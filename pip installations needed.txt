@@ -1,0 +1,3 @@
+pip install dict
+
+pip install django-filter

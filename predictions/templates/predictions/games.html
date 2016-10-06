@@ -1,0 +1,17 @@
+{% extends 'predictions/base.html' %}
+
+{% block header %}Games{% endblock %}
+
+{% block content %}
+
+    {% for game in games %}
+    <!--<h4>-->
+        <p>
+            <a href ="" class="gameweek"><strong>Gameweek: {{game.gameweek}}</strong></a>
+            <span class="game"> - {{game.date}} - {{ game.hometeam }} vs {{ game.awayteam}} <strong>{{ game.homegoals }} - {{ game.awaygoals }}</strong>
+            </span>
+        </p>
+    <!--</h4>-->
+    {% endfor %}
+
+{% endblock %}

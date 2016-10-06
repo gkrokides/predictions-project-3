@@ -1,0 +1,56 @@
+{% extends 'predictions/base.html' %}
+
+{% block header %}New Predictions{% endblock %}
+
+
+
+{% block content12 %}
+
+{% load app_filters %}
+
+{% if new_predictions_cnt < 1 %}
+
+    <div class="alert alert-danger">
+        <strong>No predictions yet!</strong>
+        You are seeing this message because you selected a gameweek before the 6th
+        (Predictions start after the 6th Gameweek to allow the models to gather enough data to make predictions).
+
+    </div>
+
+{% else %}
+
+<div class="well centred h4">
+    <h2><strong class="home-team">Showing Predictions for:</strong></h2><br>
+    League: <strong class="home-team">{{ szname }}</strong><br>
+    Season: <strong class="home-team">{{ szyear }}</strong><br>
+    Gameweek: <strong class="home-team">{{ gw }}</strong>
+</div>
+
+<table class="table table-condensed table-bordered table-hover">
+    <thead>
+      <tr>
+        <th class="centred">Match</th>
+        <th class="elo_hist">ELO (H)</th>
+        <th class="elo_l6">ELO (6)</th>
+        <th class="gsrs">GSRS</th>
+      </tr>
+    </thead>
+    <tbody class="centred">
+
+    {% for itemm in sorted_x %}
+
+      <tr>
+        <td>{{ itemm.match }}</td>
+        <td class={{ itemm.elohist|apply_prediction_colors }}><strong>{{ itemm.elohist }}</strong></td>
+        <td class={{ itemm.elol6|apply_prediction_colors }}><strong>{{ itemm.elol6 }}</strong></td>
+        <td class={{ itemm.gsrs|apply_prediction_colors }}><strong>{{ itemm.gsrs }}</strong></td>
+        <td class="prediction panel-body"><a href="{% url 'game_detail' itemm.pk %}">H2H</a></td>
+      </tr>
+
+    {% endfor %}
+    </tbody>
+  </table>
+
+{% endif %}
+
+{% endblock %}

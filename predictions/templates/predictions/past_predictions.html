@@ -1,0 +1,99 @@
+{% extends 'predictions/base.html' %}
+
+{% block header %}Predictions History{% endblock %}
+
+{% block content3 %}
+
+{% if predicted_games < 1 %}
+
+    <div class="alert alert-danger">
+        <strong>No predictions yet!</strong>
+        You are seeing this message either because you selected a gameweek before the 6th
+        (Predictions start after the 6th Gameweek to allow the models to gather enough data to make predictions) or
+        because you selected a gameweek that has not been played yet.
+
+    </div>
+
+{% else %}
+
+    <form action="" method="get" class="">
+            {{ gfilter.form.as_p }}
+            <input type="submit" value="Filter" />
+    </form>
+
+
+    <table class="table table-condensed">
+            <thead>
+              <tr class="">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th colspan="3" style="font-size:13px; background: black; color:white">Models prediction status</th>
+                <th></th>
+              </tr>
+              <tr style="background: black; color:#B6B6B4">
+                <!--<th>Gameweek</th>-->
+                <th style="font-size:13px">Date</th>
+                <th class="right-al-small">Home</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th style="font-size:13px">Away</th>
+                <th class="elo_hist">Elo(H)</th>
+                <th class="elo_l6">Elo(6)</th>
+                <th class="gsrs">GSRS</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% regroup gfilter by date as dated_list %}
+            {% for date in dated_list %}
+              <tr class="noborder"><td colspan="10" style="font-size:10px">{{date.grouper}}</td></tr>
+                {% for game in date.list %}
+                <tr style="font-size:12px">
+                <!--<td>{{ game.gameweek }}</td>-->
+                <td></td>
+                <td class="right-al">{{ game.hometeam }}</td>
+                <td class="right-al">{{ game.homegoals }}</td>
+                <td align="center">-</td>
+                <td align="left">{{ game.awaygoals }}</td>
+                <td>{{ game.awayteam }}</td>
+
+                {% if game.prediction_status_elohist == 'Success' %}
+                <td class="succ"><span class="glyphicon glyphicon-ok"></span></td>
+                {% elif  game.prediction_status_elohist == 'Fail' %}
+                <td class="fail"><span class="glyphicon glyphicon-remove"></span></td>
+                {% else %}
+                <td class="centred">{{ game.prediction_status_elohist }}</td>
+                {% endif %}
+
+                {% if game.prediction_status_elol6 == 'Success' %}
+                <td class="centred succ"><span class="glyphicon glyphicon-ok"></span></td>
+                {% elif  game.prediction_status_elol6 == 'Fail' %}
+                <td class="centred fail"><span class="glyphicon glyphicon-remove"></span></td>
+                {% else %}
+                <td class="centred">{{ game.prediction_status_elol6 }}</td>
+                {% endif %}
+
+                {% if game.prediction_status_gsrs == 'Success' %}
+                <td class="centred succ"><span class="glyphicon glyphicon-ok"></span></td>
+                {% elif  game.prediction_status_gsrs == 'Fail' %}
+                <td class="centred fail"><span class="glyphicon glyphicon-remove"></span></td>
+                {% else %}
+                <td class="centred">{{ game.prediction_status_gsrs }}</td>
+                {% endif %}
+                <!--<td class="centred">Fail</td>-->
+                <td class="prediction"><a href="{% url 'game_detail' game.pk %}">H2H</a></td>
+                {% endfor %}
+              </tr>
+
+            {% endfor %}
+            </tbody>
+    </table>
+{% endif %}
+
+{% endblock %}
+

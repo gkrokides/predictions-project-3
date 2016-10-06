@@ -1,0 +1,585 @@
+{% extends 'predictions/base.html' %}
+
+{% block head %}
+
+<!--I moved this to the base html -->
+<!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
+
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      google.charts.setOnLoadCallback(drawDonutHome);
+      google.charts.setOnLoadCallback(drawDonutAway);
+      google.charts.setOnLoadCallback(drawHomeDiffChart);
+      google.charts.setOnLoadCallback(drawAwayDiffChart);
+
+      <!-- example line chart data ---------------------------------- -->
+      <!--function drawChart() {-->
+        <!--var data = google.visualization.arrayToDataTable([-->
+          <!--['Year', 'Sales', 'Expenses'],-->
+          <!--['2004',  1000,      400],-->
+          <!--['2005',  1170,      460],-->
+          <!--['2006',  660,       1120],-->
+          <!--['2007',  1030,      540]-->
+        <!--]);-->
+
+      <!--COMPARISON LINE CHART--------------------  -->
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable(
+        {{ chart_data|safe }}
+        );
+
+
+        var options = {
+          title: 'Teams Performance (Rating p week)',
+          curveType: 'function',
+          legend: 'bottom',
+          lineWidth: 3,
+          backgroundColor: 'white',
+          chartArea: {backgroundColor: 'white', left: '5%', width: '50%'},
+          vAxis: { gridlines:{ color:'#848482' } },
+          hAxis: { gridlines:{ color:'#848482' } },
+          vAxis: { gridlines:{ count:'10' } },
+          hAxis: { gridlines:{ count: {{title}} } },
+          colors: ['#2B65EC','#F75D59'],
+          focusTarget: 'category'
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+
+       <!--HOME DONUT CHART--------------------  -->
+       function drawDonutHome() {
+        var data = google.visualization.arrayToDataTable([
+          ['Result', 'Total'],
+          ['Won', {{ homewins }}],
+          ['Lost', {{ homelosses }}],
+          ['Drawn', {{ homedraws }}]
+        ]);
+
+        var options = {
+          title: '{{ hometm }}',
+          titleTextStyle: {color: '#2B65EC'},
+          backgroundColor: { fill: "transparent" },
+          'chartArea': {'width': '90%', 'height': '80%', left: '1%'},
+          pieHole: 0.4,
+          legend: 'bottom',
+          colors:['green','red','orange'],
+          fontSize: 10
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart_home'));
+        chart.draw(data, options);
+      }
+
+       <!--AWAY DONUT CHART--------------------  -->
+       function drawDonutAway() {
+        var data = google.visualization.arrayToDataTable([
+          ['Team', 'Results'],
+          ['Won', {{ awaywins }}],
+          ['Lost', {{ awaylosses }}],
+          ['Drawn', {{ awaydraws }}]
+        ]);
+
+        var options = {
+          title: '{{ awaytm }}',
+          titleTextStyle: {color: '#F75D59'},
+          backgroundColor: { fill: "transparent" },
+          'chartArea': {'width': '90%', 'height': '80%', left: '1%'},
+          pieHole: 0.4,
+          legend: 'bottom',
+          colors:['green','red','orange'],
+          fontSize: 10
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart_away'));
+        chart.draw(data, options);
+      }
+
+      <!--HOME TEAM GOALS AGAINST AVG CHART  -->
+      function drawHomeDiffChart() {
+        var oldData = google.visualization.arrayToDataTable([
+          ['Name', 'League avg. goals'],
+          ['0-1', {{ lg0to1 }}],
+          ['2-3', {{ lg2to3 }}],
+          ['4-6', {{ lg4to6 }}],
+          ['7+', {{ lg7plus }}]
+        ]);
+
+        var newData = google.visualization.arrayToDataTable([
+          ['Name', 'Team avg. goals'],
+          ['0-1', {{ home0to1 }}],
+          ['2-3', {{ home2to3 }}],
+          ['4-6', {{ home4to6 }}],
+          ['7+', {{ home7plus }}]
+        ]);
+
+        var options = {
+        legend: { position: 'none' },
+        series: {
+                 0:{color: '#2B65EC', labelInLegend: 'Team avg. goals'}
+                },
+        tooltip : { trigger: 'none' },
+        chartArea: {'width': '50%', 'height': '70%', left: '6%'},
+        vAxis: {
+        format: '#%',
+        viewWindowMode:'explicit',
+            viewWindow: {
+              max:1,
+              min:0
+            }
+         }
+         };
+
+        var colChartDiff = new google.visualization.ColumnChart(document.getElementById('colchart_diff_hm'));
+        var diffData = colChartDiff.computeDiff(oldData, newData);
+        colChartDiff.draw(diffData, options);
+        }
+
+        <!--AWAY TEAM GOALS AGAINST AVG CHART  -->
+      function drawAwayDiffChart() {
+        var oldData = google.visualization.arrayToDataTable([
+          ['Name', 'League avg. goals'],
+          ['0-1', {{ lg0to1 }}],
+          ['2-3', {{ lg2to3 }}],
+          ['4-6', {{ lg4to6 }}],
+          ['7+', {{ lg7plus }}]
+        ]);
+
+        var newData = google.visualization.arrayToDataTable([
+          ['Name', 'Team avg. goals'],
+          ['0-1', {{ away0to1 }}],
+          ['2-3', {{ away2to3 }}],
+          ['4-6', {{ away4to6 }}],
+          ['7+', {{ away7plus }}]
+        ]);
+
+        var options = {
+        legend: { position: 'none' },
+        series: {
+                 0:{color: '#F75D59', labelInLegend: 'Team avg. goals'}
+                },
+        tooltip : { trigger: 'none' },
+        chartArea: {'width': '50%', 'height': '70%', left: '6%'},
+        vAxis: {
+        format: '#%',
+        viewWindowMode:'explicit',
+            viewWindow: {
+              max:1,
+              min:0
+            }
+         }
+         };
+
+        var colChartDiff = new google.visualization.ColumnChart(document.getElementById('colchart_diff_aw'));
+        var diffData = colChartDiff.computeDiff(oldData, newData);
+        colChartDiff.draw(diffData, options);
+        }
+    </script>
+
+{% endblock %}
+
+{% block header %}Head to Head{% endblock %}
+
+{% block content12 %}
+
+<h4><strong>Season: {{ season }}</strong></h4>
+<h4><strong>Stats up to gameweek: {{ title }}</strong></h4>
+<h2><strong><span class="home-team">{{ hometm }}</span> vs <span class="away-team">{{ awaytm }}</span></strong></h2>
+
+<div id="curve_chart" class="line-chart" style="width: 900px; height: 300px;"></div>
+<table class="table table-condensed">
+        <thead>
+          <tr class="">
+            <th>Team</th>
+            <th>Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for key, value in x.items %}
+          <tr>
+            {% if key == hometm %}
+            <td class="warning home-team"><strong>{{ key }}</strong></td>
+            <td class="warning home-team"><strong>{{ value|floatformat:2 }}</strong></td>
+            {% elif key == awaytm %}
+            <td class="warning away-team"><strong>{{ key }}</strong></td>
+            <td class="warning away-team"><strong>{{ value|floatformat:2 }}</strong></td>
+            {% else %}
+            <td>{{ key }}</td>
+            <td>{{ value|floatformat:2 }}</td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+        </tbody>
+</table>
+
+
+{% endblock %}
+{% block content15 %}
+    <div class="well">
+    <div id="donutchart_home"></div>
+    </div>
+
+    <table class=" well table table-condensed table-bordered">
+        <thead>
+          <tr>
+            <th colspan="6" class="home-team" style="text-align: center">Form</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% if homeform.0 == "W" %}
+                      <td class="succ centred">{{ homeform.0 }}</td>
+                {% elif homeform.0 == "D" %}
+                      <td class="draw centred">{{ homeform.0 }}</td>
+                {% elif homeform.0 == "L" %}
+                      <td class="fail centred">{{ homeform.0 }}</td>
+                {% else %}
+                      <td class="centred">{{ homeform.0 }}</td>
+                {% endif %}
+
+                {% if homeform.1 == "W" %}
+                      <td class="succ centred">{{ homeform.1 }}</td>
+                {% elif homeform.1 == "D" %}
+                      <td class="draw centred">{{ homeform.1 }}</td>
+                {% elif homeform.1 == "L" %}
+                      <td class="fail centred">{{ homeform.1 }}</td>
+                {% else %}
+                      <td class="centred">{{ homeform.1 }}</td>
+                {% endif %}
+
+                {% if homeform.2 == "W" %}
+                      <td class="succ centred">{{ homeform.2 }}</td>
+                {% elif homeform.2 == "D" %}
+                      <td class="draw centred">{{ homeform.2 }}</td>
+                {% elif homeform.2 == "L" %}
+                      <td class="fail centred">{{ homeform.2 }}</td>
+                {% else %}
+                      <td class="centred">{{ homeform.2 }}</td>
+                {% endif %}
+
+                {% if homeform.3 == "W" %}
+                      <td class="succ centred">{{ homeform.3 }}</td>
+                {% elif homeform.3 == "D" %}
+                      <td class="draw centred">{{ homeform.3 }}</td>
+                {% elif homeform.3 == "L" %}
+                      <td class="fail centred">{{ homeform.3 }}</td>
+                {% else %}
+                      <td class="centred">{{ homeform.3 }}</td>
+                {% endif %}
+
+                {% if homeform.4 == "W" %}
+                      <td class="succ centred">{{ homeform.4 }}</td>
+                {% elif homeform.4 == "D" %}
+                      <td class="draw centred">{{ homeform.4 }}</td>
+                {% elif homeform.4 == "L" %}
+                      <td class="fail centred">{{ homeform.4 }}</td>
+                {% else %}
+                      <td class="centred">{{ homeform.4 }}</td>
+                {% endif %}
+
+                {% if homeform.5 == "W" %}
+                      <td class="succ centred">{{ homeform.5 }}</td>
+                {% elif homeform.5 == "D" %}
+                      <td class="draw centred">{{ homeform.5 }}</td>
+                {% elif homeform.5 == "L" %}
+                      <td class="fail centred">{{ homeform.5 }}</td>
+                {% else %}
+                      <td class="centred">{{ homeform.5 }}</td>
+                {% endif %}
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-condensed table-bordered" style="font-size:12px">
+        <thead style="background-color:#F4F4F4">
+          <tr>
+            <th class="left-al home-team">Scoring</th>
+            <th class="centred home-team" style="background-color:#F4F4F4">Home</th>
+            <th class="right-al home-team">Away</th>
+            <th class="right-al home-team">Overall</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="left-al">Goals Scored</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ homefor_hm }}</td>
+                <td class="right-al">{{ homefor_aw }}</td>
+                <td class="right-al">{{ homefor }}</td>
+            </tr>
+             <tr>
+                <td class="left-al">Goals Conceded</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ homeagainst_hm }}</td>
+                <td class="right-al">{{ homeagainst_aw }}</td>
+                <td class="right-al">{{ homeagainst }}</td>
+            </tr>
+             <tr>
+                <td class="left-al">Goals scored p.match</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ home_scored_p_game_hm|floatformat:2 }}</td>
+                <td class="right-al">{{ home_scored_p_game_aw|floatformat:2 }}</td>
+                <td class="right-al">{{ home_scored_p_game|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td class="left-al">Goals conceded p.match</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ home_conceded_p_game_hm|floatformat:2 }}</td>
+                <td class="right-al">{{ home_conceded_p_game_aw|floatformat:2 }}</td>
+                <td class="right-al">{{ home_conceded_p_game|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td class="left-al">Goals over 2.5</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ home_over2p5_all_pcnt_hm|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_over2p5_all_pcnt_aw|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_over2p5_all_pcnt|floatformat:0 }}%</td>
+            </tr>
+            <tr>
+                <td class="left-al">Goals over 3.5</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ home_over3p5_all_pcnt_hm|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_over3p5_all_pcnt_aw|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_over3p5_all_pcnt|floatformat:0 }}%</td>
+            </tr>
+            <tr>
+                <td class="left-al">Goals over 4.5</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ home_over4p5_all_pcnt_hm|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_over4p5_all_pcnt_aw|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_over4p5_all_pcnt|floatformat:0 }}%</td>
+            </tr>
+            <tr>
+                <td class="left-al">Both teams scored</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ home_gg_all_pcnt_hm|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_gg_all_pcnt_aw|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_gg_all_pcnt|floatformat:0 }}%</td>
+            </tr>
+            <tr>
+                <td class="left-al">Clean sheets</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ home_cleansheets_all_pcnt_hm|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_cleansheets_all_pcnt_aw|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_cleansheets_all_pcnt|floatformat:0 }}%</td>
+            </tr>
+            <tr>
+                <td class="left-al">Failed to score</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ home_failedtoscore_all_pcnt_hm|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_failedtoscore_all_pcnt_aw|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_failedtoscore_all_pcnt|floatformat:0 }}%</td>
+            </tr>
+        </tbody>
+    </table>
+
+     <table class="table table-condensed table-bordered" style="font-size:12px">
+        <thead style="background-color:#F4F4F4">
+          <tr>
+            <th class="left-al home-team">Home/Away Advantage</th>
+            <th class="centred home-team" style="background-color:#F4F4F4">Home</th>
+            <th class="right-al home-team">Away</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="left-al">Rating points earned/lost</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ home_points_at_home|floatformat:0 }}</td>
+                <td class="right-al">{{ home_points_away|floatformat:0 }}</td>
+            </tr>
+             <tr>
+                <td class="left-al">% Goals scored</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ home_goals_at_home_pcnt|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_goals_away_pcnt|floatformat:0  }}%</td>
+            </tr>
+             <tr>
+                <td class="left-al">% Goals conceded</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ home_against_at_home_pcnt|floatformat:0 }}%</td>
+                <td class="right-al">{{ home_against_away_pcnt|floatformat:0 }}%</td>
+            </tr>
+        </tbody>
+     </table>
+
+
+    <div><span style="background-color: #2B65EC; color: white;">{{ hometm }} avg. goals</span> vs <span style="background-color: #e6e6e6; color: grey;">League avg. goals</span></div>
+    <div id='colchart_diff_hm' style='width: 450px; height: 250px; display: inline-block'></div>
+
+{% endblock %}
+
+{% block content16 %}
+
+    <!--<div class="line-chart" style="width: 900px; height: 300px"></div>-->
+
+    <div class="well">
+    <div id="donutchart_away"></div>
+    </div>
+
+    <table class=" well table table-condensed table-bordered">
+        <thead>
+          <tr>
+            <th colspan="6" class="away-team" style="text-align: center">Form</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% if awayform.0 == "W" %}
+                      <td class="succ centred">{{ awayform.0 }}</td>
+                {% elif awayform.0 == "D" %}
+                      <td class="draw centred">{{ awayform.0 }}</td>
+                {% elif awayform.0 == "L" %}
+                      <td class="fail centred">{{ awayform.0 }}</td>
+                {% else %}
+                      <td class="centred">{{ awayform.0 }}</td>
+                {% endif %}
+
+                {% if awayform.1 == "W" %}
+                      <td class="succ centred">{{ awayform.1 }}</td>
+                {% elif awayform.1 == "D" %}
+                      <td class="draw centred">{{ awayform.1 }}</td>
+                {% elif awayform.1 == "L" %}
+                      <td class="fail centred">{{ awayform.1 }}</td>
+                {% else %}
+                      <td class="centred">{{ awayform.1 }}</td>
+                {% endif %}
+
+                {% if awayform.2 == "W" %}
+                      <td class="succ centred">{{ awayform.2 }}</td>
+                {% elif awayform.2 == "D" %}
+                      <td class="draw centred">{{ awayform.2 }}</td>
+                {% elif awayform.2 == "L" %}
+                      <td class="fail centred">{{ awayform.2 }}</td>
+                {% else %}
+                      <td class="centred">{{ awayform.2 }}</td>
+                {% endif %}
+
+                {% if awayform.3 == "W" %}
+                      <td class="succ centred">{{ awayform.3 }}</td>
+                {% elif awayform.3 == "D" %}
+                      <td class="draw centred">{{ awayform.3 }}</td>
+                {% elif awayform.3 == "L" %}
+                      <td class="fail centred">{{ awayform.3 }}</td>
+                {% else %}
+                      <td class="centred">{{ awayform.3 }}</td>
+                {% endif %}
+
+                {% if awayform.4 == "W" %}
+                      <td class="succ centred">{{ awayform.4 }}</td>
+                {% elif awayform.4 == "D" %}
+                      <td class="draw centred">{{ awayform.4 }}</td>
+                {% elif awayform.4 == "L" %}
+                      <td class="fail centred">{{ awayform.4 }}</td>
+                {% else %}
+                      <td class="centred">{{ awayform.4 }}</td>
+                {% endif %}
+
+                {% if awayform.5 == "W" %}
+                      <td class="succ centred">{{ awayform.5 }}</td>
+                {% elif awayform.5 == "D" %}
+                      <td class="draw centred">{{ awayform.5 }}</td>
+                {% elif awayform.5 == "L" %}
+                      <td class="fail centred">{{ awayform.5 }}</td>
+                {% else %}
+                      <td class="centred">{{ awayform.5 }}</td>
+                {% endif %}
+            </tr>
+        </tbody>
+    </table>
+
+
+     <table class="table table-condensed table-bordered" style="font-size:12px">
+        <thead style="background-color:#F4F4F4">
+          <tr>
+            <th class="left-al away-team">Scoring</th>
+            <th class="centred away-team">Home</th>
+            <th class="right-al away-team" style="background-color:#F4F4F4">Away</th>
+            <th class="right-al away-team">Overall</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="left-al">Goals Scored</td>
+                <td class="centred">{{ awayfor_hm }}</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ awayfor_aw }}</td>
+                <td class="right-al">{{ awayfor }}</td>
+            </tr>
+             <tr>
+                <td class="left-al">Goals Conceded</td>
+                <td class="centred">{{ awayagainst_hm }}</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ awayagainst_aw }}</td>
+                <td class="right-al">{{ awayagainst }}</td>
+            </tr>
+             <tr>
+                <td class="left-al">Goals scored p.match</td>
+                <td class="centred">{{ away_scored_p_game_hm|floatformat:2 }}</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ away_scored_p_game_aw|floatformat:2 }}</td>
+                <td class="right-al">{{ away_scored_p_game|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td class="left-al">Goals conceded p.match</td>
+                <td class="centred">{{ away_conceded_p_game_hm|floatformat:2 }}</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ away_conceded_p_game_aw|floatformat:2 }}</td>
+                <td class="right-al">{{ away_conceded_p_game|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td class="left-al">Goals over 2.5</td>
+                <td class="centred">{{ away_over2p5_all_pcnt_hm|floatformat:0 }}%</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ away_over2p5_all_pcnt_aw|floatformat:0 }}%</td>
+                <td class="right-al">{{ away_over2p5_all_pcnt|floatformat:0 }}%</td>
+            </tr>
+            <tr>
+                <td class="left-al">Goals over 3.5</td>
+                <td class="centred">{{ away_over3p5_all_pcnt_hm|floatformat:0 }}%</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ away_over3p5_all_pcnt_aw|floatformat:0 }}%</td>
+                <td class="right-al">{{ away_over3p5_all_pcnt|floatformat:0 }}%</td>
+            </tr>
+            <tr>
+                <td class="left-al">Goals over 4.5</td>
+                <td class="centred">{{ away_over4p5_all_pcnt_hm|floatformat:0 }}%</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ away_over4p5_all_pcnt_aw|floatformat:0 }}%</td>
+                <td class="right-al">{{ away_over4p5_all_pcnt|floatformat:0 }}%</td>
+            </tr>
+            <tr>
+                <td class="left-al">Both teams scored</td>
+                <td class="centred">{{ away_gg_all_pcnt_hm|floatformat:0 }}%</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ away_gg_all_pcnt_aw|floatformat:0 }}%</td>
+                <td class="right-al">{{ away_gg_all_pcnt|floatformat:0 }}%</td>
+            </tr>
+            <tr>
+                <td class="left-al">Clean sheets</td>
+                <td class="centred">{{ away_cleansheets_all_pcnt_hm|floatformat:0 }}%</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ away_cleansheets_all_pcnt_aw|floatformat:0 }}%</td>
+                <td class="right-al">{{ away_cleansheets_all_pcnt|floatformat:0 }}%</td>
+            </tr>
+            <tr>
+                <td class="left-al">Failed to score</td>
+                <td class="centred">{{ away_failedtoscore_all_pcnt_hm|floatformat:0 }}%</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ away_failedtoscore_all_pcnt_aw|floatformat:0 }}%</td>
+                <td class="right-al">{{ away_failedtoscore_all_pcnt|floatformat:0 }}%</td>
+            </tr>
+        </tbody>
+     </table>
+
+    <table class="table table-condensed table-bordered" style="font-size:12px">
+        <thead style="background-color:#F4F4F4">
+          <tr>
+            <th class="left-al away-team">Home/Away Advantage</th>
+            <th class="centred away-team">Home</th>
+            <th class="right-al away-team" style="background-color:#F4F4F4">Away</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="left-al">Rating points earned/lost</td>
+                <td class="centred">{{ away_points_at_home|floatformat:0 }}</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ away_points_away|floatformat:0 }}</td>
+            </tr>
+             <tr>
+                <td class="left-al">% Goals scored</td>
+                <td class="centred">{{ away_goals_at_home_pcnt|floatformat:0 }}%</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ away_goals_away_pcnt|floatformat:0 }}%</td>
+            </tr>
+             <tr>
+                <td class="left-al">% Goals conceded</td>
+                <td class="centred">{{ away_against_at_home_pcnt|floatformat:0}}%</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ away_against_away_pcnt|floatformat:0 }}%</td>
+            </tr>
+        </tbody>
+     </table>
+
+    <div><span style="background-color: #F75D59; color: white;">{{ awaytm }} avg. goals</span> vs <span style="background-color: #e6e6e6; color: grey;">League avg. goals</span></div>
+    <div id='colchart_diff_aw' style='width: 450px; height: 250px; display: inline-block'></div>
+
+{% endblock %}

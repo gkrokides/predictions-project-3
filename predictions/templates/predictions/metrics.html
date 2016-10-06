@@ -1,0 +1,26 @@
+{% extends 'predictions/base.html' %}
+
+{% block header %}Leaderboard{% endblock %}
+
+{% block content %}
+
+<!--<h2><strong>Season: {{ season }}</strong></h2>-->
+<!--<h2><strong>Gameweek: {{ gamewk }}</strong></h2>-->
+
+ <table class="table table-condensed">
+            <thead>
+              <tr class="table-header">
+                <th>Team</th>
+                <th>HGA</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for key, value in x.items %}
+              <tr>
+                <td>{{ key }}</td>
+                <td>{{ value|floatformat:0 }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+    </table>
+{% endblock %}

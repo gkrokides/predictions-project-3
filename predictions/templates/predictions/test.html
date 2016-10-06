@@ -1,0 +1,255 @@
+{% extends 'predictions/base.html' %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
+    <script>
+
+   var statesUSA=["California", "Illinois", "Wisconsin"];
+   var statesCanada=["Quebec", "Ontario", "Alberta"];
+   var statesEngland=["Essex", "Hampshire", "Surrey"];
+   var citiesCalifornia=["Los Angeles", "San Francisco"];
+   var citiesIllinois=["Chicago", "Springfield"];
+   var citiesWisconsin=["Milwaukee", "Madison"];
+   var citiesQuebec=["Montreal", "Brossard"];
+   var citiesOntario=["Toronto", "Ottawa"];
+   var citiesAlberta=["Calgary", "Edmonton"];
+   var citiesEssex=["Birch", "Dunmow"];
+   var citiesHampshire=["Winchester", "Portsmouth"];
+   var citiesSurrey=["Fairlands", "Kingswood"];
+
+   function countryChanged(country)
+   {
+      var selectState = document.getElementById('states');
+      var ln = selectState.length - 1;
+      while (ln > 0)
+      {
+        selectState.remove(1);  //Remove all but "Select State"
+        ln--;
+      }
+
+      var selectCity = document.getElementById('cities');
+      var ln = selectCity.length - 1;
+      while (ln > 0)
+      {
+        selectCity.remove(1);  //Remove all but "Select City"
+        ln--;
+      }
+
+      var stateArray;
+
+      switch(country)
+      {
+        case "USA":
+            stateArray=statesUSA
+            break;
+        case "Canada":
+            stateArray=statesCanada
+            break;
+        case "England":
+            stateArray=statesEngland
+            break;
+        default:
+      }
+
+      for (i = 0; i < stateArray.length; i++)
+      {
+        var option = document.createElement('option');
+        option.text = stateArray[i];
+        option.value = stateArray[i];
+        selectState.add(option);
+      }
+  }
+
+  function stateChanged(state)
+  {
+     var selectCity = document.getElementById('cities');
+     var ln = selectCity.length - 1;
+     while (ln > 0)
+     {
+       selectCity.remove(1);  //Remove all but "Select City"
+       ln--;
+     }
+
+     var cityArray;
+
+     switch(state)
+     {
+       case "California":
+           cityArray=citiesCalifornia
+           break;
+       case "Illinois":
+           cityArray=citiesIllinois
+           break;
+       case "Wisconsin":
+           cityArray=citiesWisconsin
+           break;
+       case "Quebec":
+           cityArray=citiesQuebec
+           break;
+       case "Ontario":
+           cityArray=citiesOntario
+           break;
+       case "Alberta":
+           cityArray=citiesAlberta
+           break;
+       case "Essex":
+           cityArray=citiesEssex
+           break;
+       case "Hampshire":
+           cityArray=citiesHampshire
+           break;
+       case "Surrey":
+           cityArray=citiesSurrey
+           break;
+       default:
+     }
+
+     for (i = 0; i < cityArray.length; i++)
+     {
+       var option = document.createElement('option');
+       option.text = cityArray[i];
+       option.value = cityArray[i];
+       selectCity.add(option);
+     }
+  }
+
+ function cityChanged(city)
+  {
+     switch(city)
+     {
+       case "Los Angeles":
+           alert("Los Angeles text")
+           break;
+       case "San Francisco":
+           alert("San Francisco text")
+           break;
+       case "Chicago":
+           alert("Chicago text")
+           break;
+       case "Springfield":
+           alert("Springfield text")
+           break;
+       case "Milwaukee":
+           alert("Milwaukee text")
+           break;
+       case "Madison":
+           alert("Madison text")
+           break;
+       case "Montreal":
+           alert("Montreal text")
+           break;
+       case "Brossard":
+           alert("Brossard text")
+           break;
+       case "Toronto":
+           alert("Toronto text")
+           break;
+       case "Ottawa":
+           alert("Ottawa text")
+           break;
+       case "Calgary":
+           alert("Calgary text")
+           break;
+       case "Edmonton":
+           alert("Edmonton text")
+           break;
+       case "Birch":
+           alert("Birch text")
+           break;
+       case "Dunmow":
+           alert("Dunmow text")
+           break;
+       case "Winchester":
+           alert("Winchester text")
+           break;
+       case "Portsmouth":
+           alert("Portsmouth text")
+           break;
+       case "Fairlands":
+           alert("Fairlands text")
+           break;
+       case "Kingswood":
+           alert("Kingswood text")
+           break;
+       default:
+     }
+  }
+
+
+
+    </script>
+
+
+{% endblock %}
+
+
+{% block header %}Serve javascript{% endblock %}
+
+
+{% block content15 %}
+
+    <p id="demo">HELLO</p>
+
+    <button type="button" onclick="myFunction()">Click Me!</button>
+
+{% endblock %}
+
+
+{% block content16 %}
+
+    <!--<div class="panel panel-primary">-->
+        <!--<div class="panel-heading">Wins/Draws/Losses</div>-->
+        <!--<div class="panel-body" id="myfirstchart" style="height: 200px; width: 400px;"></div>-->
+    <!--</div>-->
+
+        <p> Morris Pie chart</p>
+
+        <div class="well" id="myfirstchart" style="height: 200px; width: 400px;"></div>
+
+
+  <select id='countries' onchange='countryChanged(this.value);'>
+    <option value=''>Select Country</option>
+    <option value='USA'>USA</option>
+    <option value='Canada'>Canada</option>
+    <option value='England'>England</option>
+  </select>
+  &nbsp;&nbsp;
+  <select id='states' onchange='stateChanged(this.value);'>
+    <option value=''>Select State</option>
+  </select>
+  &nbsp;&nbsp;
+  <select id='cities' onchange='cityChanged(this.value);'>
+    <option value=''>Select City</option>
+  </select>
+
+<script>
+
+  new Morris.Donut({
+
+  // ID of the element in which to draw the chart.
+  element: 'myfirstchart',
+
+  data: [
+    { label: 'Wins', value: 20 },
+    { label: 'Losses', value: 10 },
+    { label: 'Draws', value: 5 }
+  ],
+
+
+  colors: [
+    'Green',
+    'Red',
+    'Orange'
+  ],
+
+});
+
+    </script>
+
+{% endblock %}
+

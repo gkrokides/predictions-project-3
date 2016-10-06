@@ -1,0 +1,210 @@
+{% extends 'predictions/base.html' %}
+
+{% block head %}
+    <script>
+        var seasonsByCountry ={{ szns_drpdown|safe }}
+
+        function changecat(value) {
+            if (value.length == 0) document.getElementById("country_leagues").innerHTML = "<option></option>";
+            else {
+                var cntrOptions = "";
+                var leagueName = [];
+                for (seazonn in seasonsByCountry[value]) {
+                    if (leagueName.indexOf(seasonsByCountry[value][seazonn][2]) >= 0) { continue; }
+                    leagueName.push(seasonsByCountry[value][seazonn][2]);
+                    cntrOptions += "<option value=" + seasonsByCountry[value][seazonn][2] + ">" + seasonsByCountry[value][seazonn][2] + "</option>";
+                }
+                document.getElementById("country_leagues").innerHTML = "<option value=''>Select Division</option>" + cntrOptions;
+                document.getElementById("league_period").innerHTML = "<option value=''>Select Period</option>";
+            }
+        }
+
+        function changedLeague(value) {
+            val = document.getElementById("cntries").value
+            if (val.length == 0) document.getElementById("league_period").innerHTML = "<option value=''>Select Period</option>";
+            else {
+                var cntrOptions = "";
+                for (seazonn in seasonsByCountry[val]) {
+                    if (seasonsByCountry[val][seazonn][2] != value) { continue; }
+                    cntrOptions += "<option value=" + seasonsByCountry[val][seazonn][5] + ">" + seasonsByCountry[val][seazonn][3] + "/" + seasonsByCountry[val][seazonn][4] + "</option>";
+                }
+                document.getElementById("league_period").innerHTML = "<option value=''>Select Period</option>" + cntrOptions;
+            }
+        }
+
+    </script>
+
+{% endblock %}
+
+{% block header %}
+    Predictions
+{% endblock %}
+
+{% block content5 %}
+    <div class="well">
+        <form class="date" action="{% url 'predictions' %}" method="POST">
+
+            <select name="cntries" id="cntries" onChange="changecat(this.value);">
+                <option value="" disabled selected>Select Country</option>
+                {% for country in countries %}
+                          <option value="{{ country }}">{{ country }}</option>
+                {% endfor %}{% csrf_token %}
+            </select>
+
+            <select name="country_leagues"  id="country_leagues" onChange="changedLeague(this.value);">
+                <option value="select_league" disabled selected>Select Division</option>
+            </select>
+
+            <select name ="league_period" id="league_period">
+                <option value="select_period" disabled selected>Select Period</option>
+            </select>
+
+        <input type="submit" value="Submit">
+        </form>
+
+        League: <strong>{{ season }}</strong><br>
+        Season: <strong>{{ ssnout }}</strong><br>
+        Gameweek: <strong>{{ gamewkout }}</strong>
+    </div>
+
+    {% if user_made_selection %}
+        <table class="table table-condensed">
+                <thead>
+                  <tr style="background: black; color:#B6B6B4">
+                    <th class="left-al">Team</th>
+                    <th class="centred">MP</th>
+                    <th class="centred">W</th>
+                    <th class="centred">D</th>
+                    <th class="centred">L</th>
+                    <th class="centred">GF</th>
+                    <th class="centred">GA</th>
+                    <th colspan="6" class="centred">Last 6 Games</th>
+                    <th class="centred">Rating</th>
+                  </tr>
+                </thead>
+                <tbody style="font-size:12px">
+                {% for itemm in x %}
+                  <tr>
+                    <td>{{ itemm.team }}</td>
+                    <td class="centred">{{ itemm.played }}</td>
+                    <td class="centred">{{ itemm.wins }}</td>
+                    <td class="centred">{{ itemm.draws }}</td>
+                    <td class="centred">{{ itemm.losses }}</td>
+                    <td class="centred">{{ itemm.gf }}</td>
+                    <td class="centred">{{ itemm.ga }}</td>
+
+                    {% if itemm.f1 == "W" %}
+                      <td class="succ centred">{{ itemm.f1 }}</td>
+                    {% elif itemm.f1 == "D" %}
+                      <td class="draw centred">{{ itemm.f1 }}</td>
+                    {% elif itemm.f1 == "L" %}
+                      <td class="fail centred">{{ itemm.f1 }}</td>
+                    {% else %}
+                      <td class="centred">{{ itemm.f1 }}</td>
+                    {% endif %}
+
+                    {% if itemm.f2 == "W" %}
+                      <td class="succ centred">{{ itemm.f2 }}</td>
+                    {% elif itemm.f2 == "D" %}
+                      <td class="draw centred">{{ itemm.f2 }}</td>
+                    {% elif itemm.f2 == "L" %}
+                      <td class="fail centred">{{ itemm.f2 }}</td>
+                    {% else %}
+                      <td class="centred">{{ itemm.f2 }}</td>
+                    {% endif %}
+
+                    {% if itemm.f3 == "W" %}
+                      <td class="succ centred">{{ itemm.f3 }}</td>
+                    {% elif itemm.f3 == "D" %}
+                      <td class="draw centred">{{ itemm.f3 }}</td>
+                    {% elif itemm.f3 == "L" %}
+                      <td class="fail centred">{{ itemm.f3 }}</td>
+                    {% else %}
+                      <td class="centred">{{ itemm.f3 }}</td>
+                    {% endif %}
+
+                    {% if itemm.f4 == "W" %}
+                      <td class="succ centred">{{ itemm.f4 }}</td>
+                    {% elif itemm.f4 == "D" %}
+                      <td class="draw centred">{{ itemm.f4 }}</td>
+                    {% elif itemm.f4 == "L" %}
+                      <td class="fail centred">{{ itemm.f4 }}</td>
+                    {% else %}
+                      <td class="centred">{{ itemm.f4 }}</td>
+                    {% endif %}
+
+                    {% if itemm.f5 == "W" %}
+                      <td class="succ centred">{{ itemm.f5 }}</td>
+                    {% elif itemm.f5 == "D" %}
+                      <td class="draw centred">{{ itemm.f5 }}</td>
+                    {% elif itemm.f5 == "L" %}
+                      <td class="fail centred">{{ itemm.f5 }}</td>
+                    {% else %}
+                      <td class="centred">{{ itemm.f5 }}</td>
+                    {% endif %}
+
+                    {% if itemm.f6 == "W" %}
+                      <td class="succ centred">{{ itemm.f6 }}</td>
+                    {% elif itemm.f6 == "D" %}
+                      <td class="draw centred">{{ itemm.f6 }}</td>
+                    {% elif itemm.f6 == "L" %}
+                      <td class="fail centred">{{ itemm.f6 }}</td>
+                    {% else %}
+                      <td class="centred">{{ itemm.f6 }}</td>
+                    {% endif %}
+
+                    <td class="elo_hist"><strong>{{ itemm.points|floatformat:2 }}</strong></td>
+                  </tr>
+                {% endfor %}
+
+                </tbody>
+        </table>
+    {% else %}
+        <p></p>
+    {% endif %}
+
+{% endblock %}
+
+{% block content6 %}
+
+{% if user_made_selection %}
+
+    <div class="well">
+        <p style="font-size:16px"><strong>Regular season matches played:</strong></p>
+        <strong>{{games_played}}</strong> out of <strong>{{ games_total }}</strong><br>
+        <div class="progress">
+          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ games_played_perc_string }}"
+          aria-valuemin="0" aria-valuemax="100" style="width: {{ games_played_perc_string }}">
+            {{games_played_perc_string}}
+          </div>
+        </div>
+    </div>
+
+    <div class="well">
+        <p style="font-size:16px"><strong>Results</strong></p>
+        Home wins: <strong>{{ home_wins_total_perc }}</strong><br>
+        Draws: <strong>{{ draws_total_perc }}</strong><br>
+        Away wins: <strong>{{ away_wins_total_perc }}</strong>
+    </div>
+
+     <div class="well">
+        <p style="font-size:16px"><strong>Scoring</strong></p>
+        Goals scored: <strong>{{ season_goals }}</strong><br>
+        Goals p. match: <strong>{{ goals_p_game|floatformat:2 }}</strong><br>
+        Both teams scored: <strong>{{ bts_perc }}</strong>
+    </div>
+
+    <div class="well">
+        <p style="font-size:16px"><strong>Goal Range</strong></p>
+        Over 1.5: <strong>{{ over_1p5 }}</strong><br>
+        Over 2.5: <strong>{{ over_2p5 }}</strong><br>
+        Over 3.5: <strong>{{ over_3p5 }}</strong>
+    </div>
+
+    <p><a href="{% url 'past_predictions' seasonid %}"><button type="button" class="btn btn-danger">Past Predictions <span class="badge">{{ past_predictions_cnt }}</span></button></a></p>
+    <p><a href="{% url 'new_predictions' seasonid gamewkout %}"><button type="button" class="btn btn-primary">New Predictions <span class="badge">{{ new_predictions_cnt }}</span></button></a></p>
+
+{% endif %}
+
+{% endblock %}
+

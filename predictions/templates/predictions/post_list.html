@@ -1,0 +1,13 @@
+{% extends 'predictions/base.html' %}
+
+    {% block header %} BetKrok Posts {% endblock %}
+
+    {% block content3 %}
+                {% for post in posts %}
+                    <div class="well">
+                        <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
+                        <p>{{ post.text|linebreaks }}</p>
+                        <p style="color: grey">published: {{ post.published_date }}</p>
+                    </div>
+                {% endfor %}
+    {% endblock %}

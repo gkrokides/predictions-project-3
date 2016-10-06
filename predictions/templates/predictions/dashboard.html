@@ -1,0 +1,491 @@
+{% extends 'predictions/base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+        var seasonsByCountry ={{ szns_drpdown|safe }}
+
+        function changecat(value) {
+            if (value.length == 0) document.getElementById("country_leagues").innerHTML = "<option></option>";
+            else {
+                var cntrOptions = "";
+                var leagueName = [];
+                for (seazonn in seasonsByCountry[value]) {
+                    if (leagueName.indexOf(seasonsByCountry[value][seazonn][2]) >= 0) { continue; }
+                    leagueName.push(seasonsByCountry[value][seazonn][2]);
+                    cntrOptions += "<option value=" + seasonsByCountry[value][seazonn][2] + ">" + seasonsByCountry[value][seazonn][2] + "</option>";
+                }
+                document.getElementById("country_leagues").innerHTML = "<option value='All'>All</option>" + cntrOptions;
+                document.getElementById("league_period").innerHTML = "<option value='All'>All</option>";
+            }
+        }
+
+        function changedLeague(value) {
+            val = document.getElementById("cntries").value
+            if (val.length == 0) document.getElementById("league_period").innerHTML = "<option value=''>Select Period</option>";
+            else {
+                var cntrOptions = "";
+                for (seazonn in seasonsByCountry[val]) {
+                    if (seasonsByCountry[val][seazonn][2] != value) { continue; }
+                    cntrOptions += "<option value=" + seasonsByCountry[val][seazonn][5] + ">" + seasonsByCountry[val][seazonn][3] + "/" + seasonsByCountry[val][seazonn][4] + "</option>";
+                }
+                document.getElementById("league_period").innerHTML = "<option value='All'>All</option>" + cntrOptions;
+            }
+        }
+
+    </script>
+{% endblock %}
+
+{% block header %}
+    Dashboard
+{% endblock %}
+
+{% block content18 %}
+
+{% load dashboard_filter %}
+{% load strike_rate_filter %}
+
+ <div class="well">
+    <h3><strong>Filter the Dashboard</strong></h3>
+    <form class="" action="{% url 'dashboard' %}" method="POST">
+    <div class="form-group">
+      Country:
+      <select name="cntries" id="cntries" onChange="changecat(this.value);">
+          <option value="All">All</option>
+          {% for country in countries %}
+            <option value="{{ country }}">{{ country }}</option>
+          {% endfor %}{% csrf_token %}
+      </select>
+    </div>
+    <div class="form-group">
+      Division:
+      <select name="country_leagues"  id="country_leagues" onChange="changedLeague(this.value);">
+          <option value="All">All</option>
+      </select>
+    </div>
+    <div class="form-group">
+      Period:
+      <select name ="league_period" id="league_period">
+          <option value="All">All</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-info">Submit</button>
+  </form>
+ </div>
+
+ <div class="well">
+     <h3><strong>
+         Dashboard filters
+         </strong>
+     </h3>
+     Country: <strong><span class={{ cntry|apply_color_if_all }}>{{ cntry }}</span></strong><br>
+     Division: <strong><span class={{ divisionn|apply_color_if_all }}>{{ divisionn }}</span></strong><br>
+     Season end: <strong><span class={{ period_end_out|apply_color_if_all }}>{{ period_end_out }}</span></strong><br>
+ </div>
+
+
+{% endblock %}
+
+{% block content19 %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+            <div class="panel-heading"><a data-toggle="collapse" href="#collapse3"><strong>Strike Rate</strong> (click to expand/hide)</a></div>
+            <div id="collapse3" class="panel-body" style="background: #212121; padding-bottom: 0cm;">
+                <div class="well">
+                    <table class="table table-condensed table-bordered table-hover differentTable" style="background: #FFFFFF">
+                        <thead>
+                        <tr>
+                            <th class="left-al">Strike Rate</th>
+                            <th class="elo_hist">ELO (H)</th>
+                            <th class="elo_l6">ELO (6)</th>
+                            <th class="gsrs">GSRS</th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="centred">
+                        <tr>
+                            <td class="left-al">Home</td>
+                            <td class={{elohist_strike_rate_home_out|strike_rate_colors}}>{{ elohist_strike_rate_home }}</td>
+                            <td class={{elol6_strike_rate_home_out|strike_rate_colors}}>{{ elol6_strike_rate_home }}</td>
+                            <td class={{gsrs_strike_rate_home_out|strike_rate_colors}}>{{ gsrs_strike_rate_home }}</td>
+                        </tr>
+                        <tr>
+                            <td class="left-al">Away</td>
+                            <td class={{elohist_strike_rate_away_out|strike_rate_colors}}>{{ elohist_strike_rate_away }}</td>
+                            <td class={{elol6_strike_rate_away_out|strike_rate_colors}}>{{ elol6_strike_rate_away }}</td>
+                            <td class={{gsrs_strike_rate_away_out|strike_rate_colors}}>{{ gsrs_strike_rate_away }}</td>
+                        </tr>
+                        <tr>
+                            <td class="left-al">Draw</td>
+                            <td class={{elohist_strike_rate_draw_out|strike_rate_colors}}>{{ elohist_strike_rate_draw }}</td>
+                            <td class={{elol6_strike_rate_draw_out|strike_rate_colors}}>{{ elol6_strike_rate_draw }}</td>
+                            <td class={{gsrs_strike_rate_draw_out|strike_rate_colors}}>{{ gsrs_strike_rate_draw }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p>* N/A = no predictions have been made yet for this kind of bet</p><br>
+                </div>
+           </div>
+        </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+            <div class="panel-heading"><a data-toggle="collapse" href="#collapse1"><strong>Model Strengths</strong> (click to expand/hide)</a></div>
+            <div id="collapse1" class="panel-body" style="background: #212121; padding-bottom: 0cm;">
+                <div class="well">
+
+                    <p style="font-size:16px">Strongest in <strong>Home</strong> predictions: <strong>{{ strongest_home_model }}</strong></p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success {{ barclass_home }}" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="width:{{ strongest_home_value }}">
+                            {{ strongest_home_value }}
+                        </div>
+                    </div>
+
+                    <p style="font-size:16px">Strongest in <strong>Away</strong> predictions: <strong>{{ strongest_away_model }}</strong></p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success {{ barclass_away }}" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="width:{{ strongest_away_value }}">
+                            {{ strongest_away_value }}
+                        </div>
+                    </div>
+
+                    <p style="font-size:16px">Strongest in <strong>Draw</strong> predictions: <strong>{{ strongest_draw_model }}</strong></p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success {{ barclass_draw }}" role="progressbar"
+                             aria-valuemin="0" aria-valuemax="100" style="width:{{ strongest_draw_value }}">
+                            {{ strongest_draw_value }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><a data-toggle="collapse" href="#collapse2"><strong>Predictions Breakdown</strong> (click to expand/hide)</a></div>
+        <div id="collapse2" class="panel-body" style="background: #212121; padding-bottom: 0cm;">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="well">
+                        <div class="elo_hist"><strong>ELO(H) All predictions</strong></div>
+                        <div id="elohist" style="height: 150px; width: 85%;"></div>
+                    </div>
+                    <div class="well">
+                        <div class="elo_hist"><strong>Successful Home Predictions</strong></div>
+                        <div id="elohist_home" style="height: 150px; width: 85%;"></div>
+                        <div class="elo_hist"><strong>Successful Away Predictions </strong></div>
+                        <div id="elohist_away" style="height: 150px; width: 85%;"></div>
+                         <div class="elo_hist"><strong>Successful Draw Predictions </strong></div>
+                        <div id="elohist_draw" style="height: 150px; width: 85%;"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="well">
+                        <div class="elo_l6"><strong>ELO(6) All predictions</strong></div>
+                        <div id="elol6" style="height: 150px; width: 85%;"></div>
+                    </div>
+                    <div class="well">
+                        <div class="elo_l6"><strong>Successful Home Predictions</strong></div>
+                        <div id="elol6_home" style="height: 150px; width: 85%;"></div>
+                        <div class="elo_l6"><strong>Successful Away Predictions </strong></div>
+                        <div id="elol6_away" style="height: 150px; width: 85%;"></div>
+                        <div class="elo_l6"><strong>Successful Draw Predictions </strong></div>
+                        <div id="elol6_draw" style="height: 150px; width: 85%;"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="well">
+                        <div class="gsrs"><strong>GSRS All predictions</strong></div>
+                        <div id="gsrs" style="height: 150px; width: 85%;"></div>
+                    </div>
+                    <div class="well">
+                        <div class="gsrs"><strong>Successful Home Predictions</strong></div>
+                        <div id="gsrs_home" style="height: 150px; width: 85%;"></div>
+                        <div class="gsrs"><strong>Successful Away Predictions</strong></div>
+                        <div id="gsrs_away" style="height: 150px; width: 85%;"></div>
+                        <div class="gsrs"><strong>Successful Draw Predictions</strong></div>
+                        <div id="gsrs_draw" style="height: 150px; width: 85%;"></div>
+                    </div>
+                </div>
+
+            <script>
+              new Morris.Donut({
+
+              // ID of the element in which to draw the chart.
+              element: 'elohist',
+
+              data: [
+                { label: 'Home', value: {{ elohist_total_preds_home}} },
+                { label: 'Away', value: {{ elohist_total_preds_away}} },
+                { label: 'Draw', value: {{ elohist_total_preds_draw}} }
+              ],
+
+
+              colors: [
+                '#0C090A',
+                '#524E4F',
+                '#8A8284'
+              ],
+              });
+            </script>
+            <script>
+              new Morris.Donut({
+
+              // ID of the element in which to draw the chart.
+              element: 'elohist_home',
+
+              data: [
+                { label: 'Successful', value: {{ elohist_total_succ_home }} },
+                { label: 'Failed', value: {{ elohist_total_fail_home }} }
+              ],
+
+
+              colors: [
+                '#0C090A',
+                '#eeeeee',
+              ],
+              });
+            </script>
+            <script>
+              new Morris.Donut({
+
+              // ID of the element in which to draw the chart.
+              element: 'elohist_away',
+
+              data: [
+                { label: 'Successful', value: {{ elohist_total_succ_away }} },
+                { label: 'Failed', value: {{ elohist_total_fail_away }} }
+              ],
+
+
+              colors: [
+                '#524E4F',
+                '#eeeeee',
+              ],
+              });
+            </script>
+            <script>
+              new Morris.Donut({
+
+              // ID of the element in which to draw the chart.
+              element: 'elohist_draw',
+
+              data: [
+                { label: 'Successful', value: {{ elohist_total_succ_draw }} },
+                { label: 'Failed', value: {{ elohist_total_fail_draw }} }
+              ],
+
+
+              colors: [
+                '#8A8284',
+                '#eeeeee',
+              ],
+              });
+            </script>
+
+            <script>
+              new Morris.Donut({
+
+              // ID of the element in which to draw the chart.
+              element: 'elol6',
+
+              data: [
+                { label: 'Home', value: {{ elol6_total_preds_home}} },
+                { label: 'Away', value: {{ elol6_total_preds_away}} },
+                { label: 'Draw', value: {{ elol6_total_preds_draw}} }
+              ],
+
+
+              colors: [
+                '#810541',
+                '#954E70',
+                '#C89AB0'
+              ],
+              });
+           </script>
+            <script>
+              new Morris.Donut({
+
+              // ID of the element in which to draw the chart.
+              element: 'elol6_home',
+
+              data: [
+                { label: 'Successful', value: {{ elol6_total_succ_home }} },
+                { label: 'Failed', value: {{ elol6_total_fail_home }} }
+              ],
+
+
+              colors: [
+                '#810541',
+                '#eeeeee'
+              ],
+              });
+           </script>
+            <script>
+              new Morris.Donut({
+
+              // ID of the element in which to draw the chart.
+              element: 'elol6_away',
+
+              data: [
+                { label: 'Successful', value: {{ elol6_total_succ_away }} },
+                { label: 'Failed', value: {{ elol6_total_fail_away }} }
+              ],
+
+
+              colors: [
+                '#954E70',
+                '#eeeeee'
+              ],
+              });
+           </script>
+            <script>
+              new Morris.Donut({
+
+              // ID of the element in which to draw the chart.
+              element: 'elol6_draw',
+
+              data: [
+                { label: 'Successful', value: {{ elol6_total_succ_draw }} },
+                { label: 'Failed', value: {{ elol6_total_fail_draw }} }
+              ],
+
+
+              colors: [
+                '#C89AB0',
+                '#eeeeee'
+              ],
+              });
+           </script>
+
+            <script>
+             new Morris.Donut({
+
+              // ID of the element in which to draw the chart.
+              element: 'gsrs',
+
+              data: [
+                { label: 'Home', value: {{ gsrs_total_preds_home}} },
+                { label: 'Away', value: {{ gsrs_total_preds_away}} },
+                { label: 'Draw', value: {{ gsrs_total_preds_draw}} }
+              ],
+
+
+              colors: [
+                '#E9AB17',
+                '#E9C572',
+                '#F2DDAA'
+              ],
+              });
+            </script>
+            <script>
+             new Morris.Donut({
+
+              // ID of the element in which to draw the chart.
+              element: 'gsrs_home',
+
+              data: [
+                { label: 'Successful', value: {{ gsrs_total_succ_home }} },
+                { label: 'Failed', value: {{ gsrs_total_fail_home }} }
+              ],
+
+
+              colors: [
+                '#E9AB17',
+                '#eeeeee'
+              ],
+              });
+            </script>
+            <script>
+             new Morris.Donut({
+
+              // ID of the element in which to draw the chart.
+              element: 'gsrs_away',
+
+              data: [
+                { label: 'Successful', value: {{ gsrs_total_succ_away }} },
+                { label: 'Failed', value: {{ gsrs_total_fail_away }} }
+              ],
+
+
+              colors: [
+                '#E9C572',
+                '#eeeeee'
+              ],
+              });
+            </script>
+            <script>
+             new Morris.Donut({
+
+              // ID of the element in which to draw the chart.
+              element: 'gsrs_draw',
+
+              data: [
+                { label: 'Successful', value: {{ gsrs_total_succ_draw }} },
+                { label: 'Failed', value: {{ gsrs_total_fail_draw }} }
+              ],
+
+
+              colors: [
+                '#F2DDAA',
+                '#eeeeee'
+              ],
+              });
+            </script>
+            </div>
+       </div>
+    </div>
+    <div class="panel panel-default">
+            <div class="panel-heading"><a data-toggle="collapse" href="#collapse4"><strong>Streaks</strong> (click to expand/hide)</a></div>
+            <div id="collapse4" class="panel-body" style="background: #212121; padding-bottom: 0cm;">
+                <div class="well">
+                    <table class="table table-condensed table-bordered table-hover differentTable" style="background: #FFFFFF">
+                        <thead>
+                        <tr>
+                            <th class="left-al">Streak</th>
+                            <th class="elo_hist">ELO (H)</th>
+                            <th class="elo_l6">ELO (6)</th>
+                            <th class="gsrs">GSRS</th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="centred">
+                        <tr>
+                            <td class="left-al">Highest winning streak</td>
+                            <td>{{ elohist_winning_streaks }}</td>
+                            <td>{{ elol6_winning_streaks }}</td>
+                            <td>{{ gsrs_winning_streaks }}</td>
+                        </tr>
+                        <tr>
+                            <td class="left-al">Highest losing streak</td>
+                            <td>{{ elohist_losing_streaks }}</td>
+                            <td>{{ elol6_losing_streaks }}</td>
+                            <td>{{ gsrs_losing_streaks }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+           </div>
+    </div>
+
+
+
+
+
+{% endblock %}
+
+
+
+
+

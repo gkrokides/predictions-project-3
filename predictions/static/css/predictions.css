@@ -1,0 +1,273 @@
+.page-header {
+    background-color: #ff9400;
+    margin-top: 0;
+    padding: 1px 1px 1px 40px;
+
+
+}
+
+.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+    color: #ffffff;
+    font-size: 36pt;
+    text-decoration: none;
+    padding-bottom: 10;
+}
+
+.content {
+    margin-left: 40px;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Poiret One', cursive;
+
+}
+
+.date {
+    float: right;
+
+}
+
+
+.save {
+    float: right;
+}
+
+.post-form textarea, .post-form input {
+    width: 100%;
+}
+
+.top-menu, .top-menu:hover, .top-menu:visited {
+    color: #ffffff;
+    float: right;
+    font-size: 26pt;
+    margin-right: 20px;
+}
+
+.post {
+    margin-bottom: 70px;
+}
+
+.post h1 a, .post h1 a:visited {
+    color: #000000;
+}
+
+.nav {
+
+ margin-left: 40px;
+
+}
+
+.sectionheader {
+    margin-top: -20px;
+
+}
+
+.top-button {
+    color: #ffffff;
+    float: right;
+    font-size: 13pt;
+    margin-right: 0px;
+}
+
+.table-header {
+    color: orange;
+    font-size: 15pt;
+}
+
+.game {
+    font-size: 13pt;
+    color: #808080;
+    float: left;
+}
+
+.gameweek {
+    font-size: 11pt;
+    color: ff9400;
+}
+
+.away {
+
+    text-align: right;
+}
+.tbody {
+
+    border-collapse: collapse;
+}
+
+.prediction {
+
+    font-size: 10pt;
+}
+
+.centred {
+    text-align: center;
+}
+
+.right-al {
+
+    text-align: right;
+}
+
+.left-al {
+
+    text-align: left;
+}
+
+.noborder {
+
+    background: #DCDCDC;
+    border: none;
+}
+
+.succ {
+    text-align: center !important;
+    color: white;
+    background: #4CC552;
+    border: solid;
+    border-radius: 10px;
+
+}
+
+.fail {
+    text-align: center !important;
+    color: white;
+    background: #F62817;
+    border: solid;
+    border-radius: 10px;
+}
+
+.draw {
+    text-align: center !important;
+    color: white;
+    background: orange;
+    border: solid;
+    border-radius: 10px;
+}
+
+.elo_hist {
+
+    font-size: 13px;
+    text-align: center !important;
+    color: white;
+    background: #0C090A;
+    border: solid;
+}
+
+.elo_l6 {
+
+    font-size: 13px;
+    text-align: center !important;
+    color: white;
+    background: #810541;
+    border: solid;
+}
+
+.gsrs {
+
+    font-size: 13px;
+    text-align: center !important;
+    color: white;
+    background: #E9AB17;
+    border: solid;
+}
+
+.negmargin {
+
+  display: inline-block;
+  margin-bottom: 5px;
+
+}
+
+.line-chart {
+
+    margin-top: 50;
+    padding: 20px 20px 20px 40px;
+}
+
+.centred-aligned {
+    align: centre;
+}
+
+
+
+.home-team {
+    color: #2B65EC;
+}
+
+.away-team {
+    color: #F75D59;
+}
+
+.right-al-small {
+    font-size: 13px;
+    text-align: right;
+}
+
+.inline_block {
+    display: inline-block;
+
+}
+
+.prediction_header {
+
+    font-size: 18pt;
+}
+
+.home-prediction {
+background:#2E86C1;
+}
+
+.away-prediction {
+background:#85C1E9;
+}
+
+.draw-prediction {
+background:#EAF2F8;
+}
+
+.elo_hist_chart {
+    color: white;
+    background: #0C090A;
+}
+
+.elo_l6_chart {
+    color: white;
+    background: #810541;
+}
+
+.gsrs_chart {
+    color: white;
+    background: #E9AB17;
+}
+
+.whiteback {
+    background: #FFFFFF;
+}
+
+.dash-filter {
+    color: #01A9DB;
+}
+
+.srslot1 {
+    background: #00E600;
+}
+
+.srslot2 {
+    background: #05FF05;
+}
+
+.srslot3 {
+    background: #99FF99;
+}
+
+.srslot4 {
+    background: #D1FFD1;
+}
+
+.srslot5 {
+    background: #FED2D2;
+}
+
+.srslot6 {
+    background: #FD9595;
+}

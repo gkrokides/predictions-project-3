@@ -1,0 +1,11 @@
+{% extends 'predictions/base.html' %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+    <h1>New post</h1>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-warning" style ="float:right;">Save</button>
+    </form>
+{% endblock %}
