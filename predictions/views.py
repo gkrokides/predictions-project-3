@@ -839,5 +839,5 @@ def dashboard(request):
                    'gsrs_strike_rate_away_out': gsrs_strike_rate_away_out, 'elol6_strike_rate_home_out': elol6_strike_rate_home_out,
                    'elohist_strike_rate_home_out': elohist_strike_rate_home_out, 'elohist_strike_rate_away_out': elohist_strike_rate_away_out,
                    'elohist_strike_rate_draw_out': elohist_strike_rate_draw_out, 'elol6_strike_rate_away_out': elol6_strike_rate_away_out,
-                    'elol6_strike_rate_draw_out': elol6_strike_rate_draw_out, 'gsrs_strike_rate_home_out ': gsrs_strike_rate_home_out,
+                   'elol6_strike_rate_draw_out': elol6_strike_rate_draw_out, 'gsrs_strike_rate_home_out': gsrs_strike_rate_home_out,
                    'gsrs_strike_rate_draw_out': gsrs_strike_rate_draw_out})
