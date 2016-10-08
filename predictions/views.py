@@ -763,15 +763,51 @@ def dashboard(request):
         strongest_draw_model = 'GSRS'
         strongest_draw_value = gsrs_strike_rate_draw
         barclass_draw = "gsrs_chart"
-    elohist_strike_rate_home_out = float(elohist_total_succ_home) / elohist_total_preds_home
-    elohist_strike_rate_away_out = float(elohist_total_succ_away) / elohist_total_preds_away
-    elohist_strike_rate_draw_out = float(elohist_total_succ_draw) / elohist_total_preds_draw
-    elol6_strike_rate_home_out = float(elol6_total_succ_home) / elol6_total_preds_home
-    elol6_strike_rate_away_out = float(elol6_total_succ_away) / elol6_total_preds_away
-    elol6_strike_rate_draw_out = float(elol6_total_succ_draw) / elol6_total_preds_draw
-    gsrs_strike_rate_home_out = float(gsrs_total_succ_home) / gsrs_total_preds_home
-    gsrs_strike_rate_away_out = float(gsrs_total_succ_away) / gsrs_total_preds_away
-    gsrs_strike_rate_draw_out = float(gsrs_total_succ_draw) / gsrs_total_preds_draw
+    # variables that return classes
+    if elohist_total_preds_home == 0:
+        elohist_strike_rate_home_out = 0
+    else:
+        elohist_strike_rate_home_out = float(elohist_total_succ_home) / elohist_total_preds_home
+
+    if elohist_total_preds_away == 0:
+        elohist_strike_rate_away_out = 0
+    else:
+        elohist_strike_rate_away_out = float(elohist_total_succ_away) / elohist_total_preds_away
+
+    if elohist_total_preds_draw == 0:
+        elohist_strike_rate_draw_out = 0
+    else:
+        elohist_strike_rate_draw_out = float(elohist_total_succ_draw) / elohist_total_preds_draw
+
+    if elol6_total_preds_home == 0:
+        elol6_strike_rate_home_out = 0
+    else:
+        elol6_strike_rate_home_out = float(elol6_total_succ_home) / elol6_total_preds_home
+
+    if elol6_total_preds_away == 0:
+        elol6_strike_rate_away_out = 0
+    else:
+        elol6_strike_rate_away_out = float(elol6_total_succ_away) / elol6_total_preds_away
+
+    if elol6_total_preds_draw == 0:
+        elol6_strike_rate_draw_out = 0
+    else:
+        elol6_strike_rate_draw_out = float(elol6_total_succ_draw) / elol6_total_preds_draw
+
+    if gsrs_total_preds_home == 0:
+        gsrs_strike_rate_home_out = 0
+    else:
+        gsrs_strike_rate_home_out = float(gsrs_total_succ_home) / gsrs_total_preds_home
+
+    if gsrs_total_preds_away == 0:
+        gsrs_strike_rate_away_out = 0
+    else:
+        gsrs_strike_rate_away_out = float(gsrs_total_succ_away) / gsrs_total_preds_away
+
+    if gsrs_total_preds_draw == 0:
+        gsrs_strike_rate_draw_out = 0
+    else:
+        gsrs_strike_rate_draw_out = float(gsrs_total_succ_draw) / gsrs_total_preds_draw
     return render(request, 'predictions/dashboard.html',
                   {'szns_drpdown': szns_drpdown, 'countries': countries, 'elohist_strike_rate_home': elohist_strike_rate_home,
                    'elohist_strike_rate_away': elohist_strike_rate_away, 'elohist_strike_rate_draw': elohist_strike_rate_draw,
