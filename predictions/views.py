@@ -446,6 +446,7 @@ def metrics(request):
 
 def predictions(request):
     seasonid = 0
+    games_selected = ''
     games_played = 0
     games_total = 0
     games_played_perc = 0
@@ -479,11 +480,11 @@ def predictions(request):
     if request.method == "POST":
         lg_name = request.POST.get('country_leagues')
         period_end = str(request.POST.get('league_period'))
-        games_selected = Game.objects.filter(season__league__league_name=lg_name, season__end_date=period_end)[0]
-        seasonid = games_selected.season.id
-        if lg_name == "select_league" or lg_name == '' or not lg_name:
+        if lg_name == "select_league" or lg_name == '' or not lg_name or lg_name is None or period_end == 'None' or period_end == '':
             return redirect('predictions')
         else:
+            games_selected = Game.objects.filter(season__league__league_name=lg_name, season__end_date=period_end)[0]
+            seasonid = games_selected.season.id
             games_played = Game.objects.total_season_games_played(seasonid)
             games_total = Game.objects.total_season_games(seasonid)
             games_played_perc = float(games_played) / games_total
