@@ -19,10 +19,10 @@ class Migration(migrations.Migration):
         #     model_name='points',
         #     name='team',
         # ),
-        # migrations.RemoveField(
-        #     model_name='team',
-        #     name='id',
-        # ),
+        migrations.RemoveField(
+            model_name='team',
+            name='id',
+        ),
         migrations.AlterField(
             model_name='team',
             name='name',
