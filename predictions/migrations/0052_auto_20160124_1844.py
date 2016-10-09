@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     # dependencies = [
     #     ('predictions', '0051_points'),
     # ]
-
+    #
     # operations = [
     #     migrations.RemoveField(
     #         model_name='points',
@@ -32,4 +32,5 @@ class Migration(migrations.Migration):
     #         name='Points',
     #     ),
     # ]
+
     pass
