@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='team',
             name='name',
-            field=models.CharField(max_length=250, serialize=False, primary_key=True),
+            field=models.CharField(max_length=250, serialize=False),
         ),
         migrations.DeleteModel(
             name='Points',
