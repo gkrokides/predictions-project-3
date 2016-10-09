@@ -70,7 +70,7 @@ class Season(models.Model):
 
 
 class Team(models.Model):
-    name = models.CharField(max_length=250, unique=True)
+    name = models.CharField(max_length=250, unique=True, primary_key=True)
     # points = models.IntegerField(null=True, blank=True)
 
     class Meta:
