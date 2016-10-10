@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'predictions_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'betkrok$betkrokdb',
+        'NAME': 'betkrok$betkrokdb2',
         'USER': 'betkrok',
         'PASSWORD': 'thebigshipisintheport',
         'HOST': 'betkrok.mysql.pythonanywhere-services.com',
