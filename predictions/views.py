@@ -8,6 +8,7 @@ from django.db.models import Q, F, Sum
 from operator import itemgetter
 from django.conf import settings
 from datetime import datetime
+import json
 
 # from django.db.models import Count
 # from itertools import chain
@@ -473,6 +474,7 @@ def predictions(request):
     for cntr in countries:
         szns_drpdown.update({str(cntr): Season.objects.get_seasons_full(cntr)})
     x = []
+    szns_drpdown = json.dumps(szns_drpdown)
     gamewk_out = ""
     lstout = "no league selected"
     ssnout = ""
