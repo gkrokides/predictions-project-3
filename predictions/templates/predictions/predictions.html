@@ -2,7 +2,7 @@
 
 {% block head %}
     <script>
-        var seasonsByCountry ={{ szns_drpdown|safe }}
+        var seasonsByCountry ={{ szns_drpdown|safe }};
 
         function changecat(value) {
             if (value.length == 0) document.getElementById("country_leagues").innerHTML = "<option></option>";
