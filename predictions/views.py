@@ -446,6 +446,7 @@ def metrics(request):
 
 
 def predictions(request):
+    leaderboard = Game.objects.all()
     seasonid = 0
     games_selected = ''
     games_played = 0
