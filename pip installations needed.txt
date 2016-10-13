@@ -2,4 +2,4 @@ pip install dict
 
 pip install django-filter
 
-blah blah
+better do pip freeze > requirements.txt to automatically create the requirements file
