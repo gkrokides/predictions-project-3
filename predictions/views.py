@@ -511,10 +511,10 @@ def predictions(request):
             gamewk = leaderboard[0].gameweek + 1
             gamewk_out = gamewk - 1
             user_made_selection = True
-            new_predictions_cnt = leaderboard.exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).count()
+            # new_predictions_cnt = leaderboard.exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).count()
             past_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__lte=gamewk_out).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).count()
-            new_predictions_cnt = json.dumps(new_predictions_cnt)
-            past_predictions_cnt = json.dumps(past_predictions_cnt)
+            new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__gt=6).count() - past_predictions_cnt
+            # past_predictions_cnt = json.dumps(past_predictions_cnt)
             # teams_total = Game.objects.filter(season=seasonid, gameweek=1).count() * 2
             for tm in leaderboard:
                 h = tm.hometeam
