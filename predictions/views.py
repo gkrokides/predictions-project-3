@@ -558,7 +558,7 @@ def predictions(request):
                    'games_played_perc_string': format(games_played_perc, "0.00%"), 'home_wins_total_perc': home_wins_total_perc,
                    'away_wins_total_perc': away_wins_total_perc, 'draws_total_perc': draws_total_perc, 'season_goals': season_goals,
                    'goals_p_game': goals_p_game, 'bts_perc': bts_perc, 'over_1p5': over_1p5, 'over_2p5': over_2p5, 'over_3p5': over_3p5,
-                   'new_predictions_cnt': new_predictions_cnt, 'past_predictions_cnt': past_predictions_cnt})
+                   'new_predictions_cnt': json.dumps(new_predictions_cnt), 'past_predictions_cnt': json.dumps(past_predictions_cnt)})
 
 
 def testview(request):
