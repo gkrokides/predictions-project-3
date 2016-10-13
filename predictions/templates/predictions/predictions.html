@@ -203,9 +203,6 @@
 
     <p><a href="{% url 'past_predictions' seasonid %}"><button type="button" class="btn btn-danger">Past Predictions <span class="badge">{{ past_predictions_cnt|safe }}</span></button></a></p>
     <p><a href="{% url 'new_predictions' seasonid gamewkout %}"><button type="button" class="btn btn-primary">New Predictions <span class="badge">{{ new_predictions_cnt|safe }}</span></button></a></p>
-    <p>seasonid: {{ seasonid }}</p>
-    <p>leaderboard: {{ leaderboard }}</p>
-    <p>new predictions: {{ new_predictions_cnt|safe }}</p>
 
 {% endif %}
 
