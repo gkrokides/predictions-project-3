@@ -401,9 +401,10 @@ def game_detail(request, pk):
     lg2to3 = all_matches_annotated.filter(Q(result_total=2) | Q(result_total=3)).count() / float(all_matches_cnt)
     lg4to6 = all_matches_annotated.filter(Q(result_total=4) | Q(result_total=5) | Q(result_total=6)).count() / float(all_matches_cnt)
     lg7plus = all_matches_annotated.filter(result_total__gt=6).count() / float(all_matches_cnt)
+    chart_data_json = json.dumps(chart_data)
     return render(request, 'predictions/game_detail.html',
                   {'hometm': hometm, 'awaytm': awaytm, 'gm': gm, 'leaderboard': leaderboard, 'x': sorted_x,
-                   'season': season, 'gamewk': gamewk, 'title': gamewk_for_title, 'chart_data': chart_data,
+                   'season': season, 'gamewk': gamewk, 'title': gamewk_for_title, 'chart_data': chart_data_json,
                    'homewins': homewins, 'homelosses': homelosses, 'homedraws': homedraws,
                    'awaywins': awaywins, 'awaylosses': awaylosses, 'awaydraws': awaydraws, 'homeform': homeform, 'awayform': awayform,
                    'homefor': homefor, 'homeagainst': homeagainst, 'home_total_games': home_total_games, 'home_scored_p_game': home_scored_p_game,
