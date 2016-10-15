@@ -368,17 +368,41 @@ def game_detail(request, pk):
     # HOME/AWAY ADVANTAGE
     home_points_at_home = Game.objects.team_total_home_points(hometm, gm.season.id, gm.gameweek)
     home_points_away = Game.objects.team_total_away_points(hometm, gm.season.id, gm.gameweek)
-    home_goals_at_home_pcnt = (float(homefor_hm) / homefor) * 100
-    home_goals_away_pcnt = (float(homefor_aw) / homefor) * 100
-    home_against_at_home_pcnt = (float(homeagainst_hm) / homeagainst) * 100
-    home_against_away_pcnt = (float(homeagainst_aw) / homeagainst) * 100
+    try:
+        home_goals_at_home_pcnt = (float(homefor_hm) / homefor) * 100
+    except ZeroDivisionError:
+        home_goals_at_home_pcnt = 0
+    try:
+        home_goals_away_pcnt = (float(homefor_aw) / homefor) * 100
+    except ZeroDivisionError:
+        home_goals_away_pcnt = 0
+    try:
+        home_against_at_home_pcnt = (float(homeagainst_hm) / homeagainst) * 100
+    except ZeroDivisionError:
+        home_against_at_home_pcnt = 0
+    try:
+        home_against_away_pcnt = (float(homeagainst_aw) / homeagainst) * 100
+    except ZeroDivisionError:
+        home_against_away_pcnt = 0
     away_points_at_home = Game.objects.team_total_home_points(awaytm, gm.season.id, gm.gameweek)
     away_points_away = Game.objects.team_total_away_points(awaytm, gm.season.id, gm.gameweek)
-    away_goals_at_home_pcnt = (float(awayfor_hm) / awayfor) * 100
-    away_goals_away_pcnt = (float(awayfor_aw) / awayfor) * 100
-    away_against_at_home_pcnt = (float(awayagainst_hm) / awayagainst) * 100
-    away_against_away_pcnt = (float(awayagainst_aw) / awayagainst) * 100
-    # BAR CHART data Team vs Average
+    try:
+        away_goals_at_home_pcnt = (float(awayfor_hm) / awayfor) * 100
+    except ZeroDivisionError:
+        away_goals_at_home_pcnt = 0
+    try:
+        away_goals_away_pcnt = (float(awayfor_aw) / awayfor) * 100
+    except ZeroDivisionError:
+        away_goals_away_pcnt = 0
+    try:
+        away_against_at_home_pcnt = (float(awayagainst_hm) / awayagainst) * 100
+    except ZeroDivisionError:
+        away_against_at_home_pcnt = 0
+    try:
+        away_against_away_pcnt = (float(awayagainst_aw) / awayagainst) * 100
+    except ZeroDivisionError:
+        away_against_away_pcnt = 0
+   # BAR CHART data Team vs Average
     # home team
     homeset_cleaned = homeset.exclude(result__exact='').exclude(result__isnull=True)
     homeset_annotated = homeset_cleaned.annotate(result_total=Sum(F('homegoals') + F('awaygoals')))
