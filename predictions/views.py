@@ -836,8 +836,9 @@ def dashboard(request):
         gsrs_strike_rate_draw_out = 0
     else:
         gsrs_strike_rate_draw_out = float(gsrs_total_succ_draw) / gsrs_total_preds_draw
+    szns_drpdown_json = json.dumps(szns_drpdown)
     return render(request, 'predictions/dashboard.html',
-                  {'szns_drpdown': szns_drpdown, 'countries': countries, 'elohist_strike_rate_home': elohist_strike_rate_home,
+                  {'szns_drpdown': szns_drpdown_json, 'countries': countries, 'elohist_strike_rate_home': elohist_strike_rate_home,
                    'elohist_strike_rate_away': elohist_strike_rate_away, 'elohist_strike_rate_draw': elohist_strike_rate_draw,
                    'elol6_strike_rate_home': elol6_strike_rate_home, 'elol6_strike_rate_away': elol6_strike_rate_away,
                    'elol6_strike_rate_draw': elol6_strike_rate_draw, 'gsrs_strike_rate_home': gsrs_strike_rate_home,
