@@ -862,7 +862,7 @@ def dashboard(request):
                    'strongest_draw_value': strongest_draw_value, 'barclass_home': barclass_home, 'barclass_away': barclass_away,
                    'barclass_draw': barclass_draw, 'cntry': cntry, 'divisionn': divisionn, 'period_end_out': period_end_out,
                    'elohist_winning_streaks': elohist_winning_streaks, 'elol6_winning_streaks': elol6_winning_streaks,
-                   'gsrs_winning_streaks': gsrs_winning_streaks, 'elohist_losing_streaks': elohist_losing_streaks,
+                   'gsrs_winning_streaks': json.dumps(gsrs_winning_streaks), 'elohist_losing_streaks': elohist_losing_streaks,
                    'elol6_losing_streaks': elol6_losing_streaks, 'gsrs_losing_streaks': gsrs_losing_streaks,
                    'gsrs_strike_rate_away_out': gsrs_strike_rate_away_out, 'elol6_strike_rate_home_out': elol6_strike_rate_home_out,
                    'elohist_strike_rate_home_out': elohist_strike_rate_home_out, 'elohist_strike_rate_away_out': elohist_strike_rate_away_out,
