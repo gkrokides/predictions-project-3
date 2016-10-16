@@ -27,6 +27,9 @@ h1, h2, h3, h4 {
 
 }
 
+body {
+    padding-top: 65px;
+}
 
 .save {
     float: right;
@@ -270,4 +273,10 @@ background:#EAF2F8;
 
 .srslot6 {
     background: #FD9595;
+}
+
+.navbar-default .navbar-nav>.active> a,
+.navbar-default .navbar-nav>.active> a:focus,
+.navbar-default .navbar-nav>.active> a:hover {
+  background: red;
 }
