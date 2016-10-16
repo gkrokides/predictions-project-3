@@ -584,20 +584,20 @@ class GameManager(models.Manager):
     def total_model_streaks(self, model, seasonidd):
         if seasonidd != 'all':
             if model == 'elohist':
-                qs = self.filter(season=seasonidd).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist')
+                qs = self.filter(season=seasonidd).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist').order_by('date')
             elif model == 'elol6':
-                qs = self.filter(season=seasonidd).exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True).values('prediction_status_elol6')
+                qs = self.filter(season=seasonidd).exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True).values('prediction_status_elol6').order_by('date')
             elif model == 'gsrs':
-                qs = self.filter(season=seasonidd).exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True).values('prediction_status_gsrs')
+                qs = self.filter(season=seasonidd).exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True).values('prediction_status_gsrs').order_by('date')
             else:
                 qs = ""
         else:
             if model == 'elohist':
-                qs = self.exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist')
+                qs = self.exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist').order_by('date')
             elif model == 'elol6':
-                qs = self.exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True).values('prediction_status_elol6')
+                qs = self.exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True).values('prediction_status_elol6').order_by('date')
             elif model == 'gsrs':
-                qs = self.exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True).values('prediction_status_gsrs')
+                qs = self.exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True).values('prediction_status_gsrs').order_by('date')
             else:
                 qs = ""
         results = []
@@ -640,11 +640,11 @@ class GameManager(models.Manager):
             filtered_qs = self.filter(season=seasonidd)
 
         if model == 'elohist':
-            qs = filtered_qs .exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist')
+            qs = filtered_qs .exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist').order_by('date')
         elif model == 'elol6':
-            qs = filtered_qs .exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True).values('prediction_status_elol6')
+            qs = filtered_qs .exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True).values('prediction_status_elol6').order_by('date')
         elif model == 'gsrs':
-            qs = filtered_qs .exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True).values('prediction_status_gsrs')
+            qs = filtered_qs .exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True).values('prediction_status_gsrs').order_by('date')
         else:
             qs = ""
         results = []
@@ -676,20 +676,20 @@ class GameManager(models.Manager):
     def total_model_losing_streaks(self, model, seasonidd):
         if seasonidd != 'all':
             if model == 'elohist':
-                qs = self.filter(season=seasonidd).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist')
+                qs = self.filter(season=seasonidd).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist').order_by('date')
             elif model == 'elol6':
-                qs = self.filter(season=seasonidd).exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True).values('prediction_status_elol6')
+                qs = self.filter(season=seasonidd).exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True).values('prediction_status_elol6').order_by('date')
             elif model == 'gsrs':
-                qs = self.filter(season=seasonidd).exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True).values('prediction_status_gsrs')
+                qs = self.filter(season=seasonidd).exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True).values('prediction_status_gsrs').order_by('date')
             else:
                 qs = ""
         else:
             if model == 'elohist':
-                qs = self.exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist')
+                qs = self.exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist').order_by('date')
             elif model == 'elol6':
-                qs = self.exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True).values('prediction_status_elol6')
+                qs = self.exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True).values('prediction_status_elol6').order_by('date')
             elif model == 'gsrs':
-                qs = self.exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True).values('prediction_status_gsrs')
+                qs = self.exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True).values('prediction_status_gsrs').order_by('date')
             else:
                 qs = ""
         results = []
@@ -732,11 +732,11 @@ class GameManager(models.Manager):
             filtered_qs = self.filter(season=seasonidd)
 
         if model == 'elohist':
-            qs = filtered_qs .exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist')
+            qs = filtered_qs .exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist').order_by('date')
         elif model == 'elol6':
-            qs = filtered_qs .exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True).values('prediction_status_elol6')
+            qs = filtered_qs .exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True).values('prediction_status_elol6').order_by('date')
         elif model == 'gsrs':
-            qs = filtered_qs .exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True).values('prediction_status_gsrs')
+            qs = filtered_qs .exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True).values('prediction_status_gsrs').order_by('date')
         else:
             qs = ""
         results = []
