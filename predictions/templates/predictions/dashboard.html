@@ -111,25 +111,25 @@
                         <tbody class="centred">
                         <tr>
                             <td class="left-al">Home</td>
-                            <td class={{elohist_strike_rate_home_out|strike_rate_colors}}>{{ elohist_strike_rate_home }}</td>
-                            <td class={{elol6_strike_rate_home_out|strike_rate_colors}}>{{ elol6_strike_rate_home }}</td>
-                            <td class={{gsrs_strike_rate_home_out|strike_rate_colors}}>{{ gsrs_strike_rate_home }}</td>
+                            <td class={{elohist_strike_rate_home_out|strike_rate_colors}}>{{ elohist_strike_rate_home|floatformat:0 }}%</td>
+                            <td class={{elol6_strike_rate_home_out|strike_rate_colors}}>{{ elol6_strike_rate_home|floatformat:0 }}%</td>
+                            <td class={{gsrs_strike_rate_home_out|strike_rate_colors}}>{{ gsrs_strike_rate_home|floatformat:0 }}%</td>
                         </tr>
                         <tr>
                             <td class="left-al">Away</td>
-                            <td class={{elohist_strike_rate_away_out|strike_rate_colors}}>{{ elohist_strike_rate_away }}</td>
-                            <td class={{elol6_strike_rate_away_out|strike_rate_colors}}>{{ elol6_strike_rate_away }}</td>
-                            <td class={{gsrs_strike_rate_away_out|strike_rate_colors}}>{{ gsrs_strike_rate_away }}</td>
+                            <td class={{elohist_strike_rate_away_out|strike_rate_colors}}>{{ elohist_strike_rate_away|floatformat:0 }}%</td>
+                            <td class={{elol6_strike_rate_away_out|strike_rate_colors}}>{{ elol6_strike_rate_away|floatformat:0 }}%</td>
+                            <td class={{gsrs_strike_rate_away_out|strike_rate_colors}}>{{ gsrs_strike_rate_away|floatformat:0 }}%</td>
                         </tr>
                         <tr>
                             <td class="left-al">Draw</td>
-                            <td class={{elohist_strike_rate_draw_out|strike_rate_colors}}>{{ elohist_strike_rate_draw }}</td>
-                            <td class={{elol6_strike_rate_draw_out|strike_rate_colors}}>{{ elol6_strike_rate_draw }}</td>
-                            <td class={{gsrs_strike_rate_draw_out|strike_rate_colors}}>{{ gsrs_strike_rate_draw }}</td>
+                            <td class={{elohist_strike_rate_draw_out|strike_rate_colors}}>{{ elohist_strike_rate_draw|floatformat:0 }}%</td>
+                            <td class={{elol6_strike_rate_draw_out|strike_rate_colors}}>{{ elol6_strike_rate_draw|floatformat:0 }}%</td>
+                            <td class={{gsrs_strike_rate_draw_out|strike_rate_colors}}>{{ gsrs_strike_rate_draw|floatformat:0 }}%</td>
                         </tr>
                         </tbody>
                     </table>
-                    <p>* N/A = no predictions have been made yet for this kind of bet</p><br>
+                    <p>"%" = no predictions have been made yet for this kind of bet</p><br>
                 </div>
            </div>
         </div>
@@ -143,24 +143,24 @@
                     <p style="font-size:16px">Strongest in <strong>Home</strong> predictions: <strong>{{ strongest_home_model }}</strong></p>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success {{ barclass_home }}" role="progressbar"
-                             aria-valuemin="0" aria-valuemax="100" style="width:{{ strongest_home_value }}">
-                            {{ strongest_home_value }}
+                             aria-valuemin="0" aria-valuemax="100"  style="width:{{ strongest_home_value|floatformat:0 }}%">
+                            {{ strongest_home_value|floatformat:0 }}%
                         </div>
                     </div>
 
                     <p style="font-size:16px">Strongest in <strong>Away</strong> predictions: <strong>{{ strongest_away_model }}</strong></p>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success {{ barclass_away }}" role="progressbar"
-                             aria-valuemin="0" aria-valuemax="100" style="width:{{ strongest_away_value }}">
-                            {{ strongest_away_value }}
+                             aria-valuemin="0" aria-valuemax="100" style="width:{{ strongest_away_value|floatformat:0 }}%">
+                            {{ strongest_away_value|floatformat:0 }}%
                         </div>
                     </div>
 
                     <p style="font-size:16px">Strongest in <strong>Draw</strong> predictions: <strong>{{ strongest_draw_model }}</strong></p>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success {{ barclass_draw }}" role="progressbar"
-                             aria-valuemin="0" aria-valuemax="100" style="width:{{ strongest_draw_value }}">
-                            {{ strongest_draw_value }}
+                             aria-valuemin="0" aria-valuemax="100" style="width:{{ strongest_draw_value|floatformat:0 }}%">
+                            {{ strongest_draw_value|floatformat:0 }}%
                         </div>
                     </div>
 

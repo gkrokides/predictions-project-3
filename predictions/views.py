@@ -622,6 +622,9 @@ def dashboard(request):
     cntry_class = ''
     divisionn_class = ''
     period_end_out_class = ''
+    strongest_home_list = [0.0]
+    strongest_away_list = [0.0]
+    strongest_draw_list = [0.0]
     # dropdown list data
     countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
     szns_drpdown = {}
@@ -708,51 +711,60 @@ def dashboard(request):
     if elohist_total_preds_home == 0:
         elohist_strike_rate_home = "NA*"
     else:
-        elohist_strike_rate_home = format(float(elohist_total_succ_home) / elohist_total_preds_home, "0.00%")
+        elohist_strike_rate_home = (float(elohist_total_succ_home) / elohist_total_preds_home) * 100
+        strongest_home_list.append(elohist_strike_rate_home)
 
     if elohist_total_preds_away == 0:
         elohist_strike_rate_away = "NA*"
     else:
-        elohist_strike_rate_away = format(float(elohist_total_succ_away) / elohist_total_preds_away, "0.00%")
+        elohist_strike_rate_away = (float(elohist_total_succ_away) / elohist_total_preds_away) * 100
+        strongest_away_list.append(elohist_strike_rate_away)
 
     if elohist_total_preds_draw == 0:
         elohist_strike_rate_draw = "NA*"
     else:
-        elohist_strike_rate_draw = format(float(elohist_total_succ_draw) / elohist_total_preds_draw, "0.00%")
+        elohist_strike_rate_draw = (float(elohist_total_succ_draw) / elohist_total_preds_draw) * 100
+        strongest_draw_list.append(elohist_strike_rate_draw)
 
     if elol6_total_preds_home == 0:
         elol6_strike_rate_home = "NA*"
     else:
-        elol6_strike_rate_home = format(float(elol6_total_succ_home) / elol6_total_preds_home, "0.00%")
+        elol6_strike_rate_home = (float(elol6_total_succ_home) / elol6_total_preds_home) * 100
+        strongest_home_list.append(elol6_strike_rate_home)
 
     if elol6_total_preds_away == 0:
         elol6_strike_rate_away = "NA*"
     else:
-        elol6_strike_rate_away = format(float(elol6_total_succ_away) / elol6_total_preds_away, "0.00%")
+        elol6_strike_rate_away = (float(elol6_total_succ_away) / elol6_total_preds_away) * 100
+        strongest_away_list.append(elol6_strike_rate_away)
 
     if elol6_total_preds_draw == 0:
         elol6_strike_rate_draw = "NA*"
     else:
-        elol6_strike_rate_draw = format(float(elol6_total_succ_draw) / elol6_total_preds_draw, "0.00%")
+        elol6_strike_rate_draw = (float(elol6_total_succ_draw) / elol6_total_preds_draw) * 100
+        strongest_draw_list.append(elol6_strike_rate_draw)
 
     if gsrs_total_preds_home == 0:
         gsrs_strike_rate_home = "NA*"
     else:
-        gsrs_strike_rate_home = format(float(gsrs_total_succ_home) / gsrs_total_preds_home, "0.00%")
+        gsrs_strike_rate_home = (float(gsrs_total_succ_home) / gsrs_total_preds_home) * 100
+        strongest_home_list.append(gsrs_strike_rate_home)
 
     if gsrs_total_preds_away == 0:
         gsrs_strike_rate_away = "NA*"
     else:
-        gsrs_strike_rate_away = format(float(gsrs_total_succ_away) / gsrs_total_preds_away, "0.00%")
+        gsrs_strike_rate_away = (float(gsrs_total_succ_away) / gsrs_total_preds_away) * 100
+        strongest_away_list.append(gsrs_strike_rate_away)
 
     if gsrs_total_preds_draw == 0:
         gsrs_strike_rate_draw = "NA*"
     else:
-        gsrs_strike_rate_draw = format(float(gsrs_total_succ_draw) / gsrs_total_preds_draw, "0.00%")
+        gsrs_strike_rate_draw = (float(gsrs_total_succ_draw) / gsrs_total_preds_draw) * 100
+        strongest_draw_list.append(gsrs_strike_rate_draw)
     # variable model strengths
-    strongest_home = max(elohist_strike_rate_home, elol6_strike_rate_home, gsrs_strike_rate_home)
-    strongest_away = max(elohist_strike_rate_away, elol6_strike_rate_away, gsrs_strike_rate_away)
-    strongest_draw = max(elohist_strike_rate_draw, elol6_strike_rate_draw, gsrs_strike_rate_draw)
+    strongest_home = max(strongest_home_list)
+    strongest_away = max(strongest_away_list)
+    strongest_draw = max(strongest_draw_list)
     if strongest_home == elohist_strike_rate_home:
         strongest_home_model = 'ELO(H)'
         strongest_home_value = elohist_strike_rate_home
@@ -761,23 +773,31 @@ def dashboard(request):
         strongest_home_model = 'ELO(6)'
         strongest_home_value = elol6_strike_rate_home
         barclass_home = "elo_l6_chart"
-    else:
+    elif strongest_home == gsrs_strike_rate_home:
         strongest_home_model = 'GSRS'
         strongest_home_value = gsrs_strike_rate_home
         barclass_home = "gsrs_chart"
+    else:
+        strongest_home_model = 'None yet'
+        strongest_home_value = 0
+        barclass_home = ""
 
     if strongest_away == elohist_strike_rate_away:
         strongest_away_model = 'ELO(H)'
         strongest_away_value = elohist_strike_rate_away
         barclass_away = "elo_hist_chart"
-    elif strongest_away == elol6_strike_rate_home:
+    elif strongest_away == elol6_strike_rate_away:
         strongest_away_model = 'ELO(6)'
         strongest_away_value = elol6_strike_rate_away
         barclass_away = "elo_l6_chart"
-    else:
+    elif strongest_away == gsrs_strike_rate_away:
         strongest_away_model = 'GSRS'
         strongest_away_value = gsrs_strike_rate_away
         barclass_away = "gsrs_chart"
+    else:
+        strongest_away_model = 'None yet'
+        strongest_away_value = 0
+        barclass_away = ""
 
     if strongest_draw == elohist_strike_rate_draw:
         strongest_draw_model = 'ELO(H)'
@@ -787,10 +807,14 @@ def dashboard(request):
         strongest_draw_model = 'ELO(6)'
         strongest_draw_value = elol6_strike_rate_draw
         barclass_draw = "elo_l6_chart"
-    else:
+    elif strongest_draw == elol6_strike_rate_draw:
         strongest_draw_model = 'GSRS'
         strongest_draw_value = gsrs_strike_rate_draw
         barclass_draw = "gsrs_chart"
+    else:
+        strongest_draw_model = 'None yet'
+        strongest_draw_value = 0
+        barclass_draw = ""
     # variables that return classes
     if elohist_total_preds_home == 0:
         elohist_strike_rate_home_out = 0

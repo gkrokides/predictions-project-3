@@ -15,7 +15,9 @@ def strike_rate_colors(value):
         return 'srslot4'
     elif 0.09 <= value < 0.29:
         return 'srslot5'
-    else:
+    elif 0.0001 <= value < 0.09:
         return 'srslot6'
+    else:
+        return ''
 
 
