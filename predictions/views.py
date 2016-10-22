@@ -9,6 +9,8 @@ from operator import itemgetter
 from django.conf import settings
 from datetime import datetime
 import json
+from django.forms import modelformset_factory
+from django import forms
 
 # from django.db.models import Count
 # from itertools import chain
@@ -893,3 +895,109 @@ def dashboard(request):
                    'elohist_strike_rate_draw_out': elohist_strike_rate_draw_out, 'elol6_strike_rate_away_out': elol6_strike_rate_away_out,
                    'elol6_strike_rate_draw_out': elol6_strike_rate_draw_out, 'gsrs_strike_rate_home_out': gsrs_strike_rate_home_out,
                    'gsrs_strike_rate_draw_out': gsrs_strike_rate_draw_out})
+
+
+def addscore(request):
+    formset_to_save = ''
+    msg = ''
+    msg_class = ''
+    GameFormSet = modelformset_factory(Game, fields=('gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam'), extra=0)
+    formset = GameFormSet(queryset=Game.objects.all())
+    countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
+    szns_drpdown = {}
+    # filling in a dictionary of leagues for each country
+    for cntr in countries:
+        szns_drpdown.update({str(cntr): Season.objects.get_seasons_full(cntr)})
+    szns_drpdown = json.dumps(szns_drpdown)
+    gamewk = ""
+    lstout = "no league selected"
+    ssnout = ""
+    user_made_selection = False
+    if request.method == "POST":
+        if 'jsform' in request.POST:
+            lg_name = request.POST.get('country_leagues')
+            period_end = str(request.POST.get('league_period'))
+            if lg_name == "select_league" or lg_name == '' or not lg_name or lg_name is None or period_end == 'None' or period_end == '':
+                return redirect('add_score')
+            else:
+                games_selected = Game.objects.filter(season__league__league_name=lg_name, season__end_date=period_end)[0]
+                seasonid = games_selected.season.id
+                user_made_selection = True
+                lst = Season.objects.get(id=seasonid)
+                lstout = lst.league.league_name
+                ssnout = str(lst.get_start_year()) + "/" + str(lst.get_end_year())
+                leaderboard = Game.objects.last_gameweek(seasn=lst)
+                gamewk = leaderboard[0].gameweek + 1
+                formset = GameFormSet(queryset=Game.objects.filter(season=seasonid, homegoals__isnull=True))
+        elif 'djform' in request.POST:
+            formset_to_save = GameFormSet(request.POST, request.FILES)
+            if formset_to_save.is_valid():
+                formset_to_save.save()
+                msg = "Success! All games saved!"
+                msg_class = 'bg-success'
+            else:
+                formset_to_save = GameFormSet()
+                msg = "Something went wrong. Call krok"
+                msg_class = 'bg-danger'
+    return render(request, 'predictions/addscore.html', {'formset': formset, 'user_made_selection': user_made_selection,
+                                                         'szns_drpdown': szns_drpdown, 'gamewk': gamewk, 'lstout': lstout,
+                                                         'ssnout': ssnout, 'countries': countries,
+                                                         'formset_to_save': formset_to_save, 'msg': msg,
+                                                         'msg_class': msg_class})
+
+
+def addgames(request):
+    formset_to_save = ''
+    msg = ''
+    msg_class = ''
+    GameFormSet = modelformset_factory(
+        Game,
+        fields=('date', 'gameweek', 'hometeam', 'awayteam', 'season'),
+        extra=25,
+        widgets={
+            'homegoals': forms.Textarea(attrs={'cols': 8, 'rows': 1}),
+            'awaygoals': forms.Textarea(attrs={'cols': 8, 'rows': 1}),
+            'date': forms.DateInput()
+        })
+    formset = GameFormSet(queryset=Game.objects.none())
+    countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
+    szns_drpdown = {}
+    # filling in a dictionary of leagues for each country
+    for cntr in countries:
+        szns_drpdown.update({str(cntr): Season.objects.get_seasons_full(cntr)})
+    szns_drpdown = json.dumps(szns_drpdown)
+    gamewk = ""
+    lstout = "no league selected"
+    ssnout = ""
+    user_made_selection = False
+    if request.method == "POST":
+        if 'jsform' in request.POST:
+            lg_name = request.POST.get('country_leagues')
+            period_end = str(request.POST.get('league_period'))
+            if lg_name == "select_league" or lg_name == '' or not lg_name or lg_name is None or period_end == 'None' or period_end == '':
+                return redirect('add_games')
+            else:
+                games_selected = Game.objects.filter(season__league__league_name=lg_name, season__end_date=period_end)[0]
+                seasonid = games_selected.season.id
+                user_made_selection = True
+                lst = Season.objects.get(id=seasonid)
+                lstout = lst.league.league_name
+                ssnout = str(lst.get_start_year()) + "/" + str(lst.get_end_year())
+                leaderboard = Game.objects.last_gameweek(seasn=lst)
+                gamewk = leaderboard[0].gameweek + 1
+                # formset = GameFormSet(queryset=Game.objects.filter(season=seasonid, gameweek=gamewk))
+        elif 'djform' in request.POST:
+            formset_to_save = GameFormSet(request.POST, request.FILES)
+            if formset_to_save.is_valid():
+                formset_to_save.save()
+                msg = "Success! All games saved!"
+                msg_class = 'bg-success'
+            else:
+                formset_to_save = GameFormSet()
+                msg = "Something went wrong. Call krok"
+                msg_class = 'bg-danger'
+    return render(request, 'predictions/addgame.html', {'formset': formset, 'user_made_selection': user_made_selection,
+                                                         'szns_drpdown': szns_drpdown, 'gamewk': gamewk, 'lstout': lstout,
+                                                         'ssnout': ssnout, 'countries': countries,
+                                                         'formset_to_save': formset_to_save, 'msg': msg,
+                                                         'msg_class': msg_class})

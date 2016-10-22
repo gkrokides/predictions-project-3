@@ -96,7 +96,8 @@
                         <button data-toggle="dropdown" class="btn btn-info navbar-btn dropdown-toggle">Hi, {{ request.user.username }} <span class="glyphicon glyphicon-chevron-down"></span></button>
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'post_new' %}"><span class="glyphicon glyphicon-pencil"></span> Add Post</a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-record"></span> Add Match</a></li>
+                            <li><a href="{% url 'add_games' %}"><span class="glyphicon glyphicon-record"></span> Add Match</a></li>
+                            <li><a href="{% url 'add_score' %}"><span class="glyphicon glyphicon-record"></span> Add Score</a></li>
                             <li class="divider"></li>
                             <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Sign out</a></li>
                         </ul>

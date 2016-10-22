@@ -1,0 +1,99 @@
+{% extends 'predictions/base.html' %}
+
+{% block head %}
+
+    <script>
+        var seasonsByCountry ={{ szns_drpdown|safe }};
+
+        function changecat(value) {
+            if (value.length == 0) document.getElementById("country_leagues").innerHTML = "<option></option>";
+            else {
+                var cntrOptions = "";
+                var leagueName = [];
+                for (seazonn in seasonsByCountry[value]) {
+                    if (leagueName.indexOf(seasonsByCountry[value][seazonn][2]) >= 0) { continue; }
+                    leagueName.push(seasonsByCountry[value][seazonn][2]);
+                    cntrOptions += "<option value=" + seasonsByCountry[value][seazonn][2] + ">" + seasonsByCountry[value][seazonn][2] + "</option>";
+                }
+                document.getElementById("country_leagues").innerHTML = "<option value=''>Select Division</option>" + cntrOptions;
+                document.getElementById("league_period").innerHTML = "<option value=''>Select Period</option>";
+            }
+        }
+
+        function changedLeague(value) {
+            val = document.getElementById("cntries").value
+            if (val.length == 0) document.getElementById("league_period").innerHTML = "<option value=''>Select Period</option>";
+            else {
+                var cntrOptions = "";
+                for (seazonn in seasonsByCountry[val]) {
+                    if (seasonsByCountry[val][seazonn][2] != value) { continue; }
+                    cntrOptions += "<option value=" + seasonsByCountry[val][seazonn][5] + ">" + seasonsByCountry[val][seazonn][3] + "/" + seasonsByCountry[val][seazonn][4] + "</option>";
+                }
+                document.getElementById("league_period").innerHTML = "<option value=''>Select Period</option>" + cntrOptions;
+            }
+        }
+
+    </script>
+
+{% endblock %}
+
+{% block header %}Add score{% endblock %}
+
+{% block content %}
+<div class="well">
+        <form class="date" action="{% url 'add_score' %}" method="POST">
+
+            <select name="cntries" id="cntries" onChange="changecat(this.value);">
+                <option value="" disabled selected>Select Country</option>
+                {% for country in countries %}
+                          <option value="{{ country }}">{{ country }}</option>
+                {% endfor %}{% csrf_token %}
+            </select>
+
+            <select name="country_leagues"  id="country_leagues" onChange="changedLeague(this.value);">
+                <option value="select_league" disabled selected>Select Division</option>
+            </select>
+
+            <select name ="league_period" id="league_period">
+                <option value="select_period" disabled selected>Select Period</option>
+            </select>
+
+        <input type="submit" value="Submit" name="jsform">
+        </form>
+        <br><br>
+        League: <strong>{{ lstout }}</strong><br>
+        Season: <strong>{{ ssnout }}</strong><br>
+        <p class="{{msg_class}}">{{ msg }}</p>
+
+    </div>
+
+{% if user_made_selection %}
+<form class="" action="{% url 'add_score' %}" method="POST">
+    {{ formset.management_form }}
+    <table class="table well">
+        <thead>
+            <tr>
+                <th>Gameweek</th>
+                <th>Home</th>
+                <th>Home goals</th>
+                <th>Away goals</th>
+                <th>Away</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for form in formset.forms %}
+                <tr>
+                        {% for field in form %}
+                            <td>{{ field }}</td>
+                        {% endfor %}{% csrf_token %}
+                </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <input type="submit" value="Add Scores" name="djform">
+</form>
+{% else %}
+    <p></p>
+{% endif %}
+
+{% endblock %}

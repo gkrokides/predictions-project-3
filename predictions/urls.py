@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'^pastpredictions/(?P<seasonid>[0-9]+)/$', views.past_predictions, name='past_predictions'),
     url(r'^newpredictions/(?P<seasonid>[0-9]+)/(?P<gamewk>[0-9]+)/$', views.new_predictions, name='new_predictions'),
     url(r'^test/$', views.testview, name='test'),
-    url(r'^dashboard/$', views.dashboard, name='dashboard')
+    url(r'^dashboard/$', views.dashboard, name='dashboard'),
+    url(r'^add-score/$', views.addscore, name='add_score'),
+    url(r'^add-game/$', views.addgames, name='add_games')
     # url(r'^games_filtered/$', views.games_filter, name='games_filtered'),
 ]
