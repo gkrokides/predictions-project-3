@@ -3,9 +3,11 @@
 {% block header %}{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
     <h1>New post</h1>
     <form method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-warning" style ="float:right;">Save</button>
     </form>
+{% endif %}
 {% endblock %}

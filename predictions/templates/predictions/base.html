@@ -65,6 +65,8 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
         <!--<link href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">-->
         {% block head %}{% endblock %}
     </head>
@@ -98,6 +100,7 @@
                             <li><a href="{% url 'post_new' %}"><span class="glyphicon glyphicon-pencil"></span> Add Post</a></li>
                             <li><a href="{% url 'add_games' %}"><span class="glyphicon glyphicon-record"></span> Add Match</a></li>
                             <li><a href="{% url 'add_score' %}"><span class="glyphicon glyphicon-record"></span> Add Score</a></li>
+                            <li><a href="{% url 'all_games' %}"><span class="glyphicon glyphicon-search"></span> All Matches</a></li>
                             <li class="divider"></li>
                             <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Sign out</a></li>
                         </ul>

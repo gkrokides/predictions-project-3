@@ -1,0 +1,45 @@
+{% extends 'predictions/base.html' %}
+{% block head %}
+        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+        <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+        $('#example').DataTable();
+        } );
+    </script>
+
+{% endblock %}
+{% block header %}All Games{% endblock %}
+
+{% block content3 %}
+{% if user.is_authenticated %}
+
+    <table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Season</th>
+                <th>Gameweek</th>
+                <th>Date</th>
+                <th>Home</th>
+                <th>Home goals</th>
+                <th>Away goals</th>
+                <th>Away</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for obj in tableset %}
+            <tr>
+                <td width="15%">{{ obj.season }}</td>
+                <td>{{ obj.gameweek }}</td>
+                <td>{{ obj.date }}</td>
+                <td>{{ obj.hometeam }}</td>
+                <td>{{ obj.homegoals }}</td>
+                <td>{{ obj.awaygoals }}</td>
+                <td>{{ obj.awayteam }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endif %}
+{% endblock %}

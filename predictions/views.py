@@ -1001,3 +1001,8 @@ def addgames(request):
                                                          'ssnout': ssnout, 'countries': countries,
                                                          'formset_to_save': formset_to_save, 'msg': msg,
                                                          'msg_class': msg_class})
+
+
+def all_games(request):
+    tableset = Game.objects.all()
+    return render(request, 'predictions/all_games.html', {'tableset': tableset})

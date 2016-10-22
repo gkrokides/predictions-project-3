@@ -40,6 +40,7 @@
 {% block header %}Add games{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <div class="well srslot4">
         <form class="date" action="{% url 'add_games' %}" method="POST">
 
@@ -100,5 +101,5 @@
 {% else %}
     <p></p>
 {% endif %}
-
+{% endif %}
 {% endblock %}
