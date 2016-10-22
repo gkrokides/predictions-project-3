@@ -952,8 +952,8 @@ def addgames(request):
     msg_class = ''
     GameFormSet = modelformset_factory(
         Game,
-        fields=('date', 'gameweek', 'hometeam', 'awayteam', 'season'),
-        extra=25,
+        fields=('date', 'gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam', 'season'),
+        extra=12,
         widgets={
             'homegoals': forms.Textarea(attrs={'cols': 8, 'rows': 1}),
             'awaygoals': forms.Textarea(attrs={'cols': 8, 'rows': 1}),
