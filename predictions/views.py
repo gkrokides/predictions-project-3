@@ -62,7 +62,7 @@ def predictions_filter(request):
 
 
 def past_predictions(request, seasonid):
-    gfilter = GameFilter(request.GET, queryset=Game.objects.filter(season=seasonid).exclude(prediction_status_elohist__isnull=True).exclude(prediction_status_elohist__exact='').order_by('-date'))
+    gfilter = GameFilter(request.GET, queryset=Game.objects.filter(season=seasonid).exclude(prediction_status_elohist__isnull=True).exclude(prediction_status_elohist__exact='').order_by('-gameweek'))
     predicted_games = gfilter.count()
     return render(request, 'predictions/past_predictions.html', {'gfilter': gfilter, 'predicted_games': predicted_games})
 
