@@ -77,6 +77,7 @@ body {
     font-size: 15pt;
 }
 
+
 .game {
     font-size: 13pt;
     color: #808080;
@@ -275,3 +276,29 @@ background:#EAF2F8;
     background: #FD9595;
 }
 
+.navbar-custom1 .nav > li > a:focus,
+.navbar-custom1 .nav > li > a:hover,
+.navbar-custom1 .nav > li.active > a {
+  background-color: #5DADE2;
+  color: white;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+  color : white;
+}
+
+.activepage {
+
+    background: #5DADE2;
+    color: white;
+}
+
+.site-title {
+
+    color: #5DADE2;
+    font-size: 24pt;
+    font-family: 'Poiret One';
+
+
+
+}

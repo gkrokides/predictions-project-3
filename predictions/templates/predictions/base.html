@@ -49,7 +49,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="{% static 'css/predictions.css' %}">
+
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
         <script src="{% static 'javascript/change_color.js' %}"></script>
         <!--<script src="{% static 'javascript/game_details_charts.js' %}"></script>-->
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -66,6 +67,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+        <link rel="stylesheet" href="{% static 'css/predictions.css' %}">
 
         <!--<link href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">-->
         {% block head %}{% endblock %}
@@ -73,7 +75,7 @@
     <body>
 
 
-    <nav class="navbar  navbar-inverse  navbar-fixed-top">
+    <nav class="navbar navbar-fixed-top navbar-inverse navbar-custom1">
         <div class="container">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only"> Toggle navigation</span>
@@ -82,25 +84,25 @@
                 <span class="icon-bar"> </span>
             </button>
 
-            <a class="navbar-brand" href="#"> Betkrok - {% block header %}{% endblock %}</a>
+            <a class="navbar-brand" href="{% url 'about' %}"><strong class="site-title">Betkrok{% block header %}{% endblock %}</strong></a>
 
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-left">
-                    <li id="home"><a href="/">Home</a> </li>
-                    <li id="dashboard"> <a href="{% url 'dashboard' %}">Dashboard</a> </li>
-                    <li id="predictions"> <a href="{% url 'predictions' %}">Predictions</a> </li>
-                    <li id="about"> <a href="{% url 'about' %}">About</a> </li>
-                    <li id="contact"> <a href="{% url 'contactus' %}">Contact us</a> </li>
+                <ul class="nav navbar-nav">
+                    <li {% if 'dashboard' in request.path %}class="activepage"{% endif %} id="dashboard"> <a href="{% url 'dashboard' %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a> </li>
+                    <li {% if 'predictions' in request.path %}class="activepage"{% endif %} id="predictions"> <a href="{% url 'predictions' %}"><i class="fa fa-magic" aria-hidden="true"></i> Predictions</a> </li>
+                    <li {% if 'posts' in request.path %}class="activepage"{% endif %} id="home"> <a href="{% url 'post_list' %}"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Posts</a> </li>
+                    <li {% if 'contact' in request.path %}class="activepage"{% endif %} id="contactus"> <a href="{% url 'contactus' %}"><i class="fa fa-envelope" aria-hidden="true"></i> Contact us</a> </li>
                 </ul>
                 {% if user.is_authenticated %}
                 <ul class="nav navbar-nav navbar-right">
                     <div class="btn-group">
-                        <button data-toggle="dropdown" class="btn btn-info navbar-btn dropdown-toggle">Hi, {{ request.user.username }} <span class="glyphicon glyphicon-chevron-down"></span></button>
+                        <button data-toggle="dropdown" class="btn btn-info navbar-btn dropdown-toggle"><i class="fa fa-user" aria-hidden="true"></i> {{ request.user.username }}
+                            <span class="glyphicon glyphicon-chevron-down"></span></button>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'post_new' %}"><span class="glyphicon glyphicon-pencil"></span> Add Post</a></li>
-                            <li><a href="{% url 'add_games' %}"><span class="glyphicon glyphicon-record"></span> Add Match</a></li>
-                            <li><a href="{% url 'add_score' %}"><span class="glyphicon glyphicon-record"></span> Add Score</a></li>
-                            <li><a href="{% url 'all_games' %}"><span class="glyphicon glyphicon-search"></span> All Matches</a></li>
+                            <li><a href="{% url 'post_new' %}"><i class="fa fa-pencil fa-fw" aria-hidden="true"> Add Post</i></a></li>
+                            <li><a href="{% url 'add_games' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Add Match</i></a></li>
+                            <li><a href="{% url 'add_score' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Add Score</i></a></li>
+                            <li><a href="{% url 'all_games' %}"><i class="fa fa-search" aria-hidden="true"> All Matches</i></a></li>
                             <li class="divider"></li>
                             <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Sign out</a></li>
                         </ul>

@@ -3,13 +3,13 @@ from . import views
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    url(r'^$', views.post_list, name='post_list'),
+    url(r'^posts$', views.post_list, name='post_list'),
     url(r'^post/(?P<pk>[0-9]+)/$', views.post_detail, name='post_detail'),
     url(r'^post/new/$', views.post_new, name='post_new'),
     url(r'^post/(?P<pk>[0-9]+)/edit/$', views.post_edit, name='post_edit'),
     url(r'^predictions/$', views.predictions, name='predictions'),
     url(r'^predictions/history/$', views.predictions_filter, name='predictions_history'),
-    url(r'^about/$', TemplateView.as_view(template_name='predictions/about.html'), name='about'),
+    url(r'^$', TemplateView.as_view(template_name='predictions/about.html'), name='about'),
     url(r'^contact-us/$', TemplateView.as_view(template_name='predictions/contact_us.html'), name='contactus'),
     url(r'^game/(?P<pk>[0-9]+)/$', views.game_detail, name='game_detail'),
     url(r'^metrics/$', views.metrics, name='metrics'),
