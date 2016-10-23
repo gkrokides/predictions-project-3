@@ -809,7 +809,7 @@ def dashboard(request):
         strongest_draw_model = 'ELO(6)'
         strongest_draw_value = elol6_strike_rate_draw
         barclass_draw = "elo_l6_chart"
-    elif strongest_draw == elol6_strike_rate_draw:
+    elif strongest_draw == gsrs_strike_rate_draw:
         strongest_draw_model = 'GSRS'
         strongest_draw_value = gsrs_strike_rate_draw
         barclass_draw = "gsrs_chart"
