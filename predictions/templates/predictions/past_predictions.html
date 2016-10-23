@@ -49,13 +49,13 @@
               </tr>
             </thead>
             <tbody>
-            {% regroup gfilter by date as dated_list %}
+            {% regroup gfilter by gameweek as dated_list %}
             {% for date in dated_list %}
-              <tr class="noborder"><td colspan="10" style="font-size:10px">{{date.grouper}}</td></tr>
+              <tr class="noborder"><td colspan="10" style="font-size:10px">Gameweek {{date.grouper}}</td></tr>
                 {% for game in date.list %}
                 <tr style="font-size:12px">
                 <!--<td>{{ game.gameweek }}</td>-->
-                <td></td>
+                <td align="left">{{ game.date }}</td>
                 <td class="right-al">{{ game.hometeam }}</td>
                 <td class="right-al">{{ game.homegoals }}</td>
                 <td align="center">-</td>
