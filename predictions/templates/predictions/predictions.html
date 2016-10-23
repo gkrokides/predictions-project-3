@@ -40,8 +40,10 @@
 {% endblock %}
 
 {% block content5 %}
+
     <div class="well">
-        <form class="date" action="{% url 'predictions' %}" method="POST">
+
+        <form class="" action="{% url 'predictions' %}" method="POST">
 
             <select name="cntries" id="cntries" onChange="changecat(this.value);">
                 <option value="" disabled selected>Select Country</option>
@@ -61,9 +63,7 @@
         <input type="submit" value="Submit">
         </form>
 
-        League: <strong>{{ season }}</strong><br>
-        Season: <strong>{{ ssnout }}</strong><br>
-        Gameweek: <strong>{{ gamewkout }}</strong>
+
     </div>
 
     {% if user_made_selection %}
@@ -169,6 +169,21 @@
 {% if user_made_selection %}
 
     <div class="well">
+        <p style="font-size:16px">
+            <strong>League Overview:</strong>
+        </p>
+        League: <strong>{{ season }}</strong><br>
+        Season: <strong>{{ ssnout }}</strong><br>
+        Gameweek: <strong>{{ gamewkout }}</strong><br><br>
+        {% if user_made_selection %}
+        <a href="{% url 'new_predictions' seasonid gamewkout %}"><button type="button" class="btn btn-primary">New Predictions <span class="badge">{{ new_predictions_cnt|safe }}</span></button></a>
+        <a href="{% url 'past_predictions' seasonid %}"><button type="button" class="btn btn-danger">Past Predictions <span class="badge">{{ past_predictions_cnt|safe }}</span></button></a><br>
+        {% else %}
+        <p></p>
+        {% endif %}
+    </div>
+
+    <div class="well">
         <p style="font-size:16px"><strong>Regular season matches played:</strong></p>
         <strong>{{games_played}}</strong> out of <strong>{{ games_total }}</strong><br>
         <div class="progress">
@@ -180,7 +195,7 @@
     </div>
 
     <div class="well">
-        <p style="font-size:16px"><strong>Results</strong></p>
+        <p style="font-size:16px"><strong>League Results</strong></p>
         Home wins: <strong>{{ home_wins_total_perc }}</strong><br>
         Draws: <strong>{{ draws_total_perc }}</strong><br>
         Away wins: <strong>{{ away_wins_total_perc }}</strong>
@@ -200,8 +215,7 @@
         Over 3.5: <strong>{{ over_3p5 }}</strong>
     </div>
 
-    <p><a href="{% url 'past_predictions' seasonid %}"><button type="button" class="btn btn-danger">Past Predictions <span class="badge">{{ past_predictions_cnt|safe }}</span></button></a></p>
-    <p><a href="{% url 'new_predictions' seasonid gamewkout %}"><button type="button" class="btn btn-primary">New Predictions <span class="badge">{{ new_predictions_cnt|safe }}</span></button></a></p>
+
 
 {% endif %}
 
