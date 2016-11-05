@@ -1,49 +1,49 @@
 {% load staticfiles %}
 <html>
-    <style>
-    body {
-        font-family: "Lato", sans-serif;
-    }
+    <!--<style>-->
+    <!--body {-->
+        <!--font-family: "Lato", sans-serif;-->
+    <!--}-->
 
-    .sidenav {
-        height: 100%;
-        width: 230px;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        background-color: #111;
-        overflow-x: hidden;
-        transition: 0.5s;
-        padding-top: 60px;
-    }
+    <!--.sidenav {-->
+        <!--height: 100%;-->
+        <!--width: 230px;-->
+        <!--position: fixed;-->
+        <!--z-index: 1;-->
+        <!--top: 0;-->
+        <!--left: 0;-->
+        <!--background-color: #111;-->
+        <!--overflow-x: hidden;-->
+        <!--transition: 0.5s;-->
+        <!--padding-top: 60px;-->
+    <!--}-->
 
-    .sidenav a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: 15px;
-        color: #818181;
-        display: block;
-        transition: 0.3s
-    }
+    <!--.sidenav a {-->
+        <!--padding: 8px 8px 8px 32px;-->
+        <!--text-decoration: none;-->
+        <!--font-size: 15px;-->
+        <!--color: #818181;-->
+        <!--display: block;-->
+        <!--transition: 0.3s-->
+    <!--}-->
 
-    .sidenav a:hover, .offcanvas a:focus{
-        color: #f1f1f1;
-    }
+    <!--.sidenav a:hover, .offcanvas a:focus{-->
+        <!--color: #f1f1f1;-->
+    <!--}-->
 
-    .closebtn {
-        position: absolute;
-        top: 0;
-        right: 25px;
-        font-size: 36px !important;
-        margin-left: 50px;
-    }
+    <!--.closebtn {-->
+        <!--position: absolute;-->
+        <!--top: 0;-->
+        <!--right: 25px;-->
+        <!--font-size: 36px !important;-->
+        <!--margin-left: 50px;-->
+    <!--}-->
 
-    @media screen and (max-height: 450px) {
-      .sidenav {padding-top: 15px;}
-      .sidenav a {font-size: 18px;}
-    }
-    </style>
+    <!--@media screen and (max-height: 450px) {-->
+      <!--.sidenav {padding-top: 15px;}-->
+      <!--.sidenav a {font-size: 18px;}-->
+    <!--}-->
+    <!--</style>-->
     <head>
         <title>BetKrok</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -88,7 +88,12 @@
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li {% if 'dashboard' in request.path %}class="activepage"{% endif %} id="dashboard"> <a href="{% url 'dashboard' %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a> </li>
+                    <li {% if 'dashboard' in request.path %}class="activepage dropdown"{% endif %} id="dashboard"> <a class="dropdown-toggle" data-toggle="dropdown" href="{% url 'dashboard' %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'dashboard' %}">Overview</a></li>
+                        <li><a href="{% url 'byleague' %}">By League</a></li>
+                    </ul>
+                    </li>
                     <li {% if 'predictions' in request.path %}class="activepage"{% endif %} id="predictions"> <a href="{% url 'predictions' %}"><i class="fa fa-magic" aria-hidden="true"></i> Predictions</a> </li>
                     <li {% if 'posts' in request.path %}class="activepage"{% endif %} id="home"> <a href="{% url 'post_list' %}"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Posts</a> </li>
                     <li {% if 'contact' in request.path %}class="activepage"{% endif %} id="contactus"> <a href="{% url 'contactus' %}"><i class="fa fa-envelope" aria-hidden="true"></i> Contact us</a> </li>
@@ -243,6 +248,41 @@
                 </div>
             </div>
         </div>
+
+        <div class="content container-fluid">
+            <div class="row">
+                <div class="col-md-2">
+                    {% block content23 %}
+                    {% endblock %}
+                </div>
+                <div class="col-md-8">
+                    {% block content24 %}
+                    {% endblock %}
+                </div>
+                <div class="col-md-2">
+                    {% block content25 %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+        <div class="content container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    {% block content26 %}
+                    {% endblock %}
+                </div>
+                <div class="col-md-4">
+                    {% block content27 %}
+                    {% endblock %}
+                </div>
+                <div class="col-md-4">
+                    {% block content28 %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!--<div class="navbar  navbar-inverse navbar-fixed-bottom">-->

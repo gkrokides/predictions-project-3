@@ -9,6 +9,7 @@
 <!--<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
 <script>
         var seasonsByCountry ={{ szns_drpdown|safe }}
+        var allSeasons = {{ allseasons|safe }}
 
         function changecat(value) {
             if (value.length == 0) document.getElementById("country_leagues").innerHTML = "<option></option>";
@@ -22,6 +23,13 @@
                 }
                 document.getElementById("country_leagues").innerHTML = "<option value='All'>All</option>" + cntrOptions;
                 document.getElementById("league_period").innerHTML = "<option value='All'>All</option>";
+            }
+            if (value == 'All'){
+                var seasonOptions = "";
+                for (i = 0; i < allSeasons.length; i++) {
+                    seasonOptions += "<option value=" + allSeasons[i] + ">" + Number(allSeasons[i]-1) + "/" + allSeasons[i] + "</option>";
+                }
+                document.getElementById("league_period").innerHTML = "<option value='All'>All</option>" + seasonOptions;
             }
         }
 
@@ -71,6 +79,9 @@
       Period:
       <select name ="league_period" id="league_period">
           <option value="All">All</option>
+          {% for szn in allseasons_notjson %}
+            <option value="{{ szn }}">{{ szn|add:"-1" }}/{{ szn }}</option>
+          {% endfor %}{% csrf_token %}
       </select>
     </div>
     <button type="submit" class="btn btn-info">Submit</button>
@@ -84,7 +95,7 @@
      </h4>
      Country: <strong><span class={{ cntry|apply_color_if_all }}>{{ cntry }}</span></strong><br>
      Division: <strong><span class={{ divisionn|apply_color_if_all }}>{{ divisionn }}</span></strong><br>
-     Season end: <strong><span class={{ period_end_out|apply_color_if_all }}>{{ period_end_out }}</span></strong><br>
+     Season: <strong><span class={{ period_end_out|apply_color_if_all }}>{{ period_end_out }}</span></strong><br>
  </div>
 
 
@@ -139,7 +150,7 @@
             <div id="collapse1" class="panel-body" style="background: #212121; padding-bottom: 0cm;">
                 <div class="well">
 
-                    <p style="font-size:16px">Best in <strong>Home</strong> predictions: <strong>{{ strongest_home_model }}</strong></p>
+                    <p style="font-size:16px">Best in <span class="badge">Home</span> predictions: <span class="badge {{ barclass_home }}">{{ strongest_home_model }}</span></p>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success {{ barclass_home }}" role="progressbar"
                              aria-valuemin="0" aria-valuemax="100"  style="width:{{ strongest_home_value|floatformat:0 }}%">
@@ -147,7 +158,7 @@
                         </div>
                     </div>
 
-                    <p style="font-size:16px">Best in <strong>Away</strong> predictions: <strong>{{ strongest_away_model }}</strong></p>
+                    <p style="font-size:16px">Best in <span class="badge">Away</span> predictions: <span class="badge {{ barclass_away }}">{{ strongest_away_model }}</span></p>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success {{ barclass_away }}" role="progressbar"
                              aria-valuemin="0" aria-valuemax="100" style="width:{{ strongest_away_value|floatformat:0 }}%">
@@ -155,7 +166,7 @@
                         </div>
                     </div>
 
-                    <p style="font-size:16px">Best in <strong>Draw</strong> predictions: <strong>{{ strongest_draw_model }}</strong></p>
+                    <p style="font-size:16px">Best in <span class="badge">Draw</span> predictions: <span class="badge {{ barclass_draw }}">{{ strongest_draw_model }}</span></p>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success {{ barclass_draw }}" role="progressbar"
                              aria-valuemin="0" aria-valuemax="100" style="width:{{ strongest_draw_value|floatformat:0 }}%">

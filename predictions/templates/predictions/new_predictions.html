@@ -1,17 +1,137 @@
 {% extends 'predictions/base.html' %}
 
+{% block head %}
+
+<!--The style below is for the success progress bars-->
+<style>
+
+.bar-chart {
+    position: relative;
+    width: 100%;
+    margin-top: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.bar-chart > .chart {
+    position: relative;
+    width: 100%;
+}
+
+.bar-chart > .chart > .item {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    margin-bottom: 10px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.bar-chart > .chart > .item > .bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #C0C0C0;
+    z-index: 5;
+}
+
+.bar-chart > .chart > .item > .bar > .percent {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 40px;
+    line-height: 40px;
+    padding-right: 12px;
+    z-index: 15;
+    font-size: 15px;
+
+
+}
+
+
+.bar-chart > .chart > .item > .bar > .item-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #3e50b4;
+    z-index: 10;
+}
+
+.bar-chart > .chart > .item > .bar > .item-eloh {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #0C090A;
+    z-index: 10;
+}
+
+.bar-chart > .chart > .item > .bar > .item-elo6 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #810541;
+    z-index: 10;
+}
+
+.bar-chart > .chart > .item > .bar > .item-gsrs {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #E9AB17;
+    z-index: 10;
+}
+
+.bar-chart > .chart > .item > .bar > .item-progress > .title {
+    display: block;
+    position: absolute;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 12px;
+    letter-spacing: 2px;
+    z-index: 15;
+}
+</style>
+
+<script>
+    $(document).ready(function(){
+    barChart();
+
+    $(window).resize(function(){
+        barChart();
+    });
+
+    function barChart(){
+        $('.bar-chart').find('.item-progress').each(function(){
+            var itemProgress = $(this),
+            itemProgressWidth = $(this).parent().width() * ($(this).data('percent') / 100);
+            itemProgress.css('width', itemProgressWidth);
+        });
+    };
+});
+</script>
+
+
+{% endblock %}
+
 {% block header %}{% endblock %}
 
 
 
-{% block content12 %}
+{% block content24 %}
 
 {% load app_filters %}
 
 {% if new_predictions_cnt < 1 %}
 
     <div class="alert alert-danger">
-        <strong>No predictions yet!</strong>
+        <strong>No new predictions yet!</strong>
         You are seeing this message because you selected a gameweek before the 6th
         (Predictions start after the 6th Gameweek to allow the models to gather enough data to make predictions).
 
@@ -20,7 +140,7 @@
 {% else %}
 
 <div class="well centred h4">
-    <h2><strong class="home-team">Showing Predictions for:</strong></h2><br>
+    <h2><strong class="home-team">Showing Predictions for:</strong></h2>
     League: <strong class="home-team">{{ szname }}</strong><br>
     Season: <strong class="home-team">{{ szyear }}</strong><br>
     Gameweek: <strong class="home-team">{{ gw }}</strong>
@@ -29,6 +149,7 @@
 <table class="table table-condensed table-bordered table-hover">
     <thead>
       <tr>
+        <th class="centred">Date</th>
         <th class="centred">Match</th>
         <th class="elo_hist">ELO (H)</th>
         <th class="elo_l6">ELO (6)</th>
@@ -40,6 +161,7 @@
     {% for itemm in sorted_x %}
 
       <tr>
+        <td>{{ itemm.date }}</td>
         <td>{{ itemm.match }}</td>
         <td class={{ itemm.elohist|apply_prediction_colors }}><strong>{{ itemm.elohist }}</strong></td>
         <td class={{ itemm.elol6|apply_prediction_colors }}><strong>{{ itemm.elol6 }}</strong></td>
@@ -51,6 +173,186 @@
     </tbody>
   </table>
 
-{% endif %}
 
+
+<div class="row">
+    <div class="col-sm-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center text-uppercase">
+                    <h3><strong>Home Success</strong></h3>
+                </div>
+                <!-- //.text-center -->
+            </div>
+            <!-- //.col-md-12 -->
+        </div>
+
+        <div class="row">
+
+                <div class="bar-chart">
+                    <div class="chart clearfix">
+                        <div class="item">
+                            <div class="bar">
+                                <span class="percent">{{ home_elohist_succ_preds }}/{{ home_elohist_total_preds }}</span>
+
+                                <div class="item-progress item-eloh" data-percent="{{ home_elohist_strikerate }}">
+                                    <span class="title">ELO(H)</span>
+                                </div>
+                                <!-- //.item-progress -->
+                            </div>
+                            <!-- //.bar -->
+                        </div>
+                        <!-- //.item -->
+
+                        <div class="item">
+                            <div class="bar">
+                                <span class="percent">{{ home_elo6_succ_preds }}/{{ home_elo6_total_preds }}</span>
+
+                                <div class="item-progress item-elo6" data-percent="{{ home_elo6_strikerate }}">
+                                    <span class="title">ELO(6)</span>
+                                </div>
+                                <!-- //.item-progress -->
+                            </div>
+                            <!-- //.bar -->
+                        </div>
+                        <!-- //.item -->
+
+                        <div class="item">
+                            <div class="bar">
+                                <span class="percent">{{ home_gsrs_succ_preds }}/{{ home_gsrs_total_preds }}</span>
+
+                                <div class="item-progress item-gsrs" data-percent="{{ home_gsrs_strikerate }}">
+                                    <span class="title">GSRS</span>
+                                </div>
+                                <!-- //.item-progress -->
+                            </div>
+                            <!-- //.bar -->
+                        </div>
+
+                        <!-- //.item -->
+                    </div>
+                </div>
+
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center text-uppercase">
+                    <h3><strong>Away Success</strong></h3>
+                </div>
+                <!-- //.text-center -->
+            </div>
+            <!-- //.col-md-12 -->
+        </div>
+
+        <div class="row">
+
+                <div class="bar-chart">
+                    <div class="chart clearfix">
+                        <div class="item">
+                            <div class="bar">
+                                <span class="percent">{{ away_elohist_succ_preds }}/{{ away_elohist_total_preds }}</span>
+
+                                <div class="item-progress item-eloh" data-percent="{{ away_elohist_strikerate }}">
+                                    <span class="title">ELO(H)</span>
+                                </div>
+                                <!-- //.item-progress -->
+                            </div>
+                            <!-- //.bar -->
+                        </div>
+                        <!-- //.item -->
+
+                        <div class="item">
+                            <div class="bar">
+                                <span class="percent">{{ away_elo6_succ_preds }}/{{ away_elo6_total_preds }}</span>
+
+                                <div class="item-progress item-elo6" data-percent="{{ away_elo6_strikerate }}">
+                                    <span class="title">ELO(6)</span>
+                                </div>
+                                <!-- //.item-progress -->
+                            </div>
+                            <!-- //.bar -->
+                        </div>
+                        <!-- //.item -->
+
+                        <div class="item">
+                            <div class="bar">
+                                <span class="percent">{{ away_gsrs_succ_preds }}/{{ away_gsrs_total_preds }}</span>
+
+                                <div class="item-progress item-gsrs" data-percent="{{ away_gsrs_strikerate }}">
+                                    <span class="title">GSRS</span>
+                                </div>
+                                <!-- //.item-progress -->
+                            </div>
+                            <!-- //.bar -->
+                        </div>
+                        <!-- //.item -->
+
+                    </div>
+                </div>
+
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center text-uppercase">
+                    <h3><strong>Draw Success</strong></h3>
+                </div>
+                <!-- //.text-center -->
+            </div>
+            <!-- //.col-md-12 -->
+        </div>
+
+        <div class="row">
+
+                <div class="bar-chart">
+                    <div class="chart clearfix">
+                        <div class="item">
+                            <div class="bar">
+                                <span class="percent">{{ draw_elohist_succ_preds }}/{{ draw_elohist_total_preds }}</span>
+
+                                <div class="item-progress item-eloh" data-percent="{{ draw_elohist_strikerate }}">
+                                    <span class="title">ELO(H)</span>
+                                </div>
+                                <!-- //.item-progress -->
+                            </div>
+                            <!-- //.bar -->
+                        </div>
+                        <!-- //.item -->
+
+                        <div class="item">
+                            <div class="bar">
+                                <span class="percent">{{ draw_elo6_succ_preds }}/{{ draw_elo6_total_preds }}</span>
+
+                                <div class="item-progress item-elo6" data-percent="{{ draw_elo6_strikerate }}">
+                                    <span class="title">ELO(6)</span>
+                                </div>
+                                <!-- //.item-progress -->
+                            </div>
+                            <!-- //.bar -->
+                        </div>
+                        <!-- //.item -->
+
+                        <div class="item">
+                            <div class="bar">
+                                <span class="percent">{{ draw_gsrs_succ_preds }}/{{ draw_gsrs_total_preds }}</span>
+
+                                <div class="item-progress item-gsrs" data-percent="{{ draw_gsrs_strikerate }}">
+                                    <span class="title">GSRS</span>
+                                </div>
+                                <!-- //.item-progress -->
+                            </div>
+                            <!-- //.bar -->
+                        </div>
+
+                    </div>
+                </div>
+
+        </div>
+    </div>
+</div>
+
+{% endif %}
 {% endblock %}

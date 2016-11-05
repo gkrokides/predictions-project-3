@@ -1,0 +1,253 @@
+{% extends 'predictions/base.html' %}
+
+{% block head %}
+<script>
+        var seasonsByCountry ={{ szns_drpdown|safe }}
+        var allSeasons = {{ allseasons|safe }}
+
+        function changecat(value) {
+            if (value.length == 0) document.getElementById("country_leagues").innerHTML = "<option></option>";
+            else {
+                var cntrOptions = "";
+                var leagueName = [];
+                for (seazonn in seasonsByCountry[value]) {
+                    if (leagueName.indexOf(seasonsByCountry[value][seazonn][2]) >= 0) { continue; }
+                    leagueName.push(seasonsByCountry[value][seazonn][2]);
+                    cntrOptions += "<option value=" + seasonsByCountry[value][seazonn][2] + ">" + seasonsByCountry[value][seazonn][2] + "</option>";
+                }
+                document.getElementById("country_leagues").innerHTML = "<option value='All'>All</option>" + cntrOptions;
+                document.getElementById("league_period").innerHTML = "<option value='All'>All</option>";
+            }
+            if (value == 'All'){
+                var seasonOptions = "";
+                for (i = 0; i < allSeasons.length; i++) {
+                    seasonOptions += "<option value=" + allSeasons[i] + ">" + Number(allSeasons[i]-1) + "/" + allSeasons[i] + "</option>";
+                }
+                document.getElementById("league_period").innerHTML = "<option value='All'>All</option>" + seasonOptions;
+            }
+        }
+
+        function changedLeague(value) {
+            val = document.getElementById("cntries").value
+            if (val.length == 0) document.getElementById("league_period").innerHTML = "<option value=''>Select Period</option>";
+            else {
+                var cntrOptions = "";
+                for (seazonn in seasonsByCountry[val]) {
+                    if (seasonsByCountry[val][seazonn][2] != value) { continue; }
+                    cntrOptions += "<option value=" + seasonsByCountry[val][seazonn][5] + ">" + seasonsByCountry[val][seazonn][3] + "/" + seasonsByCountry[val][seazonn][4] + "</option>";
+                }
+                document.getElementById("league_period").innerHTML = "<option value='All'>All</option>" + cntrOptions;
+            }
+        }
+
+    </script>
+
+<script type="text/javascript">
+window.onload = function () {
+	var charthm = new CanvasJS.Chart("chartHome",
+	{
+		animationEnabled: true,
+      	theme: "theme2",
+		title:{
+			text: "Home Strike Rate (Click on legend names to Hide / Unhide models)"
+		},
+		data: [
+		{
+			type: "column", //change type to bar, line, area, pie, etc
+			showInLegend: true,
+          	legendText: "ELO(H)",
+          	color: "#0C090A",
+			dataPoints: {{ elohist_canvas_home|safe }}
+			},
+			{
+			type: "column",
+            axisYIndex: 1,
+			showInLegend: true,
+            legendText: "ELO(6)",
+            color: "#810541",
+			dataPoints: {{ elol6_canvas_home|safe }}
+			},
+          {
+			type: "column",
+            axisYIndex: 1,
+			showInLegend: true,
+            legendText: "GSRS",
+            color: "#E9AB17",
+			dataPoints: {{ gsrs_canvas_home|safe }}
+			},
+		],
+		legend: {
+			cursor: "pointer",
+			itemclick: function (e) {
+				if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+					e.dataSeries.visible = false;
+				} else {
+					e.dataSeries.visible = true;
+			}
+			charthm.render();
+			}
+		}
+	});
+
+	charthm.render();
+
+	var chartaw = new CanvasJS.Chart("chartAway",
+	{
+		animationEnabled: true,
+      	theme: "theme2",
+		title:{
+			text: "Away Strike Rate (Click on legend names to Hide / Unhide models)"
+		},
+		data: [
+		{
+			type: "column", //change type to bar, line, area, pie, etc
+			showInLegend: true,
+          	legendText: "ELO(H)",
+          	color: "#0C090A",
+			dataPoints: {{ elohist_canvas_away|safe }}
+			},
+			{
+			type: "column",
+            axisYIndex: 1,
+			showInLegend: true,
+            legendText: "ELO(6)",
+            color: "#810541",
+			dataPoints: {{ elol6_canvas_away|safe }}
+			},
+          {
+			type: "column",
+            axisYIndex: 1,
+			showInLegend: true,
+            legendText: "GSRS",
+            color: "#E9AB17",
+			dataPoints: {{ gsrs_canvas_away|safe }}
+			},
+		],
+		legend: {
+			cursor: "pointer",
+			itemclick: function (e) {
+				if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+					e.dataSeries.visible = false;
+				} else {
+					e.dataSeries.visible = true;
+			}
+			chartaw.render();
+			}
+		}
+	});
+
+	chartaw.render();
+
+	var chartdr = new CanvasJS.Chart("chartDraw",
+	{
+		animationEnabled: true,
+      	theme: "theme2",
+		title:{
+			text: "Draw Strike Rate (Click on legend names to Hide / Unhide models)"
+		},
+		data: [
+		{
+			type: "column", //change type to bar, line, area, pie, etc
+			showInLegend: true,
+          	legendText: "ELO(H)",
+          	color: "#0C090A",
+			dataPoints: {{ elohist_canvas_draw|safe }}
+			},
+			{
+			type: "column",
+            axisYIndex: 1,
+			showInLegend: true,
+            legendText: "ELO(6)",
+            color: "#810541",
+			dataPoints: {{ elol6_canvas_draw|safe }}
+			},
+          {
+			type: "column",
+            axisYIndex: 1,
+			showInLegend: true,
+            legendText: "GSRS",
+            color: "#E9AB17",
+			dataPoints: {{ gsrs_canvas_draw|safe }}
+			},
+		],
+		legend: {
+			cursor: "pointer",
+			itemclick: function (e) {
+				if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+					e.dataSeries.visible = false;
+				} else {
+					e.dataSeries.visible = true;
+			}
+			chartdr.render();
+			}
+		}
+	});
+
+	chartdr.render();
+}
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
+{% endblock %}
+
+{% block content18 %}
+{% load dashboard_filter %}
+
+
+
+ <div class="well centred">
+    <h4><strong>Filter the Dashboard</strong></h4>
+    <form class="" action="{% url 'byleague' %}" method="POST">
+    <div class="form-group">
+      Country:
+      <select name="cntries" id="cntries" onChange="changecat(this.value);">
+          <option value="All">All</option>
+          {% for country in countries %}
+            <option value="{{ country }}">{{ country }}</option>
+          {% endfor %}{% csrf_token %}
+      </select>
+    </div>
+    <div class="form-group">
+      Division:
+      <select name="country_leagues"  id="country_leagues" onChange="changedLeague(this.value);">
+          <option value="All">All</option>
+      </select>
+    </div>
+    <div class="form-group">
+      Period:
+      <select name ="league_period" id="league_period">
+          <option value="All">All</option>
+          {% for szn in allseasons_notjson %}
+            <option value="{{ szn }}">{{ szn|add:"-1" }}/{{ szn }}</option>
+          {% endfor %}{% csrf_token %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-info">Submit</button>
+  </form>
+ </div>
+
+ <div class="well centred">
+     <h4><strong>
+         Dashboard filters
+         </strong>
+     </h4>
+     Country: <strong><span class={{ cntry|apply_color_if_all }}>{{ cntry }}</span></strong><br>
+     Division: <strong><span class={{ divisionn|apply_color_if_all }}>{{ divisionn }}</span></strong><br>
+     Season end: <strong><span class={{ period_end_out|apply_color_if_all }}>{{ period_end_out }}</span></strong><br>
+ </div>
+
+{% endblock %}
+
+
+
+{% block content19 %}
+
+<div id="chartHome" style="height: 300px; width: 100%;"></div>
+<hr>
+<div id="chartAway" style="height: 300px; width: 100%;"></div>
+<hr>
+<div id="chartDraw" style="height: 300px; width: 100%;"></div>
+
+
+{% endblock %}
+

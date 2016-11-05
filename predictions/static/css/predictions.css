@@ -298,7 +298,17 @@ background:#EAF2F8;
     color: #5DADE2;
     font-size: 24pt;
     font-family: 'Poiret One';
+}
 
+.floatleft {
+    float: left;
 
 
 }
+
+.floatright {
+    float: right;
+    font-size: 15px;
+
+}
+

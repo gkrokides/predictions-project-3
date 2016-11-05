@@ -5,6 +5,7 @@ from django.db.models import Q, Max, Sum, F
 # from decimal import Decimal, ROUND_HALF_UP, ROUND_HALF_DOWN
 import django_filters
 from django.conf import settings
+from datetime import datetime
 
 
 class Leagues(models.Model):
@@ -49,14 +50,24 @@ class SeasonManager(models.Manager):
         # sn_lst.append([str('CYP2 2014/2015'), 4])
         qset = self.filter(league__country=cntry).order_by('-end_date')
         for item in qset:
-            sn_lst.append([str(item), item.id, str(item.league.league_name), str(item.get_start_year()), str(item.get_end_year()), str(item.end_date)])
+            sn_lst.append([str(item), item.id, str(item.league.league_name), str(item.get_start_year()), str(item.get_end_year()), str(item.end_date), str(item.league.short_name)])
         return sn_lst
+
+    def get_distinct_season_ends(self):
+        dlist = []
+        qset = self.all().order_by('-end_date')
+        for itm in qset:
+            dlist.append(str(itm.get_end_year()))
+        # converting my list to a set and then back to a list, leave me only with distinct values as sets only allow distinct values
+        dlist = list(set(dlist))
+        return dlist
 
 
 class Season(models.Model):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     league = models.ForeignKey('Leagues', to_field='short_name', null=True, related_name='league')
+    teamstotal = models.IntegerField(default=0, verbose_name='No. of teams', blank=True, null=True)
     objects = SeasonManager()
 
     def get_start_year(self):
@@ -138,7 +149,11 @@ class GameManager(models.Manager):
         else:
             games_lst = self.filter(season=seasonn, gameweek__lte=gamewk - 1)
             szn = Season.objects.get(id=seasonn)
-            multiplier = -szn.league.teamstotal / 2
+            # I used to use teamstotal from the leagues model (instead of num_of_teams_in_season) but it was wrong because year by year the number of teams in a league might change
+            # So the teamstotal in leagues is actually redundant
+            # num_of_teams_in_season = Team.objects.filter(Q(hometeam__season__id=szn) | Q(awayteam__season__id=szn)).distinct().count()
+            num_of_teams_in_season = szn.teamstotal
+            multiplier = -num_of_teams_in_season / 2
             x = []
             for gm in games_lst:
                 h_r_old = self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek)
@@ -155,7 +170,11 @@ class GameManager(models.Manager):
         else:
             games_lst = self.filter(season=seasonn, gameweek__lte=gamewk - 1, gameweek__gte=7)
             szn = Season.objects.get(id=seasonn)
-            multiplier = -szn.league.teamstotal / 2
+            # I used to use teamstotal from the leagues model (instead of num_of_teams_in_season) but it was wrong because year by year the number of teams in a league might change
+            # So the teamstotal in leagues is actually redundant
+            # num_of_teams_in_season = Team.objects.filter(Q(hometeam__season__id=szn) | Q(awayteam__season__id=szn)).distinct().count()
+            num_of_teams_in_season = szn.teamstotal
+            multiplier = -num_of_teams_in_season / 2
             x = []
             for gm in games_lst:
                 h_r_old = self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek) - self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek - 5)
@@ -187,7 +206,9 @@ class GameManager(models.Manager):
         else:
             games_lst = self.filter(season=seasonn, gameweek__lte=gamewk - 1, gameweek__gte=7)
             szn = Season.objects.get(id=seasonn)
-            multiplier = -szn.league.teamstotal / 2
+            # multiplier = -szn.league.teamstotal / 2
+            num_of_teams_in_season = szn.teamstotal
+            multiplier = -num_of_teams_in_season / 2
             for gm in games_lst:
                 hm_goal_diff = self.total_goal_diff(tm=gm.hometeam, seasn=gm.season.id, gw=gm.gameweek)
                 aw_goal_diff = self.total_goal_diff(tm=gm.awayteam, seasn=gm.season.id, gw=gm.gameweek)
@@ -520,6 +541,9 @@ class GameManager(models.Manager):
             qsitem = self.filter(season__league__country=country, season__league__league_name=division, season__end_date=period)[0]
             seasonidd = qsitem.season.id
             filtered_qs = self.filter(season=seasonidd)
+        # in this case, period will be provided as year(i.e 2017) instead of an actual date
+        elif country == 'All' and division == 'All' and period != 'All':
+            filtered_qs = self.filter(season__end_date__year=period)
 
         if model == 'elohist':
             qs = filtered_qs.filter(prediction_elohist=prediction).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
@@ -568,6 +592,9 @@ class GameManager(models.Manager):
             qsitem = self.filter(season__league__country=country, season__league__league_name=division, season__end_date=period)[0]
             seasonidd = qsitem.season.id
             filtered_qs = self.filter(season=seasonidd)
+        # in this case, period will be provided as year(i.e 2017) instead of an actual date
+        elif country == 'All' and division == 'All' and period != 'All':
+            filtered_qs = self.filter(season__end_date__year=period)
 
         if model == 'elohist':
             qs = filtered_qs.filter(prediction_elohist=prediction, prediction_status_elohist='Success')
@@ -638,6 +665,9 @@ class GameManager(models.Manager):
             qsitem = self.filter(season__league__country=country, season__league__league_name=division, season__end_date=period)[0]
             seasonidd = qsitem.season.id
             filtered_qs = self.filter(season=seasonidd)
+        # in this case, period will be provided as year(i.e 2017) instead of an actual date
+        elif country == 'All' and division == 'All' and period != 'All':
+            filtered_qs = self.filter(season__end_date__year=period)
 
         if model == 'elohist':
             qs = filtered_qs .exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist').order_by('date')
@@ -730,6 +760,9 @@ class GameManager(models.Manager):
             qsitem = self.filter(season__league__country=country, season__league__league_name=division, season__end_date=period)[0]
             seasonidd = qsitem.season.id
             filtered_qs = self.filter(season=seasonidd)
+        # in this case, period will be provided as year(i.e 2017) instead of an actual date
+        elif country == 'All' and division == 'All' and period != 'All':
+            filtered_qs = self.filter(season__end_date__year=period)
 
         if model == 'elohist':
             qs = filtered_qs .exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).values('prediction_status_elohist').order_by('date')
@@ -763,6 +796,146 @@ class GameManager(models.Manager):
         else:
             output = max(streaks)
         return output
+
+    # model strike rate if the request comes from the dashboard filters (haven't created one without filters yet)
+    def model_strike_rate(self, model, seasonid, prediction):
+        successful_preds = self.total_model_successful_predictions(model, seasonid, prediction)
+        total_preds = self.total_model_predictions(model, seasonid, prediction)
+        if total_preds == 0:
+            strikerate = 0
+        else:
+            strikerate = (float(successful_preds) / total_preds) * 100
+        return strikerate
+
+    # model strike rate if the request comes from the dashboard filters (haven't created one without filters yet)
+    def model_strike_rate_ifpost(self, model, country, division, period, prediction):
+        successful_preds = self.total_model_successful_predictions_ifpost(model, country, division, period, prediction)
+        total_preds = self.total_model_predictions_ifpost(model, country, division, period, prediction)
+        if total_preds == 0:
+            strikerate = 0
+        else:
+            strikerate = (float(successful_preds) / total_preds) * 100
+        return strikerate
+
+    # returns a list of leagues for the selected country, division and period
+    def leagues_list(self, country, division, period):
+        lglist = []
+        lglist_final = []
+        filtered_qs = Game.objects.all().values('season_id').distinct()
+        if country == 'All' and division == 'All' and period == 'All':
+            filtered_qs = Game.objects.all().values('season_id').distinct()
+        elif country != 'All' and division == 'All' and period == 'All':
+            filtered_qs = self.filter(season__league__country=country).values('season_id').distinct()
+        elif country != 'All' and division != 'All' and period == 'All':
+            filtered_qs = self.filter(season__league__country=country, season__league__league_name=division).values('season_id').distinct()
+        elif country != 'All' and division != 'All' and period != 'All':
+            qsitem = self.filter(season__league__country=country, season__league__league_name=division, season__end_date=period)[0]
+            seasonidd = qsitem.season.id
+            filtered_qs = self.filter(season=seasonidd).values('season_id').distinct()
+        # in this case, period will be provided as year(i.e 2017) instead of an actual date
+        elif country == 'All' and division == 'All' and period != 'All':
+            filtered_qs = self.filter(season__end_date__year=period).values('season_id').distinct()
+
+        for itemm in filtered_qs:
+            lglist.append(str(itemm.get('season_id')))
+
+        for lstitem in lglist:
+            season_object = Season.objects.get(id=lstitem)
+            lglist_final.append(str(season_object))
+
+        return lglist_final
+
+    # returns a list of strike rates for the given selections
+    def strike_rate_list(self, model, country, division, period, prediction):
+        srlist = []
+        seasonlist = []
+        filtered_qs = Game.objects.all().values('season_id').distinct()
+        if country == 'All' and division == 'All' and period == 'All':
+            filtered_qs = Game.objects.all().values('season_id').distinct()
+        elif country != 'All' and division == 'All' and period == 'All':
+            filtered_qs = self.filter(season__league__country=country).values('season_id').distinct()
+        elif country != 'All' and division != 'All' and period == 'All':
+            filtered_qs = self.filter(season__league__country=country, season__league__league_name=division).values('season_id').distinct()
+        elif country != 'All' and division != 'All' and period != 'All':
+            qsitem = self.filter(season__league__country=country, season__league__league_name=division, season__end_date=period)[0]
+            seasonidd = qsitem.season.id
+            filtered_qs = self.filter(season=seasonidd).values('season_id').distinct()
+        # in this case, period will be provided as year(i.e 2017) instead of an actual date
+        elif country == 'All' and division == 'All' and period != 'All':
+            filtered_qs = self.filter(season__end_date__year=period).values('season_id').distinct()
+
+        for val in filtered_qs:
+            seasonlist.append(val.get('season_id'))
+
+        for lstitem in seasonlist:
+            srlist.append(self.model_strike_rate(model, lstitem, prediction))
+        return srlist
+
+    def total_model_strike_rate_for_short_name(self, model, short_name, period, prediction):
+        filtered_qs = Game.objects.all()
+        qs_total = ''
+        qs_successful = ''
+        if period == 'All':
+            filtered_qs = Game.objects.filter(season__league__short_name=short_name)
+        elif period != 'All':
+            filtered_qs = Game.objects.filter(season__league__short_name=short_name, season__end_date__year=period)
+
+        if model == 'elohist':
+            qs_total = filtered_qs.filter(prediction_elohist=prediction).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+            qs_successful = filtered_qs.filter(prediction_elohist=prediction, prediction_status_elohist='Success')
+        elif model == 'elol6':
+            qs_total = filtered_qs.filter(prediction_elol6=prediction).exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True)
+            qs_successful = filtered_qs.filter(prediction_elol6=prediction, prediction_status_elol6='Success')
+        elif model == 'gsrs':
+            qs_total = filtered_qs.filter(prediction_gsrs=prediction).exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True)
+            qs_successful = filtered_qs.filter(prediction_gsrs=prediction, prediction_status_gsrs='Success')
+        else:
+            qs_total = ""
+        total_predictions = qs_total.count()
+        successful_predictions = qs_successful.count()
+        if total_predictions == 0:
+            strikerate = 0
+        else:
+            strikerate = round((float(successful_predictions) / total_predictions) * 100)
+        return strikerate
+
+    # returns a list of dictionaries containing league short name and strike rate (used for canvas charts)
+    def strike_rate_list_for_canvas(self, model, country, division, period, prediction):
+        lglist = []
+        srlist = []
+        filtered_qs = Game.objects.all()
+        if country == 'All' and division == 'All' and period == 'All':
+            filtered_qs = Game.objects.all()
+        elif country != 'All' and division == 'All' and period == 'All':
+            filtered_qs = self.filter(season__league__country=country)
+        elif country != 'All' and division != 'All' and period == 'All':
+            filtered_qs = self.filter(season__league__country=country, season__league__league_name=division)
+        elif country != 'All' and division != 'All' and period != 'All':
+            qsitem = self.filter(season__league__country=country, season__league__league_name=division, season__end_date__year=period)[0]
+            seasonidd = qsitem.season.id
+            filtered_qs = self.filter(season=seasonidd)
+        # in this case, period will be provided as year(i.e 2017) instead of an actual date
+        elif country == 'All' and division == 'All' and period != 'All':
+            filtered_qs = self.filter(season__end_date__year=period)
+
+        if model == 'elohist':
+            qs = filtered_qs.filter(prediction_elohist=prediction).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        elif model == 'elol6':
+            qs = filtered_qs.filter(prediction_elol6=prediction).exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True)
+        elif model == 'gsrs':
+            qs = filtered_qs.filter(prediction_gsrs=prediction).exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True)
+        else:
+            qs = ""
+
+        # list of distinct league short names
+        filtered_qs_vals = list(set(filtered_qs.values_list('season__league', flat=True)))
+        for itm in filtered_qs_vals:
+            lglist.append(str(itm))
+        lglist.sort()
+
+        for lg in lglist:
+            srlist.append({str('label'): lg, str('y'): self.total_model_strike_rate_for_short_name(model,lg, period, prediction)})
+        return srlist
 
 
 class Game(models.Model):

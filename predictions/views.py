@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Post, Team, Game, Season, GameFilter, Leagues
-from .forms import PostForm
+from .forms import PostForm, GameForm
 from dicts.sorteddict import ValueSortedDict
 from decimal import Decimal
 from django.db.models import Q, F, Sum
@@ -613,8 +613,82 @@ def new_predictions(request, seasonid, gamewk):
             'pk': gm.pk
         })
     sorted_x = sorted(x, key=itemgetter('date'), reverse=False)
+    # progress bars variables
+    home_elohist_total_preds = Game.objects.total_model_predictions('elohist', seasonid, 'HOME')
+    home_elohist_succ_preds = Game.objects.total_model_successful_predictions('elohist', seasonid, 'HOME')
+    if home_elohist_total_preds == 0:
+        home_elohist_strikerate = 0
+    else:
+        home_elohist_strikerate = (float(home_elohist_succ_preds) / home_elohist_total_preds) * 100
+
+    home_elo6_total_preds = Game.objects.total_model_predictions('elol6', seasonid, 'HOME')
+    home_elo6_succ_preds = Game.objects.total_model_successful_predictions('elol6', seasonid, 'HOME')
+    if home_elo6_total_preds == 0:
+        home_elo6_strikerate = 0
+    else:
+        home_elo6_strikerate = (float(home_elo6_succ_preds) / home_elo6_total_preds) * 100
+
+    home_gsrs_total_preds = Game.objects.total_model_predictions('gsrs', seasonid, 'HOME')
+    home_gsrs_succ_preds = Game.objects.total_model_successful_predictions('gsrs', seasonid, 'HOME')
+    if home_gsrs_total_preds == 0:
+        home_gsrs_strikerate = 0
+    else:
+        home_gsrs_strikerate = (float(home_gsrs_succ_preds) / home_gsrs_total_preds) * 100
+
+    away_elohist_total_preds = Game.objects.total_model_predictions('elohist', seasonid, 'AWAY')
+    away_elohist_succ_preds = Game.objects.total_model_successful_predictions('elohist', seasonid, 'AWAY')
+    if away_elohist_total_preds == 0:
+        away_elohist_strikerate = 0
+    else:
+        away_elohist_strikerate = (float(away_elohist_succ_preds) / away_elohist_total_preds) * 100
+
+    away_elo6_total_preds = Game.objects.total_model_predictions('elol6', seasonid, 'AWAY')
+    away_elo6_succ_preds = Game.objects.total_model_successful_predictions('elol6', seasonid, 'AWAY')
+    if away_elo6_total_preds == 0:
+        away_elo6_strikerate = 0
+    else:
+        away_elo6_strikerate = (float(away_elo6_succ_preds) / away_elo6_total_preds) * 100
+
+    away_gsrs_total_preds = Game.objects.total_model_predictions('gsrs', seasonid, 'AWAY')
+    away_gsrs_succ_preds = Game.objects.total_model_successful_predictions('gsrs', seasonid, 'AWAY')
+    if away_gsrs_total_preds == 0:
+        away_gsrs_strikerate = 0
+    else:
+        away_gsrs_strikerate = (float(away_gsrs_succ_preds) / away_gsrs_total_preds) * 100
+
+    draw_elohist_total_preds = Game.objects.total_model_predictions('elohist', seasonid, 'DRAW')
+    draw_elohist_succ_preds = Game.objects.total_model_successful_predictions('elohist', seasonid, 'DRAW')
+    if draw_elohist_total_preds == 0:
+        draw_elohist_strikerate = 0
+    else:
+        draw_elohist_strikerate = (float(draw_elohist_succ_preds) / draw_elohist_total_preds) * 100
+
+    draw_elo6_total_preds = Game.objects.total_model_predictions('elol6', seasonid, 'DRAW')
+    draw_elo6_succ_preds = Game.objects.total_model_successful_predictions('elol6', seasonid, 'DRAW')
+    if draw_elo6_total_preds == 0:
+        draw_elo6_strikerate = 0
+    else:
+        draw_elo6_strikerate = (float(draw_elo6_succ_preds) / draw_elo6_total_preds) * 100
+
+    draw_gsrs_total_preds = Game.objects.total_model_predictions('gsrs', seasonid, 'DRAW')
+    draw_gsrs_succ_preds = Game.objects.total_model_successful_predictions('gsrs', seasonid, 'DRAW')
+    if draw_gsrs_total_preds == 0:
+        draw_gsrs_strikerate = 0
+    else:
+        draw_gsrs_strikerate = (float(draw_gsrs_succ_preds) / draw_gsrs_total_preds) * 100
     return render(request, 'predictions/new_predictions.html', {'szname': season_name, 'szyear': season_year, 'gw': prediction_gamewk, 'new_predictions_set': new_predictions_set,
-                                                                'sorted_x': sorted_x, 'new_predictions_cnt': new_predictions_cnt})
+                                                                'sorted_x': sorted_x, 'new_predictions_cnt': new_predictions_cnt, 'home_elohist_total_preds': home_elohist_total_preds,
+                                                                'home_elohist_succ_preds': home_elohist_succ_preds, 'home_elohist_strikerate': home_elohist_strikerate,
+                                                                'home_elo6_total_preds': home_elo6_total_preds, 'home_elo6_succ_preds': home_elo6_succ_preds, 'home_elo6_strikerate': home_elo6_strikerate,
+                                                                'home_gsrs_total_preds': home_gsrs_total_preds, 'home_gsrs_succ_preds': home_gsrs_succ_preds, 'home_gsrs_strikerate': home_gsrs_strikerate,
+                                                                'away_elohist_total_preds': away_elohist_total_preds, 'away_elohist_succ_preds': away_elohist_succ_preds,
+                                                                'away_elohist_strikerate': away_elohist_strikerate, 'away_elo6_total_preds': away_elo6_total_preds, 'away_elo6_succ_preds': away_elo6_succ_preds,
+                                                                'away_elo6_strikerate': away_elo6_strikerate, 'away_gsrs_total_preds': away_gsrs_total_preds,
+                                                                'away_gsrs_succ_preds': away_gsrs_succ_preds, 'away_gsrs_strikerate': away_gsrs_strikerate, 'draw_elohist_total_preds': draw_elohist_total_preds,
+                                                                'draw_elohist_succ_preds': draw_elohist_succ_preds, 'draw_elohist_strikerate': draw_elohist_strikerate,
+                                                                'draw_elo6_total_preds': draw_elo6_total_preds, 'draw_elo6_succ_preds': draw_elo6_succ_preds,
+                                                                'draw_elo6_strikerate': draw_elo6_strikerate, 'draw_gsrs_total_preds': draw_gsrs_total_preds,
+                                                                'draw_gsrs_succ_preds': draw_gsrs_succ_preds, 'draw_gsrs_strikerate': draw_gsrs_strikerate})
 
 
 def dashboard(request):
@@ -629,6 +703,7 @@ def dashboard(request):
     strongest_draw_list = [0.0]
     # dropdown list data
     countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
+    allseasons = Season.objects.get_distinct_season_ends()
     szns_drpdown = {}
     # filling in a dictionary of lists of leagues for each country. Each list will contain more info (look at get_seasons_full() in models)
     for cntr in countries:
@@ -640,7 +715,10 @@ def dashboard(request):
         if period_end == 'All':
             period_end_out = 'All'
         else:
-            period_end_out = str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year - 1) + "/" + str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year)
+            try:
+                period_end_out = str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year - 1) + "/" + str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year)
+            except ValueError:
+                period_end_out = str(int(request.POST.get('league_period')) - 1) + "/" + str(request.POST.get('league_period'))
         # variables all predictions if request.post
         elohist_total_preds_home = Game.objects.total_model_predictions_ifpost('elohist', cntry, divisionn, period_end, 'HOME')
         elohist_total_preds_away = Game.objects.total_model_predictions_ifpost('elohist', cntry, divisionn, period_end, 'AWAY')
@@ -863,6 +941,7 @@ def dashboard(request):
     else:
         gsrs_strike_rate_draw_out = float(gsrs_total_succ_draw) / gsrs_total_preds_draw
     szns_drpdown_json = json.dumps(szns_drpdown)
+    allseasons_json = json.dumps(allseasons)
     return render(request, 'predictions/dashboard.html',
                   {'szns_drpdown': szns_drpdown_json, 'countries': countries, 'elohist_strike_rate_home': elohist_strike_rate_home,
                    'elohist_strike_rate_away': elohist_strike_rate_away, 'elohist_strike_rate_draw': elohist_strike_rate_draw,
@@ -894,7 +973,7 @@ def dashboard(request):
                    'elohist_strike_rate_home_out': elohist_strike_rate_home_out, 'elohist_strike_rate_away_out': elohist_strike_rate_away_out,
                    'elohist_strike_rate_draw_out': elohist_strike_rate_draw_out, 'elol6_strike_rate_away_out': elol6_strike_rate_away_out,
                    'elol6_strike_rate_draw_out': elol6_strike_rate_draw_out, 'gsrs_strike_rate_home_out': gsrs_strike_rate_home_out,
-                   'gsrs_strike_rate_draw_out': gsrs_strike_rate_draw_out})
+                   'gsrs_strike_rate_draw_out': gsrs_strike_rate_draw_out, 'allseasons': allseasons_json, 'allseasons_notjson': allseasons})
 
 
 def addscore(request):
@@ -952,7 +1031,7 @@ def addgames(request):
     msg_class = ''
     GameFormSet = modelformset_factory(
         Game,
-        fields=('date', 'gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam', 'season'),
+        form=GameForm,
         extra=12,
         widgets={
             'homegoals': forms.Textarea(attrs={'cols': 8, 'rows': 1}),
@@ -985,10 +1064,18 @@ def addgames(request):
                 ssnout = str(lst.get_start_year()) + "/" + str(lst.get_end_year())
                 leaderboard = Game.objects.last_gameweek(seasn=lst)
                 gamewk = leaderboard[0].gameweek + 1
+                # override the hometeam, awayteam and season querysets (of each form in the formset) to only show the teams and season related to the selected season
+                for form in formset:
+                    form.fields['hometeam'].queryset = Team.objects.filter(Q(hometeam__season__id=seasonid) | Q(awayteam__season__id=seasonid)).distinct()
+                    form.fields['awayteam'].queryset = Team.objects.filter(Q(hometeam__season__id=seasonid) | Q(awayteam__season__id=seasonid)).distinct()
+                    form.fields['season'].queryset = Season.objects.filter(id=seasonid).distinct()
                 # formset = GameFormSet(queryset=Game.objects.filter(season=seasonid, gameweek=gamewk))
         elif 'djform' in request.POST:
             formset_to_save = GameFormSet(request.POST, request.FILES)
             if formset_to_save.is_valid():
+                # for frm in formset:
+                #     frm.fields['hometeam'] = frm.fields['homefield']
+                #     frm.fields['awayteam'] = frm.fields['awayfield']
                 formset_to_save.save()
                 msg = "Success! All games saved!"
                 msg_class = 'bg-success'
@@ -997,12 +1084,69 @@ def addgames(request):
                 msg = "Something went wrong. Call krok"
                 msg_class = 'bg-danger'
     return render(request, 'predictions/addgame.html', {'formset': formset, 'user_made_selection': user_made_selection,
-                                                         'szns_drpdown': szns_drpdown, 'gamewk': gamewk, 'lstout': lstout,
-                                                         'ssnout': ssnout, 'countries': countries,
-                                                         'formset_to_save': formset_to_save, 'msg': msg,
-                                                         'msg_class': msg_class})
+                                                        'szns_drpdown': szns_drpdown, 'gamewk': gamewk, 'lstout': lstout,
+                                                        'ssnout': ssnout, 'countries': countries,
+                                                        'formset_to_save': formset_to_save, 'msg': msg, 'msg_class': msg_class})
 
 
 def all_games(request):
     tableset = Game.objects.all()
     return render(request, 'predictions/all_games.html', {'tableset': tableset})
+
+
+def dashboard_byleague(request):
+    cntry = 'All'
+    divisionn = 'All'
+    period_end_out = 'All'
+    cntry_class = ''
+    divisionn_class = ''
+    period_end_out_class = ''
+    period_end_canvas = 'All'
+    allseasons = Season.objects.get_distinct_season_ends()
+    # dropdown list data
+    countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
+    szns_drpdown = {}
+    # filling in a dictionary of lists of leagues for each country. Each list will contain more info (look at get_seasons_full() in models)
+    for cntr in countries:
+        szns_drpdown.update({str(cntr): Season.objects.get_seasons_full(cntr)})
+    if request.method == "POST":
+        cntry = request.POST.get('cntries')
+        divisionn = request.POST.get('country_leagues')
+        period_end = str(request.POST.get('league_period'))
+        if period_end == 'All':
+            period_end_out = 'All'
+        else:
+            try:
+                period_end_out = str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year - 1) + "/" + str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year)
+            except ValueError:
+                period_end_out = str(int(request.POST.get('league_period')) - 1) + "/" + str(request.POST.get('league_period'))
+            try:
+                period_end_canvas = str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year)
+            except ValueError:
+                period_end_canvas = str(request.POST.get('league_period'))
+    elohist_canvas_home = Game.objects.strike_rate_list_for_canvas('elohist', cntry, divisionn, period_end_canvas, 'HOME')
+    elol6_canvas_home = Game.objects.strike_rate_list_for_canvas('elol6', cntry, divisionn, period_end_canvas, 'HOME')
+    gsrs_canvas_home = Game.objects.strike_rate_list_for_canvas('gsrs', cntry, divisionn, period_end_canvas, 'HOME')
+    elohist_canvas_away = Game.objects.strike_rate_list_for_canvas('elohist', cntry, divisionn, period_end_canvas, 'AWAY')
+    elol6_canvas_away = Game.objects.strike_rate_list_for_canvas('elol6', cntry, divisionn, period_end_canvas, 'AWAY')
+    gsrs_canvas_away = Game.objects.strike_rate_list_for_canvas('gsrs', cntry, divisionn, period_end_canvas, 'AWAY')
+    elohist_canvas_draw = Game.objects.strike_rate_list_for_canvas('elohist', cntry, divisionn, period_end_canvas, 'DRAW')
+    elol6_canvas_draw = Game.objects.strike_rate_list_for_canvas('elol6', cntry, divisionn, period_end_canvas, 'DRAW')
+    gsrs_canvas_draw = Game.objects.strike_rate_list_for_canvas('gsrs', cntry, divisionn, period_end_canvas, 'DRAW')
+
+    elohist_canvas_home = json.dumps(elohist_canvas_home)
+    elol6_canvas_home = json.dumps(elol6_canvas_home)
+    gsrs_canvas_home = json.dumps(gsrs_canvas_home)
+    elohist_canvas_away = json.dumps(elohist_canvas_away)
+    elol6_canvas_away = json.dumps(elol6_canvas_away)
+    gsrs_canvas_away = json.dumps(gsrs_canvas_away)
+    elohist_canvas_draw = json.dumps(elohist_canvas_draw)
+    elol6_canvas_draw = json.dumps(elol6_canvas_draw)
+    gsrs_canvas_draw = json.dumps(gsrs_canvas_draw)
+    szns_drpdown_json = json.dumps(szns_drpdown)
+    allseasons_json = json.dumps(allseasons)
+    return render(request, 'predictions/byleague.html', {'szns_drpdown': szns_drpdown_json, 'countries': countries, 'allseasons': allseasons_json, 'allseasons_notjson': allseasons,
+                                                         'elohist_canvas_home': elohist_canvas_home, 'elol6_canvas_home': elol6_canvas_home, 'gsrs_canvas_home': gsrs_canvas_home,
+                                                         'cntry': cntry, 'divisionn': divisionn, 'period_end_out': period_end_out, 'elohist_canvas_away': elohist_canvas_away,
+                                                         'elol6_canvas_away': elol6_canvas_away, 'gsrs_canvas_away': gsrs_canvas_away, 'elohist_canvas_draw': elohist_canvas_draw,
+                                                         'elol6_canvas_draw': elol6_canvas_draw, 'gsrs_canvas_draw': gsrs_canvas_draw})
