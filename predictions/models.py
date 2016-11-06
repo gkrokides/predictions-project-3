@@ -914,19 +914,8 @@ class GameManager(models.Manager):
             qsitem = self.filter(season__league__country=country, season__league__league_name=division, season__end_date__year=period)[0]
             seasonidd = qsitem.season.id
             filtered_qs = self.filter(season=seasonidd)
-        # in this case, period will be provided as year(i.e 2017) instead of an actual date
         elif country == 'All' and division == 'All' and period != 'All':
             filtered_qs = self.filter(season__end_date__year=period)
-
-        if model == 'elohist':
-            qs = filtered_qs.filter(prediction_elohist=prediction).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
-        elif model == 'elol6':
-            qs = filtered_qs.filter(prediction_elol6=prediction).exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True)
-        elif model == 'gsrs':
-            qs = filtered_qs.filter(prediction_gsrs=prediction).exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True)
-        else:
-            qs = ""
-
         # list of distinct league short names
         filtered_qs_vals = list(set(filtered_qs.values_list('season__league', flat=True)))
         for itm in filtered_qs_vals:

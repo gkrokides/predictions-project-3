@@ -1098,9 +1098,6 @@ def dashboard_byleague(request):
     cntry = 'All'
     divisionn = 'All'
     period_end_out = 'All'
-    cntry_class = ''
-    divisionn_class = ''
-    period_end_out_class = ''
     period_end_canvas = 'All'
     allseasons = Season.objects.get_distinct_season_ends()
     # dropdown list data
