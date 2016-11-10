@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^add-score/$', views.addscore, name='add_score'),
     url(r'^add-game/$', views.addgames, name='add_games'),
     url(r'^all-games/$', views.all_games, name='all_games'),
-    url(r'^byleague/$', views.dashboard_byleague, name='byleague')
-    # url(r'^test3/$', views.test3, name='test3')
+    url(r'^byleague/$', views.dashboard_byleague, name='byleague'),
+    url(r'^test3/$', views.test3, name='test3')
     # url(r'^games_filtered/$', views.games_filter, name='games_filtered'),
 ]

@@ -1147,3 +1147,8 @@ def dashboard_byleague(request):
                                                          'cntry': cntry, 'divisionn': divisionn, 'period_end_out': period_end_out, 'elohist_canvas_away': elohist_canvas_away,
                                                          'elol6_canvas_away': elol6_canvas_away, 'gsrs_canvas_away': gsrs_canvas_away, 'elohist_canvas_draw': elohist_canvas_draw,
                                                          'elol6_canvas_draw': elol6_canvas_draw, 'gsrs_canvas_draw': gsrs_canvas_draw})
+
+
+def test3(request):
+    tableset = Game.objects.all()
+    return render(request, 'predictions/test3.html', {'tableset': tableset})
