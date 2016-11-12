@@ -1,6 +1,7 @@
 {% extends 'predictions/base.html' %}
 
 {% block head %}
+
 <script>
         var seasonsByCountry ={{ szns_drpdown|safe }}
         var allSeasons = {{ allseasons|safe }}
@@ -47,42 +48,40 @@ window.onload = function () {
 	var charthm = new CanvasJS.Chart("chartHome",
 	{
 		animationEnabled: true,
+		backgroundColor: "rgba(182,177,168,0.2)",
       	theme: "theme2",
 		title:{
-			text: "Home Strike Rate (Click on legend names to Hide / Unhide models)"
+			text: "ELO (H) Total Strike Rate by Gameweek - Hide/Unhide via Legend"
 		},
-		axisY:{
-        valueFormatString:"#0'%'",
-        interval: 10,
-        gridColor: "#B6B1A8",
-        tickColor: "#B6B1A8",
-        interlacedColor: "rgba(182,177,168,0.2)",
-        maximum: 100
-
+      	axisY:{
+          lineThickness: 1,
+          gridThickness: 1,
+          valueFormatString:"#0'%'",
+          interval: 10,
+          gridColor: "#B6B1A8",
+          tickColor: "#B6B1A8",
+          maximum: 100
       	},
+      	axisX:{
+          interval: 1,
+        },
 		data: [
 		{
-			type: "column", //change type to bar, line, area, pie, etc
+			type: "column", //change type to bar, line, column, pie, etc
+			legendText: "ELO(H)",
 			showInLegend: true,
-          	legendText: "ELO(H)",
-          	color: "#0C090A",
-			dataPoints: {{ elohist_canvas_home|safe }}
+			color: "#0C090A",
+			lineThickness: 3,
+			dataPoints: {{ elohist_canvas|safe }}
 			},
 			{
-			type: "column",
+			type: "spline",
+			legendText: "Average",
+			color: "grey",
+			lineThickness: 3,
             axisYIndex: 1,
 			showInLegend: true,
-            legendText: "ELO(6)",
-            color: "#810541",
-			dataPoints: {{ elol6_canvas_home|safe }}
-			},
-          {
-			type: "column",
-            axisYIndex: 1,
-			showInLegend: true,
-            legendText: "GSRS",
-            color: "#E9AB17",
-			dataPoints: {{ gsrs_canvas_home|safe }}
+			dataPoints: {{ elohist_avg_canvas|safe }}
 			},
 		],
 		legend: {
@@ -103,43 +102,42 @@ window.onload = function () {
 	var chartaw = new CanvasJS.Chart("chartAway",
 	{
 		animationEnabled: true,
+		backgroundColor: "rgba(182,177,168,0.2)",
       	theme: "theme2",
 		title:{
-			text: "Away Strike Rate (Click on legend names to Hide / Unhide models)"
+			text: "ELO (6) Total Strike Rate by Gameweek - Hide/Unhide via Legend"
 		},
-		axisY:{
-        valueFormatString:"#0'%'",
-        interval: 10,
-        gridColor: "#B6B1A8",
-        tickColor: "#B6B1A8",
-        interlacedColor: "rgba(182,177,168,0.2)",
-        maximum: 100
-
+      	axisY:{
+          lineThickness: 1,
+          gridThickness: 1,
+          valueFormatString:"#0'%'",
+          interval: 10,
+          gridColor: "#B6B1A8",
+          tickColor: "#B6B1A8",
+          maximum: 100
       	},
+      	axisX:{
+          interval: 1,
+        },
 		data: [
 		{
-			type: "column", //change type to bar, line, area, pie, etc
+			type: "column", //change type to bar, line, column, pie, etc
+			legendText: "ELO(6)",
 			showInLegend: true,
-          	legendText: "ELO(H)",
-          	color: "#0C090A",
-			dataPoints: {{ elohist_canvas_away|safe }}
+			color: "#810541",
+			lineThickness: 3,
+			dataPoints: {{ elol6_canvas|safe }}
 			},
 			{
-			type: "column",
+			type: "spline",
+			legendText: "Average",
+			color: "grey",
+			lineThickness: 3,
             axisYIndex: 1,
 			showInLegend: true,
-            legendText: "ELO(6)",
-            color: "#810541",
-			dataPoints: {{ elol6_canvas_away|safe }}
+			dataPoints: {{ elol6_avg_canvas|safe }}
 			},
-          {
-			type: "column",
-            axisYIndex: 1,
-			showInLegend: true,
-            legendText: "GSRS",
-            color: "#E9AB17",
-			dataPoints: {{ gsrs_canvas_away|safe }}
-			},
+
 		],
 		legend: {
 			cursor: "pointer",
@@ -159,43 +157,42 @@ window.onload = function () {
 	var chartdr = new CanvasJS.Chart("chartDraw",
 	{
 		animationEnabled: true,
+		backgroundColor: "rgba(182,177,168,0.2)",
       	theme: "theme2",
 		title:{
-			text: "Draw Strike Rate (Click on legend names to Hide / Unhide models)"
+			text: "GSRS Total Strike Rate by Gameweek - Hide/Unhide via Legend"
 		},
-		axisY:{
-        valueFormatString:"#0'%'",
-        interval: 10,
-        gridColor: "#B6B1A8",
-        tickColor: "#B6B1A8",
-        interlacedColor: "rgba(182,177,168,0.2)",
-        maximum: 100
-
+      	axisY:{
+          lineThickness: 1,
+          gridThickness: 1,
+          valueFormatString:"#0'%'",
+          interval: 10,
+          gridColor: "#B6B1A8",
+          tickColor: "#B6B1A8",
+          maximum: 100
       	},
+      	axisX:{
+          interval: 1,
+        },
 		data: [
 		{
-			type: "column", //change type to bar, line, area, pie, etc
+			type: "column", //change type to bar, line, column, pie, etc
+			legendText: "GSRS",
 			showInLegend: true,
-          	legendText: "ELO(H)",
-          	color: "#0C090A",
-			dataPoints: {{ elohist_canvas_draw|safe }}
+			color: "#E9AB17",
+			lineThickness: 3,
+			dataPoints: {{ gsrs_canvas|safe }}
 			},
 			{
-			type: "column",
+			type: "spline",
+			legendText: "Average",
+			color: "grey",
+			lineThickness: 3,
             axisYIndex: 1,
 			showInLegend: true,
-            legendText: "ELO(6)",
-            color: "#810541",
-			dataPoints: {{ elol6_canvas_draw|safe }}
+			dataPoints: {{ gsrs_avg_canvas|safe }}
 			},
-          {
-			type: "column",
-            axisYIndex: 1,
-			showInLegend: true,
-            legendText: "GSRS",
-            color: "#E9AB17",
-			dataPoints: {{ gsrs_canvas_draw|safe }}
-			},
+
 		],
 		legend: {
 			cursor: "pointer",
@@ -213,61 +210,60 @@ window.onload = function () {
 	chartdr.render();
 }
 </script>
-
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
+
 {% endblock %}
 
 {% block content18 %}
 {% load dashboard_filter %}
 
+<div class="well centred">
+	<h4><strong>Filter the Dashboard</strong></h4>
+	<form class="" action="{% url 'bygameweek' %}" method="POST">
+		<div class="form-group">
+			Country:
+			<select name="cntries" id="cntries" onChange="changecat(this.value);">
+				<option value="All">All</option>
+				{% for country in countries %}
+				<option value="{{ country }}">{{ country }}</option>
+				{% endfor %}{% csrf_token %}
+			</select>
+		</div>
+		<div class="form-group">
+			Division:
+			<select name="country_leagues"  id="country_leagues" onChange="changedLeague(this.value);">
+				<option value="All">All</option>
+			</select>
+		</div>
+		<div class="form-group">
+			Season:
+			<select name ="league_period" id="league_period">
+				<option value="All">All</option>
+				{% for szn in allseasons_notjson %}
+				<option value="{{ szn }}">{{ szn|add:"-1" }}/{{ szn }}</option>
+				{% endfor %}{% csrf_token %}
+			</select>
+		</div>
+		<button type="submit" class="btn btn-info">Submit</button>
+	</form>
+</div>
 
+<div class="well centred">
+	<h4><strong>
+		Dashboard filters
+	</strong>
+	</h4>
+	Country: <strong><span class={{ cntry|apply_color_if_all }}>{{ cntry }}</span></strong><br>
+	Division: <strong><span class={{ divisionn|apply_color_if_all }}>{{ divisionn }}</span></strong><br>
+	Season: <strong><span class={{ period_end_out|apply_color_if_all }}>{{ period_end_out }}</span></strong><br>
+</div>
 
- <div class="well centred">
-    <h4><strong>Filter the Dashboard</strong></h4>
-    <form class="" action="{% url 'byleague' %}" method="POST">
-    <div class="form-group">
-      Country:
-      <select name="cntries" id="cntries" onChange="changecat(this.value);">
-          <option value="All">All</option>
-          {% for country in countries %}
-            <option value="{{ country }}">{{ country }}</option>
-          {% endfor %}{% csrf_token %}
-      </select>
-    </div>
-    <div class="form-group">
-      Division:
-      <select name="country_leagues"  id="country_leagues" onChange="changedLeague(this.value);">
-          <option value="All">All</option>
-      </select>
-    </div>
-    <div class="form-group">
-      Season:
-      <select name ="league_period" id="league_period">
-          <option value="All">All</option>
-          {% for szn in allseasons_notjson %}
-            <option value="{{ szn }}">{{ szn|add:"-1" }}/{{ szn }}</option>
-          {% endfor %}{% csrf_token %}
-      </select>
-    </div>
-    <button type="submit" class="btn btn-info">Submit</button>
-  </form>
- </div>
-
- <div class="well centred">
-     <h4><strong>
-         Dashboard filters
-         </strong>
-     </h4>
-     Country: <strong><span class={{ cntry|apply_color_if_all }}>{{ cntry }}</span></strong><br>
-     Division: <strong><span class={{ divisionn|apply_color_if_all }}>{{ divisionn }}</span></strong><br>
-     Season: <strong><span class={{ period_end_out|apply_color_if_all }}>{{ period_end_out }}</span></strong><br>
- </div>
+<p style="color: grey;">Average = The average performance (per gameweek) for the given model, calculated historically and for all leagues and seasons</p>
 
 {% endblock %}
 
-
-
 {% block content19 %}
+
 
 <div id="chartHome" style="height: 300px; width: 100%;"></div>
 <hr>
@@ -275,6 +271,7 @@ window.onload = function () {
 <hr>
 <div id="chartDraw" style="height: 300px; width: 100%;"></div>
 
+<!--<p>{{ elohist_canvas }}</p>-->
+<!--<p>{{ elohist_avg_canvas }}</p>-->
 
 {% endblock %}
-

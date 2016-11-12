@@ -92,6 +92,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="{% url 'dashboard' %}">Overview</a></li>
                         <li><a href="{% url 'byleague' %}">By League</a></li>
+                        <li><a href="{% url 'bygameweek' %}">By Gameweek</a></li>
                     </ul>
                     </li>
                     <li {% if 'predictions' in request.path %}class="activepage"{% endif %} id="predictions"> <a href="{% url 'predictions' %}"><i class="fa fa-magic" aria-hidden="true"></i> Predictions</a> </li>
@@ -109,7 +110,9 @@
                             <li><a href="{% url 'add_score' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Add Score</i></a></li>
                             <li><a href="{% url 'all_games' %}"><i class="fa fa-search" aria-hidden="true"> All Matches</i></a></li>
                             <li class="divider"></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Sign out</a></li>
+                            <li><a href="{% url 'admin:index' %}"><span class="fa fa-lock" aria-hidden="true"></span> Admin Page</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{% url 'admin:logout' %}"><span class="glyphicon glyphicon-log-out"></span> Sign out</a></li>
                         </ul>
                     </div>
                 </ul>

@@ -695,6 +695,7 @@ def dashboard(request):
     cntry = 'All'
     divisionn = 'All'
     period_end_out = 'All'
+    period_end_canvas = 'All'
     cntry_class = ''
     divisionn_class = ''
     period_end_out_class = ''
@@ -719,6 +720,10 @@ def dashboard(request):
                 period_end_out = str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year - 1) + "/" + str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year)
             except ValueError:
                 period_end_out = str(int(request.POST.get('league_period')) - 1) + "/" + str(request.POST.get('league_period'))
+            try:
+                period_end_canvas = str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year)
+            except ValueError:
+                period_end_canvas = str(request.POST.get('league_period'))
         # variables all predictions if request.post
         elohist_total_preds_home = Game.objects.total_model_predictions_ifpost('elohist', cntry, divisionn, period_end, 'HOME')
         elohist_total_preds_away = Game.objects.total_model_predictions_ifpost('elohist', cntry, divisionn, period_end, 'AWAY')
@@ -940,8 +945,17 @@ def dashboard(request):
         gsrs_strike_rate_draw_out = -0.1
     else:
         gsrs_strike_rate_draw_out = float(gsrs_total_succ_draw) / gsrs_total_preds_draw
+
     szns_drpdown_json = json.dumps(szns_drpdown)
     allseasons_json = json.dumps(allseasons)
+
+    elohist_distribution_strike_rate = Game.objects.strike_rate_distribution_for_season('elohist', cntry, divisionn, period_end_canvas)
+    elol6_distribution_strike_rate = Game.objects.strike_rate_distribution_for_season('elol6', cntry, divisionn, period_end_canvas)
+    gsrs_distribution_strike_rate = Game.objects.strike_rate_distribution_for_season('gsrs', cntry, divisionn, period_end_canvas)
+
+    elohist_distribution_strike_rate = json.dumps(elohist_distribution_strike_rate)
+    elol6_distribution_strike_rate = json.dumps(elol6_distribution_strike_rate)
+    gsrs_distribution_strike_rate = json.dumps(gsrs_distribution_strike_rate)
     return render(request, 'predictions/dashboard.html',
                   {'szns_drpdown': szns_drpdown_json, 'countries': countries, 'elohist_strike_rate_home': elohist_strike_rate_home,
                    'elohist_strike_rate_away': elohist_strike_rate_away, 'elohist_strike_rate_draw': elohist_strike_rate_draw,
@@ -973,7 +987,9 @@ def dashboard(request):
                    'elohist_strike_rate_home_out': elohist_strike_rate_home_out, 'elohist_strike_rate_away_out': elohist_strike_rate_away_out,
                    'elohist_strike_rate_draw_out': elohist_strike_rate_draw_out, 'elol6_strike_rate_away_out': elol6_strike_rate_away_out,
                    'elol6_strike_rate_draw_out': elol6_strike_rate_draw_out, 'gsrs_strike_rate_home_out': gsrs_strike_rate_home_out,
-                   'gsrs_strike_rate_draw_out': gsrs_strike_rate_draw_out, 'allseasons': allseasons_json, 'allseasons_notjson': allseasons})
+                   'gsrs_strike_rate_draw_out': gsrs_strike_rate_draw_out, 'allseasons': allseasons_json, 'allseasons_notjson': allseasons,
+                   'period_end_canvas': period_end_canvas, 'elohist_distribution_strike_rate': elohist_distribution_strike_rate,
+                   'elol6_distribution_strike_rate': elol6_distribution_strike_rate, 'gsrs_distribution_strike_rate': gsrs_distribution_strike_rate})
 
 
 def addscore(request):
@@ -1149,6 +1165,50 @@ def dashboard_byleague(request):
                                                          'elol6_canvas_draw': elol6_canvas_draw, 'gsrs_canvas_draw': gsrs_canvas_draw})
 
 
-def test3(request):
-    tableset = Game.objects.all()
-    return render(request, 'predictions/test3.html', {'tableset': tableset})
+def dashboard_bygameweek(request):
+    cntry = 'All'
+    divisionn = 'All'
+    period_end_out = 'All'
+    period_end_canvas = 'All'
+    allseasons = Season.objects.get_distinct_season_ends()
+    # dropdown list data
+    countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
+    szns_drpdown = {}
+    # filling in a dictionary of lists of leagues for each country. Each list will contain more info (look at get_seasons_full() in models)
+    for cntr in countries:
+        szns_drpdown.update({str(cntr): Season.objects.get_seasons_full(cntr)})
+    if request.method == "POST":
+        cntry = request.POST.get('cntries')
+        divisionn = request.POST.get('country_leagues')
+        period_end = str(request.POST.get('league_period'))
+        if period_end == 'All':
+            period_end_out = 'All'
+        else:
+            try:
+                period_end_out = str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year - 1) + "/" + str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year)
+            except ValueError:
+                period_end_out = str(int(request.POST.get('league_period')) - 1) + "/" + str(request.POST.get('league_period'))
+            try:
+                period_end_canvas = str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year)
+            except ValueError:
+                period_end_canvas = str(request.POST.get('league_period'))
+    szns_drpdown_json = json.dumps(szns_drpdown)
+    allseasons_json = json.dumps(allseasons)
+
+    elohist_canvas = Game.objects.strike_rate_list_pergmwk_for_canvas('elohist', cntry, divisionn, period_end_canvas)
+    elohist_avg_canvas = Game.objects.strike_rate_list_pergmwk_for_canvas('elohist', 'All', 'All', 'All')
+    elol6_canvas = Game.objects.strike_rate_list_pergmwk_for_canvas('elol6', cntry, divisionn, period_end_canvas)
+    elol6_avg_canvas = Game.objects.strike_rate_list_pergmwk_for_canvas('elol6', 'All', 'All', 'All')
+    gsrs_canvas = Game.objects.strike_rate_list_pergmwk_for_canvas('gsrs', cntry, divisionn, period_end_canvas)
+    gsrs_avg_canvas = Game.objects.strike_rate_list_pergmwk_for_canvas('gsrs', 'All', 'All', 'All')
+
+    elohist_canvas = json.dumps(elohist_canvas)
+    elohist_avg_canvas = json.dumps(elohist_avg_canvas)
+    elol6_canvas = json.dumps(elol6_canvas)
+    elol6_avg_canvas = json.dumps(elol6_avg_canvas)
+    gsrs_canvas = json.dumps(gsrs_canvas)
+    gsrs_avg_canvas = json.dumps(gsrs_avg_canvas)
+    return render(request, 'predictions/bygameweek.html', {'szns_drpdown': szns_drpdown_json, 'countries': countries, 'cntry': cntry, 'divisionn': divisionn, 'period_end_out': period_end_out,
+                                                           'allseasons': allseasons_json, 'allseasons_notjson': allseasons, 'period_end_canvas': period_end_canvas,
+                                                           'elohist_canvas': elohist_canvas, 'elohist_avg_canvas': elohist_avg_canvas, 'elol6_canvas': elol6_canvas,
+                                                           'elol6_avg_canvas': elol6_avg_canvas, 'gsrs_canvas': gsrs_canvas, 'gsrs_avg_canvas': gsrs_avg_canvas})

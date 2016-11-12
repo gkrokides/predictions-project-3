@@ -47,6 +47,71 @@
         }
 
     </script>
+
+<script type="text/javascript">
+window.onload = function () {
+	var chart = new CanvasJS.Chart("chartElohist",
+	{
+		animationEnabled: true,
+		title:{
+			text: "ELO (H)"
+		},
+		axisX: {
+				labelAngle: -45
+			},
+		data: [
+		{
+			type: "column", //change type to bar, line, area, pie, etc
+			color: "#0C090A",
+			dataPoints: {{ elohist_distribution_strike_rate|safe }}
+		}
+		]
+		});
+
+	chart.render();
+
+	var chart = new CanvasJS.Chart("chartElol6",
+	{
+		animationEnabled: true,
+		title:{
+			text: "ELO (6)"
+		},
+		axisX: {
+				labelAngle: -45
+			},
+		data: [
+		{
+			type: "column", //change type to bar, line, area, pie, etc
+			color: "#810541",
+			dataPoints: {{ elol6_distribution_strike_rate|safe }}
+		}
+		]
+		});
+
+	chart.render();
+
+	var chart = new CanvasJS.Chart("chartGsrs",
+	{
+		animationEnabled: true,
+		title:{
+			text: "GSRS"
+		},
+		axisX: {
+				labelAngle: -45
+			},
+		data: [
+		{
+			type: "column", //change type to bar, line, area, pie, etc
+			color: "#E9AB17",
+			dataPoints: {{ gsrs_distribution_strike_rate|safe }}
+		}
+		]
+		});
+
+	chart.render();
+}
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
 {% endblock %}
 
 {% block header %}
@@ -76,7 +141,7 @@
       </select>
     </div>
     <div class="form-group">
-      Period:
+      Season:
       <select name ="league_period" id="league_period">
           <option value="All">All</option>
           {% for szn in allseasons_notjson %}
@@ -179,6 +244,40 @@
         </div>
         </div>
     </div>
+
+    <div class="row">
+  <div class="col-md-4">
+    <div class="panel panel-default">
+            <div class="panel-heading"><a data-toggle="collapse" href="#collapse4"><strong>Total Strike Rate Distribution</strong> (click to expand/hide)</a></div>
+            <div id="collapse4" class="panel-body" style="background: #212121;">
+                <div class="">
+                    <div id="chartElohist" style="height: 300px; width: 100%;"></div>
+                </div>
+           </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel panel-default">
+            <div class="panel-heading"><a data-toggle="collapse" href="#collapse4"><strong>Total Strike Rate Distribution</strong> (click to expand/hide)</a></div>
+            <div id="collapse4" class="panel-body" style="background: #212121;">
+                <div class="">
+                    <div id="chartElol6" style="height: 300px; width: 100%;"></div>
+                </div>
+           </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel panel-default">
+            <div class="panel-heading"><a data-toggle="collapse" href="#collapse4"><strong>Total Strike Rate Distribution</strong> (click to expand/hide)</a></div>
+            <div id="collapse4" class="panel-body" style="background: #212121;">
+                <div class="">
+                    <div id="chartGsrs" style="height: 300px; width: 100%;"></div>
+                </div>
+           </div>
+    </div>
+  </div>
+</div>
+
     <div class="panel panel-default">
         <div class="panel-heading"><a data-toggle="collapse" href="#collapse2"><strong>Predictions Breakdown</strong> (click to expand/hide)</a></div>
         <div id="collapse2" class="panel-body" style="background: #212121; padding-bottom: 0cm;">
@@ -456,42 +555,6 @@
             </div>
        </div>
     </div>
-    <div class="panel panel-default">
-            <div class="panel-heading"><a data-toggle="collapse" href="#collapse4"><strong>Streaks</strong> (click to expand/hide)</a></div>
-            <div id="collapse4" class="panel-body" style="background: #212121; padding-bottom: 0cm;">
-                <div class="well">
-                    <table class="table table-condensed table-bordered table-hover differentTable" style="background: #FFFFFF">
-                        <thead>
-                        <tr>
-                            <th class="left-al">Streak</th>
-                            <th class="elo_hist">ELO (H)</th>
-                            <th class="elo_l6">ELO (6)</th>
-                            <th class="gsrs">GSRS</th>
-                        </tr>
-                        </thead>
-
-                        <tbody class="centred">
-                        <tr>
-                            <td class="left-al">Highest winning streak</td>
-                            <td>{{ elohist_winning_streaks }}</td>
-                            <td>{{ elol6_winning_streaks }}</td>
-                            <td>{{ gsrs_winning_streaks }}</td>
-                        </tr>
-                        <tr>
-                            <td class="left-al">Highest losing streak</td>
-                            <td>{{ elohist_losing_streaks }}</td>
-                            <td>{{ elol6_losing_streaks }}</td>
-                            <td>{{ gsrs_losing_streaks }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-           </div>
-    </div>
-
-
-
-
 
 {% endblock %}
 

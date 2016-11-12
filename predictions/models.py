@@ -899,6 +899,29 @@ class GameManager(models.Manager):
             strikerate = round((float(successful_predictions) / total_predictions) * 100)
         return strikerate
 
+    # Don't worry about gameweek being less than 7 as this is only used by strike_rate_list_pergmwk_for_canvas which filters out the gameweeks less than 7 in the
+    # qrst parameter
+    def total_model_strike_rate_for_gameweek(self, qrst, gamewk, model):
+        if model == 'elohist':
+            qs_total = qrst.filter(gameweek=gamewk).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+            qs_successful = qrst.filter(gameweek=gamewk, prediction_status_elohist='Success')
+        elif model == 'elol6':
+            qs_total = qrst.filter(gameweek=gamewk).exclude(prediction_status_elol6__exact='').exclude(prediction_status_elol6__isnull=True)
+            qs_successful = qrst.filter(gameweek=gamewk, prediction_status_elol6='Success')
+        elif model == 'gsrs':
+            qs_total = qrst.filter(gameweek=gamewk).exclude(prediction_status_gsrs__exact='').exclude(prediction_status_gsrs__isnull=True)
+            qs_successful = qrst.filter(gameweek=gamewk, prediction_status_gsrs='Success')
+        else:
+            qs_total = ""
+            qs_successful = ""
+        total_predictions = qs_total.count()
+        successful_predictions = qs_successful.count()
+        if total_predictions == 0:
+            strikerate = 0
+        else:
+            strikerate = round((float(successful_predictions) / total_predictions) * 100)
+        return strikerate
+
     # returns a list of dictionaries containing league short name and strike rate (used for canvas charts)
     def strike_rate_list_for_canvas(self, model, country, division, period, prediction):
         lglist = []
@@ -923,7 +946,138 @@ class GameManager(models.Manager):
         lglist.sort()
 
         for lg in lglist:
-            srlist.append({str('label'): lg, str('y'): self.total_model_strike_rate_for_short_name(model,lg, period, prediction)})
+            srlist.append({str('label'): lg, str('y'): self.total_model_strike_rate_for_short_name(model, lg, period, prediction)})
+        return srlist
+
+    # returns a list of dictionaries containing gameweek and strike rate (used for canvas charts)
+    def strike_rate_list_pergmwk_for_canvas(self, model, country, division, period):
+        gwlist = []
+        srlist = []
+        filtered_qs = Game.objects.all()
+        # since the list is showing strike rate per gameweek i'm excluding the null or empty values of any of the models
+        # which I don't need to do in the previous functions for canvas
+        if country == 'All' and division == 'All' and period == 'All':
+            filtered_qs = Game.objects.filter(gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        elif country != 'All' and division == 'All' and period == 'All':
+            filtered_qs = self.filter(season__league__country=country, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        elif country != 'All' and division != 'All' and period == 'All':
+            filtered_qs = self.filter(season__league__country=country, season__league__league_name=division, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        elif country != 'All' and division != 'All' and period != 'All':
+            qsitem = self.filter(season__league__country=country, season__league__league_name=division, season__end_date__year=period)[0]
+            seasonidd = qsitem.season.id
+            filtered_qs = self.filter(season=seasonidd, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        elif country == 'All' and division == 'All' and period != 'All':
+            filtered_qs = self.filter(season__end_date__year=period, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        # list of distinct gameweeks. When using set instead of list you ensure only distinct items will be in the list. So I use a set that's
+        # converted back to a list hence list(set())
+        filtered_qs_vals = list(set(filtered_qs.values_list('gameweek', flat=True)))
+        for itm in filtered_qs_vals:
+            gwlist.append(int(itm))
+        gwlist.sort()
+
+        for gw in gwlist:
+            srlist.append({str('x'): gw, str('y'): self.total_model_strike_rate_for_gameweek(filtered_qs, gw, model)})
+        return srlist
+
+    # returns a list of dictionaries with the distribution of strike rate for the same number of gameweeks (i.e if user chooses 'All', 'All', 'All
+    # they will get the same number of gameweeks as they would if they chose a country, league and season
+    def strike_rate_distribution_for_canvas(self, model, country, division, period):
+        gwlist = []
+        srlist = []
+        zero_to_thirty = 0
+        thirty_to_fifty = 0
+        fifty_to_seventy = 0
+        seventy_to_ninenty = 0
+        ninenty_and_above = 0
+        filtered_qs = Game.objects.all()
+        # since the list is showing strike rate per gameweek i'm excluding the null or empty values of any of the models
+        # which I don't need to do in the previous functions for canvas
+        if country == 'All' and division == 'All' and period == 'All':
+            filtered_qs = Game.objects.filter(gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        elif country != 'All' and division == 'All' and period == 'All':
+            filtered_qs = self.filter(season__league__country=country, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        elif country != 'All' and division != 'All' and period == 'All':
+            filtered_qs = self.filter(season__league__country=country, season__league__league_name=division, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        elif country != 'All' and division != 'All' and period != 'All':
+            qsitem = self.filter(season__league__country=country, season__league__league_name=division, season__end_date__year=period)[0]
+            seasonidd = qsitem.season.id
+            filtered_qs = self.filter(season=seasonidd, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        elif country == 'All' and division == 'All' and period != 'All':
+            filtered_qs = self.filter(season__end_date__year=period, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        # list of distinct gameweeks. When using set instead of list you ensure only distinct items will be in the list. So I use a set that's
+        # converted back to a list hence list(set())
+        filtered_qs_vals = list(set(filtered_qs.values_list('gameweek', flat=True)))
+        for itm in filtered_qs_vals:
+            gwlist.append(int(itm))
+        gwlist.sort()
+        for gw in gwlist:
+            x = self.total_model_strike_rate_for_gameweek(filtered_qs, gw, model)
+            if 0 <= x <= 29.49:
+                zero_to_thirty += 1
+            elif 29.50 <= x <= 49.49:
+                thirty_to_fifty += 1
+            elif 49.50 <= x <= 69.49:
+                fifty_to_seventy += 1
+            elif 69.50 <= x <= 89.49:
+                seventy_to_ninenty += 1
+            elif 89.50 <= x:
+                ninenty_and_above += 1
+
+        srlist.append({str('label'): '0% to 29%', str('y'): zero_to_thirty})
+        srlist.append({str('label'): '30% to 49%', str('y'): thirty_to_fifty})
+        srlist.append({str('label'): '50% to 69%', str('y'): fifty_to_seventy})
+        srlist.append({str('label'): '70% to 89%', str('y'): seventy_to_ninenty})
+        srlist.append({str('label'): '90% & above', str('y'): ninenty_and_above})
+        return srlist
+
+    # returns a list of dictionaries with the distribution of strike rate for as many gameweeks there are in the underlying seasons of filtered_qs
+    def strike_rate_distribution_for_season(self, model, country, division, period):
+        gwlist = []
+        srlist = []
+        zero_to_thirty = 0
+        thirty_to_fifty = 0
+        fifty_to_seventy = 0
+        seventy_to_ninenty = 0
+        ninenty_and_above = 0
+        filtered_qs = Game.objects.all()
+        # since the list is showing strike rate per gameweek i'm excluding the null or empty values of any of the models
+        # which I don't need to do in the previous functions for canvas
+        if country == 'All' and division == 'All' and period == 'All':
+            filtered_qs = Game.objects.filter(gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        elif country != 'All' and division == 'All' and period == 'All':
+            filtered_qs = self.filter(season__league__country=country, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        elif country != 'All' and division != 'All' and period == 'All':
+            filtered_qs = self.filter(season__league__country=country, season__league__league_name=division, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        elif country != 'All' and division != 'All' and period != 'All':
+            qsitem = self.filter(season__league__country=country, season__league__league_name=division, season__end_date__year=period)[0]
+            seasonidd = qsitem.season.id
+            filtered_qs = self.filter(season=seasonidd, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        elif country == 'All' and division == 'All' and period != 'All':
+            filtered_qs = self.filter(season__end_date__year=period, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        # list of distinct seasons. When using set instead of list you ensure only distinct items will be in the list. So I use a set that's
+        # converted back to a list hence list(set())
+        distinct_seasons = list(set(filtered_qs.values_list('season__id', flat=True)))
+        for s in distinct_seasons:
+            current_set = filtered_qs.filter(season__id=s)
+            distinct_gameweeks = list(set(current_set.values_list('gameweek', flat=True)))
+            distinct_gameweeks.sort()
+            for gw in distinct_gameweeks:
+                x = self.total_model_strike_rate_for_gameweek(current_set, gw, model)
+                if 0 <= x <= 30.44:
+                    zero_to_thirty += 1
+                elif 30.45 <= x <= 50.44:
+                    thirty_to_fifty += 1
+                elif 50.45 <= x <= 70.44:
+                    fifty_to_seventy += 1
+                elif 70.45 <= x <= 90.44:
+                    seventy_to_ninenty += 1
+                elif 90.45 <= x:
+                    ninenty_and_above += 1
+        srlist.append({str('label'): '0% - 30%', str('y'): zero_to_thirty})
+        srlist.append({str('label'): '31% - 50%', str('y'): thirty_to_fifty})
+        srlist.append({str('label'): '51% - 70%', str('y'): fifty_to_seventy})
+        srlist.append({str('label'): '71% - 90%', str('y'): seventy_to_ninenty})
+        srlist.append({str('label'): '91% & above', str('y'): ninenty_and_above})
         return srlist
 
 

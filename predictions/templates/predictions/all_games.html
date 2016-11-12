@@ -2,6 +2,7 @@
 {% block head %}
         <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
         <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+
     <script>
         $(document).ready(function() {
         $('#example').DataTable();
@@ -14,15 +15,15 @@
 {% block content30 %}
 {% if user.is_authenticated %}
 
-    <table id="example" class="display" cellspacing="0" width="100%">
+    <table id="example" class="display compact" cellspacing="0" width="100%">
         <thead>
-            <tr>
+            <tr style="font-size:80%;">
                 <th>Season</th>
                 <th>Gmwk</th>
                 <th>Date</th>
                 <th class="right-al">Home</th>
-                <th>Hm gls</th>
-                <th>Aw gls</th>
+                <th>Home goals</th>
+                <th>Away goals</th>
                 <th>Away</th>
                 <!--<th>Status Black</th>-->
                 <!--<th>Status Purple</th>-->
@@ -31,7 +32,7 @@
         </thead>
         <tbody>
         {% for obj in tableset %}
-            <tr>
+            <tr style="font-size:80%;">
                 <td width="15%">{{ obj.season }}</td>
                 <td width="1%">{{ obj.gameweek }}</td>
                 <td width="15%">{{ obj.date }}</td>
