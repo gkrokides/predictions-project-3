@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^add-game/$', views.addgames, name='add_games'),
     url(r'^all-games/$', views.all_games, name='all_games'),
     url(r'^byleague/$', views.dashboard_byleague, name='byleague'),
-    url(r'^bygameweek/$', views.dashboard_bygameweek, name='bygameweek')
+    url(r'^bygameweek/$', views.dashboard_bygameweek, name='bygameweek'),
+    url(r'^activeusers/$', views.active_users, name='activeusers')
 
 ]

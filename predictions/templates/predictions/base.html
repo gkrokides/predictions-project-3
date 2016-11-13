@@ -112,6 +112,8 @@
                             <li class="divider"></li>
                             <li><a href="{% url 'admin:index' %}"><span class="fa fa-lock" aria-hidden="true"></span> Admin Page</a></li>
                             <li class="divider"></li>
+                            <li><a href="{% url 'activeusers' %}"><span class="fa fa-users" aria-hidden="true"></span> Active Users</a></li>
+                            <li class="divider"></li>
                             <li><a href="{% url 'admin:logout' %}"><span class="glyphicon glyphicon-log-out"></span> Sign out</a></li>
                         </ul>
                     </div>
@@ -298,6 +300,23 @@
                 </div>
                 <div class="col-md-1">
                     {% block content31 %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+        <div class="content container-fluid">
+            <div class="row">
+                <div class="col-md-5">
+                    {% block content32 %}
+                    {% endblock %}
+                </div>
+                <div class="col-md-2">
+                    {% block content33 %}
+                    {% endblock %}
+                </div>
+                <div class="col-md-5">
+                    {% block content34 %}
                     {% endblock %}
                 </div>
             </div>

@@ -1,0 +1,30 @@
+{% extends 'predictions/base.html' %}
+
+{% block header %}{% endblock %}
+
+{% block head %}
+    <!--<style>-->
+    <!--body {-->
+        <!--background-color: #C0C0C0;-->
+    <!--}-->
+    <!--</style>-->
+{% endblock %}
+
+
+{% block content33 %}
+
+{% if user.is_authenticated %}
+
+    <h2 style="color: green;"><strong>Online Now</strong></h2>
+    {% for u in userslist %}
+        {% if user.is_authenticated %}
+            <div class="alert alert-success">
+                {{u.username}}<br>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+{% endif %}
+
+
+{% endblock %}

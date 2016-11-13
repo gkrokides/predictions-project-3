@@ -11,6 +11,8 @@ from datetime import datetime
 import json
 from django.forms import modelformset_factory
 from django import forms
+from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
 
 # from django.db.models import Count
 # from itertools import chain
@@ -589,7 +591,23 @@ def predictions(request):
 
 
 def testview(request):
-    return render(request, 'predictions/test.html')
+    active_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    user_id_list = []
+    for session in active_sessions:
+        data = session.get_decoded()
+        user_id_list.append(data.get('_auth_user_id', None))
+    userslist = User.objects.filter(id__in=user_id_list)
+    return render(request, 'predictions/test.html', {'userslist': userslist})
+
+
+def active_users(request):
+    active_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    user_id_list = []
+    for session in active_sessions:
+        data = session.get_decoded()
+        user_id_list.append(data.get('_auth_user_id', None))
+    userslist = User.objects.filter(id__in=user_id_list)
+    return render(request, 'predictions/activeusers.html', {'userslist': userslist})
 
 
 def new_predictions(request, seasonid, gamewk):

@@ -250,6 +250,24 @@
 });
 
     </script>
+{% endblock %}
+
+{% block content17 %}
+<!--{%for u in users%}-->
+    <!--{% if user.is_authenticated %}-->
+    <!--Name: {{u.username}}<br />-->
+    <!--Last Login: {{u.last_login}}<br />-->
+    <!--&lt;!&ndash;{{ u.name }}&ndash;&gt;-->
+    <!--{% endif %}-->
+<!--{% endfor %}-->
+
+<p>
+{% for u in userslist %}
+    {% if user.is_authenticated %}
+        <strong>Currently Active:</strong> {{u.username}}
+    {% endif %}
+{% endfor %}
+</p>
 
 {% endblock %}
 
