@@ -136,3 +136,5 @@ ELO_S = 400  # S is a scaling parameter that controls the extent to which a team
 # net of Home Ground Advantage, while smaller values of S mean the opposite.
 STARTING_POINTS = 1500
 ELO_K = 20
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
