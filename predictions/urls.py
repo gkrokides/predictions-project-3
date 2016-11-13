@@ -15,12 +15,12 @@ urlpatterns = [
     url(r'^metrics/$', views.metrics, name='metrics'),
     url(r'^pastpredictions/(?P<seasonid>[0-9]+)/$', views.past_predictions, name='past_predictions'),
     url(r'^newpredictions/(?P<seasonid>[0-9]+)/(?P<gamewk>[0-9]+)/$', views.new_predictions, name='new_predictions'),
-    url(r'^test/$', views.testview, name='test'),
+    # url(r'^test/$', views.testview, name='test'),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^add-score/$', views.addscore, name='add_score'),
     url(r'^add-game/$', views.addgames, name='add_games'),
     url(r'^all-games/$', views.all_games, name='all_games'),
     url(r'^byleague/$', views.dashboard_byleague, name='byleague'),
     url(r'^bygameweek/$', views.dashboard_bygameweek, name='bygameweek')
-    # url(r'^games_filtered/$', views.games_filter, name='games_filtered'),
+
 ]

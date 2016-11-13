@@ -1,13 +1,31 @@
 {% extends 'predictions/base.html' %}
 {% block head %}
-        <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
-        <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jqc-1.12.3/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-flash-1.2.2/b-html5-1.2.2/b-print-1.2.2/r-2.1.0/datatables.min.css"/>
 
-    <script>
-        $(document).ready(function() {
-        $('#example').DataTable();
-        } );
-    </script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jqc-1.12.3/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-flash-1.2.2/b-html5-1.2.2/b-print-1.2.2/r-2.1.0/datatables.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+    $('#example').DataTable( {
+        "scrollY": "600px",
+        "paging": false,
+        "scrollCollapse": true,
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    } );
+} );
+</script>
+
+<!--<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">-->
+<!--<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>-->
+
+    <!--<script>-->
+        <!--$(document).ready(function() {-->
+        <!--$('#example').DataTable();-->
+        <!--} );-->
+    <!--</script>-->
 
 {% endblock %}
 {% block header %}{% endblock %}
@@ -25,9 +43,9 @@
                 <th>Home goals</th>
                 <th>Away goals</th>
                 <th>Away</th>
-                <!--<th>Status Black</th>-->
-                <!--<th>Status Purple</th>-->
-                <!--<th>Status Yellow</th>-->
+                <th>Status Black</th>
+                <th>Status Purple</th>
+                <th>Status Yellow</th>
             </tr>
         </thead>
         <tbody>
@@ -40,9 +58,9 @@
                 <td class="centred" width="1%">{{ obj.homegoals }}</td>
                 <td class="centred" width="1%">{{ obj.awaygoals }}</td>
                 <td>{{ obj.awayteam }}</td>
-                <!--<td>{{ obj.prediction_status_elohist }}</td>-->
-                <!--<td>{{ obj.prediction_status_elol6 }}</td>-->
-                <!--<td>{{ obj.prediction_status_gsrs }}</td>-->
+                <td>{{ obj.prediction_status_elohist }}</td>
+                <td>{{ obj.prediction_status_elol6 }}</td>
+                <td>{{ obj.prediction_status_gsrs }}</td>
             </tr>
         {% endfor %}
         </tbody>
