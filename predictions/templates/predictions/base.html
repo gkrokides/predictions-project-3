@@ -45,7 +45,7 @@
     <!--}-->
     <!--</style>-->
     <head>
-        <title>BetKrok</title>
+        <title>BetAid.net</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
@@ -84,7 +84,7 @@
                 <span class="icon-bar"> </span>
             </button>
 
-            <a class="navbar-brand" href="{% url 'about' %}"><strong class="site-title">Betkrok{% block header %}{% endblock %}</strong></a>
+            <a class="navbar-brand" href="{% url 'about' %}"><strong class="site-title">betaid.net{% block header %}{% endblock %}</strong></a>
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -317,6 +317,15 @@
                 </div>
                 <div class="col-md-5">
                     {% block content34 %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+        <div class="content container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    {% block content35 %}
                     {% endblock %}
                 </div>
             </div>

@@ -1,11 +1,80 @@
 {% extends 'predictions/base.html' %}
 
 {% block header %}{% endblock %}
-
-{% block content %}
-
-<p>About us</p>
+{% block content35 %}
 
 
+<div class="container">
+	<div class="row">
+	<header class="jumbotron">
+            <h1>Welcome to <strong><span style="color: #5DADE2;">betaid.net</span></strong></h1>
+            <p style="font-size: 13pt">betaid.net provides football predictions (Home, Away and Draw) through the use of our own prediction models.
+			We have given a random color to each model, black, maroon and yellow to make it easier for you to distinguish them. </p>
+        </header>
+	</div>
+
+    <div class="row" style="height:20%; display: block; border: solid; border-color: black; border-width: 5px;">
+        <div class="col-xs-4" style="background-color: #0C090A; height: 100%"></div>
+        <div class="col-xs-4" style="background-color: #810541; height: 100%"></div>
+		<div class="col-xs-4" style="background-color: #E9AB17; height: 100%"></div>
+    </div>
+
+     <div class="row">
+            <div class="col-md-4">
+                <h2>Black Model</h2>
+                <p>You will also see this as <strong>ELO(H)</strong>. This model uses the <a href="https://en.wikipedia.org/wiki/Elo_rating_system">Elo rating</a> system as its base but with
+                a number of modifications. It incorporates variables that make it much stronger when applied in football, i.e  HGA (home ground advantage), Goal difference
+                scaling factors, draw thresholds and more. The (H) in parenthesis stands for 'Historical' and indicates the lookback period that the model considers when making predictions.
+                This means that the model goes back and gathers info for all the games of each team for the current season.
+                </p>
+            </div>
+            <!-- /.col-md-4 -->
+            <div class="col-md-4">
+                <h2>Maroon Model</h2>
+                <p>You will also see this as <strong>ELO(6)</strong>. The base of the calculations in this model is the same as the black model (ELO(H)) with the difference being in the lookback
+                period. So the (6) in the name of the model means that the data gathered for the calculation of predictions are going back 6 games. So this model tries to capture the most recent
+                form and ignores the build up of the team's form since the start of the season. So all the variable values are calculated according to the team's and season's last 6 games.</p>
+            </div>
+            <!-- /.col-md-4 -->
+            <div class="col-md-4">
+                <h2>Yellow Model</h2>
+                <p>You will also see this as <strong>GSRS</strong>. This model takes a totally different approach than the other two. GSRS stands for Goal Superiority Rating System. This means
+                that the predictions are calculated using the goals scored and conceded, calculated as ratios for the needs of the prediction variables. Put simply, it does make use of variables such as
+                Home Ground Advantage, scaling factors, draw thresholds etc like the other two models, but the basis of each team's form when calculating a prediction is the goals superiority (both for and against)
+                of each team. The lookback of this model is 6 games</p>
+            </div>
+
+        </div>
+        <hr>
+        <div>
+        <h2>Predictions & Ranking</h2> When looking at the League Overview in the <a href="{% url 'predictions' %}">predictions page</a>, you will notice that we rank the teams in a different way than what's used normally.
+        So we don't give 3 points for each win and 1 point for each draw. The Elo rating system helps us rank the teams according to their real form. For example, a team that wins 3 - 0 away will get more
+        points compared to winning the same opponent 1 - 0 at home. The ranking of the opponent is also taken into consideration; for example, if a weak team wins a strong team, they will get more points
+        than what the strong team would get if they won.
+         </div>
+        <hr>
+         <div>
+        <h2>Dashboard</h2>The Dashboard gives you an understanding of how the models are performing in each league. It is quite impossible for the models
+            to achieve high performance on all covered leagues. So the best way to take advantage of these predicting models is by using the dashboard to identify the leagues for which we have
+            high strike rate. So we <strong>strongly recommend</strong> that you start by looking at the <a href="{% url 'byleague' %}">By League</a> page, filter it to show the current season
+            , and identify a league with high strike rate. If you want more information on how the models are performing on that league, head over to the  <a href="{% url 'dashboard' %}">Overview</a>
+              page and filter the dashboard to show the league you identified for the current season. Additionally, you can look at the <a href="{% url 'bygameweek' %}">By Gameweek</a>, again
+             filtering the dashboard for your identified league and look at how the models are performing each week against the average.
+         </div>
+
+		<br><br>
+
+
+
+
+    <div class="well" style="font-size: 10pt">
+	Disclaimer: These models do not make use of qualitative data, meaning that they don't harvest
+			data that cannot be measured objectively i.e a team missing a couple of key players or a team changing coach in the middle of the season etc. The reason we can't use this kind of data is because it's almost impossible to objectively predict how much such
+			situations can affect a team at any given time. Instead, we use quantitative data such as goals scored/conceded home and away, percentage of home/away wins, etc. The models do not
+			guarantee success and past performance is not indicative of future performance. We believe the best way to use these models is finding the top 3 or 4 leagues in terms of strike rate
+			performance for the current season, and follow these leagues. The dashboard was created specifically for this reason, to help you find how the models are performing on each league so
+			you can follow the top performing models at any given season.
+    </div>
+</div>
 
 {% endblock %}
