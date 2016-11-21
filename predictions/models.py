@@ -4,8 +4,9 @@ from django.utils import timezone
 from django.db.models import Q, Max, Sum, F
 # from decimal import Decimal, ROUND_HALF_UP, ROUND_HALF_DOWN
 import django_filters
-from django.conf import settings
+# from django.conf import settings
 from datetime import datetime
+from predictions_project import elosettings
 
 
 class Leagues(models.Model):
@@ -110,7 +111,7 @@ class GameManager(models.Manager):
         prevgmwk = gmwk - 1
         # tmgames = self.filter(Q(hometeam=tm, season=seasn) | Q(awayteam=tm, season=seasn)).order_by('gameweek')
         if gmwk == 1:
-            out = settings.STARTING_POINTS
+            out = elosettings.STARTING_POINTS
         elif gmwk > 1:
             # ix = tmgames.get(gameweek=prevgmwk)
             iprevgame = self.filter(Q(hometeam=tm, season=seasn, gameweek=prevgmwk) | Q(awayteam=tm, season=seasn, gameweek=prevgmwk))
@@ -137,10 +138,10 @@ class GameManager(models.Manager):
         draw_points = total_home_draws * 0.5
         total_games = self.filter(hometeam=teamm, season=seasonn, gameweek__lte=gmwk-1).count()
         if total_games == 0 or gmwk == 1:
-            mhga = settings.ELO_HGA
+            mhga = elosettings.ELO_HGA
         else:
             strike_rate = (win_points + draw_points)/total_games
-            mhga = strike_rate * float(settings.ELO_HGA)
+            mhga = strike_rate * float(elosettings.ELO_HGA)
         return mhga
 
     def elo_draw_threshold(self, seasonn, gamewk):
@@ -399,11 +400,11 @@ class GameManager(models.Manager):
         qset = self.filter(hometeam=team, season=sz, gameweek__lt=gmwk).order_by('gameweek')
         points = 0.0
         if gmwk == 1:
-                points = settings.STARTING_POINTS - self.get_previous_elo(team, sz, gmwk)
+                points = elosettings.STARTING_POINTS - self.get_previous_elo(team, sz, gmwk)
         else:
             for gm in qset:
                 if gm.gameweek == 1:
-                    points += gm.elo_rating_home - settings.STARTING_POINTS
+                    points += gm.elo_rating_home - elosettings.STARTING_POINTS
                 else:
                     points += gm.elo_rating_home - self.get_previous_elo(team, sz, gm.gameweek)
         return points
@@ -413,11 +414,11 @@ class GameManager(models.Manager):
         qset = self.filter(awayteam=team, season=sz, gameweek__lt=gmwk).order_by('gameweek')
         points = 0.0
         if gmwk == 1:
-                points = settings.STARTING_POINTS - self.get_previous_elo(team, sz, gmwk)
+                points = elosettings.STARTING_POINTS - self.get_previous_elo(team, sz, gmwk)
         else:
             for gm in qset:
                 if gm.gameweek == 1:
-                    points += gm.elo_rating_away - settings.STARTING_POINTS
+                    points += gm.elo_rating_away - elosettings.STARTING_POINTS
                 else:
                     points += gm.elo_rating_away - self.get_previous_elo(team, sz, gm.gameweek)
         return points
@@ -1100,7 +1101,7 @@ class Game(models.Model):
     prediction_status_gsrs = models.CharField(max_length=80, null=True, blank=True)
     objects = GameManager()
 
-    # # ELO SETTINGS MOVED TO SETTINGS.PY
+    # # ELO SETTINGS MOVED TO elosettings.py
     # ELO_HGA = 65  # Home ground advantage factor. You can set it to 0 if you don't want to add it as a factor in the calculations
     # ELO_S = 400  # S is a scaling parameter that controls the extent to which a team's Ratings deficit, net of any
     # # Home Ground Advantage, is translated into expected performance. Larger values of S mean that
@@ -1110,7 +1111,7 @@ class Game(models.Model):
     # ELO_K = 20
 
     def get_k_factor(self):
-        k = settings.ELO_K
+        k = elosettings.ELO_K
         scaling = {10: 2.99, 9: 2.88, 8: 2.77, 7: 2.64, 6: 2.49, 5: 2.32, 4: 2.11, 3: 1.85, 2: 1.51, 1: 1.00}
         if self.homegoals >= 0:
             goaldiff = abs(self.homegoals - self.awaygoals)
@@ -1160,15 +1161,15 @@ class Game(models.Model):
     def home_se(self):
         home_sa = 0.00
         if self.gameweek == 1:
-            away_r_old = settings.STARTING_POINTS
-            home_r_old = settings.STARTING_POINTS
-            home_sa = 1 / (1 + 10 ** ((away_r_old - home_r_old - settings.ELO_HGA) / float(settings.ELO_S)))
+            away_r_old = elosettings.STARTING_POINTS
+            home_r_old = elosettings.STARTING_POINTS
+            home_sa = 1 / (1 + 10 ** ((away_r_old - home_r_old - elosettings.ELO_HGA) / float(elosettings.ELO_S)))
         elif self.gameweek > 1:
             away_r_old = self._default_manager.get_previous_elo(tm=self.awayteam, seasn=self.season, gmwk=self.gameweek)
             home_r_old = self._default_manager.get_previous_elo(tm=self.hometeam, seasn=self.season, gmwk=self.gameweek)
             previous_gw = self.gameweek - 1
             home_ground_adv = self._default_manager.modified_hga(teamm=self.hometeam, seasonn=self.season, gmwk=self.gameweek)
-            home_sa = 1 / (1 + 10 ** ((away_r_old - home_r_old - home_ground_adv) / float(settings.ELO_S)))
+            home_sa = 1 / (1 + 10 ** ((away_r_old - home_r_old - home_ground_adv) / float(elosettings.ELO_S)))
         return home_sa
 
     def away_se(self):
