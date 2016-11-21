@@ -4,6 +4,20 @@
 
 {% block content %}
 
-<p>contact form</p>
+{% load bootstrap %}
+
+<div class="">
+<h2>Get in touch!</h2>
+</div>
+
+<div class="well">
+<form method="post">
+    {% csrf_token %}
+    {{ form|bootstrap }}
+    <div class="form-actions">
+      <button type="submit" class="btn btn-info">Send <span class="glyphicon glyphicon-send"></span></button>
+    </div>
+</form>
+</div>
 
 {% endblock %}

@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^predictions/$', views.predictions, name='predictions'),
     url(r'^predictions/history/$', views.predictions_filter, name='predictions_history'),
     url(r'^$', TemplateView.as_view(template_name='predictions/about.html'), name='about'),
-    url(r'^contact-us/$', TemplateView.as_view(template_name='predictions/contact_us.html'), name='contactus'),
+    url(r'^contact-us/$', views.email, name='contactus'),
     url(r'^game/(?P<pk>[0-9]+)/$', views.game_detail, name='game_detail'),
     url(r'^metrics/$', views.metrics, name='metrics'),
     url(r'^pastpredictions/(?P<seasonid>[0-9]+)/$', views.past_predictions, name='past_predictions'),
@@ -22,6 +22,8 @@ urlpatterns = [
     url(r'^all-games/$', views.all_games, name='all_games'),
     url(r'^byleague/$', views.dashboard_byleague, name='byleague'),
     url(r'^bygameweek/$', views.dashboard_bygameweek, name='bygameweek'),
-    url(r'^activeusers/$', views.active_users, name='activeusers')
+    url(r'^activeusers/$', views.active_users, name='activeusers'),
+    # url(r'^email/$', views.email, name='email'),
+    url(r'^success/$', views.success, name='success'),
 
 ]

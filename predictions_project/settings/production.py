@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'predictions',
+    'bootstrapform',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -80,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'betkrok$Betkrokdb2',
         'USER': 'betkrok',
-        'PASSWORD': 'thebigshipisintheport',
+        'PASSWORD': os.environ.get('DB_PASS', ''),
         'HOST': 'betkrok.mysql.pythonanywhere-services.com',
     }
 }
@@ -143,3 +144,10 @@ ELO_K = 20
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 SECURE_SSL_REDIRECT = True
+
+EMAIL_HOST = 'smtpout.europe.secureserver.net'
+EMAIL_HOST_USER = 'support@betaid.net'
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS', '')
+EMAIL_PORT = 465
+# EMAIL_USE_TLS = True
+EMAIL_USE_SSL = True

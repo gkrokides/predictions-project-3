@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'predictions',
+    'bootstrapform',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -138,3 +139,13 @@ STARTING_POINTS = 1500
 ELO_K = 20
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_HOST = 'smtpout.europe.secureserver.net'
+EMAIL_HOST_USER = 'support@betaid.net'
+EMAIL_HOST_PASSWORD = 'Apoelakka26'
+EMAIL_PORT = 465
+# EMAIL_USE_TLS = True
+EMAIL_USE_SSL = True
+

@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Post, Team, Game, Season, GameFilter, Leagues
-from .forms import PostForm, GameForm
+from .forms import PostForm, GameForm, ContactForm
 from dicts.sorteddict import ValueSortedDict
 from decimal import Decimal
 from django.db.models import Q, F, Sum
@@ -13,6 +13,8 @@ from django.forms import modelformset_factory
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse, HttpResponseRedirect
 
 # from django.db.models import Count
 # from itertools import chain
@@ -1230,3 +1232,26 @@ def dashboard_bygameweek(request):
                                                            'allseasons': allseasons_json, 'allseasons_notjson': allseasons, 'period_end_canvas': period_end_canvas,
                                                            'elohist_canvas': elohist_canvas, 'elohist_avg_canvas': elohist_avg_canvas, 'elol6_canvas': elol6_canvas,
                                                            'elol6_avg_canvas': elol6_avg_canvas, 'gsrs_canvas': gsrs_canvas, 'gsrs_avg_canvas': gsrs_avg_canvas})
+
+
+def email(request):
+    if request.method == 'GET':
+        form = ContactForm()
+    else:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            subject = form.cleaned_data['subject']
+            from_email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            message = message + '\n ' + '\n Sent from: ' + name
+            try:
+                send_mail(subject, message, from_email, ['support@betaid.net'])
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            return redirect('success')
+    return render(request, 'predictions/contact_us.html', {'form': form})
+
+
+def success(request):
+    return render(request, 'predictions/success.html')
