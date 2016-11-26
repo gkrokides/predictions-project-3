@@ -163,6 +163,17 @@ window.onload = function () {
   </form>
  </div>
 
+ <div class="well centred">
+     <h4><strong>
+         Top 3 Leagues {{ period_end_out }}<br>
+         <h5><strong>in Total Strike Rate (%)</strong></h5><br>
+         </strong>
+     </h4>
+
+     <span class="floatleft prediction">{{ top3.0.name }}</span> <span class="badge">{{ top3.0.strike_rate|floatformat:0 }}%</span><br><br>
+     <span class="floatleft prediction">{{ top3.1.name }}</span> <span class="badge">{{ top3.1.strike_rate|floatformat:0 }}%</span><br><br>
+     <span class="floatleft prediction">{{ top3.2.name }}</span> <span class="badge">{{ top3.2.strike_rate|floatformat:0 }}%</span>
+ </div>
 
 
 

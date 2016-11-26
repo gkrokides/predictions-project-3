@@ -259,8 +259,17 @@ window.onload = function () {
 </div>
 
 
+ <div class="well centred">
+     <h4><strong>
+         Top 3 Leagues {{ period_end_out }}<br>
+         <h5><strong>in Total Strike Rate (%)</strong></h5><br>
+         </strong>
+     </h4>
 
-<p style="color: grey;">Average = The average performance (per gameweek) for the given model, calculated historically and for all leagues and seasons</p>
+     <span class="floatleft prediction">{{ top3.0.name }}</span> <span class="badge">{{ top3.0.strike_rate|floatformat:0 }}%</span><br><br>
+     <span class="floatleft prediction">{{ top3.1.name }}</span> <span class="badge">{{ top3.1.strike_rate|floatformat:0 }}%</span><br><br>
+     <span class="floatleft prediction">{{ top3.2.name }}</span> <span class="badge">{{ top3.2.strike_rate|floatformat:0 }}%</span>
+ </div>
 
 {% endblock %}
 
@@ -268,10 +277,13 @@ window.onload = function () {
 
 
 <div id="chartHome" style="height: 300px; width: 100%;"></div>
+<p style="color: grey;">Average = The average performance (per gameweek) for the given model, calculated historically and for all leagues and seasons</p>
 <hr>
 <div id="chartAway" style="height: 300px; width: 100%;"></div>
+<p style="color: grey;">Average = The average performance (per gameweek) for the given model, calculated historically and for all leagues and seasons</p>
 <hr>
 <div id="chartDraw" style="height: 300px; width: 100%;"></div>
+<p style="color: grey;">Average = The average performance (per gameweek) for the given model, calculated historically and for all leagues and seasons</p>
 
 <!--<p>{{ elohist_canvas }}</p>-->
 <!--<p>{{ elohist_avg_canvas }}</p>-->

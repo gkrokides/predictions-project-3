@@ -730,6 +730,15 @@ def dashboard(request):
     # cntry = 'All'
     divisionn = top_season.league.league_name
     # divisionn = 'All'
+    # create a list of dicts that contain the top 3 leagues by league name, and strike rate
+    ranked1 = sorted_seasons[0]['id']
+    ranked2 = sorted_seasons[1]['id']
+    ranked3 = sorted_seasons[2]['id']
+    top3 = [
+        {'name': Season.objects.get(id=ranked1).league.league_name, 'strike_rate': sorted_seasons[0]['strike_rate']},
+        {'name': Season.objects.get(id=ranked2).league.league_name, 'strike_rate': sorted_seasons[1]['strike_rate']},
+        {'name': Season.objects.get(id=ranked3).league.league_name, 'strike_rate': sorted_seasons[2]['strike_rate']}
+    ]
     cntry_class = ''
     divisionn_class = ''
     period_end_out_class = ''
@@ -1023,7 +1032,8 @@ def dashboard(request):
                    'elol6_strike_rate_draw_out': elol6_strike_rate_draw_out, 'gsrs_strike_rate_home_out': gsrs_strike_rate_home_out,
                    'gsrs_strike_rate_draw_out': gsrs_strike_rate_draw_out, 'allseasons': allseasons_json, 'allseasons_notjson': allseasons,
                    'period_end_canvas': period_end_canvas, 'elohist_distribution_strike_rate': elohist_distribution_strike_rate,
-                   'elol6_distribution_strike_rate': elol6_distribution_strike_rate, 'gsrs_distribution_strike_rate': gsrs_distribution_strike_rate})
+                   'elol6_distribution_strike_rate': elol6_distribution_strike_rate, 'gsrs_distribution_strike_rate': gsrs_distribution_strike_rate,
+                   'top3': top3})
 
 
 def addscore(request):
@@ -1149,6 +1159,21 @@ def dashboard_byleague(request):
     divisionn = 'All'
     period_end_out = 'All'
     period_end_canvas = 'All'
+
+    allgames = Game.objects.all().order_by('-date')
+    current_end_year = allgames[0].season.end_date.year
+    sorted_seasons = Game.objects.rank_seasons_by_strike_rate(current_end_year)
+    top_season_id = sorted_seasons[0]['id']
+    # create a list of dicts that contain the top 3 leagues by league name, and strike rate
+    ranked1 = sorted_seasons[0]['id']
+    ranked2 = sorted_seasons[1]['id']
+    ranked3 = sorted_seasons[2]['id']
+    top3 = [
+        {'name': Season.objects.get(id=ranked1).league.league_name, 'strike_rate': sorted_seasons[0]['strike_rate']},
+        {'name': Season.objects.get(id=ranked2).league.league_name, 'strike_rate': sorted_seasons[1]['strike_rate']},
+        {'name': Season.objects.get(id=ranked3).league.league_name, 'strike_rate': sorted_seasons[2]['strike_rate']}
+    ]
+
     allseasons = Season.objects.get_distinct_season_ends()
     # dropdown list data
     countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
@@ -1196,7 +1221,7 @@ def dashboard_byleague(request):
                                                          'elohist_canvas_home': elohist_canvas_home, 'elol6_canvas_home': elol6_canvas_home, 'gsrs_canvas_home': gsrs_canvas_home,
                                                          'cntry': cntry, 'divisionn': divisionn, 'period_end_out': period_end_out, 'elohist_canvas_away': elohist_canvas_away,
                                                          'elol6_canvas_away': elol6_canvas_away, 'gsrs_canvas_away': gsrs_canvas_away, 'elohist_canvas_draw': elohist_canvas_draw,
-                                                         'elol6_canvas_draw': elol6_canvas_draw, 'gsrs_canvas_draw': gsrs_canvas_draw})
+                                                         'elol6_canvas_draw': elol6_canvas_draw, 'gsrs_canvas_draw': gsrs_canvas_draw, 'top3': top3})
 
 
 def dashboard_bygameweek(request):
@@ -1208,7 +1233,6 @@ def dashboard_bygameweek(request):
     current_period = str(current_start_year) + "/" + str(current_end_year)
     # period_end_out = 'All'
     period_end_out = current_period
-    period_end_canvas = current_end_year
     # period_end_canvas = 'All'
     # find top season in terms of strike rate and assign the country and division to the cntry and divisionn
     # variables respectively
@@ -1220,6 +1244,15 @@ def dashboard_bygameweek(request):
     divisionn = top_season.league.league_name
     # divisionn = 'All'
     period_end_canvas = 'All'
+    # create a list of dicts that contain the top 3 leagues by league name, and strike rate
+    ranked1 = sorted_seasons[0]['id']
+    ranked2 = sorted_seasons[1]['id']
+    ranked3 = sorted_seasons[2]['id']
+    top3 = [
+        {'name': Season.objects.get(id=ranked1).league.league_name, 'strike_rate': sorted_seasons[0]['strike_rate']},
+        {'name': Season.objects.get(id=ranked2).league.league_name, 'strike_rate': sorted_seasons[1]['strike_rate']},
+        {'name': Season.objects.get(id=ranked3).league.league_name, 'strike_rate': sorted_seasons[2]['strike_rate']}
+    ]
     allseasons = Season.objects.get_distinct_season_ends()
     # dropdown list data
     countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
@@ -1261,7 +1294,8 @@ def dashboard_bygameweek(request):
     return render(request, 'predictions/bygameweek.html', {'szns_drpdown': szns_drpdown_json, 'countries': countries, 'cntry': cntry, 'divisionn': divisionn, 'period_end_out': period_end_out,
                                                            'allseasons': allseasons_json, 'allseasons_notjson': allseasons, 'period_end_canvas': period_end_canvas,
                                                            'elohist_canvas': elohist_canvas, 'elohist_avg_canvas': elohist_avg_canvas, 'elol6_canvas': elol6_canvas,
-                                                           'elol6_avg_canvas': elol6_avg_canvas, 'gsrs_canvas': gsrs_canvas, 'gsrs_avg_canvas': gsrs_avg_canvas})
+                                                           'elol6_avg_canvas': elol6_avg_canvas, 'gsrs_canvas': gsrs_canvas, 'gsrs_avg_canvas': gsrs_avg_canvas,
+                                                           'sorted_seasons': sorted_seasons, 'top3': top3})
 
 
 def email(request):
