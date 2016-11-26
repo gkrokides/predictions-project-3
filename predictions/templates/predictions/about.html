@@ -41,7 +41,7 @@
                 <p>You will also see this as <strong>GSRS</strong>. This model takes a totally different approach than the other two. GSRS stands for Goal Superiority Rating System. This means
                 that the predictions are calculated using the goals scored and conceded, calculated as ratios for the needs of the prediction variables. Put simply, it does make use of variables such as
                 Home Ground Advantage, scaling factors, draw thresholds etc like the other two models, but the basis of each team's form when calculating a prediction is the goals superiority (both for and against)
-                of each team. The lookback of this model is 6 games</p>
+                of each team. The lookback of this model is 6 games.</p>
             </div>
 
         </div>
@@ -55,11 +55,13 @@
         <hr>
          <div>
         <h2>Dashboard</h2>The Dashboard gives you an understanding of how the models are performing in each league. It is quite impossible for the models
-            to achieve high performance on all covered leagues. So the best way to take advantage of these predicting models is by using the dashboard to identify the leagues for which we have
-            high strike rate. So we <strong>strongly recommend</strong> that you start by looking at the <a href="{% url 'byleague' %}">By League</a> page, filter it to show the current season
-            , and identify a league with high strike rate. If you want more information on how the models are performing on that league, head over to the  <a href="{% url 'dashboard' %}">Overview</a>
-              page and filter the dashboard to show the league you identified for the current season. Additionally, you can look at the <a href="{% url 'bygameweek' %}">By Gameweek</a>, again
-             filtering the dashboard for your identified league and look at how the models are performing each week against the average.
+            to achieve high performance on all covered leagues. So the best way to take advantage of these predicting models is by using the dashboard to identify the leagues for which the models
+            have high strike rate. So we <strong>strongly recommend</strong> that you start by looking at the <a href="{% url 'byleague' %}">Overview</a> page, filter it to show the current season,
+             and identify a league with high strike rate. If you want more information on how the models are performing on that league, head over to the  <a href="{% url 'dashboard' %}">Strike Rate & Winners</a>
+              page and filter the dashboard to show the league you identified for the current season. Additionally, you can look at the <a href="{% url 'bygameweek' %}">Performance by Gameweek</a>, again
+             filtering the dashboard for your identified league and look at how the models are performing each week against the average. To make your lives easier, the
+              <a href="{% url 'dashboard' %}">Strike Rate & Winners</a> and <a href="{% url 'bygameweek' %}">Performance by Gameweek</a> pages, by default show stats for the top league
+             in the current season. But feel free to filter the stats according to the leagues you identified as top performers.
          </div>
 
 		<br><br>

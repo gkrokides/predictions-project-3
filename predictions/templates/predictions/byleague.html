@@ -220,6 +220,15 @@ window.onload = function () {
 {% block content18 %}
 {% load dashboard_filter %}
 
+ <div class="well centred">
+     <h4><strong>
+         Showing stats for:
+         </strong>
+     </h4>
+     Country: <strong><span class={{ cntry|apply_color_if_all }}>{{ cntry }}</span></strong><br>
+     Division: <strong><span class={{ divisionn|apply_color_if_all }}>{{ divisionn }}</span></strong><br>
+     Season: <strong><span class={{ period_end_out|apply_color_if_all }}>{{ period_end_out }}</span></strong><br>
+ </div>
 
 
  <div class="well centred">
@@ -253,15 +262,7 @@ window.onload = function () {
   </form>
  </div>
 
- <div class="well centred">
-     <h4><strong>
-         Dashboard filters
-         </strong>
-     </h4>
-     Country: <strong><span class={{ cntry|apply_color_if_all }}>{{ cntry }}</span></strong><br>
-     Division: <strong><span class={{ divisionn|apply_color_if_all }}>{{ divisionn }}</span></strong><br>
-     Season: <strong><span class={{ period_end_out|apply_color_if_all }}>{{ period_end_out }}</span></strong><br>
- </div>
+
 
 {% endblock %}
 

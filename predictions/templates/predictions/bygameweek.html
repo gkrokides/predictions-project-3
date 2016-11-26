@@ -218,6 +218,16 @@ window.onload = function () {
 {% load dashboard_filter %}
 
 <div class="well centred">
+	<h4><strong>
+		Showing stats for:
+	</strong>
+	</h4>
+	Country: <strong><span class={{ cntry|apply_color_if_all }}>{{ cntry }}</span></strong><br>
+	Division: <strong><span class={{ divisionn|apply_color_if_all }}>{{ divisionn }}</span></strong><br>
+	Season: <strong><span class={{ period_end_out|apply_color_if_all }}>{{ period_end_out }}</span></strong><br>
+</div>
+
+<div class="well centred">
 	<h4><strong>Filter the Dashboard</strong></h4>
 	<form class="" action="{% url 'bygameweek' %}" method="POST">
 		<div class="form-group">
@@ -248,15 +258,7 @@ window.onload = function () {
 	</form>
 </div>
 
-<div class="well centred">
-	<h4><strong>
-		Dashboard filters
-	</strong>
-	</h4>
-	Country: <strong><span class={{ cntry|apply_color_if_all }}>{{ cntry }}</span></strong><br>
-	Division: <strong><span class={{ divisionn|apply_color_if_all }}>{{ divisionn }}</span></strong><br>
-	Season: <strong><span class={{ period_end_out|apply_color_if_all }}>{{ period_end_out }}</span></strong><br>
-</div>
+
 
 <p style="color: grey;">Average = The average performance (per gameweek) for the given model, calculated historically and for all leagues and seasons</p>
 

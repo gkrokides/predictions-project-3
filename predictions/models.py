@@ -7,6 +7,7 @@ import django_filters
 # from django.conf import settings
 from datetime import datetime
 from predictions_project import elosettings
+from operator import itemgetter
 
 
 class Leagues(models.Model):
@@ -1080,6 +1081,33 @@ class GameManager(models.Manager):
         srlist.append({str('label'): '71% - 90%', str('y'): seventy_to_ninenty})
         srlist.append({str('label'): '91% & above', str('y'): ninenty_and_above})
         return srlist
+
+    # returns the strike rate for the selected season. The strike rate represents all the successful predictions divided
+    # by all the predictions made for all models
+    def total_season_strike_rate(self, seasonid):
+        qs = self.filter(season__id=seasonid, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        total_preds = qs.count()
+        total_preds_final = float(total_preds) * 3
+        elohist = qs.filter(prediction_status_elohist='Success').count()
+        elol6 = qs.filter(prediction_status_elol6='Success').count()
+        gsrs = qs.filter(prediction_status_gsrs='Success').count()
+        successful_preds = elohist + elol6 + gsrs
+
+        if total_preds == 0:
+            strikerate = 0
+        else:
+            strikerate = (float(successful_preds) / total_preds_final) * 100
+        return strikerate
+
+    # returns a list of seasonid/strikerate dictionaries for the selected year, sorted by strike rate, i.e
+    # [{'id': 1, 'strike_rate': 75}, {'id': 3, 'strike_rate': 48}, {'id': 2, 'strike_rate': 38}]
+    def rank_seasons_by_strike_rate(self, year):
+        allseasons = Season.objects.filter(end_date__year=year).values_list('id', flat=True)
+        strike_rates_list = []
+        for season in allseasons:
+            strike_rates_list.append({'id': season, 'strike_rate': self.total_season_strike_rate(season)})
+        sorted_list = sorted(strike_rates_list, key=itemgetter('strike_rate'), reverse=True)
+        return sorted_list
 
 
 class Game(models.Model):

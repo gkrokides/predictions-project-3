@@ -712,10 +712,24 @@ def new_predictions(request, seasonid, gamewk):
 
 
 def dashboard(request):
-    cntry = 'All'
-    divisionn = 'All'
-    period_end_out = 'All'
+    # find current year and assign it to period_end_out so when the page loads for the first time, it shows
+    # data for the current year's top league
+    allgames = Game.objects.all().order_by('-date')
+    current_start_year = allgames[0].season.start_date.year
+    current_end_year = allgames[0].season.end_date.year
+    current_period = str(current_start_year) + "/" + str(current_end_year)
+    # period_end_out = 'All'
+    period_end_out = current_period
     period_end_canvas = 'All'
+    # find top season in terms of strike rate and assign the country and division to the cntry and divisionn
+    # variables respectively
+    sorted_seasons = Game.objects.rank_seasons_by_strike_rate(current_end_year)
+    top_season_id = sorted_seasons[0]['id']
+    top_season = Season.objects.get(id=top_season_id)
+    cntry = top_season.league.country
+    # cntry = 'All'
+    divisionn = top_season.league.league_name
+    # divisionn = 'All'
     cntry_class = ''
     divisionn_class = ''
     period_end_out_class = ''
@@ -774,33 +788,33 @@ def dashboard(request):
         gsrs_losing_streaks = Game.objects.total_model_losing_streaks_ifpost('gsrs', cntry, divisionn, period_end)
     else:
         # variables all predictions if not request.post
-        elohist_total_preds_home = Game.objects.total_model_predictions('elohist', 'all', 'HOME')
-        elohist_total_preds_away = Game.objects.total_model_predictions('elohist', 'all', 'AWAY')
-        elohist_total_preds_draw = Game.objects.total_model_predictions('elohist', 'all', 'DRAW')
-        elol6_total_preds_home = Game.objects.total_model_predictions('elol6', 'all', 'HOME')
-        elol6_total_preds_away = Game.objects.total_model_predictions('elol6', 'all', 'AWAY')
-        elol6_total_preds_draw = Game.objects.total_model_predictions('elol6', 'all', 'DRAW')
-        gsrs_total_preds_home = Game.objects.total_model_predictions('gsrs', 'all', 'HOME')
-        gsrs_total_preds_away = Game.objects.total_model_predictions('gsrs', 'all', 'AWAY')
-        gsrs_total_preds_draw = Game.objects.total_model_predictions('gsrs', 'all', 'DRAW')
+        elohist_total_preds_home = Game.objects.total_model_predictions('elohist', top_season_id, 'HOME')
+        elohist_total_preds_away = Game.objects.total_model_predictions('elohist', top_season_id, 'AWAY')
+        elohist_total_preds_draw = Game.objects.total_model_predictions('elohist', top_season_id, 'DRAW')
+        elol6_total_preds_home = Game.objects.total_model_predictions('elol6', top_season_id, 'HOME')
+        elol6_total_preds_away = Game.objects.total_model_predictions('elol6', top_season_id, 'AWAY')
+        elol6_total_preds_draw = Game.objects.total_model_predictions('elol6', top_season_id, 'DRAW')
+        gsrs_total_preds_home = Game.objects.total_model_predictions('gsrs', top_season_id, 'HOME')
+        gsrs_total_preds_away = Game.objects.total_model_predictions('gsrs', top_season_id, 'AWAY')
+        gsrs_total_preds_draw = Game.objects.total_model_predictions('gsrs', top_season_id, 'DRAW')
         # variables all successful predictions if not request.post
-        elohist_total_succ_home = Game.objects.total_model_successful_predictions('elohist', 'all', 'HOME')
-        elohist_total_succ_away = Game.objects.total_model_successful_predictions('elohist', 'all', 'AWAY')
-        elohist_total_succ_draw = Game.objects.total_model_successful_predictions('elohist', 'all', 'DRAW')
-        elol6_total_succ_home = Game.objects.total_model_successful_predictions('elol6', 'all', 'HOME')
-        elol6_total_succ_away = Game.objects.total_model_successful_predictions('elol6', 'all', 'AWAY')
-        elol6_total_succ_draw = Game.objects.total_model_successful_predictions('elol6', 'all', 'DRAW')
-        gsrs_total_succ_home = Game.objects.total_model_successful_predictions('gsrs', 'all', 'HOME')
-        gsrs_total_succ_away = Game.objects.total_model_successful_predictions('gsrs', 'all', 'AWAY')
-        gsrs_total_succ_draw = Game.objects.total_model_successful_predictions('gsrs', 'all', 'DRAW')
+        elohist_total_succ_home = Game.objects.total_model_successful_predictions('elohist', top_season_id, 'HOME')
+        elohist_total_succ_away = Game.objects.total_model_successful_predictions('elohist', top_season_id, 'AWAY')
+        elohist_total_succ_draw = Game.objects.total_model_successful_predictions('elohist', top_season_id, 'DRAW')
+        elol6_total_succ_home = Game.objects.total_model_successful_predictions('elol6', top_season_id, 'HOME')
+        elol6_total_succ_away = Game.objects.total_model_successful_predictions('elol6', top_season_id, 'AWAY')
+        elol6_total_succ_draw = Game.objects.total_model_successful_predictions('elol6', top_season_id, 'DRAW')
+        gsrs_total_succ_home = Game.objects.total_model_successful_predictions('gsrs', top_season_id, 'HOME')
+        gsrs_total_succ_away = Game.objects.total_model_successful_predictions('gsrs', top_season_id, 'AWAY')
+        gsrs_total_succ_draw = Game.objects.total_model_successful_predictions('gsrs', top_season_id, 'DRAW')
         # variables all winning streaks if not request.post
-        elohist_winning_streaks = Game.objects.total_model_streaks('elohist', 'all')
-        elol6_winning_streaks = Game.objects.total_model_streaks('elol6', 'all')
-        gsrs_winning_streaks = Game.objects.total_model_streaks('gsrs', 'all')
+        elohist_winning_streaks = Game.objects.total_model_streaks('elohist', top_season_id)
+        elol6_winning_streaks = Game.objects.total_model_streaks('elol6', top_season_id)
+        gsrs_winning_streaks = Game.objects.total_model_streaks('gsrs', top_season_id)
         # variables all losing streaks if not request.post
-        elohist_losing_streaks = Game.objects.total_model_losing_streaks('elohist', 'all')
-        elol6_losing_streaks = Game.objects.total_model_losing_streaks('elol6', 'all')
-        gsrs_losing_streaks = Game.objects.total_model_losing_streaks('gsrs', 'all')
+        elohist_losing_streaks = Game.objects.total_model_losing_streaks('elohist', top_season_id)
+        elol6_losing_streaks = Game.objects.total_model_losing_streaks('elol6', top_season_id)
+        gsrs_losing_streaks = Game.objects.total_model_losing_streaks('gsrs', top_season_id)
 
     # variables all failed predictions
     elohist_total_fail_home = elohist_total_preds_home - elohist_total_succ_home
@@ -1186,9 +1200,25 @@ def dashboard_byleague(request):
 
 
 def dashboard_bygameweek(request):
-    cntry = 'All'
-    divisionn = 'All'
-    period_end_out = 'All'
+    # find current year and assign it to period_end_out so when the page loads for the first time, it shows
+    # data for the current year's top league
+    allgames = Game.objects.all().order_by('-date')
+    current_start_year = allgames[0].season.start_date.year
+    current_end_year = allgames[0].season.end_date.year
+    current_period = str(current_start_year) + "/" + str(current_end_year)
+    # period_end_out = 'All'
+    period_end_out = current_period
+    period_end_canvas = current_end_year
+    # period_end_canvas = 'All'
+    # find top season in terms of strike rate and assign the country and division to the cntry and divisionn
+    # variables respectively
+    sorted_seasons = Game.objects.rank_seasons_by_strike_rate(current_end_year)
+    top_season_id = sorted_seasons[0]['id']
+    top_season = Season.objects.get(id=top_season_id)
+    cntry = top_season.league.country
+    # cntry = 'All'
+    divisionn = top_season.league.league_name
+    # divisionn = 'All'
     period_end_canvas = 'All'
     allseasons = Season.objects.get_distinct_season_ends()
     # dropdown list data
