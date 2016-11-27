@@ -314,11 +314,25 @@ background:#EAF2F8;
 
 .floatright-small {
     float: right;
-    font-size: 8px;
-
+    font-size: 1px;
 }
 
 .spfont {
     font-family: 'Poiret One';
 }
 
+.floatcenter {
+    float: center;
+}
+
+.elohist-background {
+    background: #0C090A;
+}
+
+.elol6-background {
+    background: #810541;
+}
+
+.gsrs-background {
+    background: #E9AB17;
+}

@@ -51,7 +51,7 @@ window.onload = function () {
 		backgroundColor: "rgba(182,177,168,0.2)",
       	theme: "theme2",
 		title:{
-			text: "ELO (H) Total Strike Rate by Gameweek - Hide/Unhide via Legend"
+			text: "Black Predictor Total Strike Rate by Gameweek - Hide/Unhide via Legend"
 		},
       	axisY:{
           lineThickness: 1,
@@ -68,7 +68,7 @@ window.onload = function () {
 		data: [
 		{
 			type: "column", //change type to bar, line, column, pie, etc
-			legendText: "ELO(H)",
+			legendText: "BP",
 			showInLegend: true,
 			color: "#0C090A",
 			lineThickness: 3,
@@ -105,7 +105,7 @@ window.onload = function () {
 		backgroundColor: "rgba(182,177,168,0.2)",
       	theme: "theme2",
 		title:{
-			text: "ELO (6) Total Strike Rate by Gameweek - Hide/Unhide via Legend"
+			text: "Maroon Predictor Total Strike Rate by Gameweek - Hide/Unhide via Legend"
 		},
       	axisY:{
           lineThickness: 1,
@@ -122,7 +122,7 @@ window.onload = function () {
 		data: [
 		{
 			type: "column", //change type to bar, line, column, pie, etc
-			legendText: "ELO(6)",
+			legendText: "MP",
 			showInLegend: true,
 			color: "#810541",
 			lineThickness: 3,
@@ -160,7 +160,7 @@ window.onload = function () {
 		backgroundColor: "rgba(182,177,168,0.2)",
       	theme: "theme2",
 		title:{
-			text: "GSRS Total Strike Rate by Gameweek - Hide/Unhide via Legend"
+			text: "Yellow Predictor Total Strike Rate by Gameweek - Hide/Unhide via Legend"
 		},
       	axisY:{
           lineThickness: 1,
@@ -177,7 +177,7 @@ window.onload = function () {
 		data: [
 		{
 			type: "column", //change type to bar, line, column, pie, etc
-			legendText: "GSRS",
+			legendText: "YP",
 			showInLegend: true,
 			color: "#E9AB17",
 			lineThickness: 3,
@@ -259,17 +259,17 @@ window.onload = function () {
 </div>
 
 
- <div class="well centred">
-     <h4><strong>
-         Top 3 Leagues {{ period_end_out }}<br>
-         <h5><strong>in Total Strike Rate (%)</strong></h5><br>
-         </strong>
-     </h4>
+ <!--<div class="well centred">-->
+     <!--<h4><strong>-->
+         <!--Top 3 Leagues {{ period_end_out }}<br>-->
+         <!--<h5><strong>Total Strike Rate (%)</strong></h5><br>-->
+         <!--</strong>-->
+     <!--</h4>-->
 
-     <span class="floatleft prediction">{{ top3.0.name }}</span> <span class="badge">{{ top3.0.strike_rate|floatformat:0 }}%</span><br><br>
-     <span class="floatleft prediction">{{ top3.1.name }}</span> <span class="badge">{{ top3.1.strike_rate|floatformat:0 }}%</span><br><br>
-     <span class="floatleft prediction">{{ top3.2.name }}</span> <span class="badge">{{ top3.2.strike_rate|floatformat:0 }}%</span>
- </div>
+     <!--<span class="floatleft prediction">{{ top3.0.name }}</span> <span class="badge">{{ top3.0.strike_rate|floatformat:0 }}%</span><br><br>-->
+     <!--<span class="floatleft prediction">{{ top3.1.name }}</span> <span class="badge">{{ top3.1.strike_rate|floatformat:0 }}%</span><br><br>-->
+     <!--<span class="floatleft prediction">{{ top3.2.name }}</span> <span class="badge">{{ top3.2.strike_rate|floatformat:0 }}%</span>-->
+ <!--</div>-->
 
 {% endblock %}
 

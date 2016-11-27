@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^post/(?P<pk>[0-9]+)/edit/$', views.post_edit, name='post_edit'),
     url(r'^predictions/$', views.predictions, name='predictions'),
     url(r'^predictions/history/$', views.predictions_filter, name='predictions_history'),
-    url(r'^$', TemplateView.as_view(template_name='predictions/about.html'), name='about'),
+    url(r'^$', views.top3, name='top3'),
     url(r'^contact-us/$', views.email, name='contactus'),
     url(r'^game/(?P<pk>[0-9]+)/$', views.game_detail, name='game_detail'),
     url(r'^metrics/$', views.metrics, name='metrics'),
@@ -25,5 +25,6 @@ urlpatterns = [
     url(r'^activeusers/$', views.active_users, name='activeusers'),
     # url(r'^email/$', views.email, name='email'),
     url(r'^success/$', views.success, name='success'),
+    url(r'^about/$', views.about, name='about'),
 
 ]

@@ -799,7 +799,6 @@ class GameManager(models.Manager):
             output = max(streaks)
         return output
 
-    # model strike rate if the request comes from the dashboard filters (haven't created one without filters yet)
     def model_strike_rate(self, model, seasonid, prediction):
         successful_preds = self.total_model_successful_predictions(model, seasonid, prediction)
         total_preds = self.total_model_predictions(model, seasonid, prediction)
@@ -1099,13 +1098,29 @@ class GameManager(models.Manager):
             strikerate = (float(successful_preds) / total_preds_final) * 100
         return strikerate
 
-    # returns a list of seasonid/strikerate dictionaries for the selected year, sorted by strike rate, i.e
+    # returns a list of seasonid/ total strikerate dictionaries for the selected year, sorted by strike rate, i.e
     # [{'id': 1, 'strike_rate': 75}, {'id': 3, 'strike_rate': 48}, {'id': 2, 'strike_rate': 38}]
     def rank_seasons_by_strike_rate(self, year):
         allseasons = Season.objects.filter(end_date__year=year).values_list('id', flat=True)
         strike_rates_list = []
         for season in allseasons:
             strike_rates_list.append({'id': season, 'strike_rate': self.total_season_strike_rate(season)})
+        sorted_list = sorted(strike_rates_list, key=itemgetter('strike_rate'), reverse=True)
+        return sorted_list
+
+    # returns a list of dicts containing seasonid, country, country code, league name, strike rate for all seasons for
+    # the given year, model and prediction
+    def rank_seasons_by_strike_rate_for_model(self, year, model, prediction):
+        allseasons = Season.objects.filter(end_date__year=year).values_list('id', flat=True)
+        strike_rates_list = []
+        for season in allseasons:
+            strike_rates_list.append({
+                'id': season,
+                'strike_rate': self.model_strike_rate(model, season, prediction),
+                'country': Season.objects.get(id=season).league.country,
+                'country_code': Season.objects.get(id=season).league.country_code,
+                'league_name': Season.objects.get(id=season).league.league_name
+            })
         sorted_list = sorted(strike_rates_list, key=itemgetter('strike_rate'), reverse=True)
         return sorted_list
 

@@ -64,7 +64,7 @@ window.onload = function () {
 		{
 			type: "column", //change type to bar, line, area, pie, etc
 			showInLegend: true,
-          	legendText: "ELO(H)",
+          	legendText: "BP",
           	color: "#0C090A",
 			dataPoints: {{ elohist_canvas_home|safe }}
 			},
@@ -72,7 +72,7 @@ window.onload = function () {
 			type: "column",
             axisYIndex: 1,
 			showInLegend: true,
-            legendText: "ELO(6)",
+            legendText: "MP",
             color: "#810541",
 			dataPoints: {{ elol6_canvas_home|safe }}
 			},
@@ -80,7 +80,7 @@ window.onload = function () {
 			type: "column",
             axisYIndex: 1,
 			showInLegend: true,
-            legendText: "GSRS",
+            legendText: "YP",
             color: "#E9AB17",
 			dataPoints: {{ gsrs_canvas_home|safe }}
 			},
@@ -120,7 +120,7 @@ window.onload = function () {
 		{
 			type: "column", //change type to bar, line, area, pie, etc
 			showInLegend: true,
-          	legendText: "ELO(H)",
+          	legendText: "BP",
           	color: "#0C090A",
 			dataPoints: {{ elohist_canvas_away|safe }}
 			},
@@ -128,7 +128,7 @@ window.onload = function () {
 			type: "column",
             axisYIndex: 1,
 			showInLegend: true,
-            legendText: "ELO(6)",
+            legendText: "MP",
             color: "#810541",
 			dataPoints: {{ elol6_canvas_away|safe }}
 			},
@@ -136,7 +136,7 @@ window.onload = function () {
 			type: "column",
             axisYIndex: 1,
 			showInLegend: true,
-            legendText: "GSRS",
+            legendText: "YP",
             color: "#E9AB17",
 			dataPoints: {{ gsrs_canvas_away|safe }}
 			},
@@ -176,7 +176,7 @@ window.onload = function () {
 		{
 			type: "column", //change type to bar, line, area, pie, etc
 			showInLegend: true,
-          	legendText: "ELO(H)",
+          	legendText: "BP",
           	color: "#0C090A",
 			dataPoints: {{ elohist_canvas_draw|safe }}
 			},
@@ -184,7 +184,7 @@ window.onload = function () {
 			type: "column",
             axisYIndex: 1,
 			showInLegend: true,
-            legendText: "ELO(6)",
+            legendText: "MP",
             color: "#810541",
 			dataPoints: {{ elol6_canvas_draw|safe }}
 			},
@@ -192,7 +192,7 @@ window.onload = function () {
 			type: "column",
             axisYIndex: 1,
 			showInLegend: true,
-            legendText: "GSRS",
+            legendText: "YP",
             color: "#E9AB17",
 			dataPoints: {{ gsrs_canvas_draw|safe }}
 			},
@@ -262,17 +262,17 @@ window.onload = function () {
   </form>
  </div>
 
- <div class="well centred">
-     <h4><strong>
-         Top 3 Leagues {{ period_end_out }}<br>
-         <h5><strong>in Total Strike Rate (%)</strong></h5><br>
-         </strong>
-     </h4>
+ <!--<div class="well centred">-->
+     <!--<h4><strong>-->
+         <!--Top 3 Leagues {{ current_period }}<br>-->
+         <!--<h5><strong>Total Strike Rate (%)</strong></h5><br>-->
+         <!--</strong>-->
+     <!--</h4>-->
 
-     <span class="floatleft prediction">{{ top3.0.name }}</span> <span class="badge">{{ top3.0.strike_rate|floatformat:0 }}%</span><br><br>
-     <span class="floatleft prediction">{{ top3.1.name }}</span> <span class="badge">{{ top3.1.strike_rate|floatformat:0 }}%</span><br><br>
-     <span class="floatleft prediction">{{ top3.2.name }}</span> <span class="badge">{{ top3.2.strike_rate|floatformat:0 }}%</span>
- </div>
+     <!--<span class="floatleft prediction">{{ top3.0.name }}</span> <span class="badge">{{ top3.0.strike_rate|floatformat:0 }}%</span><br><br>-->
+     <!--<span class="floatleft prediction">{{ top3.1.name }}</span> <span class="badge">{{ top3.1.strike_rate|floatformat:0 }}%</span><br><br>-->
+     <!--<span class="floatleft prediction">{{ top3.2.name }}</span> <span class="badge">{{ top3.2.strike_rate|floatformat:0 }}%</span>-->
+ <!--</div>-->
 
 {% endblock %}
 

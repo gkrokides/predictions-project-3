@@ -54,7 +54,7 @@ window.onload = function () {
 	{
 		animationEnabled: true,
 		title:{
-			text: "ELO (H)"
+			text: "Black Predictor"
 		},
 		axisX: {
 				labelAngle: -45
@@ -74,7 +74,7 @@ window.onload = function () {
 	{
 		animationEnabled: true,
 		title:{
-			text: "ELO (6)"
+			text: "Maroon Predictor"
 		},
 		axisX: {
 				labelAngle: -45
@@ -94,7 +94,7 @@ window.onload = function () {
 	{
 		animationEnabled: true,
 		title:{
-			text: "GSRS"
+			text: "Yellow Predictor"
 		},
 		axisX: {
 				labelAngle: -45
@@ -163,17 +163,17 @@ window.onload = function () {
   </form>
  </div>
 
- <div class="well centred">
-     <h4><strong>
-         Top 3 Leagues {{ period_end_out }}<br>
-         <h5><strong>in Total Strike Rate (%)</strong></h5><br>
-         </strong>
-     </h4>
+ <!--<div class="well centred">-->
+     <!--<h4><strong>-->
+         <!--Top 3 Leagues {{ period_end_out }}<br>-->
+         <!--<h5><strong>Total Strike Rate (%)</strong></h5><br>-->
+         <!--</strong>-->
+     <!--</h4>-->
 
-     <span class="floatleft prediction">{{ top3.0.name }}</span> <span class="badge">{{ top3.0.strike_rate|floatformat:0 }}%</span><br><br>
-     <span class="floatleft prediction">{{ top3.1.name }}</span> <span class="badge">{{ top3.1.strike_rate|floatformat:0 }}%</span><br><br>
-     <span class="floatleft prediction">{{ top3.2.name }}</span> <span class="badge">{{ top3.2.strike_rate|floatformat:0 }}%</span>
- </div>
+     <!--<span class="floatleft prediction">{{ top3.0.name }}</span> <span class="badge">{{ top3.0.strike_rate|floatformat:0 }}%</span><br><br>-->
+     <!--<span class="floatleft prediction">{{ top3.1.name }}</span> <span class="badge">{{ top3.1.strike_rate|floatformat:0 }}%</span><br><br>-->
+     <!--<span class="floatleft prediction">{{ top3.2.name }}</span> <span class="badge">{{ top3.2.strike_rate|floatformat:0 }}%</span>-->
+ <!--</div>-->
 
 
 
@@ -190,9 +190,9 @@ window.onload = function () {
                         <thead>
                         <tr>
                             <th class="left-al">Strike Rate</th>
-                            <th class="elo_hist">ELO (H)</th>
-                            <th class="elo_l6">ELO (6)</th>
-                            <th class="gsrs">GSRS</th>
+                            <th class="elo_hist">BP</th>
+                            <th class="elo_l6">MP</th>
+                            <th class="gsrs">YP</th>
                         </tr>
                         </thead>
 
@@ -264,7 +264,7 @@ window.onload = function () {
 
                 <div class="col-md-4">
                     <div class="well">
-                        <div class="elo_hist"><strong>ELO(H) All predictions</strong></div>
+                        <div class="elo_hist"><strong>BP All predictions</strong></div>
                         <div id="elohist" style="height: 150px; width: 85%;"></div>
                     </div>
                     <div class="well">
@@ -279,7 +279,7 @@ window.onload = function () {
 
                 <div class="col-md-4">
                     <div class="well">
-                        <div class="elo_l6"><strong>ELO(6) All predictions</strong></div>
+                        <div class="elo_l6"><strong>MP All predictions</strong></div>
                         <div id="elol6" style="height: 150px; width: 85%;"></div>
                     </div>
                     <div class="well">
@@ -294,7 +294,7 @@ window.onload = function () {
 
                 <div class="col-md-4">
                     <div class="well">
-                        <div class="gsrs"><strong>GSRS All predictions</strong></div>
+                        <div class="gsrs"><strong>YP All predictions</strong></div>
                         <div id="gsrs" style="height: 150px; width: 85%;"></div>
                     </div>
                     <div class="well">
@@ -548,8 +548,8 @@ window.onload = function () {
   </div>
   <div class="col-md-4">
     <div class="panel panel-default">
-            <div class="panel-heading"><a data-toggle="collapse" href="#collapse4"><strong>Total Strike Rate Distribution</strong> (click to expand/hide)</a></div>
-            <div id="collapse4" class="panel-body" style="background: #212121;">
+            <div class="panel-heading"><a data-toggle="collapse" href="#collapse5"><strong>Total Strike Rate Distribution</strong> (click to expand/hide)</a></div>
+            <div id="collapse5" class="panel-body" style="background: #212121;">
                 <div class="">
                     <div id="chartElol6" style="height: 300px; width: 100%;"></div>
                 </div>
@@ -558,8 +558,8 @@ window.onload = function () {
   </div>
   <div class="col-md-4">
     <div class="panel panel-default">
-            <div class="panel-heading"><a data-toggle="collapse" href="#collapse4"><strong>Total Strike Rate Distribution</strong> (click to expand/hide)</a></div>
-            <div id="collapse4" class="panel-body" style="background: #212121;">
+            <div class="panel-heading"><a data-toggle="collapse" href="#collapse6"><strong>Total Strike Rate Distribution</strong> (click to expand/hide)</a></div>
+            <div id="collapse6" class="panel-body" style="background: #212121;">
                 <div class="">
                     <div id="chartGsrs" style="height: 300px; width: 100%;"></div>
                 </div>

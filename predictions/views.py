@@ -734,7 +734,7 @@ def dashboard(request):
     ranked1 = sorted_seasons[0]['id']
     ranked2 = sorted_seasons[1]['id']
     ranked3 = sorted_seasons[2]['id']
-    top3 = [
+    top3srs = [
         {'name': Season.objects.get(id=ranked1).league.league_name, 'strike_rate': sorted_seasons[0]['strike_rate']},
         {'name': Season.objects.get(id=ranked2).league.league_name, 'strike_rate': sorted_seasons[1]['strike_rate']},
         {'name': Season.objects.get(id=ranked3).league.league_name, 'strike_rate': sorted_seasons[2]['strike_rate']}
@@ -894,15 +894,15 @@ def dashboard(request):
     strongest_away = max(strongest_away_list)
     strongest_draw = max(strongest_draw_list)
     if strongest_home == elohist_strike_rate_home:
-        strongest_home_model = 'ELO(H)'
+        strongest_home_model = 'Black Predictor'
         strongest_home_value = elohist_strike_rate_home
         barclass_home = "elo_hist_chart"
     elif strongest_home == elol6_strike_rate_home:
-        strongest_home_model = 'ELO(6)'
+        strongest_home_model = 'Maroon Predictor'
         strongest_home_value = elol6_strike_rate_home
         barclass_home = "elo_l6_chart"
     elif strongest_home == gsrs_strike_rate_home:
-        strongest_home_model = 'GSRS'
+        strongest_home_model = 'Yellow Predictor'
         strongest_home_value = gsrs_strike_rate_home
         barclass_home = "gsrs_chart"
     else:
@@ -911,15 +911,15 @@ def dashboard(request):
         barclass_home = ""
 
     if strongest_away == elohist_strike_rate_away:
-        strongest_away_model = 'ELO(H)'
+        strongest_away_model = 'Black Predictor'
         strongest_away_value = elohist_strike_rate_away
         barclass_away = "elo_hist_chart"
     elif strongest_away == elol6_strike_rate_away:
-        strongest_away_model = 'ELO(6)'
+        strongest_away_model = 'Maroon Predictor'
         strongest_away_value = elol6_strike_rate_away
         barclass_away = "elo_l6_chart"
     elif strongest_away == gsrs_strike_rate_away:
-        strongest_away_model = 'GSRS'
+        strongest_away_model = 'Yellow Predictor'
         strongest_away_value = gsrs_strike_rate_away
         barclass_away = "gsrs_chart"
     else:
@@ -928,15 +928,15 @@ def dashboard(request):
         barclass_away = ""
 
     if strongest_draw == elohist_strike_rate_draw:
-        strongest_draw_model = 'ELO(H)'
+        strongest_draw_model = 'Black Predictor'
         strongest_draw_value = elohist_strike_rate_draw
         barclass_draw = "elo_hist_chart"
     elif strongest_draw == elol6_strike_rate_draw:
-        strongest_draw_model = 'ELO(6)'
+        strongest_draw_model = 'Maroon Predictor'
         strongest_draw_value = elol6_strike_rate_draw
         barclass_draw = "elo_l6_chart"
     elif strongest_draw == gsrs_strike_rate_draw:
-        strongest_draw_model = 'GSRS'
+        strongest_draw_model = 'Yellow Predictor'
         strongest_draw_value = gsrs_strike_rate_draw
         barclass_draw = "gsrs_chart"
     else:
@@ -1033,7 +1033,7 @@ def dashboard(request):
                    'gsrs_strike_rate_draw_out': gsrs_strike_rate_draw_out, 'allseasons': allseasons_json, 'allseasons_notjson': allseasons,
                    'period_end_canvas': period_end_canvas, 'elohist_distribution_strike_rate': elohist_distribution_strike_rate,
                    'elol6_distribution_strike_rate': elol6_distribution_strike_rate, 'gsrs_distribution_strike_rate': gsrs_distribution_strike_rate,
-                   'top3': top3})
+                   'top3': top3srs})
 
 
 def addscore(request):
@@ -1157,23 +1157,23 @@ def all_games(request):
 def dashboard_byleague(request):
     cntry = 'All'
     divisionn = 'All'
-    period_end_out = 'All'
-    period_end_canvas = 'All'
-
     allgames = Game.objects.all().order_by('-date')
+    current_start_year = allgames[0].season.start_date.year
     current_end_year = allgames[0].season.end_date.year
+    current_period = str(current_start_year) + "/" + str(current_end_year)
     sorted_seasons = Game.objects.rank_seasons_by_strike_rate(current_end_year)
     top_season_id = sorted_seasons[0]['id']
     # create a list of dicts that contain the top 3 leagues by league name, and strike rate
     ranked1 = sorted_seasons[0]['id']
     ranked2 = sorted_seasons[1]['id']
     ranked3 = sorted_seasons[2]['id']
-    top3 = [
+    top3srs = [
         {'name': Season.objects.get(id=ranked1).league.league_name, 'strike_rate': sorted_seasons[0]['strike_rate']},
         {'name': Season.objects.get(id=ranked2).league.league_name, 'strike_rate': sorted_seasons[1]['strike_rate']},
         {'name': Season.objects.get(id=ranked3).league.league_name, 'strike_rate': sorted_seasons[2]['strike_rate']}
     ]
-
+    period_end_out = current_period
+    period_end_canvas = current_end_year
     allseasons = Season.objects.get_distinct_season_ends()
     # dropdown list data
     countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
@@ -1187,6 +1187,7 @@ def dashboard_byleague(request):
         period_end = str(request.POST.get('league_period'))
         if period_end == 'All':
             period_end_out = 'All'
+            period_end_canvas = 'All'
         else:
             try:
                 period_end_out = str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year - 1) + "/" + str(datetime.strptime(request.POST.get('league_period'), '%Y-%m-%d').year)
@@ -1221,7 +1222,7 @@ def dashboard_byleague(request):
                                                          'elohist_canvas_home': elohist_canvas_home, 'elol6_canvas_home': elol6_canvas_home, 'gsrs_canvas_home': gsrs_canvas_home,
                                                          'cntry': cntry, 'divisionn': divisionn, 'period_end_out': period_end_out, 'elohist_canvas_away': elohist_canvas_away,
                                                          'elol6_canvas_away': elol6_canvas_away, 'gsrs_canvas_away': gsrs_canvas_away, 'elohist_canvas_draw': elohist_canvas_draw,
-                                                         'elol6_canvas_draw': elol6_canvas_draw, 'gsrs_canvas_draw': gsrs_canvas_draw, 'top3': top3})
+                                                         'elol6_canvas_draw': elol6_canvas_draw, 'gsrs_canvas_draw': gsrs_canvas_draw, 'top3': top3srs, 'current_period': current_period})
 
 
 def dashboard_bygameweek(request):
@@ -1248,7 +1249,7 @@ def dashboard_bygameweek(request):
     ranked1 = sorted_seasons[0]['id']
     ranked2 = sorted_seasons[1]['id']
     ranked3 = sorted_seasons[2]['id']
-    top3 = [
+    top3srs = [
         {'name': Season.objects.get(id=ranked1).league.league_name, 'strike_rate': sorted_seasons[0]['strike_rate']},
         {'name': Season.objects.get(id=ranked2).league.league_name, 'strike_rate': sorted_seasons[1]['strike_rate']},
         {'name': Season.objects.get(id=ranked3).league.league_name, 'strike_rate': sorted_seasons[2]['strike_rate']}
@@ -1295,7 +1296,7 @@ def dashboard_bygameweek(request):
                                                            'allseasons': allseasons_json, 'allseasons_notjson': allseasons, 'period_end_canvas': period_end_canvas,
                                                            'elohist_canvas': elohist_canvas, 'elohist_avg_canvas': elohist_avg_canvas, 'elol6_canvas': elol6_canvas,
                                                            'elol6_avg_canvas': elol6_avg_canvas, 'gsrs_canvas': gsrs_canvas, 'gsrs_avg_canvas': gsrs_avg_canvas,
-                                                           'sorted_seasons': sorted_seasons, 'top3': top3})
+                                                           'sorted_seasons': sorted_seasons, 'top3': top3srs})
 
 
 def email(request):
@@ -1319,3 +1320,82 @@ def email(request):
 
 def success(request):
     return render(request, 'predictions/success.html')
+
+
+def about(request):
+    return render(request, 'predictions/about.html')
+
+
+def top3(request):
+    allgames = Game.objects.all().order_by('-date')
+    current_start_year = allgames[0].season.start_date.year
+    current_end_year = allgames[0].season.end_date.year
+    current_period = str(current_start_year) + "/" + str(current_end_year)
+
+    # get the dicts
+    home_elohist = Game.objects.rank_seasons_by_strike_rate_for_model(current_end_year, 'elohist', 'HOME')
+    away_elohist = Game.objects.rank_seasons_by_strike_rate_for_model(current_end_year, 'elohist', 'AWAY')
+    draw_elohist = Game.objects.rank_seasons_by_strike_rate_for_model(current_end_year, 'elohist', 'DRAW')
+    home_elol6 = Game.objects.rank_seasons_by_strike_rate_for_model(current_end_year, 'elol6', 'HOME')
+    away_elol6 = Game.objects.rank_seasons_by_strike_rate_for_model(current_end_year, 'elol6', 'AWAY')
+    draw_elol6 = Game.objects.rank_seasons_by_strike_rate_for_model(current_end_year, 'elol6', 'DRAW')
+    home_gsrs = Game.objects.rank_seasons_by_strike_rate_for_model(current_end_year, 'gsrs', 'HOME')
+    away_gsrs = Game.objects.rank_seasons_by_strike_rate_for_model(current_end_year, 'gsrs', 'AWAY')
+    draw_gsrs = Game.objects.rank_seasons_by_strike_rate_for_model(current_end_year, 'gsrs', 'DRAW')
+
+    home_elohist_top3 = [
+        {'code': home_elohist[0]['country_code'], 'country': home_elohist[0]['country'], 'league_name': home_elohist[0]['league_name'], 'strike_rate': home_elohist[0]['strike_rate']},
+        {'code': home_elohist[1]['country_code'], 'country': home_elohist[1]['country'], 'league_name': home_elohist[1]['league_name'], 'strike_rate': home_elohist[1]['strike_rate']},
+        {'code': home_elohist[2]['country_code'], 'country': home_elohist[2]['country'], 'league_name': home_elohist[2]['league_name'], 'strike_rate': home_elohist[2]['strike_rate']}
+    ]
+
+    away_elohist_top3 = [
+        {'code': away_elohist[0]['country_code'], 'country': away_elohist[0]['country'], 'league_name': away_elohist[0]['league_name'], 'strike_rate': away_elohist[0]['strike_rate']},
+        {'code': away_elohist[1]['country_code'], 'country': away_elohist[1]['country'], 'league_name': away_elohist[1]['league_name'], 'strike_rate': away_elohist[1]['strike_rate']},
+        {'code': away_elohist[2]['country_code'], 'country': away_elohist[2]['country'], 'league_name': away_elohist[2]['league_name'], 'strike_rate': away_elohist[2]['strike_rate']}
+    ]
+
+    draw_elohist_top3 = [
+        {'code': draw_elohist[0]['country_code'], 'country': draw_elohist[0]['country'], 'league_name': draw_elohist[0]['league_name'], 'strike_rate': draw_elohist[0]['strike_rate']},
+        {'code': draw_elohist[1]['country_code'], 'country': draw_elohist[1]['country'], 'league_name': draw_elohist[1]['league_name'], 'strike_rate': draw_elohist[1]['strike_rate']},
+        {'code': draw_elohist[2]['country_code'], 'country': draw_elohist[2]['country'], 'league_name': draw_elohist[2]['league_name'], 'strike_rate': draw_elohist[2]['strike_rate']}
+    ]
+
+    home_elol6_top3 = [
+        {'code': home_elol6[0]['country_code'], 'country': home_elol6[0]['country'], 'league_name': home_elol6[0]['league_name'], 'strike_rate': home_elol6[0]['strike_rate']},
+        {'code': home_elol6[1]['country_code'], 'country': home_elol6[1]['country'], 'league_name': home_elol6[1]['league_name'], 'strike_rate': home_elol6[1]['strike_rate']},
+        {'code': home_elol6[2]['country_code'], 'country': home_elol6[2]['country'], 'league_name': home_elol6[2]['league_name'], 'strike_rate': home_elol6[2]['strike_rate']}
+    ]
+
+    away_elol6_top3 = [
+        {'code': away_elol6[0]['country_code'], 'country': away_elol6[0]['country'], 'league_name': away_elol6[0]['league_name'], 'strike_rate': away_elol6[0]['strike_rate']},
+        {'code': away_elol6[1]['country_code'], 'country': away_elol6[1]['country'], 'league_name': away_elol6[1]['league_name'], 'strike_rate': away_elol6[1]['strike_rate']},
+        {'code': away_elol6[2]['country_code'], 'country': away_elol6[2]['country'], 'league_name': away_elol6[2]['league_name'], 'strike_rate': away_elol6[2]['strike_rate']}
+    ]
+
+    draw_elol6_top3 = [
+        {'code': draw_elol6[0]['country_code'], 'country': draw_elol6[0]['country'], 'league_name': draw_elol6[0]['league_name'], 'strike_rate': draw_elol6[0]['strike_rate']},
+        {'code': draw_elol6[1]['country_code'], 'country': draw_elol6[1]['country'], 'league_name': draw_elol6[1]['league_name'], 'strike_rate': draw_elol6[1]['strike_rate']},
+        {'code': draw_elol6[2]['country_code'], 'country': draw_elol6[2]['country'], 'league_name': draw_elol6[2]['league_name'], 'strike_rate': draw_elol6[2]['strike_rate']}
+    ]
+
+    home_gsrs_top3 = [
+        {'code': home_gsrs[0]['country_code'], 'country': home_gsrs[0]['country'], 'league_name': home_gsrs[0]['league_name'], 'strike_rate': home_gsrs[0]['strike_rate']},
+        {'code': home_gsrs[1]['country_code'], 'country': home_gsrs[1]['country'], 'league_name': home_gsrs[1]['league_name'], 'strike_rate': home_gsrs[1]['strike_rate']},
+        {'code': home_gsrs[2]['country_code'], 'country': home_gsrs[2]['country'], 'league_name': home_gsrs[2]['league_name'], 'strike_rate': home_gsrs[2]['strike_rate']}
+    ]
+
+    away_gsrs_top3 = [
+        {'code': away_gsrs[0]['country_code'], 'country': away_gsrs[0]['country'], 'league_name': away_gsrs[0]['league_name'], 'strike_rate': away_gsrs[0]['strike_rate']},
+        {'code': away_gsrs[1]['country_code'], 'country': away_gsrs[1]['country'], 'league_name': away_gsrs[1]['league_name'], 'strike_rate': away_gsrs[1]['strike_rate']},
+        {'code': away_gsrs[2]['country_code'], 'country': away_gsrs[2]['country'], 'league_name': away_gsrs[2]['league_name'], 'strike_rate': away_gsrs[2]['strike_rate']}
+    ]
+
+    draw_gsrs_top3 = [
+        {'code': draw_gsrs[0]['country_code'], 'country': draw_gsrs[0]['country'], 'league_name': draw_gsrs[0]['league_name'], 'strike_rate': draw_gsrs[0]['strike_rate']},
+        {'code': draw_gsrs[1]['country_code'], 'country': draw_gsrs[1]['country'], 'league_name': draw_gsrs[1]['league_name'], 'strike_rate': draw_gsrs[1]['strike_rate']},
+        {'code': draw_gsrs[2]['country_code'], 'country': draw_gsrs[2]['country'], 'league_name': draw_gsrs[2]['league_name'], 'strike_rate': draw_gsrs[2]['strike_rate']}
+    ]
+    return render(request, 'predictions/top3.html', {'home_elohist_top3': home_elohist_top3, 'away_elohist_top3': away_elohist_top3, 'draw_elohist_top3': draw_elohist_top3,
+                                                     'home_elol6_top3': home_elol6_top3, 'away_elol6_top3': away_elol6_top3, 'draw_elol6_top3': draw_elol6_top3,
+                                                     'home_gsrs_top3': home_gsrs_top3, 'away_gsrs_top3': away_gsrs_top3, 'draw_gsrs_top3': draw_gsrs_top3, 'current_period': current_period})

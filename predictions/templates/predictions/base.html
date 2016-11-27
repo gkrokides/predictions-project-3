@@ -1,49 +1,6 @@
 {% load staticfiles %}
 <html>
-    <!--<style>-->
-    <!--body {-->
-        <!--font-family: "Lato", sans-serif;-->
-    <!--}-->
 
-    <!--.sidenav {-->
-        <!--height: 100%;-->
-        <!--width: 230px;-->
-        <!--position: fixed;-->
-        <!--z-index: 1;-->
-        <!--top: 0;-->
-        <!--left: 0;-->
-        <!--background-color: #111;-->
-        <!--overflow-x: hidden;-->
-        <!--transition: 0.5s;-->
-        <!--padding-top: 60px;-->
-    <!--}-->
-
-    <!--.sidenav a {-->
-        <!--padding: 8px 8px 8px 32px;-->
-        <!--text-decoration: none;-->
-        <!--font-size: 15px;-->
-        <!--color: #818181;-->
-        <!--display: block;-->
-        <!--transition: 0.3s-->
-    <!--}-->
-
-    <!--.sidenav a:hover, .offcanvas a:focus{-->
-        <!--color: #f1f1f1;-->
-    <!--}-->
-
-    <!--.closebtn {-->
-        <!--position: absolute;-->
-        <!--top: 0;-->
-        <!--right: 25px;-->
-        <!--font-size: 36px !important;-->
-        <!--margin-left: 50px;-->
-    <!--}-->
-
-    <!--@media screen and (max-height: 450px) {-->
-      <!--.sidenav {padding-top: 15px;}-->
-      <!--.sidenav a {font-size: 18px;}-->
-    <!--}-->
-    <!--</style>-->
     <head>
         <title>BetAid.net</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -84,7 +41,7 @@
                 <span class="icon-bar"> </span>
             </button>
 
-            <a class="navbar-brand" href="{% url 'about' %}"><strong class="site-title">betaid.net{% block header %}{% endblock %}</strong></a>
+            <a class="navbar-brand" href="{% url 'top3' %}"><strong class="site-title">betaid.net{% block header %}{% endblock %}</strong></a>
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -97,6 +54,7 @@
                     </li>
                     <li {% if 'predictions' in request.path %}class="activepage"{% endif %} id="predictions"> <a href="{% url 'predictions' %}"><i class="fa fa-magic" aria-hidden="true"></i> Predictions</a> </li>
                     <li {% if 'posts' in request.path %}class="activepage"{% endif %} id="home"> <a href="{% url 'post_list' %}"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Posts</a> </li>
+                    <li {% if 'about' in request.path %}class="activepage"{% endif %} id="about"> <a href="{% url 'about' %}"><i class="fa fa-info-circle" aria-hidden="true"></i> About</a> </li>
                     <li {% if 'contact' in request.path %}class="activepage"{% endif %} id="contactus"> <a href="{% url 'contactus' %}"><i class="fa fa-envelope" aria-hidden="true"></i> Contact us</a> </li>
                 </ul>
                 {% if user.is_authenticated %}

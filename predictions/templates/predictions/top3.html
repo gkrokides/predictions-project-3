@@ -1,0 +1,299 @@
+{% extends 'predictions/base.html' %}
+
+{% block header %}{% endblock %}
+
+{% block content35 %}
+
+
+<div class="container" style="padding-right: 40px">
+ <!--<div class="row">-->
+    <!--<h1 class="centred elo_hist_chart">Black Predictor Top 3 Leagues Success Rate</h1>-->
+    <!--<div class="col-sm-4">-->
+        <!--<div class="well centred">-->
+             <!--<h4>-->
+                 <!--<strong>Home</strong><br>-->
+             <!--</h4>-->
+
+             <!--{{ home_elohist_top3.0.league_name }} <span class="badge elo_hist_chart">{{ home_elohist_top3.0.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ home_elohist_top3.1.league_name }} <span class="badge elo_hist_chart">{{ home_elohist_top3.1.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ home_elohist_top3.2.league_name }} <span class="badge elo_hist_chart">{{ home_elohist_top3.2.strike_rate|floatformat:0 }}%</span>-->
+         <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="col-sm-4">-->
+        <!--<div class="well centred">-->
+             <!--<h4>-->
+                 <!--<strong>Away</strong><br>-->
+             <!--</h4>-->
+
+             <!--{{ away_elohist_top3.0.league_name }} <span class="badge elo_hist_chart">{{ away_elohist_top3.0.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ away_elohist_top3.1.league_name }} <span class="badge elo_hist_chart">{{ away_elohist_top3.1.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ away_elohist_top3.2.league_name }} <span class="badge elo_hist_chart">{{ away_elohist_top3.2.strike_rate|floatformat:0 }}%</span>-->
+         <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="col-sm-4">-->
+        <!--<div class="well centred">-->
+             <!--<h4>-->
+                 <!--<strong>Draw</strong><br>-->
+             <!--</h4>-->
+
+             <!--{{ draw_elohist_top3.0.league_name }} <span class="badge elo_hist_chart">{{ draw_elohist_top3.0.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ draw_elohist_top3.1.league_name }} <span class="badge elo_hist_chart">{{ draw_elohist_top3.1.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ draw_elohist_top3.2.league_name }} <span class="badge elo_hist_chart">{{ draw_elohist_top3.2.strike_rate|floatformat:0 }}%</span>-->
+         <!--</div>-->
+    <!--</div>-->
+
+<!--</div>-->
+
+ <!--<div class="row">-->
+    <!--<h1 class="centred elo_l6_chart">Maroon Predictor Top 3 Leagues Success Rate</h1>-->
+    <!--<div class="col-sm-4">-->
+        <!--<div class="well centred">-->
+             <!--<h4>-->
+                 <!--<strong>Home</strong><br>-->
+             <!--</h4>-->
+
+             <!--{{ home_elol6_top3.0.league_name }} <span class="badge elo_l6_chart">{{ home_elol6_top3.0.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ home_elol6_top3.1.league_name }} <span class="badge elo_l6_chart">{{ home_elol6_top3.1.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ home_elol6_top3.2.league_name }} <span class="badge elo_l6_chart">{{ home_elol6_top3.2.strike_rate|floatformat:0 }}%</span>-->
+         <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="col-sm-4">-->
+        <!--<div class="well centred">-->
+             <!--<h4>-->
+                 <!--<strong>Away</strong><br>-->
+             <!--</h4>-->
+
+             <!--{{ away_elol6_top3.0.league_name }} <span class="badge elo_l6_chart">{{ away_elol6_top3.0.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ away_elol6_top3.1.league_name }} <span class="badge elo_l6_chart">{{ away_elol6_top3.1.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ away_elol6_top3.2.league_name }} <span class="badge elo_l6_chart">{{ away_elol6_top3.2.strike_rate|floatformat:0 }}%</span>-->
+         <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="col-sm-4">-->
+        <!--<div class="well centred">-->
+             <!--<h4>-->
+                 <!--<strong>Draw</strong><br>-->
+             <!--</h4>-->
+
+             <!--{{ draw_elol6_top3.0.league_name }} <span class="badge elo_l6_chart">{{ draw_elol6_top3.0.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ draw_elol6_top3.1.league_name }} <span class="badge elo_l6_chart">{{ draw_elol6_top3.1.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ draw_elol6_top3.2.league_name }} <span class="badge elo_l6_chart">{{ draw_elol6_top3.2.strike_rate|floatformat:0 }}%</span>-->
+         <!--</div>-->
+    <!--</div>-->
+
+<!--</div>-->
+
+ <!--<div class="row">-->
+    <!--<h1 class="centred gsrs_chart">Yellow Predictor Top 3 Leagues Success Rate</h1>-->
+    <!--<div class="col-sm-4">-->
+        <!--<div class="well centred">-->
+             <!--<h4>-->
+                 <!--<strong>Home</strong><br>-->
+             <!--</h4>-->
+
+             <!--{{ home_gsrs_top3.0.league_name }} <span class="badge gsrs_chart">{{ home_gsrs_top3.0.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ home_gsrs_top3.1.league_name }} <span class="badge gsrs_chart">{{ home_gsrs_top3.1.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ home_gsrs_top3.2.league_name }} <span class="badge gsrs_chart">{{ home_gsrs_top3.2.strike_rate|floatformat:0 }}%</span>-->
+         <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="col-sm-4">-->
+        <!--<div class="well centred">-->
+             <!--<h4>-->
+                 <!--<strong>Away</strong><br>-->
+             <!--</h4>-->
+
+             <!--{{ away_gsrs_top3.0.league_name }} <span class="badge gsrs_chart">{{ away_gsrs_top3.0.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ away_gsrs_top3.1.league_name }} <span class="badge gsrs_chart">{{ away_gsrs_top3.1.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ away_gsrs_top3.2.league_name }} <span class="badge gsrs_chart">{{ away_gsrs_top3.2.strike_rate|floatformat:0 }}%</span>-->
+         <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="col-sm-4">-->
+        <!--<div class="well centred">-->
+             <!--<h4>-->
+                 <!--<strong>Draw</strong><br>-->
+             <!--</h4>-->
+
+             <!--{{ draw_gsrs_top3.0.league_name }} <span class="badge gsrs_chart">{{ draw_gsrs_top3.0.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ draw_gsrs_top3.1.league_name }} <span class="badge gsrs_chart">{{ draw_gsrs_top3.1.strike_rate|floatformat:0 }}%</span><br><br>-->
+             <!--{{ draw_gsrs_top3.2.league_name }} <span class="badge gsrs_chart">{{ draw_gsrs_top3.2.strike_rate|floatformat:0 }}%</span>-->
+         <!--</div>-->
+    <!--</div>-->
+
+<!--</div>-->
+
+<div class="row">
+	<header class="jumbotron">
+            <h1>Welcome to <strong><span style="color: #5DADE2;">betaid.net</span></strong></h1>
+            <p style="font-size: 13pt">betaid.net provides football predictions (Home, Away and Draw) through the use of our own prediction models.
+			We have given a random color to each model, black, maroon and yellow to make it easier for you to distinguish them. </p>
+        </header>
+	</div>
+
+    <div class="row" style="height:20%; display: block; border: solid; border-color: black; border-width: 5px;">
+        <div class="col-xs-4" style="background-color: #0C090A; height: 100%"></div>
+        <div class="col-xs-4" style="background-color: #810541; height: 100%"></div>
+		<div class="col-xs-4" style="background-color: #E9AB17; height: 100%"></div>
+    </div>
+
+     <div class="row">
+            <div class="col-sm-4">
+                <h2>Black Predictor <strong>(BP)</strong></h2>
+                <p>You will also see this as 'ELO(H)'. This model uses the <a href="https://en.wikipedia.org/wiki/Elo_rating_system">Elo rating</a> system as its base but with
+                a number of modifications. It incorporates variables that make it much stronger when applied in football, i.e  HGA (home ground advantage), Goal difference
+                scaling factors, draw thresholds and more. The (H) in parenthesis stands for 'Historical' and indicates the lookback period that the model considers when making predictions.
+                This means that the model goes back and gathers info for all the games of each team for the current season.
+                </p>
+            </div>
+            <!-- /.col-md-4 -->
+            <div class="col-sm-4">
+                <h2>Maroon Predictor <strong>(MP)</strong></h2>
+                <p>You will also see this as 'ELO(6)'. The base of the calculations in this model is the same as the black model (ELO(H)) with the difference being in the lookback
+                period. So the (6) in the name of the model means that the data gathered for the calculation of predictions are going back 6 games. So this model tries to capture the most recent
+                form and ignores the build up of the team's form since the start of the season. So all the variable values are calculated according to the team's and season's last 6 games.</p>
+            </div>
+            <!-- /.col-md-4 -->
+            <div class="col-sm-4">
+                <h2>Yellow Predictor <strong>(YP)</strong></h2>
+                <p>You will also see this as 'GSRS'. This model takes a totally different approach than the other two. GSRS stands for Goal Superiority Rating System. This means
+                that the predictions are calculated using the goals scored and conceded, calculated as ratios for the needs of the prediction variables. Put simply, it does make use of variables such as
+                Home Ground Advantage, scaling factors, draw thresholds etc like the other two models, but the basis of each team's form when calculating a prediction is the goals superiority (both for and against)
+                of each team. The lookback of this model is 6 games.</p>
+            </div>
+
+        </div>
+
+ <div class="row">
+    <h1 class="centred">Top 3 Home Success Rates {{ current_period }}</h1>
+    <div class="col-sm-4">
+        <div class="well centred">
+             <h4>
+                 <strong>Black Predictor</strong><br>
+             </h4>
+
+             {{ home_elohist_top3.0.league_name }} <span class="badge elo_hist_chart">{{ home_elohist_top3.0.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ home_elohist_top3.1.league_name }} <span class="badge elo_hist_chart">{{ home_elohist_top3.1.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ home_elohist_top3.2.league_name }} <span class="badge elo_hist_chart">{{ home_elohist_top3.2.strike_rate|floatformat:0 }}%</span>
+         </div>
+    </div>
+
+   <div class="col-sm-4">
+        <div class="well centred">
+             <h4>
+                 <strong>Maroon Predictor</strong><br>
+             </h4>
+
+             {{ home_elol6_top3.0.league_name }} <span class="badge elo_l6_chart">{{ home_elol6_top3.0.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ home_elol6_top3.1.league_name }} <span class="badge elo_l6_chart">{{ home_elol6_top3.1.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ home_elol6_top3.2.league_name }} <span class="badge elo_l6_chart">{{ home_elol6_top3.2.strike_rate|floatformat:0 }}%</span>
+         </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="well centred">
+             <h4>
+                 <strong>Yellow Predictor</strong><br>
+             </h4>
+
+             {{ home_gsrs_top3.0.league_name }} <span class="badge gsrs_chart">{{ home_gsrs_top3.0.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ home_gsrs_top3.1.league_name }} <span class="badge gsrs_chart">{{ home_gsrs_top3.1.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ home_gsrs_top3.2.league_name }} <span class="badge gsrs_chart">{{ home_gsrs_top3.2.strike_rate|floatformat:0 }}%</span>
+         </div>
+    </div>
+
+</div>
+
+ <div class="row">
+    <h1 class="centred">Top 3 Away Success Rates {{ current_period }}</h1>
+     <div class="col-sm-4">
+        <div class="well centred">
+             <h4>
+                 <strong>Black Predictor</strong><br>
+             </h4>
+
+             {{ away_elohist_top3.0.league_name }} <span class="badge elo_hist_chart">{{ away_elohist_top3.0.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ away_elohist_top3.1.league_name }} <span class="badge elo_hist_chart">{{ away_elohist_top3.1.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ away_elohist_top3.2.league_name }} <span class="badge elo_hist_chart">{{ away_elohist_top3.2.strike_rate|floatformat:0 }}%</span>
+         </div>
+    </div>
+
+     <div class="col-sm-4">
+        <div class="well centred">
+             <h4>
+                 <strong>Maroon Predictor</strong><br>
+             </h4>
+
+             {{ away_elol6_top3.0.league_name }} <span class="badge elo_l6_chart">{{ away_elol6_top3.0.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ away_elol6_top3.1.league_name }} <span class="badge elo_l6_chart">{{ away_elol6_top3.1.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ away_elol6_top3.2.league_name }} <span class="badge elo_l6_chart">{{ away_elol6_top3.2.strike_rate|floatformat:0 }}%</span>
+         </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="well centred">
+             <h4>
+                 <strong>Yellow Predictor</strong><br>
+             </h4>
+
+             {{ away_gsrs_top3.0.league_name }} <span class="badge gsrs_chart">{{ away_gsrs_top3.0.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ away_gsrs_top3.1.league_name }} <span class="badge gsrs_chart">{{ away_gsrs_top3.1.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ away_gsrs_top3.2.league_name }} <span class="badge gsrs_chart">{{ away_gsrs_top3.2.strike_rate|floatformat:0 }}%</span>
+         </div>
+    </div>
+
+</div>
+
+ <div class="row">
+    <h1 class="centred">Top 3 Home Success Rates {{ current_period }}</h1>
+    <div class="col-sm-4">
+        <div class="well centred">
+             <h4>
+                 <strong>Black Predictor</strong><br>
+             </h4>
+
+             {{ draw_elohist_top3.0.league_name }} <span class="badge elo_hist_chart">{{ draw_elohist_top3.0.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ draw_elohist_top3.1.league_name }} <span class="badge elo_hist_chart">{{ draw_elohist_top3.1.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ draw_elohist_top3.2.league_name }} <span class="badge elo_hist_chart">{{ draw_elohist_top3.2.strike_rate|floatformat:0 }}%</span>
+         </div>
+    </div>
+
+   <div class="col-sm-4">
+        <div class="well centred">
+             <h4>
+                 <strong>Maroon Predictor</strong><br>
+             </h4>
+
+             {{ draw_elol6_top3.0.league_name }} <span class="badge elo_l6_chart">{{ draw_elol6_top3.0.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ draw_elol6_top3.1.league_name }} <span class="badge elo_l6_chart">{{ draw_elol6_top3.1.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ draw_elol6_top3.2.league_name }} <span class="badge elo_l6_chart">{{ draw_elol6_top3.2.strike_rate|floatformat:0 }}%</span>
+         </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="well centred">
+             <h4>
+                 <strong>Yellow Predictor</strong><br>
+             </h4>
+
+             {{ draw_gsrs_top3.0.league_name }} <span class="badge gsrs_chart">{{ draw_gsrs_top3.0.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ draw_gsrs_top3.1.league_name }} <span class="badge gsrs_chart">{{ draw_gsrs_top3.1.strike_rate|floatformat:0 }}%</span><br><br>
+             {{ draw_gsrs_top3.2.league_name }} <span class="badge gsrs_chart">{{ draw_gsrs_top3.2.strike_rate|floatformat:0 }}%</span>
+         </div>
+    </div>
+
+</div>
+
+    <div class="well" style="font-size: 10pt">
+	Disclaimer: These models do not make use of qualitative data, meaning that they don't harvest
+			data that cannot be measured objectively i.e a team missing a couple of key players or a team changing coach in the middle of the season etc. The reason we can't use this kind of data is because it's almost impossible to objectively predict how much such
+			situations can affect a team at any given time. Instead, we use quantitative data such as goals scored/conceded home and away, percentage of home/away wins, etc. The models do not
+			guarantee success and past performance is not indicative of future performance. We believe the best way to use these models is finding the top 3 or 4 leagues in terms of strike rate
+			performance for the current season, and follow these leagues. We included the top 3 leagues of each predictor per bet type in the home page for your convenience.
+    </div>
+
+</div>
+{% endblock %}
