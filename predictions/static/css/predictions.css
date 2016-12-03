@@ -337,3 +337,8 @@ background:#EAF2F8;
     background: #E9AB17;
 }
 
+.large-flag {
+    width: 200px;
+    height: 100px;
+    float: right;
+}

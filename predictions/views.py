@@ -477,6 +477,7 @@ def metrics(request):
 
 
 def predictions(request):
+    flag = ''
     seasonid = 0
     games_selected = ''
     games_played = 0
@@ -580,6 +581,12 @@ def predictions(request):
                      'f6': Game.objects.team_form(a, seasonid, gamewk - 1),
                      'points': round(Decimal(Game.objects.get_previous_elo(tm=tm.awayteam, seasn=lst, gmwk=gamewk)), 2)
                      })
+            selected_season = Season.objects.get(id=seasonid)
+            country_code = selected_season.league.country_code
+            if country_code == 'England':
+                flag = 'gb-eng'
+            else:
+                flag = country_code
     sorted_x = sorted(x, key=itemgetter('points'), reverse=True)
     return render(request, 'predictions/predictions.html',
                   {'x': sorted_x, 'seasonid': seasonid, 'gamewkout': gamewk_out, 'seasons': seasons,
@@ -589,7 +596,7 @@ def predictions(request):
                    'games_played_perc_string': format(games_played_perc, "0.00%"), 'home_wins_total_perc': home_wins_total_perc,
                    'away_wins_total_perc': away_wins_total_perc, 'draws_total_perc': draws_total_perc, 'season_goals': season_goals,
                    'goals_p_game': goals_p_game, 'bts_perc': bts_perc, 'over_1p5': over_1p5, 'over_2p5': over_2p5, 'over_3p5': over_3p5,
-                   'new_predictions_cnt': new_predictions_cnt, 'past_predictions_cnt': past_predictions_cnt})
+                   'new_predictions_cnt': new_predictions_cnt, 'past_predictions_cnt': past_predictions_cnt, 'flag': flag})
 
 
 def testview(request):
