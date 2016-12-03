@@ -184,7 +184,9 @@
 
     </script>
 
-    <link rel="stylesheet" type="text/css" href="//cloud.github.com/downloads/lafeber/world-flags-sprite/flags32.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="//cloud.github.com/downloads/lafeber/world-flags-sprite/flags32.css"/>-->
+
+    {% load staticfiles %}
 
 {% endblock %}
 
@@ -199,12 +201,16 @@
     <button type="button" onclick="myFunction()">Click Me!</button>
 
 
-<ul class="f32">
-  <li class="flag ar">Argentina</li><br>
-  <li class="flag au">Australia</li><br>
-  <li class="flag at">Austria</li>
-</ul>
 
+
+<p>
+<br><br><br>
+<img src="" class="flag flag-CZ" alt=""/> Czech Republic<br>
+<img src="" class="flag flag-CY" alt=""/> Cyprus<br>
+<img src="" class="flag flag-GR" alt=""/> Greece<br>
+<br><br><br>
+<img src="{% static 'images/flags.png' %}" alt="My image"/>
+</p>
 
 {% endblock %}
 
@@ -266,21 +272,6 @@
 {% endblock %}
 
 {% block content17 %}
-<!--{%for u in users%}-->
-    <!--{% if user.is_authenticated %}-->
-    <!--Name: {{u.username}}<br />-->
-    <!--Last Login: {{u.last_login}}<br />-->
-    <!--&lt;!&ndash;{{ u.name }}&ndash;&gt;-->
-    <!--{% endif %}-->
-<!--{% endfor %}-->
-
-<p>
-{% for u in userslist %}
-    {% if user.is_authenticated %}
-        <strong>Currently Active:</strong> {{u.username}}
-    {% endif %}
-{% endfor %}
-</p>
 
 
 
