@@ -133,15 +133,15 @@ class GameManager(models.Manager):
         return ldrbrd_list
 
     def modified_hga(self, teamm, seasonn, gmwk):
-        total_home_wins = self.filter(season=seasonn, hometeam=teamm, gameweek__lte=gmwk-1, result='HOME').count()
-        total_home_draws = self.filter(season=seasonn, hometeam=teamm, gameweek__lte=gmwk-1, result='DRAW').count()
+        total_home_wins = self.filter(season=seasonn, hometeam=teamm, gameweek__lte=gmwk - 1, result='HOME').count()
+        total_home_draws = self.filter(season=seasonn, hometeam=teamm, gameweek__lte=gmwk - 1, result='DRAW').count()
         win_points = total_home_wins * 1
         draw_points = total_home_draws * 0.5
-        total_games = self.filter(hometeam=teamm, season=seasonn, gameweek__lte=gmwk-1).count()
+        total_games = self.filter(hometeam=teamm, season=seasonn, gameweek__lte=gmwk - 1).count()
         if total_games == 0 or gmwk == 1:
             mhga = elosettings.ELO_HGA
         else:
-            strike_rate = (win_points + draw_points)/total_games
+            strike_rate = (win_points + draw_points) / total_games
             mhga = strike_rate * float(elosettings.ELO_HGA)
         return mhga
 
@@ -163,6 +163,7 @@ class GameManager(models.Manager):
                 rdiff = round(h_r_old - a_r_old, 0)
                 x.append(rdiff)
             out = abs(sum(x) / games_lst.count()) * multiplier
+            # print x
         return out
 
     def elol6_draw_threshold(self, seasonn, gamewk):
@@ -236,7 +237,9 @@ class GameManager(models.Manager):
             home_r = self.get_previous_elo(tm=hometm, seasn=szn, gmwk=gweek)
             away_r = self.get_previous_elo(tm=awaytm, seasn=szn, gmwk=gweek)
             rdiff = home_r - away_r
+            # print("{}: about to run elo_draw_threshold".format(datetime.now()))
             draw_threshold = self.elo_draw_threshold(seasonn=szn, gamewk=gweek)
+            # print("{}: ran elo_draw_threshold".format(datetime.now()))
             if rdiff > draw_threshold:
                 prediction = "HOME"
             elif rdiff < (draw_threshold * 2):
@@ -430,11 +433,11 @@ class GameManager(models.Manager):
         return qrset
 
     # total games that will be played for the given season
-    def total_season_games(self,seasonn):
+    def total_season_games(self, seasonn):
         games_per_gameweek = self.filter(season=seasonn, gameweek=1).count()
-        ttl_teams = games_per_gameweek*2
-        ttl_gameweeks = (ttl_teams-1)*2
-        ttl_games = ttl_gameweeks*games_per_gameweek
+        ttl_teams = games_per_gameweek * 2
+        ttl_gameweeks = (ttl_teams - 1) * 2
+        ttl_games = ttl_gameweeks * games_per_gameweek
         return ttl_games
 
     def total_season_home_wins(self, szn):
@@ -1144,15 +1147,6 @@ class Game(models.Model):
     prediction_status_gsrs = models.CharField(max_length=80, null=True, blank=True)
     objects = GameManager()
 
-    # # ELO SETTINGS MOVED TO elosettings.py
-    # ELO_HGA = 65  # Home ground advantage factor. You can set it to 0 if you don't want to add it as a factor in the calculations
-    # ELO_S = 400  # S is a scaling parameter that controls the extent to which a team's Ratings deficit, net of any
-    # # Home Ground Advantage, is translated into expected performance. Larger values of S mean that
-    # # a team's Expected share of points scored responds more slowly to any given Ratings deficit or surplus
-    # # net of Home Ground Advantage, while smaller values of S mean the opposite.
-    # STARTING_POINTS = 1500
-    # ELO_K = 20
-
     def get_k_factor(self):
         k = elosettings.ELO_K
         scaling = {10: 2.99, 9: 2.88, 8: 2.77, 7: 2.64, 6: 2.49, 5: 2.32, 4: 2.11, 3: 1.85, 2: 1.51, 1: 1.00}
@@ -1250,10 +1244,10 @@ class Game(models.Model):
             gmwkk = self._default_manager.last_gameweek_played(self.awayteam, self.season.id)
             last_gwk_qrset = Game.objects.filter(Q(season=self.season.id, gameweek=gmwkk, hometeam=self.awayteam) | Q(season=self.season.id, gameweek=gmwkk, awayteam=self.awayteam))
             tms = last_gwk_qrset.get(Q(hometeam=self.awayteam) | Q(awayteam=self.awayteam))
-            if self.hometeam == tms.awayteam:
-                rating = tms.elo_rating_home
-            else:
+            if self.awayteam == tms.awayteam:
                 rating = tms.elo_rating_away
+            else:
+                rating = tms.elo_rating_home
             return rating
 
     def elo_hist_prediction_status(self):
@@ -1295,6 +1289,14 @@ class Game(models.Model):
             return out
         else:
             return ''
+
+    # def r_difference(self):
+    #     # this means if self.elo_rating_home is not empty or null
+    #     if self.elo_rating_home != '' or not self.elo_rating_home:
+    #         rdiff = self.elo_rating_home - self.elo_rating_away
+    #         return rdiff
+    #     else:
+    #         return ''
 
     def save(self, *args, **kwargs):
         if self.homegoals >= 0:
