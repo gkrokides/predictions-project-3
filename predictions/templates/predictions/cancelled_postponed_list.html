@@ -1,0 +1,22 @@
+{% extends 'predictions/base.html' %}
+
+{% block header %}{% endblock %}
+
+    {% block content3 %}
+        {% for match in postponed_cancelled %}
+
+                <h4>
+                    <strong><a href="{% url 'edit_match' pk=match.pk %}">{{ match.hometeam }} <span class="badge">vs</span> {{ match.awayteam }}</a></strong>
+                    <img src="" class="flag flag-{{ match.season.league.country_code }}" alt=""/>
+                </h4>
+
+                <p>
+
+                    Status: {{ match.game_status }}<br>
+                    Country: {{ match.season.league.country }}<br>
+                    Season: {{ match.season }}<br>
+                    Gameweek: {{ match.gameweek }}<br>
+                </p>
+                <hr>
+        {% endfor %}
+    {% endblock %}

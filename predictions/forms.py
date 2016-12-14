@@ -18,7 +18,7 @@ class GameForm(forms.ModelForm):
 
     class Meta:
         model = Game
-        fields = ('date', 'gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam', 'season',)
+        fields = ('date', 'gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam', 'season', 'game_status',)
 
 
 class ContactForm(forms.Form):

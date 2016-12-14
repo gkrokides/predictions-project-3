@@ -86,7 +86,7 @@
                 <td class="centred">{{ game.prediction_status_gsrs }}</td>
                 {% endif %}
                 <!--<td class="centred">Fail</td>-->
-                <td class="prediction"><a href="{% url 'game_detail' game.pk %}">H2H</a></td>
+                <td class="prediction"><a href="{% url 'h2h' game.pk %}">H2H</a></td>
                 {% endfor %}
               </tr>
 

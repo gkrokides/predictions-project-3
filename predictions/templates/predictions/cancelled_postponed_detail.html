@@ -1,0 +1,18 @@
+{% extends 'predictions/base.html' %}
+
+    {% block content3 %}
+        <div class="post">
+
+            <h1>{{ match.hometeam }} vs {{ match.awayteam }}</h1>
+            <p>
+                Status: {{ match.game_status }}<br>
+                Country: {{ match.season.league.country }}<br>
+                Season: {{ match.season }}<br>
+                Gameweek: {{ match.gameweek }}<br>
+            </p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'cancelled_postponed_edit' pk=match.pk %}" class="btn btn-warning">
+                <span class="glyphicon glyphicon-edit"></span> Update</a>
+            {% endif %}
+        </div>
+    {% endblock %}

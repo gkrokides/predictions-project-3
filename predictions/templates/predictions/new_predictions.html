@@ -166,7 +166,7 @@
         <td class={{ itemm.elohist|apply_prediction_colors }}><strong>{{ itemm.elohist }}</strong></td>
         <td class={{ itemm.elol6|apply_prediction_colors }}><strong>{{ itemm.elol6 }}</strong></td>
         <td class={{ itemm.gsrs|apply_prediction_colors }}><strong>{{ itemm.gsrs }}</strong></td>
-        <td class="prediction panel-body"><a href="{% url 'game_detail' itemm.pk %}">H2H</a></td>
+        <td class="prediction panel-body"><a href="{% url 'h2h' itemm.pk %}">H2H</a></td>
       </tr>
 
     {% endfor %}

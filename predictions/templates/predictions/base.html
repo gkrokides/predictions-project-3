@@ -57,7 +57,7 @@
                     </li>
                     <li {% if 'predictions' in request.path %}class="activepage"{% endif %} id="predictions"> <a href="{% url 'predictions' %}"><i class="fa fa-magic" aria-hidden="true"></i> Predictions</a> </li>
                     <li {% if 'posts' in request.path %}class="activepage"{% endif %} id="home"> <a href="{% url 'post_list' %}"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Posts</a> </li>
-                    <li {% if 'about' in request.path %}class="activepage"{% endif %} id="about"> <a href="{% url 'about' %}"><i class="fa fa-info-circle" aria-hidden="true"></i> About</a> </li>
+                    <li {% if 'about' in request.path %}class="activepage"{% endif %} id="about"> <a href="{% url 'faq' %}"><i class="fa fa-info-circle" aria-hidden="true"></i> FAQ</a> </li>
                     <li {% if 'contact' in request.path %}class="activepage"{% endif %} id="contactus"> <a href="{% url 'contactus' %}"><i class="fa fa-envelope" aria-hidden="true"></i> Contact us</a> </li>
                 </ul>
                 {% if user.is_authenticated %}
@@ -69,6 +69,7 @@
                             <li><a href="{% url 'post_new' %}"><i class="fa fa-pencil fa-fw" aria-hidden="true"> Add Post</i></a></li>
                             <li><a href="{% url 'add_games' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Add Match</i></a></li>
                             <li><a href="{% url 'add_score' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Add Score</i></a></li>
+                            <li><a href="{% url 'cancelled_postponed_list' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Postponed/Cancelled Matches</i></a></li>
                             <li><a href="{% url 'all_games' %}"><i class="fa fa-search" aria-hidden="true"> All Matches</i></a></li>
                             <li class="divider"></li>
                             <li><a href="{% url 'admin:index' %}"><span class="fa fa-lock" aria-hidden="true"></span> Admin Page</a></li>

@@ -1,0 +1,43 @@
+{% extends 'predictions/base.html' %}
+
+    {% block content3 %}
+<div class="post">
+    <span class="table-header">
+    <strong>{{ match.hometeam }}</strong>
+    </span>
+    <span style="border: 2px solid #a1a1a1; padding: 8px 8px; background: #dddddd; width: 300px; border-radius: 50px;">vs</span>
+    <span class="table-header">
+    <strong>{{ match.awayteam }}</strong>
+    </span>
+
+    <h2>General info</h2>
+    Status: <strong>{{ match.game_status }}</strong><br>
+    Country: <strong>{{ match.season.league.country }}</strong><br>
+    Season: <strong>{{ match.season }}</strong><br>
+    Gameweek: <strong>{{ match.gameweek }}</strong><br>
+    Score: <strong>{{ match.homegoals }} - {{ match.awaygoals }}</strong><br>
+    Result: <strong>{{ match.result }}</strong><br>
+    <hr>
+    <h2>Metrics</h2>
+    <strong>{{ match.hometeam }}</strong><br>
+    Rating (this week): <strong>{{ match.elo_rating_home|floatformat:2 }}</strong><br>
+    Rating (previous week): <strong>{{ match.elo_rating_home_previous_week|floatformat:2 }}</strong><br>
+    <br>
+    <strong>{{ match.awayteam }}</strong><br>
+    Rating (this week): <strong>{{ match.elo_rating_away|floatformat:2 }}</strong><br>
+    Rating (previous week): <strong>{{ match.elo_rating_away_previous_week|floatformat:2 }}</strong><br>
+    <br>
+    Rating difference (Home - Away): <strong>{{ match.rdiff }}</strong><br>
+    <hr>
+    <h2>Predictions</h2>
+    Black Predictor: <strong>{{ match.prediction_elohist }} ({{ match.prediction_status_elohist }})</strong><br>
+    Maroon Predictor: <strong>{{ match.prediction_elol6 }} ({{ match.prediction_status_elol6 }})</strong><br>
+    Yellow Predictor: <strong>{{ match.prediction_gsrs }} ({{ match.prediction_status_gsrs }})</strong><br>
+    <br><br>
+
+    {% if user.is_authenticated %}
+    <a href="{% url 'edit_match' pk=match.pk %}" class="btn btn-warning">
+        <span class="glyphicon glyphicon-edit"></span> Update</a>
+    {% endif %}
+</div>
+    {% endblock %}

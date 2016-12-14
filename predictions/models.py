@@ -158,10 +158,11 @@ class GameManager(models.Manager):
             multiplier = -num_of_teams_in_season / 2
             x = []
             for gm in games_lst:
-                h_r_old = self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek)
-                a_r_old = self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek)
-                rdiff = round(h_r_old - a_r_old, 0)
-                x.append(rdiff)
+                # h_r_old = self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek)
+                # a_r_old = self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek)
+                # rdiff = round(h_r_old - a_r_old, 0)
+                # x.append(rdiff)
+                x.append(gm.rdiff)
             out = abs(sum(x) / games_lst.count()) * multiplier
             # print x
         return out
@@ -180,8 +181,10 @@ class GameManager(models.Manager):
             multiplier = -num_of_teams_in_season / 2
             x = []
             for gm in games_lst:
-                h_r_old = self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek) - self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek - 5)
-                a_r_old = self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek) - self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek - 5)
+                # h_r_old = self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek) - self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek - 5)
+                # a_r_old = self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek) - self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek - 5)
+                h_r_old = gm.elo_rating_home_previous_week - self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek - 5)
+                a_r_old = gm.elo_rating_away_previous_week - self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek - 5)
                 rdiff = round(h_r_old - a_r_old, 0)
                 x.append(rdiff)
             out = abs(sum(x) / float(games_lst.count())) * multiplier
@@ -213,10 +216,11 @@ class GameManager(models.Manager):
             num_of_teams_in_season = szn.teamstotal
             multiplier = -num_of_teams_in_season / 2
             for gm in games_lst:
-                hm_goal_diff = self.total_goal_diff(tm=gm.hometeam, seasn=gm.season.id, gw=gm.gameweek)
-                aw_goal_diff = self.total_goal_diff(tm=gm.awayteam, seasn=gm.season.id, gw=gm.gameweek)
-                gm_goal_diff = hm_goal_diff - aw_goal_diff
-                x.append(gm_goal_diff)
+                # hm_goal_diff = self.total_goal_diff(tm=gm.hometeam, seasn=gm.season.id, gw=gm.gameweek)
+                # aw_goal_diff = self.total_goal_diff(tm=gm.awayteam, seasn=gm.season.id, gw=gm.gameweek)
+                # gm_goal_diff = hm_goal_diff - aw_goal_diff
+                # x.append(gm_goal_diff)
+                x.append(gm.gsrs_goaldiff())
             out = abs(sum(x) / float(len(x))) * multiplier
         return out
 
@@ -328,7 +332,7 @@ class GameManager(models.Manager):
                 elif lst.result == 'DRAW':
                     x = "D"
                 else:
-                    x = ""
+                    x = lst.game_status
             elif lst.awayteam == team:
                 if lst.result == 'HOME':
                     x = "L"
@@ -336,6 +340,8 @@ class GameManager(models.Manager):
                     x = "W"
                 elif lst.result == 'DRAW':
                     x = "D"
+                else:
+                    x = lst.game_status
             else:
                 x = ""
         return x
@@ -1129,9 +1135,19 @@ class GameManager(models.Manager):
 
 
 class Game(models.Model):
+    ok = 'OK'
+    postponed = 'PST'
+    cancelled = 'CNC'
+    GAME_STATUS_CHOICES = (
+        (ok, 'OK'),
+        (postponed, 'Postponed'),
+        (cancelled, 'Cancelled'),
+    )
+
     date = models.DateField()
     gameweek = models.PositiveIntegerField()
     season = models.ForeignKey('Season')
+    game_status = models.CharField(max_length=10, choices=GAME_STATUS_CHOICES, default=ok,)
     hometeam = models.ForeignKey(Team, related_name='hometeam')
     awayteam = models.ForeignKey(Team, related_name='awayteam')
     homegoals = models.IntegerField(null=True, blank=True)
@@ -1139,6 +1155,11 @@ class Game(models.Model):
     result = models.CharField(max_length=5, null=True, blank=True)
     elo_rating_home = models.FloatField(null=True, blank=True)
     elo_rating_away = models.FloatField(null=True, blank=True)
+    elo_rating_home_previous_week = models.FloatField(null=True, blank=True)
+    elo_rating_away_previous_week = models.FloatField(null=True, blank=True)
+    rdiff = models.FloatField(null=True, blank=True)
+    goaldiff_hm = models.IntegerField(null=True, blank=True)
+    goaldiff_aw = models.IntegerField(null=True, blank=True)
     prediction_elohist = models.CharField(max_length=80, null=True, blank=True)
     prediction_status_elohist = models.CharField(max_length=80, null=True, blank=True)
     prediction_elol6 = models.CharField(max_length=80, null=True, blank=True)
@@ -1290,13 +1311,20 @@ class Game(models.Model):
         else:
             return ''
 
-    # def r_difference(self):
-    #     # this means if self.elo_rating_home is not empty or null
-    #     if self.elo_rating_home != '' or not self.elo_rating_home:
-    #         rdiff = self.elo_rating_home - self.elo_rating_away
-    #         return rdiff
-    #     else:
-    #         return ''
+    def r_difference(self):
+        # this means if self.elo_rating_home is not empty or null
+        if self.elo_rating_home:
+            rdiff = round(self.elo_rating_home_previous_week - self.elo_rating_away_previous_week, 0)
+            return rdiff
+        else:
+            return ''
+
+    def gsrs_goaldiff(self):
+        # if self.goaldiff_hm:
+        #     return self.goaldiff_hm - self.goaldiff_aw
+        # else:
+        #     return 0
+        return self.goaldiff_hm - self.goaldiff_aw
 
     def save(self, *args, **kwargs):
         if self.homegoals >= 0:
@@ -1312,6 +1340,13 @@ class Game(models.Model):
 
         self.elo_rating_home = self.r_new_home()
         self.elo_rating_away = self.r_new_away()
+
+        self.elo_rating_home_previous_week = self._default_manager.get_previous_elo(self.hometeam, self.season, self.gameweek)
+        self.elo_rating_away_previous_week = self._default_manager.get_previous_elo(self.awayteam, self.season, self.gameweek)
+
+        self.rdiff = self.r_difference()
+        self.goaldiff_hm = self._default_manager.total_goal_diff(self.hometeam, self.season.id, self.gameweek)
+        self.goaldiff_aw = self._default_manager.total_goal_diff(self.awayteam, self.season.id, self.gameweek)
 
         self.prediction_elohist = self._default_manager.elo_hist_prediction(hometm=self.hometeam, awaytm=self.awayteam, szn=self.season.id, gweek=self.gameweek)
         self.prediction_status_elohist = self.elo_hist_prediction_status()

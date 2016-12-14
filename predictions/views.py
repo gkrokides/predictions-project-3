@@ -71,7 +71,7 @@ def past_predictions(request, seasonid):
     return render(request, 'predictions/past_predictions.html', {'gfilter': gfilter, 'predicted_games': predicted_games})
 
 
-def game_detail(request, pk):
+def h2h(request, pk):
     gm = get_object_or_404(Game, pk=pk)
     # season = Season.objects.get(id=2)
     season = gm.season
@@ -432,7 +432,7 @@ def game_detail(request, pk):
     lg4to6 = all_matches_annotated.filter(Q(result_total=4) | Q(result_total=5) | Q(result_total=6)).count() / float(all_matches_cnt)
     lg7plus = all_matches_annotated.filter(result_total__gt=6).count() / float(all_matches_cnt)
     chart_data_json = json.dumps(chart_data)
-    return render(request, 'predictions/game_detail.html',
+    return render(request, 'predictions/h2h.html',
                   {'hometm': hometm, 'awaytm': awaytm, 'gm': gm, 'leaderboard': leaderboard, 'x': sorted_x,
                    'season': season, 'gamewk': gamewk, 'title': gamewk_for_title, 'chart_data': chart_data_json,
                    'homewins': homewins, 'homelosses': homelosses, 'homedraws': homedraws,
@@ -543,7 +543,8 @@ def predictions(request):
             gamewk_out = gamewk - 1
             user_made_selection = True
             past_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__lte=gamewk_out).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).count()
-            new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__gt=6).count() - past_predictions_cnt
+            # new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__gt=6).count() - past_predictions_cnt
+            new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek=gamewk).count()
             # teams_total = Game.objects.filter(season=seasonid, gameweek=1).count() * 2
             for tm in leaderboard:
                 h = tm.hometeam
@@ -1047,7 +1048,7 @@ def addscore(request):
     formset_to_save = ''
     msg = ''
     msg_class = ''
-    GameFormSet = modelformset_factory(Game, fields=('gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam'), extra=0)
+    GameFormSet = modelformset_factory(Game, fields=('gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam', 'game_status'), extra=0)
     formset = GameFormSet(queryset=Game.objects.all())
     countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
     szns_drpdown = {}
@@ -1074,7 +1075,7 @@ def addscore(request):
                 ssnout = str(lst.get_start_year()) + "/" + str(lst.get_end_year())
                 leaderboard = Game.objects.last_gameweek(seasn=lst)
                 gamewk = leaderboard[0].gameweek + 1
-                formset = GameFormSet(queryset=Game.objects.filter(season=seasonid, homegoals__isnull=True))
+                formset = GameFormSet(queryset=Game.objects.filter(season=seasonid, homegoals__isnull=True, game_status='OK'))
         elif 'djform' in request.POST:
             formset_to_save = GameFormSet(request.POST, request.FILES)
             if formset_to_save.is_valid():
@@ -1329,8 +1330,12 @@ def success(request):
     return render(request, 'predictions/success.html')
 
 
-def about(request):
-    return render(request, 'predictions/about.html')
+def success_postponed_cancelled(request):
+    return render(request, 'predictions/success_postponed_cancelled.html')
+
+
+def faq(request):
+    return render(request, 'predictions/faq.html')
 
 
 def top3(request):
@@ -1406,3 +1411,30 @@ def top3(request):
     return render(request, 'predictions/top3.html', {'home_elohist_top3': home_elohist_top3, 'away_elohist_top3': away_elohist_top3, 'draw_elohist_top3': draw_elohist_top3,
                                                      'home_elol6_top3': home_elol6_top3, 'away_elol6_top3': away_elol6_top3, 'draw_elol6_top3': draw_elol6_top3,
                                                      'home_gsrs_top3': home_gsrs_top3, 'away_gsrs_top3': away_gsrs_top3, 'draw_gsrs_top3': draw_gsrs_top3, 'current_period': current_period})
+
+
+def cancelled_postponed_list(request):
+    postponed_cancelled = Game.objects.filter(Q(game_status='PST') | Q(game_status='CNC'))
+    return render(request, 'predictions/cancelled_postponed_list.html', {'postponed_cancelled': postponed_cancelled})
+
+
+def cancelled_postponed_detail(request, pk):
+    match = get_object_or_404(Game, pk=pk)
+    return render(request, 'predictions/cancelled_postponed_detail.html', {'match': match})
+
+
+def edit_match(request, pk):
+    match = get_object_or_404(Game, pk=pk)
+    if request.method == "POST":
+        form = GameForm(request.POST, instance=match)
+        if form.is_valid():
+            match.save()
+            return redirect('success_postponed_cancelled')
+    else:
+        form = GameForm(instance=match)
+    return render(request, 'predictions/edit_match.html', {'form': form})
+
+
+def game_details(request, pk):
+    match = get_object_or_404(Game, pk=pk)
+    return render(request, 'predictions/game_details.html', {'match': match})

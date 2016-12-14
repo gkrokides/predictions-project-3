@@ -40,14 +40,16 @@
                 <th>Gmwk</th>
                 <th>Date</th>
                 <th class="right-al">Home</th>
-                <th>Home rating</th>
+                <!--<th>Home rating</th>-->
                 <th>Home goals</th>
                 <th>Away goals</th>
                 <th>Away</th>
-                <th>Away rating</th>
-                <th>Status Black</th>
-                <th>Status Purple</th>
-                <th>Status Yellow</th>
+                <!--<th>Away rating</th>-->
+                <!--<th>Status Black</th>-->
+                <!--<th>Status Purple</th>-->
+                <!--<th>Status Yellow</th>-->
+                <th>Match Status</th>
+                <th>Details</th>
             </tr>
         </thead>
         <tbody>
@@ -57,14 +59,16 @@
                 <td width="1%">{{ obj.gameweek }}</td>
                 <td width="15%">{{ obj.date }}</td>
                 <td width="15%" class="right-al">{{ obj.hometeam }}</td>
-                <td width="15%" class="">{{ obj.elo_rating_home }}</td>
+                <!--<td width="15%" class="">{{ obj.elo_rating_home }}</td>-->
                 <td class="centred" width="1%">{{ obj.homegoals }}</td>
                 <td class="centred" width="1%">{{ obj.awaygoals }}</td>
                 <td>{{ obj.awayteam }}</td>
-                <td width="15%" class="">{{ obj.elo_rating_away }}</td>
-                <td>{{ obj.prediction_status_elohist }}</td>
-                <td>{{ obj.prediction_status_elol6 }}</td>
-                <td>{{ obj.prediction_status_gsrs }}</td>
+                <!--<td width="15%" class="">{{ obj.elo_rating_away }}</td>-->
+                <!--<td>{{ obj.prediction_status_elohist }}</td>-->
+                <!--<td>{{ obj.prediction_status_elol6 }}</td>-->
+                <!--<td>{{ obj.prediction_status_gsrs }}</td>-->
+                <td>{{ obj.game_status }}</td>
+                <td><a href="{% url 'game_details' pk=obj.pk %}">details</a></td>
             </tr>
         {% endfor %}
         </tbody>

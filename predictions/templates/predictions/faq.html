@@ -6,15 +6,9 @@
 
 <div class="container" style="padding-right: 40px">
 
-        <div>
-        <h2>Predictions & Ranking</h2> When looking at the League Overview in the <a href="{% url 'predictions' %}">predictions page</a>, you will notice that we rank the teams in a different way than what's used normally.
-        So we don't give 3 points for each win and 1 point for each draw. The Elo rating system helps us rank the teams according to their real form. For example, a team that wins 3 - 0 away will get more
-        points compared to winning the same opponent 1 - 0 at home. The ranking of the opponent is also taken into consideration; for example, if a weak team wins a strong team, they will get more points
-        than what the strong team would get if they won.
-         </div>
-        <hr>
+
          <div>
-        <h2>Dashboard</h2>The Dashboard gives you an understanding of how the models are performing in each league. It is quite impossible for the models
+        <h2>What's the use of the Dashboard?</h2>The Dashboard gives you an understanding of how the models are performing in each league. It is quite impossible for the models
             to achieve high performance on all covered leagues. The best way to take advantage of these predicting models is by identifying the leagues for which the models
             are performing well this season. So we <strong>strongly recommend</strong> that you start by looking at the <a href="{% url 'top3' %}">Home</a> page's top 3 leagues of each model.
             The <a href="{% url 'byleague' %}">Overview</a> page, is also a good source of information as you can see the strike of each predictor for all the leagues and bet types.
@@ -22,20 +16,33 @@
               page and filter the dashboard to show the league(s) you identified for the current season. Additionally, you can look at the <a href="{% url 'bygameweek' %}">Performance by Gameweek</a>, again
              filtering the dashboard for your identified league(s) and look at how the models are performing each week against the average. To make your lives easier, the
               <a href="{% url 'dashboard' %}">Strike Rate & Winners</a> and <a href="{% url 'bygameweek' %}">Performance by Gameweek</a> pages, by default show stats for the top predicted league
-             in the current season. Additionally, by default, the Overview page shows information for all leagues but filtered to show stats for the current period. But feel free to filter the stats according to the leagues you wish to follow.
+             in the current season. Additionally, by default, the Overview page shows information for all leagues but filtered to show stats for the current period. But feel free to filter the stats according to
+             the leagues and/or season of your choice.
          </div>
 
         <hr>
         <div>
-         <h2>Strike Rate</h2>
+        <h2>What does 'Rating' mean in the League Overview and H2H pages?</h2> When looking at the League Overview in the <a href="{% url 'predictions' %}">predictions page</a>, you will notice that we rank the teams in a different way than what's used normally.
+        So we don't give 3 points for each win and 1 point for each draw. The Elo rating system helps us rate (in other words give points to) the teams according to their real form. For example, a team that wins 3 - 0 away will get more
+        points compared to winning the same opponent 1 - 0 at home. In addition, when giving rating points to a team, the ranking of the opponent is also taken into consideration; for example, if a weak team wins a strong team, they will get more points
+        than what the strong team would get if they won.
+         </div>
+        <hr>
+        <div>
+         <h2>What do you mean by 'Strike Rate' in the Dashboard pages?</h2>
          You will also see this as Success Rate. We use both terms interchangeably. What we mean by strike rate in the context of this project, is how many winning bets each model made, divided by the total
          predictions made for the same type of bet (i.e HOME win). For example, if for Bundesliga, the black predictor made a total of 10 home win predictions and in 5 of those matches the home team
          won, then the Home strike rate for the black predictor is 50% (5 divided by 10).
 
-         The strike rate is the main performance tracker and you will see a lot of this in the Dashboard pages. But when looking at the New Predictions page of your selected league,
+         The strike rate is the main performance tracker of our choice and you will see a lot of this in the Dashboard pages. But when looking at the New Predictions page of your selected league,
          we included the raw numbers instead of the strike rate. So instead of seeing 50%, you will see something in the lines of 5/10, the first number (5) showing the successful predictions
          and the second number (10) being the total number of predictions for that bet type (HOME, AWAY or DRAW)
         </div>
+        <hr>
+        <div>
+        <h2>What does 'PST' and 'CNC' mean in the League Overview and H2H pages?</h2> PST means that the match has been postponed and CNC that it has been cancelled.
+         </div>
+
 		<br><br>
 
 </div>

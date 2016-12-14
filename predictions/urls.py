@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^predictions/history/$', views.predictions_filter, name='predictions_history'),
     url(r'^$', views.top3, name='top3'),
     url(r'^contact-us/$', views.email, name='contactus'),
-    url(r'^game/(?P<pk>[0-9]+)/$', views.game_detail, name='game_detail'),
+    url(r'^headtohead/(?P<pk>[0-9]+)/$', views.h2h, name='h2h'),
     url(r'^metrics/$', views.metrics, name='metrics'),
     url(r'^pastpredictions/(?P<seasonid>[0-9]+)/$', views.past_predictions, name='past_predictions'),
     url(r'^newpredictions/(?P<seasonid>[0-9]+)/(?P<gamewk>[0-9]+)/$', views.new_predictions, name='new_predictions'),
@@ -25,6 +25,11 @@ urlpatterns = [
     url(r'^activeusers/$', views.active_users, name='activeusers'),
     # url(r'^email/$', views.email, name='email'),
     url(r'^success/$', views.success, name='success'),
-    url(r'^about/$', views.about, name='about'),
+    url(r'^faq/$', views.faq, name='faq'),
+    url(r'^cancelled-postponed-list/$', views.cancelled_postponed_list, name='cancelled_postponed_list'),
+    url(r'^cancelled-postponed-detail/(?P<pk>[0-9]+)/$', views.cancelled_postponed_detail, name='cancelled_postponed_detail'),
+    url(r'^edit-match/(?P<pk>[0-9]+)/edit/$', views.edit_match, name='edit_match'),
+    url(r'^success-postponed-cancelled/$', views.success_postponed_cancelled, name='success_postponed_cancelled'),
+    url(r'^game-details/(?P<pk>[0-9]+)/$', views.game_details, name='game_details'),
 
 ]
