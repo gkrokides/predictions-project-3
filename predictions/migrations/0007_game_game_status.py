@@ -7,15 +7,14 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    # dependencies = [
-    #     ('predictions', '0006_auto_20161211_1049'),
-    # ]
-    #
-    # operations = [
-    #     migrations.AddField(
-    #         model_name='game',
-    #         name='game_status',
-    #         field=models.CharField(choices=[('played', 'Freshman'), ('postponed', 'Sophomore')], default='played', max_length=10),
-    #     ),
-    # ]
-    pass
+    dependencies = [
+        ('predictions', '0006_auto_20161211_1049'),
+    ]
+
+    operations = [
+        migrations.AddField(
+            model_name='game',
+            name='game_status',
+            field=models.CharField(choices=[('played', 'Freshman'), ('postponed', 'Sophomore')], default='played', max_length=10),
+        ),
+    ]
