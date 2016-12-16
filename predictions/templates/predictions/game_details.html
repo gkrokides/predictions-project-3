@@ -2,6 +2,8 @@
 
     {% block content3 %}
 <div class="post">
+
+    <div style="border: 4px solid #a1a1a1; text-align: center; background-color: black; padding: 15px;">
     <span class="table-header">
     <strong>{{ match.hometeam }}</strong>
     </span>
@@ -9,12 +11,14 @@
     <span class="table-header">
     <strong>{{ match.awayteam }}</strong>
     </span>
+    </div>
 
     <h2>General info</h2>
     Status: <strong>{{ match.game_status }}</strong><br>
     Country: <strong>{{ match.season.league.country }}</strong><br>
     Season: <strong>{{ match.season }}</strong><br>
     Gameweek: <strong>{{ match.gameweek }}</strong><br>
+    Date: <strong>{{ match.date }}</strong><br>
     Score: <strong>{{ match.homegoals }} - {{ match.awaygoals }}</strong><br>
     Result: <strong>{{ match.result }}</strong><br>
     <hr>
