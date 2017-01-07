@@ -888,7 +888,7 @@ def new_predictions(request, seasonid, gamewk):
             'date': gm.date,
             'pk': gm.pk
         })
-    sorted_x = sorted(x, key=itemgetter('date'), reverse=True)
+    sorted_x = sorted(x, key=itemgetter('date'), reverse=False)
     # progress bars variables
     home_elohist_total_preds = Game.objects.total_model_predictions('elohist', seasonid, 'HOME')
     home_elohist_succ_preds = Game.objects.total_model_successful_predictions('elohist', seasonid, 'HOME')

@@ -830,7 +830,7 @@ class GameManager(models.Manager):
         x = []
         tmgames = (self
                    .select_related('hometeam', 'awayteam')
-                   .filter(Q(hometeam=team, season=sid, date__lte=dt, game_status='OK') | Q(awayteam=team, season=sid, date__lte=dt, game_status='OK'))
+                   .filter(Q(hometeam=team, season=sid, date__lte=dt, game_status='OK', homegoals__gte=0) | Q(awayteam=team, season=sid, date__lte=dt, game_status='OK', awaygoals__gte=0))
                    .order_by('-date'))[0:6]
         if tmgames.count() < 1:
             pass
@@ -846,7 +846,7 @@ class GameManager(models.Manager):
         x = []
         tmgames = (self
                    .select_related('hometeam', 'awayteam')
-                   .filter(Q(hometeam=team, season=sid, date__lte=dt, game_status='OK') | Q(awayteam=team, season=sid, date__lte=dt, game_status='OK'))
+                   .filter(Q(hometeam=team, season=sid, date__lte=dt, game_status='OK', homegoals__gte=0) | Q(awayteam=team, season=sid, date__lte=dt, game_status='OK', awaygoals__gte=0))
                    .order_by('-date'))[0:6]
         if tmgames.count() < 1:
             pass
