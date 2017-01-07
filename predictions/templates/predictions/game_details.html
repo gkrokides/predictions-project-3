@@ -26,10 +26,12 @@
     <strong>{{ match.hometeam }}</strong><br>
     Rating (this week): <strong>{{ match.elo_rating_home|floatformat:2 }}</strong><br>
     Rating (previous week): <strong>{{ match.elo_rating_home_previous_week|floatformat:2 }}</strong><br>
+    Rating (6 games ago): <strong>{{ match.elo_rating_home_6_weeks_ago|floatformat:2 }}</strong><br>
     <br>
     <strong>{{ match.awayteam }}</strong><br>
     Rating (this week): <strong>{{ match.elo_rating_away|floatformat:2 }}</strong><br>
     Rating (previous week): <strong>{{ match.elo_rating_away_previous_week|floatformat:2 }}</strong><br>
+    Rating (6 games ago): <strong>{{ match.elo_rating_away_6_weeks_ago|floatformat:2 }}</strong><br>
     <br>
     Rating difference (Home - Away): <strong>{{ match.rdiff }}</strong><br>
     <hr>

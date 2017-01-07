@@ -1,0 +1,40 @@
+{% extends 'predictions/base.html' %}
+
+{% block content3 %}
+{% load humanize %}
+
+<table cellpadding="0" class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th class="home-prediction centred">Season</th>
+        <th class="home-prediction centred">Gameweek</th>
+        <th class="home-prediction centred">Home</th>
+        <th class="home-prediction centred"></th>
+        <th class="home-prediction centred">Away</th>
+        <th class="home-prediction centred">Date</th>
+      </tr>
+    </thead>
+    <tbody class="centred">
+
+    {% for itemm in upcoming_games %}
+
+      <tr>
+        <td>{{ itemm.season }}</td>
+        <td>{{ itemm.gameweek }}</td>
+        <td>{{ itemm.hometeam }}</td>
+        <td> - </td>
+        <td>{{ itemm.awayteam }}</td>
+        {% if itemm.date|naturalday  == 'today' %}
+        <td><span class="label label-danger">{{ itemm.date|naturalday }}</span></td>
+        {% elif itemm.date|naturalday  == 'tomorrow' %}
+        <td><span class="label label-warning">{{ itemm.date|naturalday }}</span></td>
+        {% else %}
+        <td>{{ itemm.date|naturalday }}</td>
+        {% endif %}
+      </tr>
+
+    {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

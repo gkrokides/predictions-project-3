@@ -1,0 +1,7 @@
+Many changes have happened so you'll need to run the following in PA console
+after pulling the data from github:
+
+1. makemigrations (might be redundant try migrate first as the migrations will already be pulled)
+2. migrate
+3. collectstatic
+4. pip install django-debug-toolbar

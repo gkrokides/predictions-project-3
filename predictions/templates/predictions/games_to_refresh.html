@@ -1,0 +1,44 @@
+{% extends 'predictions/base.html' %}
+
+{% block content3 %}
+
+<form action="" method="get" class="">
+            {{ games_to_refresh_formulas.form.as_p }}
+            <input type="submit" value="Filter" />
+    </form>
+
+<table cellpadding="0" class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th class="home-prediction centred">Season</th>
+        <th class="home-prediction centred">SID</th>
+        <th class="home-prediction centred">Gameweek</th>
+        <th class="home-prediction centred">Date</th>
+        <th class="home-prediction centred">Home</th>
+        <th class="home-prediction centred">Homegoals</th>
+        <th class="home-prediction centred"></th>
+        <th class="home-prediction centred">Awaygoals</th>
+        <th class="home-prediction centred">Away</th>
+      </tr>
+    </thead>
+    <tbody class="centred">
+
+    {% for itemm in games_to_refresh_formulas %}
+
+      <tr>
+        <td>{{ itemm.season }}</td>
+        <td>{{ itemm.season.id }}</td>
+        <td>{{ itemm.gameweek }}</td>
+        <td>{{ itemm.date }}</td>
+        <td>{{ itemm.hometeam }}</td>
+        <td>{{ itemm.homegoals }}</td>
+        <td> - </td>
+        <td>{{ itemm.awaygoals }}</td>
+        <td>{{ itemm.awayteam }}</td>
+      </tr>
+
+    {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

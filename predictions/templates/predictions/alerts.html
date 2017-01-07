@@ -1,0 +1,20 @@
+{% extends 'predictions/base.html' %}
+
+{% block content3 %}
+    <h1>Alerts</h1><hr>
+
+    <h4><strong>
+    <a href="{% url 'alerts_upcoming_games' %}">Upcoming games <span class="label label-info">{{ upcoming_games }}</span><br></a>
+    </strong>
+    </h4>
+
+    <h4><strong>
+    <a href="{% url 'alerts_finished_games' %}">Finished games without score <span class="label label-danger">{{ finished_games_without_score }}</span><br></a>
+    </strong>
+    </h4>
+
+    <h4><strong>
+    <a href="{% url 'alerts_refresh' %}">Games to refresh formulas <span class="label label-danger">{{ games_to_refresh_formulas }}</span><br></a>
+    </strong>
+    </h4>
+{% endblock %}

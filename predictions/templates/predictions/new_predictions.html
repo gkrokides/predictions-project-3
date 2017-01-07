@@ -132,8 +132,7 @@
 
     <div class="alert alert-danger">
         <strong>No new predictions yet!</strong>
-        You are seeing this message because you selected a gameweek before the 6th
-        (Predictions start after the 6th Gameweek to allow the models to gather enough data to make predictions).
+        Predictions start after the 6th Gameweek to allow the models to gather enough data to make predictions.
 
     </div>
 
@@ -146,9 +145,10 @@
     Gameweek: <strong class="home-team">{{ gw }}</strong>
 </div>
 
-<table class="table table-condensed table-bordered table-hover">
+<table cellpadding="10" class="table table-condensed table-bordered table-hover">
     <thead>
       <tr>
+        <th class="centred">Gameweek</th>
         <th class="centred">Date</th>
         <th class="centred">Match</th>
         <th class="elo_hist">BP</th>
@@ -161,6 +161,7 @@
     {% for itemm in sorted_x %}
 
       <tr>
+        <td>{{ itemm.gameweek }}</td>
         <td>{{ itemm.date }}</td>
         <td>{{ itemm.match }}</td>
         <td class={{ itemm.elohist|apply_prediction_colors }}><strong>{{ itemm.elohist }}</strong></td>

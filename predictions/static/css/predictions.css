@@ -29,6 +29,8 @@ h1, h2, h3, h4, h5 {
 
 body {
     padding-top: 65px;
+    padding-bottom: 65px;
+
 }
 
 .save {
@@ -124,28 +126,27 @@ body {
 }
 
 .succ {
-    text-align: center !important;
+    text-align: center;
     color: white;
     background: #4CC552;
     border: solid;
-    border-radius: 10px;
-
+    border-radius: 0px;
 }
 
 .fail {
-    text-align: center !important;
+    text-align: center;
     color: white;
     background: #F62817;
     border: solid;
-    border-radius: 10px;
+    border-radius: 0px;
 }
 
 .draw {
-    text-align: center !important;
+    text-align: center;
     color: white;
     background: orange;
     border: solid;
-    border-radius: 10px;
+    border-radius: 0px;
 }
 
 .elo_hist {
@@ -342,3 +343,16 @@ background:#EAF2F8;
     height: 100px;
     float: right;
 }
+
+.table-condensed>thead>tr>th, .table-condensed>tbody>tr>th, .table-condensed>tfoot>tr>th, .table-condensed>thead>tr>td, .table-condensed>tbody>tr>td, .table-condensed>tfoot>tr>td{
+    padding: 1px;
+}
+
+.navbar-fixed-bottom-custom {
+
+margin-top: 40;
+padding: 5px;
+ }
+
+
+

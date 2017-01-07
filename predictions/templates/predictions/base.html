@@ -13,7 +13,7 @@
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <link href='https://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
 
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
@@ -33,7 +33,7 @@
 
     </head>
     <body>
-
+    {% load alerts_filter %}
 
     <nav class="navbar navbar-fixed-top navbar-inverse navbar-custom1">
         <div class="container">
@@ -57,29 +57,31 @@
                     </li>
                     <li {% if 'predictions' in request.path %}class="activepage"{% endif %} id="predictions"> <a href="{% url 'predictions' %}"><i class="fa fa-magic" aria-hidden="true"></i> Predictions</a> </li>
                     <li {% if 'posts' in request.path %}class="activepage"{% endif %} id="home"> <a href="{% url 'post_list' %}"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Posts</a> </li>
-                    <li {% if 'about' in request.path %}class="activepage"{% endif %} id="about"> <a href="{% url 'faq' %}"><i class="fa fa-info-circle" aria-hidden="true"></i> FAQ</a> </li>
-                    <li {% if 'contact' in request.path %}class="activepage"{% endif %} id="contactus"> <a href="{% url 'contactus' %}"><i class="fa fa-envelope" aria-hidden="true"></i> Contact us</a> </li>
                 </ul>
                 {% if user.is_authenticated %}
-                <ul class="nav navbar-nav navbar-right">
-                    <div class="btn-group">
-                        <button data-toggle="dropdown" class="btn btn-info navbar-btn dropdown-toggle"><i class="fa fa-user" aria-hidden="true"></i> {{ request.user.username }}
-                            <span class="glyphicon glyphicon-chevron-down"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a href="{% url 'post_new' %}"><i class="fa fa-pencil fa-fw" aria-hidden="true"> Add Post</i></a></li>
-                            <li><a href="{% url 'add_games' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Add Match</i></a></li>
-                            <li><a href="{% url 'add_score' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Add Score</i></a></li>
-                            <li><a href="{% url 'cancelled_postponed_list' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Postponed/Cancelled Matches</i></a></li>
-                            <li><a href="{% url 'all_games' %}"><i class="fa fa-search" aria-hidden="true"> All Matches</i></a></li>
-                            <li class="divider"></li>
-                            <li><a href="{% url 'admin:index' %}"><span class="fa fa-lock" aria-hidden="true"></span> Admin Page</a></li>
-                            <li class="divider"></li>
-                            <li><a href="{% url 'activeusers' %}"><span class="fa fa-users" aria-hidden="true"></span> Active Users</a></li>
-                            <li class="divider"></li>
-                            <li><a href="{% url 'admin:logout' %}"><span class="glyphicon glyphicon-log-out"></span> Sign out</a></li>
-                        </ul>
-                    </div>
-                </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{% url 'alerts' %}"><i class="fa fa-bell-o" aria-hidden="true"></i> <span class="label label-danger">{{ ended_games_without_score|alerts_tag }}</span></a></li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <div class="btn-group">
+                            <button data-toggle="dropdown" class="btn btn-info navbar-btn dropdown-toggle"><i class="fa fa-user" aria-hidden="true"></i> {{ request.user.username }}
+                                <span class="glyphicon glyphicon-chevron-down"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'post_new' %}"><i class="fa fa-pencil fa-fw" aria-hidden="true"> Add Post</i></a></li>
+                                <li><a href="{% url 'add_games' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Add Match</i></a></li>
+                                <li><a href="{% url 'add_score' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Add Score</i></a></li>
+                                <li><a href="{% url 'cancelled_postponed_list' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Postponed/Cancelled Matches</i></a></li>
+                                <li><a href="{% url 'all_games' %}"><i class="fa fa-search" aria-hidden="true"> All Matches</i></a></li>
+                                <li class="divider"></li>
+                                <li><a href="{% url 'admin:index' %}"><span class="fa fa-lock" aria-hidden="true"></span> Admin Page</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{% url 'activeusers' %}"><span class="fa fa-users" aria-hidden="true"></span> Active Users</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{% url 'admin:logout' %}"><span class="glyphicon glyphicon-log-out"></span> Sign out</a></li>
+                            </ul>
+                        </div>
+                    </ul>
                 {% endif %}
             </div>
         </div>
@@ -293,17 +295,18 @@
             </div>
         </div>
 
+
+    <div class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container">
+          <p class="navbar-text pull-left">© 2016 - betaid.net </p>
+           <ul class="nav navbar-nav">
+           <li {% if 'faq' in request.path %}class="activepage"{% endif %} id="about"> <a href="{% url 'faq' %}"><i class="fa fa-info-circle" aria-hidden="true"></i> FAQ</a> </li>
+           <li {% if 'contact' in request.path %}class="activepage"{% endif %} id="contactus"> <a href="{% url 'contactus' %}"><i class="fa fa-envelope" aria-hidden="true"></i> Contact us</a> </li>
+           </ul>
+        </div>
     </div>
 
-    <!--<div class="navbar  navbar-inverse navbar-fixed-bottom">-->
-        <!--<div class="container">-->
-            <!--<div class="navbar-text pull=left">-->
-                <!--<p> © company 2016.</p>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-
-
+   </div>
 
     </body>
 </html>

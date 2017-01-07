@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'predictions',
     'bootstrapform',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE_CLASSES = [

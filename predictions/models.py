@@ -101,22 +101,146 @@ class GameManager(models.Manager):
         xdrawaway = self.filter(awayteam=team, result='DRAW').count()
         return (xhome + xaway) * 3 + xdrawhome + xdrawaway
 
-    # total games played by a team up to the given gameweek
-    def get_total_games(self, team, seasn, gmweek):
-        tmgames = self.filter(Q(hometeam=team, season=seasn, gameweek__lte=gmweek) | Q(awayteam=team, season=seasn, gameweek__lte=gmweek))
-        tmgames_cnt = tmgames.count()
-        return tmgames_cnt
+    def team_points_optimized(self, sn, tm, dt):
+        homepts = self.filter(hometeam=tm, season=sn, date__lte=dt).aggregate(Sum('hm_points'))
+        awaypts = self.filter(awayteam=tm, season=sn, date__lte=dt).aggregate(Sum('aw_points'))
+        total_points = homepts['hm_points__sum'] + awaypts['aw_points__sum']
+        return total_points
 
-    def get_previous_elo(self, tm, seasn, gmwk):
+    # total games played by a team up to the given gameweek (not used)
+    # def get_total_games(self, team, seasn, gmweek):
+    #     tmgames = self.filter(Q(hometeam=team, season=seasn, gameweek__lte=gmweek) | Q(awayteam=team, season=seasn, gameweek__lte=gmweek))
+    #     tmgames_cnt = tmgames.count()
+    #     return tmgames_cnt
+
+    # returns the team's previous elo rating based on gameweek. So it returns the previous gameweek's rating
+    # def get_previous_elo(self, tm, seasn, gmwk):
+    #     out = 0
+    #     prevgmwk = gmwk - 1
+    #     if gmwk == 1:
+    #         out = elosettings.STARTING_POINTS
+    #     elif gmwk > 1:
+    #         iprevgame = self.filter(Q(hometeam=tm, season=seasn, gameweek=prevgmwk) | Q(awayteam=tm, season=seasn, gameweek=prevgmwk))
+    #         prevgame = iprevgame.get(Q(hometeam=tm) | Q(awayteam=tm))
+    #         if prevgame.hometeam == tm:
+    #             out = prevgame.elo_rating_home
+    #         elif prevgame.awayteam == tm:
+    #             out = prevgame.elo_rating_away
+    #     return out
+
+    # returns the team's previous elo rating based on date. So it returns the team's previous game's rating. This is
+    # useful when a team's game has been postponed and you want to retrieve the real form
+    # def get_previous_elo_by_date(self, tm, seasn, gmwk):
+    #     try:
+    #         date_threshold = self.filter(Q(hometeam=tm, season=seasn, gameweek__lte=gmwk) | Q(awayteam=tm, season=seasn, gameweek__lte=gmwk)).order_by('-date')[0].date
+    #         qs = self.filter(Q(hometeam=tm, season=seasn, date__lt=date_threshold) | Q(awayteam=tm, season=seasn, date__lt=date_threshold)).order_by('-date')
+    #         # identify the first gameweek by reversing the queryset and getting the first gameweek of the first object
+    #         firstgw = qs.reverse()[0].gameweek
+    #         out = 0
+    #         if gmwk == firstgw:
+    #             out = elosettings.STARTING_POINTS
+    #         else:
+    #             # get the second object of qs as the first one is the current game
+    #             prevgame = qs[0]
+    #             if prevgame.hometeam == tm:
+    #                 out = prevgame.elo_rating_home
+    #             elif prevgame.awayteam == tm:
+    #                 out = prevgame.elo_rating_away
+    #     except IndexError:
+    #         out = elosettings.STARTING_POINTS
+    #     return out
+
+    def get_previous_elo_by_date(self, tm, seasn, gmwk):
+        try:
+            date_threshold = self.filter(Q(hometeam=tm, season=seasn, gameweek=gmwk) | Q(awayteam=tm, season=seasn, gameweek=gmwk)).order_by('-date')[0].date
+            qs = self.filter(Q(hometeam=tm, season=seasn, date__lt=date_threshold) | Q(awayteam=tm, season=seasn, date__lt=date_threshold)).order_by('-date')
+        except IndexError:
+            date_threshold = self.filter(Q(hometeam=tm, season=seasn, gameweek__lte=gmwk) | Q(awayteam=tm, season=seasn, gameweek__lte=gmwk)).order_by('-date')[0].date
+            qs = self.filter(Q(hometeam=tm, season=seasn, date__lte=date_threshold) | Q(awayteam=tm, season=seasn, date__lte=date_threshold)).order_by('-date')
+        # identify the first gameweek by reversing the queryset and getting the first gameweek of the first object
         out = 0
-        prevgmwk = gmwk - 1
-        # tmgames = self.filter(Q(hometeam=tm, season=seasn) | Q(awayteam=tm, season=seasn)).order_by('gameweek')
-        if gmwk == 1:
+        if self.is_first_game(tm, seasn, date_threshold) == 'Yes':
             out = elosettings.STARTING_POINTS
-        elif gmwk > 1:
-            # ix = tmgames.get(gameweek=prevgmwk)
-            iprevgame = self.filter(Q(hometeam=tm, season=seasn, gameweek=prevgmwk) | Q(awayteam=tm, season=seasn, gameweek=prevgmwk))
-            prevgame = iprevgame.get(Q(hometeam=tm) | Q(awayteam=tm))
+        else:
+            # get the second object of qs as the first one is the current game
+            prevgame = qs[0]
+            if prevgame.hometeam == tm:
+                out = prevgame.elo_rating_home
+            elif prevgame.awayteam == tm:
+                out = prevgame.elo_rating_away
+        return out
+
+    # this version of get previous elo understands if this is the first time an elo is being queried for a team
+    def get_previous_elo_by_actual_date_for_initial(self, tm, seasn, dt):
+        try:
+            qs = self.filter(Q(hometeam=tm, season=seasn, date__lt=dt) | Q(awayteam=tm, season=seasn, date__lt=dt)).order_by('-date')
+        except IndexError:
+            qs = self.filter(Q(hometeam=tm, season=seasn, date__lte=dt) | Q(awayteam=tm, season=seasn, date__lte=dt)).order_by('-date')
+        out = 0
+        if self.is_first_game(tm, seasn, dt) == 'Yes':
+            out = elosettings.STARTING_POINTS
+        else:
+            # get the second object of qs as the first one is the current game
+            prevgame = qs[0]
+            if prevgame.hometeam == tm:
+                out = prevgame.elo_rating_home
+            elif prevgame.awayteam == tm:
+                out = prevgame.elo_rating_away
+        return out
+
+    def get_previous_elo_by_actual_date(self, tm, seasn, dt, gw):
+        qs = self.filter(Q(hometeam=tm, season=seasn, date__lte=dt) | Q(awayteam=tm, season=seasn, date__lte=dt)).order_by('-date')
+        gmwk = qs[0].gameweek
+        prevgame = qs[0]
+        # identify the first gameweek by reversing the queryset and getting the first gameweek of the first object
+        firstgw = qs.reverse()[0].gameweek
+        out = 0
+        if gmwk == firstgw:
+            out = elosettings.STARTING_POINTS
+        elif gmwk == gw:
+            prevgame = qs[1]
+        else:
+            # get the second object of qs as the first one is the current game
+            prevgame = qs[0]
+        if prevgame.hometeam == tm:
+            out = prevgame.elo_rating_home
+        elif prevgame.awayteam == tm:
+            out = prevgame.elo_rating_away
+        return out
+
+    # returns the elo rating of as far back as you tell it. i.e if I'm on gameweek 10 and want the elo rating of 4
+    # games back (not necessarily 4 gameweeks back), I give the following variables: tm, season, 10, 4
+    def get_previous_elo_from_lookback(self, tm, seasn, gmwk, lookback):
+        # identify the date of the current game and set as threshold
+        date_threshold = self.filter(Q(hometeam=tm, season=seasn, gameweek__lt=gmwk) | Q(awayteam=tm, season=seasn, gameweek__lt=gmwk)).order_by('-date')[0].date
+        qs = self.filter(Q(hometeam=tm, season=seasn, date__lte=date_threshold) | Q(awayteam=tm, season=seasn, date__lte=date_threshold)).order_by('-date')
+        # identify the first gameweek by reversing the queryset and getting the first gameweek of the first object
+        firstgw = qs.reverse()[0].gameweek
+        out = 0
+        if gmwk == firstgw:
+            out = elosettings.STARTING_POINTS
+        else:
+            prevgame = qs[lookback - 1]
+            if prevgame.hometeam == tm:
+                out = prevgame.elo_rating_home
+            elif prevgame.awayteam == tm:
+                out = prevgame.elo_rating_away
+        return out
+
+    # returns the elo rating of as far back as you tell it. i.e if I'm on gameweek 10 and want the elo rating of 4
+    # games back (not necessarily 4 gameweeks back), I give the following variables: tm, season, 10, 4
+    def get_previous_elo_from_lookback_by_date(self, tm, seasn, dt, lookback):
+        # identify the date of the current game and set as threshold
+        qs = self.filter(Q(hometeam=tm, season=seasn, date__lt=dt) | Q(awayteam=tm, season=seasn, date__lt=dt)).order_by('-date')
+        # date_threshold = qs[0].date
+        # qs = self.filter(Q(hometeam=tm, season=seasn, date__lte=date_threshold) | Q(awayteam=tm, season=seasn, date__lte=date_threshold)).order_by('-date')
+        # identify the first gameweek by reversing the queryset and getting the first gameweek of the first object
+        # firstgw = qs.reverse()[0].gameweek
+        out = 0
+        if qs.count() <= 5:
+            pass
+        else:
+            prevgame = qs[lookback - 1]
             if prevgame.hometeam == tm:
                 out = prevgame.elo_rating_home
             elif prevgame.awayteam == tm:
@@ -132,70 +256,173 @@ class GameManager(models.Manager):
         ldrbrd_list = self.filter(season=seasn, gameweek=max_gw)
         return ldrbrd_list
 
-    def modified_hga(self, teamm, seasonn, gmwk):
-        total_home_wins = self.filter(season=seasonn, hometeam=teamm, gameweek__lte=gmwk - 1, result='HOME').count()
-        total_home_draws = self.filter(season=seasonn, hometeam=teamm, gameweek__lte=gmwk - 1, result='DRAW').count()
+    # def modified_hga(self, teamm, seasonn, gmwk):
+    #     total_home_wins = self.filter(season=seasonn, hometeam=teamm, gameweek__lte=gmwk - 1, result='HOME').count()
+    #     total_home_draws = self.filter(season=seasonn, hometeam=teamm, gameweek__lte=gmwk - 1, result='DRAW').count()
+    #     win_points = total_home_wins * 1
+    #     draw_points = total_home_draws * 0.5
+    #     total_games = self.filter(hometeam=teamm, season=seasonn, gameweek__lte=gmwk - 1).count()
+    #     if total_games == 0 or gmwk == 1:
+    #         mhga = elosettings.ELO_HGA
+    #     else:
+    #         strike_rate = (win_points + draw_points) / total_games
+    #         mhga = strike_rate * float(elosettings.ELO_HGA)
+    #     return mhga
+
+    def modified_hga_from_date(self, teamm, seasonn, dt):
+        total_home_wins = self.filter(season=seasonn, hometeam=teamm, date__lt=dt, result='HOME').count()
+        total_home_draws = self.filter(season=seasonn, hometeam=teamm, date__lt=dt, result='DRAW').count()
         win_points = total_home_wins * 1
         draw_points = total_home_draws * 0.5
-        total_games = self.filter(hometeam=teamm, season=seasonn, gameweek__lte=gmwk - 1).count()
-        if total_games == 0 or gmwk == 1:
+        total_games = self.filter(hometeam=teamm, season=seasonn, date__lt=dt).count()
+        if total_games == 0:
             mhga = elosettings.ELO_HGA
         else:
             strike_rate = (win_points + draw_points) / total_games
             mhga = strike_rate * float(elosettings.ELO_HGA)
         return mhga
 
-    def elo_draw_threshold(self, seasonn, gamewk):
-        if gamewk == 1:
+    # def elo_draw_threshold(self, seasonn, gamewk):
+    #     if gamewk == 1:
+    #         out = 0
+    #     else:
+    #         games_lst = self.filter(season=seasonn, gameweek__lte=gamewk - 1).order_by('-date')
+    #         szn = Season.objects.get(id=seasonn)
+    #         # I used to use teamstotal from the leagues model (instead of num_of_teams_in_season) but it was wrong because year by year the number of teams in a league might change
+    #         # So the teamstotal in leagues is actually redundant
+    #         # num_of_teams_in_season = Team.objects.filter(Q(hometeam__season__id=szn) | Q(awayteam__season__id=szn)).distinct().count()
+    #         num_of_teams_in_season = szn.teamstotal
+    #         multiplier = -num_of_teams_in_season / 2
+    #         x = []
+    #         for gm in games_lst:
+    #             # h_r_old = self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek)
+    #             # a_r_old = self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek)
+    #             # rdiff = round(h_r_old - a_r_old, 0)
+    #             # x.append(rdiff)
+    #             x.append(gm.rdiff)
+    #         out = abs(sum(x) / games_lst.count()) * multiplier
+    #         # print x
+    #     return out
+
+    def elo_draw_threshold_by_id(self, gameid):
+        g = self.get(id=gameid)
+        qs = self.set_of_games_played_before_game_date_optimized(gameid, 'No')
+        if qs.count() <= 1:
             out = 0
         else:
-            games_lst = self.filter(season=seasonn, gameweek__lte=gamewk - 1)
-            szn = Season.objects.get(id=seasonn)
-            # I used to use teamstotal from the leagues model (instead of num_of_teams_in_season) but it was wrong because year by year the number of teams in a league might change
-            # So the teamstotal in leagues is actually redundant
-            # num_of_teams_in_season = Team.objects.filter(Q(hometeam__season__id=szn) | Q(awayteam__season__id=szn)).distinct().count()
+            games_lst = qs.order_by('-date')
+            szn = Season.objects.get(id=g.season.id)
             num_of_teams_in_season = szn.teamstotal
             multiplier = -num_of_teams_in_season / 2
             x = []
             for gm in games_lst:
-                # h_r_old = self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek)
-                # a_r_old = self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek)
-                # rdiff = round(h_r_old - a_r_old, 0)
-                # x.append(rdiff)
                 x.append(gm.rdiff)
-            out = abs(sum(x) / games_lst.count()) * multiplier
-            # print x
+            out = abs(sum(x) / float(games_lst.count())) * multiplier
         return out
 
-    def elol6_draw_threshold(self, seasonn, gamewk):
-        x = []
-        if gamewk <= 7:
+    def elo_draw_threshold_by_date(self, season, dt):
+        qs = self.set_of_games_played_before_game_date_by_date_optimized(season, dt, 'No')
+        if qs.count() <= 1:
             out = 0
         else:
-            games_lst = self.filter(season=seasonn, gameweek__lte=gamewk - 1, gameweek__gte=7)
-            szn = Season.objects.get(id=seasonn)
-            # I used to use teamstotal from the leagues model (instead of num_of_teams_in_season) but it was wrong because year by year the number of teams in a league might change
-            # So the teamstotal in leagues is actually redundant
-            # num_of_teams_in_season = Team.objects.filter(Q(hometeam__season__id=szn) | Q(awayteam__season__id=szn)).distinct().count()
+            games_lst = qs.order_by('-date')
+            szn = Season.objects.get(id=season)
             num_of_teams_in_season = szn.teamstotal
             multiplier = -num_of_teams_in_season / 2
             x = []
             for gm in games_lst:
-                # h_r_old = self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek) - self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek - 5)
-                # a_r_old = self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek) - self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek - 5)
-                h_r_old = gm.elo_rating_home_previous_week - self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek - 5)
-                a_r_old = gm.elo_rating_away_previous_week - self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek - 5)
-                rdiff = round(h_r_old - a_r_old, 0)
+                x.append(gm.rdiff)
+            out = abs(sum(x) / float(games_lst.count())) * multiplier
+        return out
+
+    # def elol6_draw_threshold(self, seasonn, gamewk):
+    #     x = []
+    #     if gamewk <= 7:
+    #         out = 0
+    #     else:
+    #         games_lst = self.filter(season=seasonn, gameweek__lte=gamewk - 1, gameweek__gte=7).order_by('-date')
+    #         szn = Season.objects.get(id=seasonn)
+    #         # I used to use teamstotal from the leagues model (instead of num_of_teams_in_season) but it was wrong because year by year the number of teams in a league might change
+    #         # So the teamstotal in leagues is actually redundant
+    #         # num_of_teams_in_season = Team.objects.filter(Q(hometeam__season__id=szn) | Q(awayteam__season__id=szn)).distinct().count()
+    #         num_of_teams_in_season = szn.teamstotal
+    #         multiplier = -num_of_teams_in_season / 2
+    #         x = []
+    #         for gm in games_lst:
+    #             # h_r_old = self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek) - self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek - 5)
+    #             # a_r_old = self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek) - self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek - 5)
+    #             h_r_old = gm.elo_rating_home_previous_week - self.get_previous_elo(tm=gm.hometeam, seasn=seasonn, gmwk=gm.gameweek - 5)
+    #             a_r_old = gm.elo_rating_away_previous_week - self.get_previous_elo(tm=gm.awayteam, seasn=seasonn, gmwk=gm.gameweek - 5)
+    #             rdiff = round(h_r_old - a_r_old, 0)
+    #             x.append(rdiff)
+    #         out = abs(sum(x) / float(games_lst.count())) * multiplier
+    #     return out
+
+    def elol6_draw_threshold_by_id(self, gameid):
+        g = self.get(id=gameid)
+        qs_wout_first_6 = self.set_of_games_played_before_game_date_optimized(gameid, 'Yes')
+        if qs_wout_first_6.count() <= 1:
+            out = 0
+        else:
+            games_lst = qs_wout_first_6.order_by('-date')
+            szn = Season.objects.get(id=g.season.id)
+            num_of_teams_in_season = szn.teamstotal
+            multiplier = -num_of_teams_in_season / 2
+            x = []
+            for gm in games_lst:
+                # h_r_old = gm.elo_rating_home_previous_week - self.get_previous_elo_from_lookback_by_date(gm.hometeam, szn, gm.date, 6)
+                # a_r_old = gm.elo_rating_away_previous_week - self.get_previous_elo_from_lookback_by_date(gm.awayteam, szn, gm.date, 6)
+                # rdiff = round(h_r_old - a_r_old, 0)
+                # x.append(rdiff)
+                rdiff = gm.r_difference_6_games_back()
                 x.append(rdiff)
             out = abs(sum(x) / float(games_lst.count())) * multiplier
         return out
 
-    def total_goal_diff(self, tm, seasn, gw):
-        if gw <= 6:
+    def elol6_draw_threshold_by_date(self, season, dt):
+        qs_wout_first_6 = self.set_of_games_played_before_game_date_by_date_optimized(season, dt, 'Yes')
+        if qs_wout_first_6.count() <= 1:
             out = 0
         else:
-            lst_hm = self.filter(hometeam=tm, season=seasn, gameweek__lte=gw - 1, gameweek__gte=gw - 6)
-            lst_aw = self.filter(awayteam=tm, season=seasn, gameweek__lte=gw - 1, gameweek__gte=gw - 6)
+            games_lst = qs_wout_first_6.order_by('-date')
+            szn = Season.objects.get(id=season)
+            num_of_teams_in_season = szn.teamstotal
+            multiplier = -num_of_teams_in_season / 2
+            x = []
+            for gm in games_lst:
+                # h_r_old = gm.elo_rating_home_previous_week - self.get_previous_elo_from_lookback_by_date(gm.hometeam, szn, dt, 6)
+                # a_r_old = gm.elo_rating_away_previous_week - self.get_previous_elo_from_lookback_by_date(gm.awayteam, szn, dt, 6)
+                # rdiff = round(h_r_old - a_r_old, 0)
+                rdiff = gm.r_difference_6_games_back()
+                x.append(rdiff)
+            out = abs(sum(x) / float(games_lst.count())) * multiplier
+        return out
+
+    # def total_goal_diff(self, tm, seasn, gw):
+    #     if gw <= 6:
+    #         out = 0
+    #     else:
+    #         lst_hm = self.filter(hometeam=tm, season=seasn, gameweek__lte=gw - 1, gameweek__gte=gw - 6)
+    #         lst_aw = self.filter(awayteam=tm, season=seasn, gameweek__lte=gw - 1, gameweek__gte=gw - 6)
+    #         scored_hm = lst_hm.aggregate(Sum('homegoals'))
+    #         scored_aw = lst_aw.aggregate(Sum('awaygoals'))
+    #         scored = scored_hm.get('homegoals__sum') + scored_aw.get('awaygoals__sum')
+    #         conceded_hm = lst_hm.aggregate(Sum('awaygoals'))
+    #         conceded_aw = lst_aw.aggregate(Sum('homegoals'))
+    #         conceded = conceded_hm.get('awaygoals__sum') + conceded_aw.get('homegoals__sum')
+    #         out = scored - conceded
+    #     return out
+
+    def total_goal_diff_from_date(self, tm, seasn, dt):
+        team_games = self.set_of_team_games_played_before_game_date_2(tm, seasn, dt, 'No').order_by('-date')
+
+        cnt_of_all_games = team_games.count()
+        if cnt_of_all_games < 6:
+            out = 0
+        else:
+            team_games_6th_date = team_games[5].date
+            lst_hm = team_games.filter(hometeam=tm, date__gte=team_games_6th_date)
+            lst_aw = team_games.filter(awayteam=tm, date__gte=team_games_6th_date)
             scored_hm = lst_hm.aggregate(Sum('homegoals'))
             scored_aw = lst_aw.aggregate(Sum('awaygoals'))
             scored = scored_hm.get('homegoals__sum') + scored_aw.get('awaygoals__sum')
@@ -224,62 +451,215 @@ class GameManager(models.Manager):
             out = abs(sum(x) / float(len(x))) * multiplier
         return out
 
-    def elo_hist_prediction(self, hometm, awaytm, szn, gweek):
-        if gweek == 'current':
-            current_gw = self.last_gameweek(seasn=szn)[0].gameweek
-            home_r = self.get_previous_elo(tm=hometm, seasn=szn, gmwk=current_gw)
-            away_r = self.get_previous_elo(tm=awaytm, seasn=szn, gmwk=current_gw)
-            rdiff = home_r - away_r
-            draw_threshold = self.elo_draw_threshold(seasonn=szn, gamewk=current_gw)
-            if rdiff > draw_threshold:
-                prediction = "HOME"
-            elif rdiff < (draw_threshold * 2):
-                prediction = "AWAY"
-            else:
-                prediction = "DRAW"
-        elif gweek > 6:
-            home_r = self.get_previous_elo(tm=hometm, seasn=szn, gmwk=gweek)
-            away_r = self.get_previous_elo(tm=awaytm, seasn=szn, gmwk=gweek)
-            rdiff = home_r - away_r
-            # print("{}: about to run elo_draw_threshold".format(datetime.now()))
-            draw_threshold = self.elo_draw_threshold(seasonn=szn, gamewk=gweek)
-            # print("{}: ran elo_draw_threshold".format(datetime.now()))
-            if rdiff > draw_threshold:
-                prediction = "HOME"
-            elif rdiff < (draw_threshold * 2):
-                prediction = "AWAY"
-            else:
-                prediction = "DRAW"
+    def gsrs_draw_threshold_by_id(self, gameid):
+        g = self.get(id=gameid)
+        qs_wout_first_6 = self.set_of_games_played_before_game_date_optimized(gameid, 'Yes')
+        if qs_wout_first_6.count() <= 1:
+            out = 0
         else:
+            games_lst = qs_wout_first_6.order_by('-date')
+            szn = Season.objects.get(id=g.season.id)
+            num_of_teams_in_season = szn.teamstotal
+            multiplier = -num_of_teams_in_season / 2
+            x = []
+            for gm in games_lst:
+                x.append(gm.gsrs_goaldiff())
+            out = abs(sum(x) / float(games_lst.count())) * multiplier
+        return out
+
+    def gsrs_draw_threshold_by_date(self, season, dt):
+        qs_wout_first_6 = self.set_of_games_played_before_game_date_by_date_optimized(season, dt, 'Yes')
+        if qs_wout_first_6.count() <= 1:
+            out = 0
+        else:
+            games_lst = qs_wout_first_6.order_by('-date')
+            szn = Season.objects.get(id=season)
+            num_of_teams_in_season = szn.teamstotal
+            multiplier = -num_of_teams_in_season / 2
+            x = []
+            for gm in games_lst:
+                x.append(gm.gsrs_goaldiff())
+            out = abs(sum(x) / float(games_lst.count())) * multiplier
+        return out
+
+    # def elo_hist_prediction(self, hometm, awaytm, szn, gweek):
+    #     date_threshold = self.filter(hometeam=hometm, awayteam=awaytm, season=szn, gameweek=gweek)[0].date
+    #     max_gw = self.filter(season=szn, date__lte=date_threshold).order_by('-gameweek')[0].gameweek
+    #
+    #     if max_gw <= gweek:
+    #         gweek = gweek
+    #     else:
+    #         gweek = 'current'
+    #
+    #     if gweek == 'current':
+    #         current_gw = self.last_gameweek(seasn=szn)[0].gameweek
+    #         home_r = self.get_previous_elo_by_date(tm=hometm, seasn=szn, gmwk=current_gw)
+    #         away_r = self.get_previous_elo_by_date(tm=awaytm, seasn=szn, gmwk=current_gw)
+    #         rdiff = home_r - away_r
+    #         draw_threshold = self.elo_draw_threshold(seasonn=szn, gamewk=current_gw)
+    #         if rdiff > draw_threshold:
+    #             prediction = "HOME"
+    #         elif rdiff < (draw_threshold * 2):
+    #             prediction = "AWAY"
+    #         else:
+    #             prediction = "DRAW"
+    #     elif gweek > 6:
+    #         home_r = self.get_previous_elo_by_date(tm=hometm, seasn=szn, gmwk=gweek)
+    #         away_r = self.get_previous_elo_by_date(tm=awaytm, seasn=szn, gmwk=gweek)
+    #         rdiff = home_r - away_r
+    #         # print("{}: about to run elo_draw_threshold".format(datetime.now()))
+    #         draw_threshold = self.elo_draw_threshold(seasonn=szn, gamewk=gweek)
+    #         # print("{}: ran elo_draw_threshold".format(datetime.now()))
+    #         if rdiff > draw_threshold:
+    #             prediction = "HOME"
+    #         elif rdiff < (draw_threshold * 2):
+    #             prediction = "AWAY"
+    #         else:
+    #             prediction = "DRAW"
+    #     else:
+    #         prediction = "Not enough games to calculate prediction (the model needs at least 6 gameweeks)"
+    #     return prediction
+
+    def elo_hist_prediction_by_id(self, gameid):
+        g = self.get(id=gameid)
+        qshome = self.set_of_team_games_played_before_game_date_2(g.hometeam, g.season, g.date, 'No')
+        qsaway = self.set_of_team_games_played_before_game_date_2(g.awayteam, g.season, g.date, 'No')
+        cnt_home = qshome.count()
+        cnt_away = qsaway.count()
+        # if any of the teams has played less then 6 games
+        if cnt_home < 6 or cnt_away < 6:
             prediction = "Not enough games to calculate prediction (the model needs at least 6 gameweeks)"
+        else:
+            home_r = self.get_previous_elo_by_date(tm=g.hometeam, seasn=g.season, gmwk=g.gameweek)
+            away_r = self.get_previous_elo_by_date(tm=g.awayteam, seasn=g.season, gmwk=g.gameweek)
+            rdiff = home_r - away_r
+            draw_threshold = self.elo_draw_threshold_by_id(gameid)
+            if rdiff > draw_threshold:
+                prediction = "HOME"
+            elif rdiff < (draw_threshold * 2):
+                prediction = "AWAY"
+            else:
+                prediction = "DRAW"
         return prediction
 
-    def elo_l6_prediction(self, hometm, awaytm, szn, gweek):
-        if gweek == 'current':
-            current_gw = self.last_gameweek(seasn=szn)[0].gameweek
-            home_r = self.get_previous_elo(tm=hometm, seasn=szn, gmwk=current_gw) - self.get_previous_elo(tm=hometm, seasn=szn, gmwk=current_gw - 5)
-            away_r = self.get_previous_elo(tm=awaytm, seasn=szn, gmwk=current_gw) - self.get_previous_elo(tm=awaytm, seasn=szn, gmwk=current_gw - 5)
-            rdiff = home_r - away_r
-            draw_threshold = self.elol6_draw_threshold(seasonn=szn, gamewk=current_gw)
-            if rdiff > draw_threshold:
-                prediction = "HOME"
-            elif rdiff < (draw_threshold * 2):
-                prediction = "AWAY"
-            else:
-                prediction = "DRAW"
-        elif gweek > 6:
-            home_r = self.get_previous_elo(tm=hometm, seasn=szn, gmwk=gweek) - self.get_previous_elo(tm=hometm, seasn=szn, gmwk=gweek - 5)
-            away_r = self.get_previous_elo(tm=awaytm, seasn=szn, gmwk=gweek) - self.get_previous_elo(tm=awaytm, seasn=szn, gmwk=gweek - 5)
-            rdiff = home_r - away_r
-            draw_threshold = self.elol6_draw_threshold(seasonn=szn, gamewk=gweek)
-            if rdiff > draw_threshold:
-                prediction = "HOME"
-            elif rdiff < (draw_threshold * 2):
-                prediction = "AWAY"
-            else:
-                prediction = "DRAW"
-        else:
+    def elo_hist_prediction_by_date(self, home, away, season, dt, gw):
+        qshome = self.set_of_team_games_played_before_game_date_2(home, season, dt, 'No')
+        qsaway = self.set_of_team_games_played_before_game_date_2(away, season, dt, 'No')
+        cnt_home = qshome.count()
+        cnt_away = qsaway.count()
+        # if any of the teams has played less then 6 games
+        if cnt_home < 6 or cnt_away < 6:
             prediction = "Not enough games to calculate prediction (the model needs at least 6 gameweeks)"
+        else:
+            home_r = self.get_previous_elo_by_date(tm=home, seasn=season, gmwk=gw)
+            away_r = self.get_previous_elo_by_date(tm=away, seasn=season, gmwk=gw)
+            rdiff = home_r - away_r
+            draw_threshold = self.elo_draw_threshold_by_date(season, dt)
+            if rdiff > draw_threshold:
+                prediction = "HOME"
+            elif rdiff < (draw_threshold * 2):
+                prediction = "AWAY"
+            else:
+                prediction = "DRAW"
+        return prediction
+
+    # def elo_l6_prediction(self, hometm, awaytm, szn, gweek):
+    #     date_threshold = self.filter(hometeam=hometm, awayteam=awaytm, season=szn, gameweek=gweek)[0].date
+    #     max_gw = self.filter(season=szn, date__lte=date_threshold).order_by('-gameweek')[0].gameweek
+    #
+    #     if max_gw <= gweek:
+    #         gweek = gweek
+    #     else:
+    #         gweek = 'current'
+    #
+    #     if gweek == 'current':
+    #         current_gw = self.last_gameweek(seasn=szn)[0].gameweek
+    #         home_r = self.get_previous_elo_by_date(tm=hometm, seasn=szn, gmwk=current_gw) - self.get_previous_elo_by_date(tm=hometm, seasn=szn, gmwk=current_gw - 5)
+    #         away_r = self.get_previous_elo_by_date(tm=awaytm, seasn=szn, gmwk=current_gw) - self.get_previous_elo_by_date(tm=awaytm, seasn=szn, gmwk=current_gw - 5)
+    #         rdiff = home_r - away_r
+    #         draw_threshold = self.elol6_draw_threshold(seasonn=szn, gamewk=current_gw)
+    #         if rdiff > draw_threshold:
+    #             prediction = "HOME"
+    #         elif rdiff < (draw_threshold * 2):
+    #             prediction = "AWAY"
+    #         else:
+    #             prediction = "DRAW"
+    #     elif gweek > 6:
+    #         home_r = self.get_previous_elo_by_date(tm=hometm, seasn=szn, gmwk=gweek) - self.get_previous_elo_by_date(tm=hometm, seasn=szn, gmwk=gweek - 5)
+    #         away_r = self.get_previous_elo_by_date(tm=awaytm, seasn=szn, gmwk=gweek) - self.get_previous_elo_by_date(tm=awaytm, seasn=szn, gmwk=gweek - 5)
+    #         rdiff = home_r - away_r
+    #         draw_threshold = self.elol6_draw_threshold(seasonn=szn, gamewk=gweek)
+    #         if rdiff > draw_threshold:
+    #             prediction = "HOME"
+    #         elif rdiff < (draw_threshold * 2):
+    #             prediction = "AWAY"
+    #         else:
+    #             prediction = "DRAW"
+    #     else:
+    #         prediction = "Not enough games to calculate prediction (the model needs at least 6 gameweeks)"
+    #     return prediction
+
+    def elo_l6_prediction_by_id(self, gameid):
+        g = self.get(id=gameid)
+        # qshome = self.filter(Q(hometeam=g.hometeam, season=g.season, date__lt=g.date) | Q(awayteam=g.hometeam, season=g.season, date__lt=g.date)).order_by('-date')
+        qshome = self.set_of_team_games_played_before_game_date_2(g.hometeam, g.season, g.date, 'No')
+        qsaway = self.set_of_team_games_played_before_game_date_2(g.awayteam, g.season, g.date, 'No')
+        # qs = self.set_of_games_played_before_game_date(gameid, 'No')
+        # finds the max gameweek from qs so it can use that for draw threshold
+        # gw_for_draw_threshold = qs.order_by('-gameweek')[0].gameweek
+        cnt_home = qshome.count()
+        cnt_away = qsaway.count()
+        # if any of the teams has played less then 6 games
+        if cnt_home < 6 or cnt_away < 6:
+            prediction = "Not enough games to calculate prediction (the model needs at least 6 gameweeks)"
+        else:
+            home_r = self.get_previous_elo_by_date(tm=g.hometeam, seasn=g.season, gmwk=g.gameweek) - self.get_previous_elo_from_lookback_by_date(g.hometeam, g.season, g.date, 6)
+            away_r = self.get_previous_elo_by_date(tm=g.awayteam, seasn=g.season, gmwk=g.gameweek) - self.get_previous_elo_from_lookback_by_date(g.awayteam, g.season, g.date, 6)
+            rdiff = home_r - away_r
+            draw_threshold = self.elol6_draw_threshold_by_id(gameid)
+            if rdiff > draw_threshold:
+                prediction = "HOME"
+            elif rdiff < (draw_threshold * 2):
+                prediction = "AWAY"
+            else:
+                prediction = "DRAW"
+        return prediction
+
+    def elo_l6_prediction_by_date(self, home, away, season, dt, gw):
+        # qshome = self.filter(Q(hometeam=g.hometeam, season=g.season, date__lt=g.date) | Q(awayteam=g.hometeam, season=g.season, date__lt=g.date)).order_by('-date')
+        # t1 = datetime.now()
+        qshome = self.set_of_team_games_played_before_game_date_2(home, season, dt, 'No')
+        qsaway = self.set_of_team_games_played_before_game_date_2(away, season, dt, 'No')
+        # t2 = datetime.now()
+        # t3 = (t2 - t1).total_seconds()
+        # print('qshome and qsaway:', t3)
+        # qs = self.set_of_games_played_before_game_date(gameid, 'No')
+        # finds the max gameweek from qs so it can use that for draw threshold
+        # gw_for_draw_threshold = qs.order_by('-gameweek')[0].gameweek
+        cnt_home = qshome.count()
+        cnt_away = qsaway.count()
+        # if any of the teams has played less then 6 games
+        if cnt_home < 6 or cnt_away < 6:
+            prediction = "Not enough games to calculate prediction (the model needs at least 6 gameweeks)"
+        else:
+            # t1 = datetime.now()
+            home_r = self.get_previous_elo_by_date(tm=home, seasn=season, gmwk=gw) - self.get_previous_elo_from_lookback_by_date(home, season, dt, 6)
+            away_r = self.get_previous_elo_by_date(tm=away, seasn=season, gmwk=gw) - self.get_previous_elo_from_lookback_by_date(away, season, dt, 6)
+            # t2 = datetime.now()
+            # t3 = (t2 - t1).total_seconds()
+            # print('get previous elo and from lookback:', t3)
+            rdiff = home_r - away_r
+            # t1 = datetime.now()
+            draw_threshold = self.elol6_draw_threshold_by_date(season, dt)
+            # t2 = datetime.now()
+            # t3 = (t2 - t1).total_seconds()
+            # print('elol6_draw_threshold:', t3)
+            if rdiff > draw_threshold:
+                prediction = "HOME"
+            elif rdiff < (draw_threshold * 2):
+                prediction = "AWAY"
+            else:
+                prediction = "DRAW"
         return prediction
 
     def gsrs_prediction(self, hm, aw, sn, gmwkk):
@@ -318,41 +698,293 @@ class GameManager(models.Manager):
             prediction = "Not enough games to calculate prediction (the model needs at least 6 gameweeks)"
         return prediction
 
-    def team_form(self, team, szn, gmwk):
+    def gsrs_prediction_by_id(self, gameid):
+        g = self.get(id=gameid)
+        # qshome = self.filter(Q(hometeam=g.hometeam, season=g.season, date__lt=g.date) | Q(awayteam=g.hometeam, season=g.season, date__lt=g.date)).order_by('-date')
+        qshome = self.set_of_team_games_played_before_game_date_2(g.hometeam, g.season, g.date, 'No')
+        qsaway = self.set_of_team_games_played_before_game_date_2(g.awayteam, g.season, g.date, 'No')
+        cnt_home = qshome.count()
+        cnt_away = qsaway.count()
+        # if any of the teams has played less then 6 games
+        if cnt_home < 6 or cnt_away < 6:
+            prediction = "Not enough games to calculate prediction (the model needs at least 6 gameweeks)"
+        else:
+            # hm_hmdiff = self.filter(hometeam=g.hometeam, season=g.season, date__lt=g.date).order_by('-date')[0:6].aggregate(hm_hmdiffsum=Sum(F('homegoals') - F('awaygoals')))
+            # hm_awdiff = self.filter(awayteam=g.hometeam, season=g.season, date__lt=g.date).order_by('-date')[0:6].aggregate(hm_awdiffsum=Sum(F('awaygoals') - F('homegoals')))
+            # aw_hmdiff = self.filter(hometeam=g.awayteam, season=g.season, date__lt=g.date).order_by('-date')[0:6].aggregate(aw_hmdiffsum=Sum(F('homegoals') - F('awaygoals')))
+            # aw_awdiff = self.filter(awayteam=g.awayteam, season=g.season, date__lt=g.date).order_by('-date')[0:6].aggregate(aw_awdiffsum=Sum(F('awaygoals') - F('homegoals')))
+            hometm_6thgame = qshome.order_by('-date')[5].date
+            awaytmtm_6thgame = qsaway.order_by('-date')[5].date
+            hm_hmdiff = self.filter(hometeam=g.hometeam, season=g.season, date__lt=g.date, date__gte=hometm_6thgame).order_by('-date').aggregate(hm_hmdiffsum=Sum(F('homegoals') - F('awaygoals')))
+            hm_awdiff = self.filter(awayteam=g.hometeam, season=g.season, date__lt=g.date, date__gte=hometm_6thgame).order_by('-date').aggregate(hm_awdiffsum=Sum(F('awaygoals') - F('homegoals')))
+            aw_hmdiff = self.filter(hometeam=g.awayteam, season=g.season, date__lt=g.date, date__gte=awaytmtm_6thgame).order_by('-date').aggregate(aw_hmdiffsum=Sum(F('homegoals') - F('awaygoals')))
+            aw_awdiff = self.filter(awayteam=g.awayteam, season=g.season, date__lt=g.date, date__gte=awaytmtm_6thgame).order_by('-date').aggregate(aw_awdiffsum=Sum(F('awaygoals') - F('homegoals')))
+            home_rating = hm_hmdiff.get('hm_hmdiffsum') + hm_awdiff.get('hm_awdiffsum')
+            away_rating = aw_hmdiff.get('aw_hmdiffsum') + aw_awdiff.get('aw_awdiffsum')
+            match_rating = home_rating - away_rating
+            draw_threshold = self.gsrs_draw_threshold_by_id(gameid)
+            if match_rating > draw_threshold:
+                prediction = "HOME"
+            elif match_rating < (draw_threshold * 2):
+                prediction = "AWAY"
+            else:
+                prediction = "DRAW"
+        return prediction
+
+    def gsrs_prediction_by_date(self, home, away, season, dt):
+        # qshome = self.filter(Q(hometeam=g.hometeam, season=g.season, date__lt=g.date) | Q(awayteam=g.hometeam, season=g.season, date__lt=g.date)).order_by('-date')
+        qshome = self.set_of_team_games_played_before_game_date_2(home, season, dt, 'No')
+        qsaway = self.set_of_team_games_played_before_game_date_2(away, season, dt, 'No')
+        cnt_home = qshome.count()
+        cnt_away = qsaway.count()
+        # if any of the teams has played less then 6 games
+        if cnt_home < 6 or cnt_away < 6:
+            prediction = "Not enough games to calculate prediction (the model needs at least 6 gameweeks)"
+        else:
+            hometm_6thgame = qshome.order_by('-date')[5].date
+            awaytmtm_6thgame = qsaway.order_by('-date')[5].date
+            hm_hmdiff = self.filter(hometeam=home, season=season, date__lt=dt, date__gte=hometm_6thgame).order_by('-date').aggregate(hm_hmdiffsum=Sum(F('homegoals') - F('awaygoals')))
+            hm_awdiff = self.filter(awayteam=home, season=season, date__lt=dt, date__gte=hometm_6thgame).order_by('-date').aggregate(hm_awdiffsum=Sum(F('awaygoals') - F('homegoals')))
+            aw_hmdiff = self.filter(hometeam=away, season=season, date__lt=dt, date__gte=awaytmtm_6thgame).order_by('-date').aggregate(aw_hmdiffsum=Sum(F('homegoals') - F('awaygoals')))
+            aw_awdiff = self.filter(awayteam=away, season=season, date__lt=dt, date__gte=awaytmtm_6thgame).order_by('-date').aggregate(aw_awdiffsum=Sum(F('awaygoals') - F('homegoals')))
+            # hm_hmdiff = self.filter(hometeam=home, season=season, date__lt=dt).order_by('-date')[0:6].aggregate(hm_hmdiffsum=Sum(F('homegoals') - F('awaygoals')))
+            # hm_awdiff = self.filter(awayteam=home, season=season, date__lt=dt).order_by('-date')[0:6].aggregate(hm_awdiffsum=Sum(F('awaygoals') - F('homegoals')))
+            # aw_hmdiff = self.filter(hometeam=away, season=season, date__lt=dt).order_by('-date')[0:6].aggregate(aw_hmdiffsum=Sum(F('homegoals') - F('awaygoals')))
+            # aw_awdiff = self.filter(awayteam=away, season=season, date__lt=dt).order_by('-date')[0:6].aggregate(aw_awdiffsum=Sum(F('awaygoals') - F('homegoals')))
+            home_rating = hm_hmdiff.get('hm_hmdiffsum') + hm_awdiff.get('hm_awdiffsum')
+            away_rating = aw_hmdiff.get('aw_hmdiffsum') + aw_awdiff.get('aw_awdiffsum')
+            match_rating = home_rating - away_rating
+            draw_threshold = self.gsrs_draw_threshold_by_date(season, dt)
+            if match_rating > draw_threshold:
+                prediction = "HOME"
+            elif match_rating < (draw_threshold * 2):
+                prediction = "AWAY"
+            else:
+                prediction = "DRAW"
+        return prediction
+
+    # def team_form(self, team, szn, gmwk):
+    #     x = ""
+    #     if gmwk < 1:
+    #         return x
+    #     else:
+    #         lst = self.get(Q(hometeam=team, season=szn, gameweek=gmwk) | Q(awayteam=team, season=szn, gameweek=gmwk))
+    #         if lst.hometeam == team:
+    #             if lst.result == 'HOME':
+    #                 x = "W"
+    #             elif lst.result == 'AWAY':
+    #                 x = "L"
+    #             elif lst.result == 'DRAW':
+    #                 x = "D"
+    #             else:
+    #                 x = lst.game_status
+    #         elif lst.awayteam == team:
+    #             if lst.result == 'HOME':
+    #                 x = "L"
+    #             elif lst.result == 'AWAY':
+    #                 x = "W"
+    #             elif lst.result == 'DRAW':
+    #                 x = "D"
+    #             else:
+    #                 x = lst.game_status
+    #         else:
+    #             x = ""
+    #     return x
+
+    def team_form_by_date(self, team, szn, gmwk):
         x = ""
-        if gmwk < 1:
+        lst = self.get(Q(hometeam=team, season=szn, gameweek=gmwk) | Q(awayteam=team, season=szn, gameweek=gmwk))
+        lstdate = lst.date
+        gid = self.filter(Q(hometeam=team, season=szn, date__lte=lstdate, game_status='OK') | Q(awayteam=team, season=szn, date__lte=lstdate, game_status='OK')).order_by('-date')[0].id
+        gm = self.get(id=gid)
+        # gid = lst.id
+        cnt = self.set_of_team_games_played_upto_game_date(team, gid, 'No').count()
+        if cnt < 1:
             return x
         else:
-            lst = self.get(Q(hometeam=team, season=szn, gameweek=gmwk) | Q(awayteam=team, season=szn, gameweek=gmwk))
-            if lst.hometeam == team:
-                if lst.result == 'HOME':
+
+            if gm.hometeam == team:
+                if gm.result == 'HOME':
                     x = "W"
-                elif lst.result == 'AWAY':
+                elif gm.result == 'AWAY':
                     x = "L"
-                elif lst.result == 'DRAW':
+                elif gm.result == 'DRAW':
                     x = "D"
                 else:
-                    x = lst.game_status
-            elif lst.awayteam == team:
-                if lst.result == 'HOME':
+                    x = gm.game_status
+            elif gm.awayteam == team:
+                if gm.result == 'HOME':
                     x = "L"
-                elif lst.result == 'AWAY':
+                elif gm.result == 'AWAY':
                     x = "W"
-                elif lst.result == 'DRAW':
+                elif gm.result == 'DRAW':
                     x = "D"
                 else:
-                    x = lst.game_status
+                    x = gm.game_status
             else:
                 x = ""
         return x
 
+    # returns a dictionary with the last 6 games form (ordered by the date of the games not the gameweek)
+    def team_form_list_by_date(self, team, sid, dt):
+        x = []
+        tmgames = (self
+                   .select_related('hometeam', 'awayteam')
+                   .filter(Q(hometeam=team, season=sid, date__lte=dt, game_status='OK') | Q(awayteam=team, season=sid, date__lte=dt, game_status='OK'))
+                   .order_by('-date'))[0:6]
+        if tmgames.count() < 1:
+            pass
+        else:
+            for gm in tmgames:
+                if gm.hometeam == team:
+                    x.append(gm.hm_result)
+                else:
+                    x.append(gm.aw_result)
+        return x
+
+    def team_form_tooltip_by_date(self, team, sid, dt):
+        x = []
+        tmgames = (self
+                   .select_related('hometeam', 'awayteam')
+                   .filter(Q(hometeam=team, season=sid, date__lte=dt, game_status='OK') | Q(awayteam=team, season=sid, date__lte=dt, game_status='OK'))
+                   .order_by('-date'))[0:6]
+        if tmgames.count() < 1:
+            pass
+        else:
+            for gm in tmgames:
+                x.append(str(gm.hometeam) + ' - ' + str(gm.awayteam) + ' (' + str(gm.homegoals) + '-' + str(gm.awaygoals) + ')')
+        return x
+
+    # returns a list of pairs of form and tooltip
+    def team_form_tooltip_joined_by_date(self, team, sid, dt):
+        x = [['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', '']]
+        frm = self.team_form_list_by_date(team, sid, dt)
+        tltp = self.team_form_tooltip_by_date(team, sid, dt)
+        cnt = 0
+        for pair in frm:
+            x[cnt] = [pair, tltp[cnt]]
+            cnt += 1
+        return x
+
     def last_gameweek_played(self, team, seazn):
-        qry = self.filter(Q(hometeam=team, season=seazn) | Q(awayteam=team, season=seazn)).exclude(result__exact='').exclude(result__isnull=True).order_by('-gameweek')
+        qry = self.filter(Q(hometeam=team, season=seazn) | Q(awayteam=team, season=seazn)).exclude(result__exact='').exclude(result__isnull=True).order_by('-date')
         last_gameweek = qry[0].gameweek
         return last_gameweek
 
-    def team_total_wins(self, team, seazn, gw):
-        qryset = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw))
+    # returns the date of the most recent match played for the given team
+    def last_date_played(self, team, seazn):
+        qry = self.filter(Q(hometeam=team, season=seazn) | Q(awayteam=team, season=seazn)).exclude(result__exact='').exclude(result__isnull=True).order_by('-date')
+        last_gameweek = qry[0].date
+        return last_gameweek
+
+    # returns a queryset of all games played before the given date and excluding the current gameweek if it's the last
+    def set_of_games_played_before_game_date(self, gameid, exclude_first_6_games):
+        g = Game.objects.get(id=gameid)
+        lastgw = Game.objects.last_gameweek(g.season)[0].gameweek
+        if g.gameweek == lastgw:
+            if exclude_first_6_games == 'No':
+                qry = self.filter(season=g.season, date__lt=g.date).exclude(gameweek=g.gameweek).order_by('-date')
+            else:
+                qry = self.filter(season=g.season, date__lt=g.date).exclude(gameweek=g.gameweek).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).order_by('-date')
+        # if the game is postponed and has been played later
+        else:
+            if exclude_first_6_games == 'No':
+                qry = self.filter(season=g.season, date__lt=g.date).order_by('-date')
+            else:
+                qry = self.filter(season=g.season, date__lt=g.date).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).order_by('-date')
+        return qry
+
+    # returns a queryset of all games played before the given date and excluding the current gameweek
+    def set_of_games_played_before_game_date_optimized(self, gameid, exclude_first_6_games):
+        g = Game.objects.get(id=gameid)
+        if exclude_first_6_games == 'No':
+            qry = self.filter(season=g.season, date__lt=g.date).exclude(gameweek=g.gameweek).order_by('-date')
+        else:
+            qry = self.filter(season=g.season, date__lt=g.date).exclude(gameweek=g.gameweek).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).order_by('-date')
+        return qry
+
+    # same as above but given more arguments
+    def set_of_games_played_before_game_date_by_date(self, season, dt, exclude_first_6_games):
+        lastgw = Game.objects.last_gameweek(season)[0].gameweek
+        gw = Game.objects.filter(season=season, date__lte=dt).order_by('-date')[0].gameweek
+        if gw == lastgw:
+            if exclude_first_6_games == 'No':
+                qry = self.filter(season=season, date__lt=dt).exclude(gameweek=gw).order_by('-date')
+            else:
+                qry = self.filter(season=season, date__lt=dt).exclude(gameweek=gw).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).order_by('-date')
+        # if the game is postponed and has been played later
+        else:
+            if exclude_first_6_games == 'No':
+                qry = self.filter(season=season, date__lt=dt).order_by('-date')
+            else:
+                qry = self.filter(season=season, date__lt=dt).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).order_by('-date')
+        return qry
+
+    def set_of_games_played_before_game_date_by_date_optimized(self, season, dt, exclude_first_6_games):
+        gw = Game.objects.filter(season=season, date__lte=dt).order_by('-date')[0].gameweek
+        if exclude_first_6_games == 'No':
+            qry = self.filter(season=season, date__lt=dt).exclude(gameweek=gw).order_by('-date')
+        else:
+            qry = self.filter(season=season, date__lt=dt).exclude(gameweek=gw).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).order_by('-date')
+        return qry
+
+    # returns a queryset of all games played by the given team before the given date
+    def set_of_team_games_played_before_game_date(self, team, gameid, exclude_first_6_games):
+        g = Game.objects.get(id=gameid)
+        if exclude_first_6_games == 'No':
+            qry = self.filter(Q(hometeam=team, season=g.season, date__lt=g.date, result__gte=0) | Q(awayteam=team, season=g.season, date__lt=g.date, result__gte=0)).order_by('-date')
+        else:
+            qry = self.filter(Q(hometeam=team, season=g.season, date__lt=g.date, result__gte=0) | Q(awayteam=team, season=g.season, date__lt=g.date, result__gte=0)).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).order_by('-date')
+        return qry
+
+    # same as above but accepts more variables
+    def set_of_team_games_played_before_game_date_2(self, team, season, dt, exclude_first_6_games):
+        if exclude_first_6_games == 'No':
+            qry = self.filter(Q(hometeam=team, season=season, date__lt=dt, result__gte=0) | Q(awayteam=team, season=season, date__lt=dt, result__gte=0)).order_by('-date')
+        else:
+            qry = self.filter(Q(hometeam=team, season=season, date__lt=dt, result__gte=0) | Q(awayteam=team, season=season, date__lt=dt, result__gte=0)).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).order_by('-date')
+        return qry
+
+    # returns a queryset of all games played by the given team up to and including the given date
+    def set_of_team_games_played_upto_game_date(self, team, gameid, exclude_first_6_games):
+        g = Game.objects.get(id=gameid)
+        if exclude_first_6_games == 'No':
+            qry = self.filter(Q(hometeam=team, season=g.season, date__lte=g.date, result__gte=0) | Q(awayteam=team, season=g.season, date__lte=g.date, result__gte=0)).order_by('-date')
+        else:
+            qry = self.filter(Q(hometeam=team, season=g.season, date__lte=g.date, result__gte=0) | Q(awayteam=team, season=g.season, date__lte=g.date, result__gte=0)).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).order_by('-date')
+        return qry
+
+    # returns the total number of games played by the team in the given season
+    def team_total_season_matches(self, tm, sn):
+        qry = self.filter(Q(season=sn, hometeam=tm, result__gte=0) | Q(season=sn, awayteam=tm, result__gte=0))
+        gms = qry.count()
+        return gms
+
+    # returns Yes if this is the first game of the given team and No if it's not
+    def is_first_game(self, tm, sn, dt):
+        qry = self.filter(Q(season=sn, hometeam=tm, date__lt=dt) | Q(season=sn, awayteam=tm, date__lt=dt))
+        gms = qry.count()
+        if gms < 1:
+            is_first = 'Yes'
+        else:
+            is_first = 'No'
+        return is_first
+
+    # def team_total_wins(self, team, seazn, gw):
+    #     qryset = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw))
+    #     total_wins = 0
+    #     for g in qryset:
+    #         if g.hometeam == team:
+    #             if g.result == 'HOME':
+    #                 total_wins += 1
+    #         elif g.awayteam == team:
+    #             if g.result == 'AWAY':
+    #                 total_wins += 1
+    #     return total_wins
+
+    def team_total_wins_by_date(self, team, seazn, gw):
+        gm = self.filter(Q(hometeam=team, season=seazn, gameweek=gw) | Q(awayteam=team, season=seazn, gameweek=gw))[0].id
+        qryset = self.set_of_team_games_played_upto_game_date(team, gm, 'No')
         total_wins = 0
         for g in qryset:
             if g.hometeam == team:
@@ -363,8 +995,38 @@ class GameManager(models.Manager):
                     total_wins += 1
         return total_wins
 
-    def team_total_losses(self, team, seazn, gw):
-        qryset = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw))
+    def team_total_wins_by_date_optimized(self, team, sid, dt):
+        wins_at_home = self.filter(Q(hometeam=team, season=sid, date__lte=dt, hm_result='W') | Q(awayteam=team, season=sid, date__lte=dt, aw_result='W')).count()
+        return wins_at_home
+
+    def team_total_wins_by_date_ex_current(self, team, seazn, gw):
+        gm = self.filter(Q(hometeam=team, season=seazn, gameweek=gw) | Q(awayteam=team, season=seazn, gameweek=gw))[0].id
+        qryset = self.set_of_team_games_played_before_game_date(team, gm, 'No')
+        total_wins = 0
+        for g in qryset:
+            if g.hometeam == team:
+                if g.result == 'HOME':
+                    total_wins += 1
+            elif g.awayteam == team:
+                if g.result == 'AWAY':
+                    total_wins += 1
+        return total_wins
+
+    # def team_total_losses(self, team, seazn, gw):
+    #     qryset = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw))
+    #     total_losses = 0
+    #     for g in qryset:
+    #         if g.hometeam == team:
+    #             if g.result == 'AWAY':
+    #                 total_losses += 1
+    #         elif g.awayteam == team:
+    #             if g.result == 'HOME':
+    #                 total_losses += 1
+    #     return total_losses
+
+    def team_total_losses_by_date(self, team, seazn, gw):
+        gm = self.filter(Q(hometeam=team, season=seazn, gameweek=gw) | Q(awayteam=team, season=seazn, gameweek=gw))[0].id
+        qryset = self.set_of_team_games_played_upto_game_date(team, gm, 'No')
         total_losses = 0
         for g in qryset:
             if g.hometeam == team:
@@ -375,16 +1037,68 @@ class GameManager(models.Manager):
                     total_losses += 1
         return total_losses
 
-    def team_total_draws(self, team, seazn, gw):
-        qryset = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw))
+    def team_total_losses_by_date_optimized(self, team, sid, dt):
+        losses_at_home = self.filter(Q(hometeam=team, season=sid, date__lte=dt, hm_result='L') | Q(awayteam=team, season=sid, date__lte=dt, aw_result='L')).count()
+        return losses_at_home
+
+    def team_total_losses_by_date_ex_current(self, team, seazn, gw):
+        gm = self.filter(Q(hometeam=team, season=seazn, gameweek=gw) | Q(awayteam=team, season=seazn, gameweek=gw))[0].id
+        qryset = self.set_of_team_games_played_before_game_date(team, gm, 'No')
+        total_losses = 0
+        for g in qryset:
+            if g.hometeam == team:
+                if g.result == 'AWAY':
+                    total_losses += 1
+            elif g.awayteam == team:
+                if g.result == 'HOME':
+                    total_losses += 1
+        return total_losses
+
+    # def team_total_draws(self, team, seazn, gw):
+    #     qryset = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw))
+    #     total_draws = 0
+    #     for g in qryset:
+    #         if g.result == 'DRAW':
+    #             total_draws += 1
+    #     return total_draws
+
+    def team_total_draws_by_date(self, team, seazn, gw):
+        gm = self.filter(Q(hometeam=team, season=seazn, gameweek=gw) | Q(awayteam=team, season=seazn, gameweek=gw))[0].id
+        qryset = self.set_of_team_games_played_upto_game_date(team, gm, 'No')
         total_draws = 0
         for g in qryset:
             if g.result == 'DRAW':
                 total_draws += 1
         return total_draws
 
-    def team_total_goals_scored(self, team, seazn, gw):
-        qryset = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw)).exclude(result__exact='').exclude(result__isnull=True)
+    def team_total_draws_by_date_optimized(self, team, sid, dt):
+        draws_at_home = self.filter(Q(hometeam=team, season=sid, date__lte=dt, hm_result='D') | Q(awayteam=team, season=sid, date__lte=dt, aw_result='D')).count()
+        return draws_at_home
+
+    def team_total_draws_by_date_ex_current(self, team, seazn, gw):
+        gm = self.filter(Q(hometeam=team, season=seazn, gameweek=gw) | Q(awayteam=team, season=seazn, gameweek=gw))[0].id
+        qryset = self.set_of_team_games_played_before_game_date(team, gm, 'No')
+        total_draws = 0
+        for g in qryset:
+            if g.result == 'DRAW':
+                total_draws += 1
+        return total_draws
+
+    # def team_total_goals_scored(self, team, seazn, gw):
+    #     qryset = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw)).exclude(result__exact='').exclude(result__isnull=True)
+    #     total_homegoals = 0
+    #     total_awaygoals = 0
+    #     for g in qryset:
+    #         if g.hometeam == team:
+    #             total_homegoals += g.homegoals
+    #         elif g.awayteam == team:
+    #             total_awaygoals += g.awaygoals
+    #     return total_homegoals + total_awaygoals
+
+    def team_total_goals_scored_by_date(self, team, seazn, gw):
+        # qryset = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw)).exclude(result__exact='').exclude(result__isnull=True)
+        gm = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw)).order_by('-date')[0].id
+        qryset = self.set_of_team_games_played_upto_game_date(team, gm, 'No').exclude(result__exact='').exclude(result__isnull=True)
         total_homegoals = 0
         total_awaygoals = 0
         for g in qryset:
@@ -394,8 +1108,45 @@ class GameManager(models.Manager):
                 total_awaygoals += g.awaygoals
         return total_homegoals + total_awaygoals
 
-    def team_total_goals_conceded(self, team, seazn, gw):
-        qryset = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw)).exclude(result__exact='').exclude(result__isnull=True)
+    def team_total_goals_scored_by_date_ex_current(self, team, seazn, gw):
+        # qryset = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw)).exclude(result__exact='').exclude(result__isnull=True)
+        gm = self.filter(Q(hometeam=team, season=seazn, gameweek=gw) | Q(awayteam=team, season=seazn, gameweek=gw))[0].id
+        qryset = self.set_of_team_games_played_before_game_date(team, gm, 'No').exclude(result__exact='').exclude(result__isnull=True)
+        total_homegoals = 0
+        total_awaygoals = 0
+        for g in qryset:
+            if g.hometeam == team:
+                total_homegoals += g.homegoals
+            elif g.awayteam == team:
+                total_awaygoals += g.awaygoals
+        return total_homegoals + total_awaygoals
+
+    # def team_total_goals_conceded(self, team, seazn, gw):
+    #     qryset = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw)).exclude(result__exact='').exclude(result__isnull=True)
+    #     total_homegoals = 0
+    #     total_awaygoals = 0
+    #     for g in qryset:
+    #         if g.hometeam == team:
+    #             total_homegoals += g.awaygoals
+    #         elif g.awayteam == team:
+    #             total_awaygoals += g.homegoals
+    #     return total_homegoals + total_awaygoals
+
+    def team_total_goals_conceded_by_date(self, team, seazn, gw):
+        gm = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw)).order_by('-date')[0].id
+        qryset = self.set_of_team_games_played_upto_game_date(team, gm, 'No').exclude(result__exact='').exclude(result__isnull=True)
+        total_homegoals = 0
+        total_awaygoals = 0
+        for g in qryset:
+            if g.hometeam == team:
+                total_homegoals += g.awaygoals
+            elif g.awayteam == team:
+                total_awaygoals += g.homegoals
+        return total_homegoals + total_awaygoals
+
+    def team_total_goals_conceded_by_date_ex_current(self, team, seazn, gw):
+        gm = self.filter(Q(hometeam=team, season=seazn, gameweek=gw) | Q(awayteam=team, season=seazn, gameweek=gw))[0].id
+        qryset = self.set_of_team_games_played_before_game_date(team, gm, 'No').exclude(result__exact='').exclude(result__isnull=True)
         total_homegoals = 0
         total_awaygoals = 0
         for g in qryset:
@@ -406,31 +1157,48 @@ class GameManager(models.Manager):
         return total_homegoals + total_awaygoals
 
     # total points won/lost by a team at home
-    def team_total_home_points(self, team, sz, gmwk):
-        qset = self.filter(hometeam=team, season=sz, gameweek__lt=gmwk).order_by('gameweek')
+    # def team_total_home_points(self, team, sz, gmwk):
+    #     qset = self.filter(hometeam=team, season=sz, gameweek__lt=gmwk).order_by('gameweek')
+    #     points = 0.0
+    #     if gmwk == 1:
+    #             points = elosettings.STARTING_POINTS - self.get_previous_elo_by_date(team, sz, gmwk)
+    #     else:
+    #         for gm in qset:
+    #             if gm.gameweek == 1:
+    #                 points += gm.elo_rating_home - elosettings.STARTING_POINTS
+    #             else:
+    #                 points += gm.elo_rating_home - gm.elo_rating_home_previous_week
+    #     return points
+
+    # total points won/lost by a team at home
+    def team_total_home_points_by_date(self, team, sz, gmwk):
+        gmdate = self.filter(Q(hometeam=team, season=sz, gameweek=gmwk) | Q(awayteam=team, season=sz, gameweek=gmwk))[0].date
+        qset = self.filter(hometeam=team, season=sz, date__lt=gmdate).order_by('date')
         points = 0.0
-        if gmwk == 1:
-                points = elosettings.STARTING_POINTS - self.get_previous_elo(team, sz, gmwk)
-        else:
-            for gm in qset:
-                if gm.gameweek == 1:
-                    points += gm.elo_rating_home - elosettings.STARTING_POINTS
-                else:
-                    points += gm.elo_rating_home - self.get_previous_elo(team, sz, gm.gameweek)
+        for gm in qset:
+                points += gm.elo_rating_home - gm.elo_rating_home_previous_week
         return points
 
     # total points won/lost by a team away
-    def team_total_away_points(self, team, sz, gmwk):
-        qset = self.filter(awayteam=team, season=sz, gameweek__lt=gmwk).order_by('gameweek')
+    # def team_total_away_points(self, team, sz, gmwk):
+    #     qset = self.filter(awayteam=team, season=sz, gameweek__lt=gmwk).order_by('gameweek')
+    #     points = 0.0
+    #     if gmwk == 1:
+    #             points = elosettings.STARTING_POINTS - self.get_previous_elo_by_date(team, sz, gmwk)
+    #     else:
+    #         for gm in qset:
+    #             if gm.gameweek == 1:
+    #                 points += gm.elo_rating_away - elosettings.STARTING_POINTS
+    #             else:
+    #                 points += gm.elo_rating_away - gm.elo_rating_away_previous_week
+    #     return points
+
+    def team_total_away_points_by_date(self, team, sz, gmwk):
+        gmdate = self.filter(Q(hometeam=team, season=sz, gameweek=gmwk) | Q(awayteam=team, season=sz, gameweek=gmwk))[0].date
+        qset = self.filter(awayteam=team, season=sz, date__lt=gmdate).order_by('date')
         points = 0.0
-        if gmwk == 1:
-                points = elosettings.STARTING_POINTS - self.get_previous_elo(team, sz, gmwk)
-        else:
-            for gm in qset:
-                if gm.gameweek == 1:
-                    points += gm.elo_rating_away - elosettings.STARTING_POINTS
-                else:
-                    points += gm.elo_rating_away - self.get_previous_elo(team, sz, gm.gameweek)
+        for gm in qset:
+                points += gm.elo_rating_away - gm.elo_rating_away_previous_week
         return points
 
     # total games played for the given season
@@ -440,7 +1208,8 @@ class GameManager(models.Manager):
 
     # total games that will be played for the given season
     def total_season_games(self, seasonn):
-        games_per_gameweek = self.filter(season=seasonn, gameweek=1).count()
+        # games_per_gameweek = self.filter(season=seasonn, gameweek=1).count()
+        games_per_gameweek = Season.objects.get(id=seasonn).teamstotal / 2
         ttl_teams = games_per_gameweek * 2
         ttl_gameweeks = (ttl_teams - 1) * 2
         ttl_games = ttl_gameweeks * games_per_gameweek
@@ -478,6 +1247,15 @@ class GameManager(models.Manager):
                 cntr += 1
         return cntr
 
+    def over_one_half_optimized(self, seasonn):
+        cnt = (self
+               .filter(season=seasonn)
+               .exclude(result__exact='').exclude(result__isnull=True)
+               .annotate(diff=Sum(F('homegoals') + F('awaygoals')))
+               .filter(diff__gte=1.5)
+               .count())
+        return cnt
+
     def over_two_half(self, seasonn):
         qrset = self.filter(season=seasonn).exclude(result__exact='').exclude(result__isnull=True).annotate(diff=Sum(F('homegoals') + F('awaygoals')))
         cntr = 0
@@ -485,6 +1263,15 @@ class GameManager(models.Manager):
             if itemm.diff > 2:
                 cntr += 1
         return cntr
+
+    def over_two_half_optimized(self, seasonn):
+        cnt = (self
+               .filter(season=seasonn)
+               .exclude(result__exact='').exclude(result__isnull=True)
+               .annotate(diff=Sum(F('homegoals') + F('awaygoals')))
+               .filter(diff__gte=2.5)
+               .count())
+        return cnt
 
     def over_three_half(self, seasonn):
         qrset = self.filter(season=seasonn).exclude(result__exact='').exclude(result__isnull=True).annotate(diff=Sum(F('homegoals') + F('awaygoals')))
@@ -494,8 +1281,28 @@ class GameManager(models.Manager):
                 cntr += 1
         return cntr
 
-    def team_total_cleansheets(self, team, seasonn, gwk):
-        qrst = self.filter(Q(hometeam=team, season=seasonn, gameweek__lt=gwk) | Q(awayteam=team, season=seasonn, gameweek__lt=gwk))
+    def over_three_half_optimized(self, seasonn):
+        cnt = (self
+               .filter(season=seasonn)
+               .exclude(result__exact='').exclude(result__isnull=True)
+               .annotate(diff=Sum(F('homegoals') + F('awaygoals')))
+               .filter(diff__gte=3.5)
+               .count())
+        return cnt
+
+    # def team_total_cleansheets(self, team, seasonn, gwk):
+    #     qrst = self.filter(Q(hometeam=team, season=seasonn, gameweek__lt=gwk) | Q(awayteam=team, season=seasonn, gameweek__lt=gwk))
+    #     qrst_clean = qrst.exclude(result__exact='').exclude(result__isnull=True)
+    #     cnt = 0
+    #     for gm in qrst_clean:
+    #         if gm.hometeam == team and gm.awaygoals == 0:
+    #             cnt += 1
+    #         if gm.awayteam == team and gm.homegoals == 0:
+    #             cnt += 1
+    #     return cnt
+
+    def team_total_cleansheets_by_date(self, team, seasonn, dt):
+        qrst = self.filter(Q(hometeam=team, season=seasonn, date__lt=dt) | Q(awayteam=team, season=seasonn, date__lt=dt))
         qrst_clean = qrst.exclude(result__exact='').exclude(result__isnull=True)
         cnt = 0
         for gm in qrst_clean:
@@ -505,8 +1312,19 @@ class GameManager(models.Manager):
                 cnt += 1
         return cnt
 
-    def team_total_failedtoscore(self, team, seasonn, gwk):
-        qrst = self.filter(Q(hometeam=team, season=seasonn, gameweek__lt=gwk) | Q(awayteam=team, season=seasonn, gameweek__lt=gwk))
+    # def team_total_failedtoscore(self, team, seasonn, gwk):
+    #     qrst = self.filter(Q(hometeam=team, season=seasonn, gameweek__lt=gwk) | Q(awayteam=team, season=seasonn, gameweek__lt=gwk))
+    #     qrst_clean = qrst.exclude(result__exact='').exclude(result__isnull=True)
+    #     cnt = 0
+    #     for gm in qrst_clean:
+    #         if gm.hometeam == team and gm.homegoals == 0:
+    #             cnt += 1
+    #         if gm.awayteam == team and gm.awaygoals == 0:
+    #             cnt += 1
+    #     return cnt
+
+    def team_total_failedtoscore_by_date(self, team, seasonn, dt):
+        qrst = self.filter(Q(hometeam=team, season=seasonn, date__lt=dt) | Q(awayteam=team, season=seasonn, date__lt=dt))
         qrst_clean = qrst.exclude(result__exact='').exclude(result__isnull=True)
         cnt = 0
         for gm in qrst_clean:
@@ -883,7 +1701,6 @@ class GameManager(models.Manager):
 
     def total_model_strike_rate_for_short_name(self, model, short_name, period, prediction):
         filtered_qs = Game.objects.all()
-        qs_total = ''
         qs_successful = ''
         if period == 'All':
             filtered_qs = Game.objects.filter(season__league__short_name=short_name)
@@ -1093,7 +1910,7 @@ class GameManager(models.Manager):
     # returns the strike rate for the selected season. The strike rate represents all the successful predictions divided
     # by all the predictions made for all models
     def total_season_strike_rate(self, seasonid):
-        qs = self.filter(season__id=seasonid, gameweek__gte=7).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
+        qs = self.filter(season__id=seasonid).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True)
         total_preds = qs.count()
         total_preds_final = float(total_preds) * 3
         elohist = qs.filter(prediction_status_elohist='Success').count()
@@ -1120,15 +1937,20 @@ class GameManager(models.Manager):
     # returns a list of dicts containing seasonid, country, country code, league name, strike rate for all seasons for
     # the given year, model and prediction
     def rank_seasons_by_strike_rate_for_model(self, year, model, prediction):
+        # allseasons = Season.objects.filter(end_date__year=year).values_list('id', flat=True)
         allseasons = Season.objects.filter(end_date__year=year).values_list('id', flat=True)
         strike_rates_list = []
         for season in allseasons:
             strike_rates_list.append({
                 'id': season,
+                # 'strike_rate': self.model_strike_rate(model, season, prediction),
+                # 'country': Season.objects.get(id=season).league.country,
+                # 'country_code': Season.objects.get(id=season).league.country_code,
+                # 'league_name': Season.objects.get(id=season).league.league_name
                 'strike_rate': self.model_strike_rate(model, season, prediction),
-                'country': Season.objects.get(id=season).league.country,
-                'country_code': Season.objects.get(id=season).league.country_code,
-                'league_name': Season.objects.get(id=season).league.league_name
+                'country': Season.objects.select_related('league').get(id=season).league.country,
+                'country_code': Season.objects.select_related('league').get(id=season).league.country_code,
+                'league_name': Season.objects.select_related('league').get(id=season).league.league_name
             })
         sorted_list = sorted(strike_rates_list, key=itemgetter('strike_rate'), reverse=True)
         return sorted_list
@@ -1143,20 +1965,31 @@ class Game(models.Model):
         (postponed, 'Postponed'),
         (cancelled, 'Cancelled'),
     )
+    FLAG_CHOICES = (
+        ('No flag', 'No flag'),
+        ('Refresh', 'Refresh'),
+    )
 
     date = models.DateField()
     gameweek = models.PositiveIntegerField()
     season = models.ForeignKey('Season')
     game_status = models.CharField(max_length=10, choices=GAME_STATUS_CHOICES, default=ok,)
+    flag = models.CharField(max_length=10, choices=FLAG_CHOICES, default='No flag',)
     hometeam = models.ForeignKey(Team, related_name='hometeam')
     awayteam = models.ForeignKey(Team, related_name='awayteam')
     homegoals = models.IntegerField(null=True, blank=True)
     awaygoals = models.IntegerField(null=True, blank=True)
     result = models.CharField(max_length=5, null=True, blank=True)
+    hm_result = models.CharField(max_length=5, null=True, blank=True)
+    aw_result = models.CharField(max_length=5, null=True, blank=True)
+    hm_points = models.IntegerField(null=True, blank=True)
+    aw_points = models.IntegerField(null=True, blank=True)
     elo_rating_home = models.FloatField(null=True, blank=True)
-    elo_rating_away = models.FloatField(null=True, blank=True)
     elo_rating_home_previous_week = models.FloatField(null=True, blank=True)
+    elo_rating_home_6_weeks_ago = models.FloatField(null=True, blank=True)
+    elo_rating_away = models.FloatField(null=True, blank=True)
     elo_rating_away_previous_week = models.FloatField(null=True, blank=True)
+    elo_rating_away_6_weeks_ago = models.FloatField(null=True, blank=True)
     rdiff = models.FloatField(null=True, blank=True)
     goaldiff_hm = models.IntegerField(null=True, blank=True)
     goaldiff_aw = models.IntegerField(null=True, blank=True)
@@ -1217,17 +2050,23 @@ class Game(models.Model):
             return ''
 
     def home_se(self):
-        home_sa = 0.00
-        if self.gameweek == 1:
-            away_r_old = elosettings.STARTING_POINTS
-            home_r_old = elosettings.STARTING_POINTS
-            home_sa = 1 / (1 + 10 ** ((away_r_old - home_r_old - elosettings.ELO_HGA) / float(elosettings.ELO_S)))
-        elif self.gameweek > 1:
-            away_r_old = self._default_manager.get_previous_elo(tm=self.awayteam, seasn=self.season, gmwk=self.gameweek)
-            home_r_old = self._default_manager.get_previous_elo(tm=self.hometeam, seasn=self.season, gmwk=self.gameweek)
-            previous_gw = self.gameweek - 1
-            home_ground_adv = self._default_manager.modified_hga(teamm=self.hometeam, seasonn=self.season, gmwk=self.gameweek)
-            home_sa = 1 / (1 + 10 ** ((away_r_old - home_r_old - home_ground_adv) / float(elosettings.ELO_S)))
+        # home_sa = 0.00
+        away_r_old = self._default_manager.get_previous_elo_by_actual_date_for_initial(tm=self.awayteam, seasn=self.season, dt=self.date)
+        home_r_old = self._default_manager.get_previous_elo_by_actual_date_for_initial(tm=self.hometeam, seasn=self.season, dt=self.date)
+        # previous_gw = self.gameweek - 1
+        home_ground_adv = self._default_manager.modified_hga_from_date(teamm=self.hometeam, seasonn=self.season, dt=self.date)
+        # home_ground_adv = self._default_manager.modified_hga(teamm=self.hometeam, seasonn=self.season, gmwk=self.gameweek)
+        home_sa = 1 / (1 + 10 ** ((away_r_old - home_r_old - home_ground_adv) / float(elosettings.ELO_S)))
+        # if self.gameweek == 1:
+        #     away_r_old = elosettings.STARTING_POINTS
+        #     home_r_old = elosettings.STARTING_POINTS
+        #     home_sa = 1 / (1 + 10 ** ((away_r_old - home_r_old - elosettings.ELO_HGA) / float(elosettings.ELO_S)))
+        # elif self.gameweek > 1:
+        #     away_r_old = self._default_manager.get_previous_elo_by_date(tm=self.awayteam, seasn=self.season, gmwk=self.gameweek)
+        #     home_r_old = self._default_manager.get_previous_elo_by_date(tm=self.hometeam, seasn=self.season, gmwk=self.gameweek)
+        #     previous_gw = self.gameweek - 1
+        #     home_ground_adv = self._default_manager.modified_hga(teamm=self.hometeam, seasonn=self.season, gmwk=self.gameweek)
+        #     home_sa = 1 / (1 + 10 ** ((away_r_old - home_r_old - home_ground_adv) / float(elosettings.ELO_S)))
         return home_sa
 
     def away_se(self):
@@ -1237,7 +2076,7 @@ class Game(models.Model):
 
     def r_new_home(self):
         if self.homegoals >= 0:
-            r_old = self._default_manager.get_previous_elo(tm=self.hometeam, seasn=self.season, gmwk=self.gameweek)
+            r_old = self._default_manager.get_previous_elo_by_actual_date_for_initial(tm=self.hometeam, seasn=self.season, dt=self.date)
             k = self.get_k_factor()
             sa = self.home_sa()
             se = self.home_se()
@@ -1255,7 +2094,7 @@ class Game(models.Model):
 
     def r_new_away(self):
         if self.awaygoals >= 0:
-            r_old = self._default_manager.get_previous_elo(tm=self.awayteam, seasn=self.season, gmwk=self.gameweek)
+            r_old = self._default_manager.get_previous_elo_by_actual_date_for_initial(tm=self.awayteam, seasn=self.season, dt=self.date)
             k = self.get_k_factor()
             sa = self.away_sa()
             se = self.away_se()
@@ -1271,9 +2110,22 @@ class Game(models.Model):
                 rating = tms.elo_rating_home
             return rating
 
+    # def elo_hist_prediction_status(self):
+    #     if self.homegoals >= 0:
+    #         prediction = self._default_manager.elo_hist_prediction_by_id(self.id)
+    #         actual_result = self.result
+    #         if prediction == 'Not enough games to calculate prediction (the model needs at least 6 gameweeks)':
+    #             out = ''
+    #         elif prediction == actual_result:
+    #             out = 'Success'
+    #         else:
+    #             out = 'Fail'
+    #         return out
+    #     return ''
+
     def elo_hist_prediction_status(self):
         if self.homegoals >= 0:
-            prediction = self._default_manager.elo_hist_prediction(hometm=self.hometeam, awaytm=self.awayteam, szn=self.season.id, gweek=self.gameweek)
+            prediction = self._default_manager.elo_hist_prediction_by_id(self.id)
             actual_result = self.result
             if prediction == 'Not enough games to calculate prediction (the model needs at least 6 gameweeks)':
                 out = ''
@@ -1286,7 +2138,7 @@ class Game(models.Model):
 
     def elo_l6_prediction_status(self):
         if self.homegoals >= 0:
-            prediction = self._default_manager.elo_l6_prediction(hometm=self.hometeam, awaytm=self.awayteam, szn=self.season.id, gweek=self.gameweek)
+            prediction = self._default_manager.elo_l6_prediction_by_id(self.id)
             actual_result = self.result
             if prediction == 'Not enough games to calculate prediction (the model needs at least 6 gameweeks)':
                 out = ''
@@ -1299,7 +2151,7 @@ class Game(models.Model):
 
     def gsrs_prediction_status(self):
         if self.homegoals >= 0:
-            prediction = self._default_manager.gsrs_prediction(hm=self.hometeam, aw=self.awayteam, sn=self.season.id, gmwkk=self.gameweek)
+            prediction = self._default_manager.gsrs_prediction_by_id(self.id)
             actual_result = self.result
             if prediction == 'Not enough games to calculate prediction (the model needs at least 6 gameweeks)':
                 out = ''
@@ -1315,6 +2167,16 @@ class Game(models.Model):
         # this means if self.elo_rating_home is not empty or null
         if self.elo_rating_home:
             rdiff = round(self.elo_rating_home_previous_week - self.elo_rating_away_previous_week, 0)
+            return rdiff
+        else:
+            return ''
+
+    def r_difference_6_games_back(self):
+        # this means if self.elo_rating_home_6_weeks_ago is not empty or null
+        if self.elo_rating_home_6_weeks_ago:
+            hmdiff = self.elo_rating_home_previous_week - self.elo_rating_home_6_weeks_ago
+            awdiff = self.elo_rating_away_previous_week - self.elo_rating_away_6_weeks_ago
+            rdiff = round(hmdiff - awdiff, 0)
             return rdiff
         else:
             return ''
@@ -1338,24 +2200,95 @@ class Game(models.Model):
         else:
             self.result = ''
 
+        # t1 = datetime.now()
         self.elo_rating_home = self.r_new_home()
         self.elo_rating_away = self.r_new_away()
+        # t2 = datetime.now()
+        # t3 = (t2 - t1).total_seconds()
+        # print('elo_rating_home and elo_rating_away ran in: ', t3)
 
-        self.elo_rating_home_previous_week = self._default_manager.get_previous_elo(self.hometeam, self.season, self.gameweek)
-        self.elo_rating_away_previous_week = self._default_manager.get_previous_elo(self.awayteam, self.season, self.gameweek)
+        # t1 = datetime.now()
+        self.elo_rating_home_previous_week = self._default_manager.get_previous_elo_by_actual_date_for_initial(self.hometeam, self.season, self.date)
+        self.elo_rating_away_previous_week = self._default_manager.get_previous_elo_by_actual_date_for_initial(self.awayteam, self.season, self.date)
+        # t2 = datetime.now()
+        # t3 = (t2 - t1).total_seconds()
+        # print('elo_rating_home_previous_week and elo_rating_away_previous_week ran in: ', t3)
 
+        self.elo_rating_home_6_weeks_ago = self._default_manager.get_previous_elo_from_lookback_by_date(self.hometeam, self.season, self.date, 6)
+        self.elo_rating_away_6_weeks_ago = self._default_manager.get_previous_elo_from_lookback_by_date(self.awayteam, self.season, self.date, 6)
+        # t1 = datetime.now()
         self.rdiff = self.r_difference()
-        self.goaldiff_hm = self._default_manager.total_goal_diff(self.hometeam, self.season.id, self.gameweek)
-        self.goaldiff_aw = self._default_manager.total_goal_diff(self.awayteam, self.season.id, self.gameweek)
+        self.goaldiff_hm = self._default_manager.total_goal_diff_from_date(self.hometeam, self.season.id, self.date)
+        self.goaldiff_aw = self._default_manager.total_goal_diff_from_date(self.awayteam, self.season.id, self.date)
+        # t2 = datetime.now()
+        # t3 = (t2 - t1).total_seconds()
+        # print('rdiff, goaldiff_hm and goaldiff_aw:', t3)
 
-        self.prediction_elohist = self._default_manager.elo_hist_prediction(hometm=self.hometeam, awaytm=self.awayteam, szn=self.season.id, gweek=self.gameweek)
-        self.prediction_status_elohist = self.elo_hist_prediction_status()
+        # t1 = datetime.now()
+        self.prediction_elohist = self._default_manager.elo_hist_prediction_by_date(self.hometeam, self.awayteam, self.season.id, self.date, self.gameweek)
+        if self._default_manager.is_first_game(self.hometeam, self.season.id, self.date) == 'Yes' or self._default_manager.is_first_game(self.awayteam, self.season.id, self.date) == 'Yes':
+            self.prediction_status_elohist = ''
+        else:
+            self.prediction_status_elohist = self.elo_hist_prediction_status()
+        # t2 = datetime.now()
+        # t3 = (t2 - t1).total_seconds()
+        # print('prediction_elohist and prediction_status_elohist:', t3)
 
-        self.prediction_elol6 = self._default_manager.elo_l6_prediction(hometm=self.hometeam, awaytm=self.awayteam, szn=self.season.id, gweek=self.gameweek)
-        self.prediction_status_elol6 = self.elo_l6_prediction_status()
+        # t1 = datetime.now()
+        self.prediction_elol6 = self._default_manager.elo_l6_prediction_by_date(self.hometeam, self.awayteam, self.season.id, self.date, self.gameweek)
+        # t2 = datetime.now()
+        # t3 = (t2 - t1).total_seconds()
+        # print('prediction_elol6', t3)
+        # t1 = datetime.now()
+        if self._default_manager.is_first_game(self.hometeam, self.season.id, self.date) == 'Yes' or self._default_manager.is_first_game(self.awayteam, self.season.id, self.date) == 'Yes':
+            self.prediction_status_elol6 = ''
+        else:
+            self.prediction_status_elol6 = self.elo_l6_prediction_status()
+        # t2 = datetime.now()
+        # t3 = (t2 - t1).total_seconds()
+        # print('prediction_status_elol6:', t3)
 
-        self.prediction_gsrs = self._default_manager.gsrs_prediction(hm=self.hometeam, aw=self.awayteam, sn=self.season.id, gmwkk=self.gameweek)
-        self.prediction_status_gsrs = self.gsrs_prediction_status()
+        # t1 = datetime.now()
+        self.prediction_gsrs = self._default_manager.gsrs_prediction_by_date(self.hometeam, self.awayteam, self.season.id, self.date)
+        if self._default_manager.is_first_game(self.hometeam, self.season.id, self.date) == 'Yes' or self._default_manager.is_first_game(self.awayteam, self.season.id, self.date) == 'Yes':
+            self.prediction_status_gsrs = ''
+        else:
+            self.prediction_status_gsrs = self.gsrs_prediction_status()
+        # t2 = datetime.now()
+        # t3 = (t2 - t1).total_seconds()
+        # print('prediction_gsrs and prediction_status_gsrs:', t3)
+
+        # hometeam result and points
+        if self.homegoals >= 0:
+            if self.homegoals > self.awaygoals:
+                self.hm_result = 'W'
+                self.hm_points = 3
+            elif self.homegoals < self.awaygoals:
+                self.hm_result = 'L'
+                self.hm_points = 0
+            elif self.homegoals == self.awaygoals:
+                self.hm_result = 'D'
+                self.hm_points = 1
+            else:
+                pass
+        else:
+            pass
+
+        # awayteam result and points
+        if self.awaygoals >= 0:
+            if self.awaygoals > self.homegoals:
+                self.aw_result = 'W'
+                self.aw_points = 3
+            elif self.awaygoals < self.homegoals:
+                self.aw_result = 'L'
+                self.aw_points = 0
+            elif self.awaygoals == self.homegoals:
+                self.aw_result = 'D'
+                self.aw_points = 1
+            else:
+                pass
+        else:
+            pass
         super(Game, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -1367,6 +2300,13 @@ class GameFilter(django_filters.FilterSet):
     class Meta:
         model = Game
         fields = ['gameweek']
+
+
+class GameSeasonFilter(django_filters.FilterSet):
+
+    class Meta:
+        model = Game
+        fields = ['season']
 
 
 class Post(models.Model):

@@ -69,6 +69,9 @@
     </div>
 
 {% if user_made_selection %}
+
+<p style="color: red;"><strong>REMINDER! Otan vazeis score, allaze to FLAG se 'Refresh'</strong></p>
+
 <form class="" action="{% url 'add_score' %}" method="POST">
     {{ formset.management_form }}
     <table class="table well">
@@ -79,6 +82,8 @@
                 <th>Home goals</th>
                 <th>Away goals</th>
                 <th>Away</th>
+                <th>Status</th>
+                <th>Flag</th>
             </tr>
         </thead>
         <tbody>
@@ -93,6 +98,9 @@
     </table>
     <input type="submit" value="Add Scores" name="djform">
 </form>
+
+<p style="color: red;"><strong>REMINDER! Otan vazeis score, allaze to FLAG se 'Refresh'</strong></p>
+
 {% else %}
     <p></p>
 {% endif %}

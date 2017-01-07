@@ -31,5 +31,9 @@ urlpatterns = [
     url(r'^edit-match/(?P<pk>[0-9]+)/edit/$', views.edit_match, name='edit_match'),
     url(r'^success-postponed-cancelled/$', views.success_postponed_cancelled, name='success_postponed_cancelled'),
     url(r'^game-details/(?P<pk>[0-9]+)/$', views.game_details, name='game_details'),
+    url(r'^alerts/$', views.alerts, name='alerts'),
+    url(r'^alerts/upcoming-games/$', views.alerts_upcoming_games, name='alerts_upcoming_games'),
+    url(r'^alerts/finished-games-without-score/$', views.alerts_finished_games, name='alerts_finished_games'),
+    url(r'^alerts/games-to-refresh/$', views.alerts_refresh_formulas, name='alerts_refresh'),
 
 ]

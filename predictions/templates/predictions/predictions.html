@@ -34,12 +34,26 @@
 
     </script>
 
+    <script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    </script>
+
+
 {% endblock %}
 
 {% block header %}
 {% endblock %}
 
 {% block content5 %}
+<style type="text/css">
+.v-divider{
+
+ height:100%;
+ border-right:2px solid #CACFD2;
+}
+</style>
 
     <div class="well">
 
@@ -71,88 +85,90 @@
                 <thead>
                   <tr style="background: black; color:#B6B6B4">
                     <th class="left-al">Team</th>
-                    <th class="centred">MP</th>
-                    <th class="centred">W</th>
-                    <th class="centred">D</th>
-                    <th class="centred">L</th>
-                    <th class="centred">GF</th>
-                    <th class="centred">GA</th>
+                    <th class="centred"><span data-toggle="tooltip" data-placement="top" title="Matches played">MP</span></th>
+                    <th class="centred"><span data-toggle="tooltip" data-placement="top" title="Wins">W</span></th>
+                    <th class="centred"><span data-toggle="tooltip" data-placement="top" title="Draws">D</span></th>
+                    <th class="centred"><span data-toggle="tooltip" data-placement="top" title="Losses">L</span></th>
+                    <th class="centred"><span data-toggle="tooltip" data-placement="top" title="Goals for">GF</span></th>
+                    <th class="centred"><span data-toggle="tooltip" data-placement="top" title="Goals against">GA</span></th>
                     <th colspan="6" class="centred">Last 6 Games</th>
-                    <th class="centred">Rating</th>
+                    <th class="centred"><span data-toggle="tooltip" data-placement="top" title="Points according to Betaid rating system">Rating</span></th>
+                    <th class="centred"><span data-toggle="tooltip" data-placement="top" title="Actual league points">Points</span></th>
                   </tr>
                 </thead>
-                <tbody style="font-size:12px">
+                <tbody style="">
                 {% for itemm in x %}
                   <tr>
-                    <td>{{ itemm.team }}</td>
-                    <td class="centred">{{ itemm.played }}</td>
+                    <td class="v-divider">{{ itemm.team }}</td>
+                    <td class="centred v-divider">{{ itemm.played }}</td>
                     <td class="centred">{{ itemm.wins }}</td>
                     <td class="centred">{{ itemm.draws }}</td>
-                    <td class="centred">{{ itemm.losses }}</td>
+                    <td class="centred v-divider">{{ itemm.losses }}</td>
                     <td class="centred">{{ itemm.gf }}</td>
-                    <td class="centred">{{ itemm.ga }}</td>
+                    <td class="centred v-divider">{{ itemm.ga }}</td>
 
                     {% if itemm.f1 == "W" %}
-                      <td class="succ centred">{{ itemm.f1 }}</td>
+                      <td width="3%" class="succ centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp1 }}">{{ itemm.f1 }}</span></td>
                     {% elif itemm.f1 == "D" %}
-                      <td class="draw centred">{{ itemm.f1 }}</td>
+                      <td width="3%" class="draw centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp1 }}">{{ itemm.f1 }}</span></td>
                     {% elif itemm.f1 == "L" %}
-                      <td class="fail centred">{{ itemm.f1 }}</td>
+                      <td width="3%" class="fail centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp1 }}">{{ itemm.f1 }}</span></td>
                     {% else %}
-                      <td class="centred">{{ itemm.f1 }}</td>
+                      <td class="centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp1 }}">{{ itemm.f1 }}</span></td>
                     {% endif %}
 
                     {% if itemm.f2 == "W" %}
-                      <td class="succ centred">{{ itemm.f2 }}</td>
+                      <td width="3%" class="succ centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp2 }}">{{ itemm.f2 }}</span></td>
                     {% elif itemm.f2 == "D" %}
-                      <td class="draw centred">{{ itemm.f2 }}</td>
+                      <td width="3%" class="draw centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp2 }}">{{ itemm.f2 }}</span></td>
                     {% elif itemm.f2 == "L" %}
-                      <td class="fail centred">{{ itemm.f2 }}</td>
+                      <td width="3%" class="fail centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp2 }}">{{ itemm.f2 }}</span></td>
                     {% else %}
-                      <td class="centred">{{ itemm.f2 }}</td>
+                      <td width="3%" class="centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp2 }}">{{ itemm.f2 }}</span></td>
                     {% endif %}
 
                     {% if itemm.f3 == "W" %}
-                      <td class="succ centred">{{ itemm.f3 }}</td>
+                      <td width="3%" class="succ centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp3 }}">{{ itemm.f3 }}</span></td>
                     {% elif itemm.f3 == "D" %}
-                      <td class="draw centred">{{ itemm.f3 }}</td>
+                      <td width="3%" class="draw centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp3 }}">{{ itemm.f3 }}</span></td>
                     {% elif itemm.f3 == "L" %}
-                      <td class="fail centred">{{ itemm.f3 }}</td>
+                      <td width="3%" class="fail centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp3 }}">{{ itemm.f3 }}</span></td>
                     {% else %}
-                      <td class="centred">{{ itemm.f3 }}</td>
+                      <td width="3%" class="centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp3 }}">{{ itemm.f3 }}</span></td>
                     {% endif %}
 
                     {% if itemm.f4 == "W" %}
-                      <td class="succ centred">{{ itemm.f4 }}</td>
+                      <td width="3%" class="succ centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp4 }}">{{ itemm.f4 }}</span></td>
                     {% elif itemm.f4 == "D" %}
-                      <td class="draw centred">{{ itemm.f4 }}</td>
+                      <td width="3%" class="draw centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp4 }}">{{ itemm.f4 }}</span></td>
                     {% elif itemm.f4 == "L" %}
-                      <td class="fail centred">{{ itemm.f4 }}</td>
+                      <td width="3%" class="fail centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp4 }}">{{ itemm.f4 }}</span></td>
                     {% else %}
-                      <td class="centred">{{ itemm.f4 }}</td>
+                      <td width="3%" class="centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp4 }}">{{ itemm.f4 }}</span></td>
                     {% endif %}
 
                     {% if itemm.f5 == "W" %}
-                      <td class="succ centred">{{ itemm.f5 }}</td>
+                      <td width="3%" class="succ centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp5 }}">{{ itemm.f5 }}</span></td>
                     {% elif itemm.f5 == "D" %}
-                      <td class="draw centred">{{ itemm.f5 }}</td>
+                      <td width="3%" class="draw centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp5 }}">{{ itemm.f5 }}</span></td>
                     {% elif itemm.f5 == "L" %}
-                      <td class="fail centred">{{ itemm.f5 }}</td>
+                      <td width="3%" class="fail centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp5 }}">{{ itemm.f5 }}</span></td>
                     {% else %}
-                      <td class="centred">{{ itemm.f5 }}</td>
+                      <td width="3%" class="centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp5 }}">{{ itemm.f5 }}</span></td>
                     {% endif %}
 
                     {% if itemm.f6 == "W" %}
-                      <td class="succ centred">{{ itemm.f6 }}</td>
+                      <td width="3%" class="succ centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp6 }}">{{ itemm.f6 }}</span></td>
                     {% elif itemm.f6 == "D" %}
-                      <td class="draw centred">{{ itemm.f6 }}</td>
+                      <td width="3%" class="draw centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp6 }}">{{ itemm.f6 }}</span></td>
                     {% elif itemm.f6 == "L" %}
-                      <td class="fail centred">{{ itemm.f6 }}</td>
+                      <td width="3%" class="fail centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp6 }}">{{ itemm.f6 }}</span></td>
                     {% else %}
-                      <td class="centred">{{ itemm.f6 }}</td>
+                      <td width="3%" class="centred"><span data-toggle="tooltip" data-placement="top" title="{{ itemm.tltp6 }}">{{ itemm.f6 }}</span></td>
                     {% endif %}
 
-                    <td class="elo_hist"><strong>{{ itemm.points|floatformat:2 }}</strong></td>
+                    <td class="elo_hist"><strong>{{ itemm.points|floatformat:1 }}</strong></td>
+                    <td class="elo_hist"><strong>{{ itemm.normal_points }}</strong></td>
                   </tr>
                 {% endfor %}
 
@@ -161,6 +177,19 @@
     {% else %}
         <p></p>
     {% endif %}
+
+
+    <p>
+    {% if any_postponed %}
+        <strong>Postponed/Cancelled matches</strong><br>
+        {% for itemm in p %}
+        gameweek {{ itemm.pgw }}: {{ itemm.phome }} - {{ itemm.paway }} ({{ itemm.pstatus }}) <br>
+        {% endfor %}
+
+    {% else %}
+
+    {% endif %}
+    </p>
 
 {% endblock %}
 
@@ -176,7 +205,7 @@
         Season: <strong>{{ ssnout }}</strong><br>
         Gameweek: <strong>{{ gamewkout }}</strong><br><br>
         {% if user_made_selection %}
-        <a href="{% url 'new_predictions' seasonid gamewkout %}"><button type="button" class="btn btn-primary">New Predictions <span class="badge">{{ new_predictions_cnt|safe }}</span></button></a>
+        <a href="{% url 'new_predictions' seasonid gamewkout  %}"><button type="button" class="btn btn-primary">New Predictions <span class="badge">{{ new_predictions_cnt|safe }}</span></button></a>
         <a href="{% url 'past_predictions' seasonid %}"><button type="button" class="btn btn-danger">Past Predictions <span class="badge">{{ past_predictions_cnt|safe }}</span></button></a><br>
         {% else %}
         <p></p>

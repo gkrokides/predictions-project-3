@@ -36,15 +36,17 @@
     <table id="example" class="display compact" cellspacing="0" width="100%">
         <thead>
             <tr style="font-size:80%;">
+                <th>SID</th>
+                <th>GID</th>
                 <th>Season</th>
                 <th>Gmwk</th>
                 <th>Date</th>
+                <th>Home rating</th>
                 <th class="right-al">Home</th>
-                <!--<th>Home rating</th>-->
-                <th>Home goals</th>
+               <th>Home goals</th>
                 <th>Away goals</th>
                 <th>Away</th>
-                <!--<th>Away rating</th>-->
+                <th>Away rating</th>
                 <!--<th>Status Black</th>-->
                 <!--<th>Status Purple</th>-->
                 <!--<th>Status Yellow</th>-->
@@ -55,20 +57,22 @@
         <tbody>
         {% for obj in tableset %}
             <tr style="font-size:80%;">
+                <td width="1%">{{ obj.season.id }}</td>
+                <td width="1%">{{ obj.id }}</td>
                 <td width="15%">{{ obj.season }}</td>
                 <td width="1%">{{ obj.gameweek }}</td>
-                <td width="15%">{{ obj.date }}</td>
-                <td width="15%" class="right-al">{{ obj.hometeam }}</td>
-                <!--<td width="15%" class="">{{ obj.elo_rating_home }}</td>-->
+                <td width="10%">{{ obj.date }}</td>
+                <td width="1%" class="">{{ obj.elo_rating_home|floatformat:2 }}</td>
+                <td width="12%" class="right-al">{{ obj.hometeam }}</td>
                 <td class="centred" width="1%">{{ obj.homegoals }}</td>
                 <td class="centred" width="1%">{{ obj.awaygoals }}</td>
-                <td>{{ obj.awayteam }}</td>
-                <!--<td width="15%" class="">{{ obj.elo_rating_away }}</td>-->
+                <td width="12%">{{ obj.awayteam }}</td>
+                <td width="1%" class="">{{ obj.elo_rating_away|floatformat:2 }}</td>
                 <!--<td>{{ obj.prediction_status_elohist }}</td>-->
                 <!--<td>{{ obj.prediction_status_elol6 }}</td>-->
                 <!--<td>{{ obj.prediction_status_gsrs }}</td>-->
-                <td>{{ obj.game_status }}</td>
-                <td><a href="{% url 'game_details' pk=obj.pk %}">details</a></td>
+                <td width="1%">{{ obj.game_status }}</td>
+                <td width="1%"><a href="{% url 'game_details' pk=obj.pk %}">details</a></td>
             </tr>
         {% endfor %}
         </tbody>

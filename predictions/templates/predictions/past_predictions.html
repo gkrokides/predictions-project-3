@@ -8,9 +8,7 @@
 
     <div class="alert alert-danger">
         <strong>No predictions yet!</strong>
-        You are seeing this message either because you selected a gameweek before the 6th
-        (Predictions start after the 6th Gameweek to allow the models to gather enough data to make predictions) or
-        because you selected a gameweek that has not been played yet.
+        Predictions start after the 6th Gameweek to allow the models to gather enough data to make predictions
 
     </div>
 
@@ -63,25 +61,25 @@
                 <td>{{ game.awayteam }}</td>
 
                 {% if game.prediction_status_elohist == 'Success' %}
-                <td class="succ"><span class="glyphicon glyphicon-ok"></span></td>
+                <td class="succ">{{ game.prediction_elohist}} <span class="glyphicon glyphicon-ok"></span></td>
                 {% elif  game.prediction_status_elohist == 'Fail' %}
-                <td class="fail"><span class="glyphicon glyphicon-remove"></span></td>
+                <td class="fail">{{ game.prediction_elohist}} <span class="glyphicon glyphicon-remove"></span></td>
                 {% else %}
                 <td class="centred">{{ game.prediction_status_elohist }}</td>
                 {% endif %}
 
                 {% if game.prediction_status_elol6 == 'Success' %}
-                <td class="centred succ"><span class="glyphicon glyphicon-ok"></span></td>
+                <td class="centred succ">{{ game.prediction_elol6}} <span class="glyphicon glyphicon-ok"></span></td>
                 {% elif  game.prediction_status_elol6 == 'Fail' %}
-                <td class="centred fail"><span class="glyphicon glyphicon-remove"></span></td>
+                <td class="centred fail">{{ game.prediction_elol6}} <span class="glyphicon glyphicon-remove"></span></td>
                 {% else %}
                 <td class="centred">{{ game.prediction_status_elol6 }}</td>
                 {% endif %}
 
                 {% if game.prediction_status_gsrs == 'Success' %}
-                <td class="centred succ"><span class="glyphicon glyphicon-ok"></span></td>
+                <td class="centred succ">{{ game.prediction_gsrs}} <span class="glyphicon glyphicon-ok"></span></td>
                 {% elif  game.prediction_status_gsrs == 'Fail' %}
-                <td class="centred fail"><span class="glyphicon glyphicon-remove"></span></td>
+                <td class="centred fail">{{ game.prediction_gsrs}} <span class="glyphicon glyphicon-remove"></span></td>
                 {% else %}
                 <td class="centred">{{ game.prediction_status_gsrs }}</td>
                 {% endif %}

@@ -1,0 +1,38 @@
+{% extends 'predictions/base.html' %}
+
+{% block content3 %}
+
+<form action="" method="get" class="">
+            {{ finished_games_without_score.form.as_p }}
+            <input type="submit" value="Filter" />
+    </form>
+
+<table cellpadding="1" class="table table-condensed table-hover">
+    <thead>
+      <tr>
+        <th class="gsrs_chart centred">Season</th>
+        <th class="gsrs_chart centred">Gameweek</th>
+        <th class="gsrs_chart centred">Date</th>
+        <th class="gsrs_chart centred">Home</th>
+        <th class="gsrs_chart centred"></th>
+        <th class="gsrs_chart centred">Away</th>
+      </tr>
+    </thead>
+    <tbody class="centred">
+
+    {% for itemm in finished_games_without_score %}
+
+      <tr>
+        <td>{{ itemm.season }}</td>
+        <td>{{ itemm.gameweek }}</td>
+        <td>{{ itemm.date }}</td>
+        <td>{{ itemm.hometeam }}</td>
+        <td> - </td>
+        <td>{{ itemm.awayteam }}</td>
+      </tr>
+
+    {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

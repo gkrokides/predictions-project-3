@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import Post, Team, Game, Season, GameFilter, Leagues
+from .models import Post, Team, Game, Season, GameFilter, Leagues, GameSeasonFilter
 from .forms import PostForm, GameForm, ContactForm
 from dicts.sorteddict import ValueSortedDict
 from decimal import Decimal
@@ -17,6 +17,7 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
 
 # from django.db.models import Count
+
 # from itertools import chain
 # from django.db.models import Q, Max
 
@@ -74,6 +75,7 @@ def past_predictions(request, seasonid):
 def h2h(request, pk):
     gm = get_object_or_404(Game, pk=pk)
     # season = Season.objects.get(id=2)
+    gmscount = 0
     season = gm.season
     gamewk = gm.gameweek + 1
     gamewk_for_title = gamewk - 2
@@ -85,23 +87,37 @@ def h2h(request, pk):
     for tm in leaderboard:
         h = tm.hometeam
         a = tm.awayteam
-        x.update({h: round(Decimal(Game.objects.get_previous_elo(tm=tm.hometeam, seasn=season, gmwk=gm.gameweek)), 2)})
-        x.update({a: round(Decimal(Game.objects.get_previous_elo(tm=tm.awayteam, seasn=season, gmwk=gm.gameweek)), 2)})
+        x.update({h: round(Decimal(Game.objects.get_previous_elo_by_actual_date(tm=tm.hometeam, seasn=season, dt=gm.date, gw=gm.gameweek)), 2)})
+        x.update({a: round(Decimal(Game.objects.get_previous_elo_by_actual_date(tm=tm.awayteam, seasn=season, dt=gm.date, gw=gm.gameweek)), 2)})
     sorted_x = ValueSortedDict(x, reverse=True)
+    hmteam_all = Game.objects.filter(Q(hometeam=gm.hometeam, date__lt=gm.date, season=gm.season) | Q(awayteam=gm.hometeam, date__lt=gm.date, season=gm.season)).order_by('date')
+    awteam_all = Game.objects.filter(Q(hometeam=gm.awayteam, date__lt=gm.date, season=gm.season) | Q(awayteam=gm.awayteam, date__lt=gm.date, season=gm.season)).order_by('date')
     # last 6 games of each team--------------------------------------------
-    formstart = gm.gameweek - 6
-    formend = gm.gameweek
+    # formstart = gm.gameweek - 6
+    # formend = gm.gameweek
+    hm_formstart = hmteam_all.reverse()[5].date
+    hm_formend = hmteam_all.reverse()[0].date
+    aw_formstart = awteam_all.reverse()[5].date
+    aw_formend = awteam_all.reverse()[0].date
     homeform = []
     awayform = []
-    for i in range(formstart, formend):
-        homeform.append(Game.objects.team_form(hometm, season.id, i))
-    for i in range(formstart, formend):
-        awayform.append(Game.objects.team_form(awaytm, season.id, i))
+    home_iterset = hmteam_all.filter(date__gte=hm_formstart, date__lte=hm_formend).order_by('date')
+    away_iterset = awteam_all.filter(date__gte=aw_formstart, date__lte=aw_formend).order_by('date')
+    for mtch in home_iterset:
+        homeform.append(Game.objects.team_form_by_date(hometm, season.id, mtch.gameweek))
+    for mtchh in away_iterset:
+        awayform.append(Game.objects.team_form_by_date(awaytm, season.id, mtchh.gameweek))
+    # for i in range(formstart, formend):
+    #     homeform.append(Game.objects.team_form(hometm, season.id, i))
+    # for i in range(formstart, formend):
+    #     awayform.append(Game.objects.team_form(awaytm, season.id, i))
     # Line chart data ------------------------------------------
     homename = str(gm.hometeam)
     awayname = str(gm.awayteam)
-    hmteam_all = Game.objects.filter(Q(hometeam=gm.hometeam, gameweek__lt=gm.gameweek, season=gm.season) | Q(awayteam=gm.hometeam, gameweek__lt=gm.gameweek, season=gm.season)).order_by('gameweek')
-    awteam_all = Game.objects.filter(Q(hometeam=gm.awayteam, gameweek__lt=gm.gameweek, season=gm.season) | Q(awayteam=gm.awayteam, gameweek__lt=gm.gameweek, season=gm.season)).order_by('gameweek')
+    # hmteam_all = Game.objects.filter(Q(hometeam=gm.hometeam, date__lt=gm.date, season=gm.season) | Q(awayteam=gm.hometeam, date__lt=gm.date, season=gm.season)).order_by('date')
+    # awteam_all = Game.objects.filter(Q(hometeam=gm.awayteam, date__lt=gm.date, season=gm.season) | Q(awayteam=gm.awayteam, date__lt=gm.date, season=gm.season)).order_by('date')
+    # hmteam_all = Game.objects.filter(Q(hometeam=gm.hometeam, gameweek__lt=gm.gameweek, season=gm.season) | Q(awayteam=gm.hometeam, gameweek__lt=gm.gameweek, season=gm.season)).order_by('gameweek')
+    # awteam_all = Game.objects.filter(Q(hometeam=gm.awayteam, gameweek__lt=gm.gameweek, season=gm.season) | Q(awayteam=gm.awayteam, gameweek__lt=gm.gameweek, season=gm.season)).order_by('gameweek')
     gweeks = []
     home_elos = []
     away_elos = []
@@ -110,7 +126,8 @@ def h2h(request, pk):
         [0, settings.STARTING_POINTS, settings.STARTING_POINTS]
     ]
     for g in hmteam_all:
-        gweeks.append(g.gameweek)
+        gmscount += 1
+        gweeks.append(gmscount)
     for h in hmteam_all:
         if h.hometeam == gm.hometeam:
             home_elos.append(h.elo_rating_home)
@@ -121,28 +138,62 @@ def h2h(request, pk):
             away_elos.append(a.elo_rating_home)
         else:
             away_elos.append(a.elo_rating_away)
-    if gm.gameweek < 2:
-        chart_data = chart_data
-    else:
-        for g in range(0, gm.gameweek - 1):
-            templist = [gweeks[g], home_elos[g], away_elos[g]]
-            chart_data.append(templist)
+    # if gm.gameweek < 2:
+    #     chart_data = chart_data
+    # else:
+    #     for g in range(0, gm.gameweek - 1):
+    #         templist = [gweeks[g], home_elos[g], away_elos[g]]
+    #         chart_data.append(templist)
+    for g in range(0, hmteam_all.count()):
+        templist = [gweeks[g], home_elos[g], away_elos[g]]
+        chart_data.append(templist)
+    # gweeks = []
+    # home_elos = []
+    # away_elos = []
+    # chart_data = [
+    #     ['Gameweek', homename, awayname],
+    #     [0, settings.STARTING_POINTS, settings.STARTING_POINTS]
+    # ]
+    # for g in hmteam_all:
+    #     gweeks.append(g.gameweek)
+    # for h in hmteam_all:
+    #     if h.hometeam == gm.hometeam:
+    #         home_elos.append(h.elo_rating_home)
+    #     else:
+    #         home_elos.append(h.elo_rating_away)
+    # for a in awteam_all:
+    #     if a.hometeam == gm.awayteam:
+    #         away_elos.append(a.elo_rating_home)
+    #     else:
+    #         away_elos.append(a.elo_rating_away)
+    # if gm.gameweek < 2:
+    #     chart_data = chart_data
+    # else:
+    #     for g in range(0, gm.gameweek - 1):
+    #         templist = [gweeks[g], home_elos[g], away_elos[g]]
+    #         chart_data.append(templist)
     # donut charts data ------------------------------------------
-    homewins = Game.objects.team_total_wins(hometm, season.id, gm.gameweek - 1)
-    awaywins = Game.objects.team_total_wins(awaytm, season.id, gm.gameweek - 1)
-    homelosses = Game.objects.team_total_losses(hometm, season.id, gm.gameweek - 1)
-    awaylosses = Game.objects.team_total_losses(awaytm, season.id, gm.gameweek - 1)
-    homedraws = Game.objects.team_total_draws(hometm, season.id, gm.gameweek - 1)
-    awaydraws = Game.objects.team_total_draws(awaytm, season.id, gm.gameweek - 1)
+    homewins = Game.objects.team_total_wins_by_date_ex_current(hometm, season.id, gm.gameweek)
+    awaywins = Game.objects.team_total_wins_by_date_ex_current(awaytm, season.id, gm.gameweek)
+    homelosses = Game.objects.team_total_losses_by_date_ex_current(hometm, season.id, gm.gameweek)
+    awaylosses = Game.objects.team_total_losses_by_date_ex_current(awaytm, season.id, gm.gameweek)
+    homedraws = Game.objects.team_total_draws_by_date_ex_current(hometm, season.id, gm.gameweek)
+    awaydraws = Game.objects.team_total_draws_by_date_ex_current(awaytm, season.id, gm.gameweek)
     # SCORING TABLE DATA ------------------------------------------
     # HOME TEAM ALL GAMES -------------------------
-    homeset = Game.objects.filter(Q(hometeam=gm.hometeam, season=gm.season.id, gameweek__lt=gm.gameweek) |
-                                  Q(awayteam=gm.hometeam, season=gm.season.id, gameweek__lt=gm.gameweek))
-    homefor = Game.objects.team_total_goals_scored(hometm, season.id, gm.gameweek - 1)
-    homeagainst = Game.objects.team_total_goals_conceded(hometm, season.id, gm.gameweek - 1)
+    homeset = Game.objects.filter(Q(hometeam=gm.hometeam, season=gm.season.id, date__lt=gm.date) |
+                                  Q(awayteam=gm.hometeam, season=gm.season.id, date__lt=gm.date))
+    homefor = Game.objects.team_total_goals_scored_by_date_ex_current(hometm, season.id, gm.gameweek)
+    homeagainst = Game.objects.team_total_goals_conceded_by_date_ex_current(hometm, season.id, gm.gameweek)
     home_total_games = homeset.exclude(result__exact='').exclude(result__isnull=True).count()
-    home_scored_p_game = homefor / float(home_total_games)
-    home_conceded_p_game = homeagainst / float(home_total_games)
+    try:
+        home_scored_p_game = homefor / float(home_total_games)
+    except ZeroDivisionError:
+        home_scored_p_game = 0
+    try:
+        home_conceded_p_game = homeagainst / float(home_total_games)
+    except ZeroDivisionError:
+        home_conceded_p_game = 0
     homeset_with_results = homeset.exclude(result__exact='').exclude(result__isnull=True).annotate(diff=Sum(F('homegoals') + F('awaygoals')))
     home_over2p5_all = 0
     home_over2p5_all_pcnt = 0.0
@@ -152,9 +203,9 @@ def h2h(request, pk):
     home_over4p5_all_pcnt = 0.0
     home_gg_all = 0
     home_gg_all_pcnt = 0.0
-    home_cleansheets_all = Game.objects.team_total_cleansheets(gm.hometeam, gm.season.id, gm.gameweek)
+    home_cleansheets_all = Game.objects.team_total_cleansheets_by_date(gm.hometeam, gm.season.id, gm.date)
     home_cleansheets_all_pcnt = 0.0
-    home_failedtoscore_all = Game.objects.team_total_failedtoscore(gm.hometeam, gm.season.id, gm.gameweek)
+    home_failedtoscore_all = Game.objects.team_total_failedtoscore_by_date(gm.hometeam, gm.season.id, gm.date)
     home_failedtoscore_all_pcnt = 0.0
     for gmm in homeset_with_results:
         if gmm.diff > 2.5:
@@ -169,20 +220,44 @@ def h2h(request, pk):
         #     home_cleansheets_all += 1
         # if gmm.homegoals == 0:
         #     home_failedtoscore_all += 1
-    home_over2p5_all_pcnt = home_over2p5_all / float(home_total_games) * 100
-    home_over3p5_all_pcnt = home_over3p5_all / float(home_total_games) * 100
-    home_over4p5_all_pcnt = home_over4p5_all / float(home_total_games) * 100
-    home_gg_all_pcnt = home_gg_all / float(home_total_games) * 100
-    home_cleansheets_all_pcnt = home_cleansheets_all / float(home_total_games) * 100
-    home_failedtoscore_all_pcnt = home_failedtoscore_all / float(home_total_games) * 100
+    try:
+        home_over2p5_all_pcnt = home_over2p5_all / float(home_total_games) * 100
+    except ZeroDivisionError:
+        home_over2p5_all_pcnt = 0
+    try:
+        home_over3p5_all_pcnt = home_over3p5_all / float(home_total_games) * 100
+    except ZeroDivisionError:
+        home_over3p5_all_pcnt = 0
+    try:
+        home_over4p5_all_pcnt = home_over4p5_all / float(home_total_games) * 100
+    except ZeroDivisionError:
+        home_over4p5_all_pcnt = 0
+    try:
+        home_gg_all_pcnt = home_gg_all / float(home_total_games) * 100
+    except ZeroDivisionError:
+        home_gg_all_pcnt = 0
+    try:
+        home_cleansheets_all_pcnt = home_cleansheets_all / float(home_total_games) * 100
+    except ZeroDivisionError:
+        home_cleansheets_all_pcnt = 0
+    try:
+        home_failedtoscore_all_pcnt = home_failedtoscore_all / float(home_total_games) * 100
+    except ZeroDivisionError:
+        home_failedtoscore_all_pcnt = 0
     # HOME TEAM HOME GAMES ----------------------------------------------------------
-    homeset_hm = Game.objects.filter(hometeam=gm.hometeam, season=gm.season.id, gameweek__lt=gm.gameweek)
+    homeset_hm = Game.objects.filter(hometeam=gm.hometeam, season=gm.season.id, date__lt=gm.date)
     # because the aggregation function returns a dictionary, the last part ['homefor_home'] is used to retrieve only the number
     homefor_hm = homeset_hm.aggregate(homefor_home=Sum('homegoals'))['homefor_home']
     homeagainst_hm = homeset_hm.aggregate(homeagainst_home=Sum('awaygoals'))['homeagainst_home']
     home_total_games_hm = homeset_hm.exclude(result__exact='').exclude(result__isnull=True).count()
-    home_scored_p_game_hm = homefor_hm / float(home_total_games_hm)
-    home_conceded_p_game_hm = homeagainst_hm / float(home_total_games_hm)
+    try:
+        home_scored_p_game_hm = homefor_hm / float(home_total_games_hm)
+    except ZeroDivisionError:
+        home_scored_p_game_hm = 0
+    try:
+        home_conceded_p_game_hm = homeagainst_hm / float(home_total_games_hm)
+    except ZeroDivisionError:
+        home_conceded_p_game_hm = 0
     homeset_with_results_hm = homeset_hm.exclude(result__exact='').exclude(result__isnull=True).annotate(diff=Sum(F('homegoals') + F('awaygoals')))
     home_over2p5_all_hm = 0
     home_over2p5_all_pcnt_hm = 0.0
@@ -209,14 +284,32 @@ def h2h(request, pk):
             home_cleansheets_all_hm += 1
         if gmmm.homegoals == 0:
             home_failedtoscore_all_hm += 1
-    home_over2p5_all_pcnt_hm = home_over2p5_all_hm / float(home_total_games_hm) * 100
-    home_over3p5_all_pcnt_hm = home_over3p5_all_hm / float(home_total_games_hm) * 100
-    home_over4p5_all_pcnt_hm = home_over4p5_all_hm / float(home_total_games_hm) * 100
-    home_gg_all_pcnt_hm = home_gg_all_hm / float(home_total_games_hm) * 100
-    home_cleansheets_all_pcnt_hm = home_cleansheets_all_hm / float(home_total_games_hm) * 100
-    home_failedtoscore_all_pcnt_hm = home_failedtoscore_all_hm / float(home_total_games_hm) * 100
+    try:
+        home_over2p5_all_pcnt_hm = home_over2p5_all_hm / float(home_total_games_hm) * 100
+    except ZeroDivisionError:
+        home_over2p5_all_pcnt_hm = 0
+    try:
+        home_over3p5_all_pcnt_hm = home_over3p5_all_hm / float(home_total_games_hm) * 100
+    except ZeroDivisionError:
+        home_over3p5_all_pcnt_hm = 0
+    try:
+        home_over4p5_all_pcnt_hm = home_over4p5_all_hm / float(home_total_games_hm) * 100
+    except ZeroDivisionError:
+        home_over4p5_all_pcnt_hm = 0
+    try:
+        home_gg_all_pcnt_hm = home_gg_all_hm / float(home_total_games_hm) * 100
+    except ZeroDivisionError:
+        home_gg_all_pcnt_hm = 0
+    try:
+        home_cleansheets_all_pcnt_hm = home_cleansheets_all_hm / float(home_total_games_hm) * 100
+    except ZeroDivisionError:
+        home_cleansheets_all_pcnt_hm = 0
+    try:
+        home_failedtoscore_all_pcnt_hm = home_failedtoscore_all_hm / float(home_total_games_hm) * 100
+    except ZeroDivisionError:
+        home_failedtoscore_all_pcnt_hm = 0
     # HOME TEAM AWAY GAMES ----------------------------------------------------------
-    homeset_aw = Game.objects.filter(awayteam=gm.hometeam, season=gm.season.id, gameweek__lt=gm.gameweek)
+    homeset_aw = Game.objects.filter(awayteam=gm.hometeam, season=gm.season.id, date__lt=gm.date)
     # because the aggregation function returns a dictionary, the last part ['homefor_home'] is used to retrieve only the number
     homefor_aw = homeset_aw.aggregate(homefor_away=Sum('awaygoals'))['homefor_away']
     homeagainst_aw = homeset_aw.aggregate(homeagainst_away=Sum('homegoals'))['homeagainst_away']
@@ -249,20 +342,44 @@ def h2h(request, pk):
             home_cleansheets_all_aw += 1
         if gammm.awaygoals == 0:
             home_failedtoscore_all_aw += 1
-    home_over2p5_all_pcnt_aw = home_over2p5_all_aw / float(home_total_games_aw) * 100
-    home_over3p5_all_pcnt_aw = home_over3p5_all_aw / float(home_total_games_aw) * 100
-    home_over4p5_all_pcnt_aw = home_over4p5_all_aw / float(home_total_games_aw) * 100
-    home_gg_all_pcnt_aw = home_gg_all_aw / float(home_total_games_aw) * 100
-    home_cleansheets_all_pcnt_aw = home_cleansheets_all_aw / float(home_total_games_aw) * 100
-    home_failedtoscore_all_pcnt_aw = home_failedtoscore_all_aw / float(home_total_games_aw) * 100
+    try:
+        home_over2p5_all_pcnt_aw = home_over2p5_all_aw / float(home_total_games_aw) * 100
+    except ZeroDivisionError:
+        home_over2p5_all_pcnt_aw = 0
+    try:
+        home_over3p5_all_pcnt_aw = home_over3p5_all_aw / float(home_total_games_aw) * 100
+    except ZeroDivisionError:
+        home_over3p5_all_pcnt_aw = 0
+    try:
+        home_over4p5_all_pcnt_aw = home_over4p5_all_aw / float(home_total_games_aw) * 100
+    except ZeroDivisionError:
+        home_over4p5_all_pcnt_aw = 0
+    try:
+        home_gg_all_pcnt_aw = home_gg_all_aw / float(home_total_games_aw) * 100
+    except ZeroDivisionError:
+        home_gg_all_pcnt_aw = 0
+    try:
+        home_cleansheets_all_pcnt_aw = home_cleansheets_all_aw / float(home_total_games_aw) * 100
+    except ZeroDivisionError:
+        home_cleansheets_all_pcnt_aw = 0
+    try:
+        home_failedtoscore_all_pcnt_aw = home_failedtoscore_all_aw / float(home_total_games_aw) * 100
+    except ZeroDivisionError:
+        home_failedtoscore_all_pcnt_aw = 0
     # AWAY TEAM ALL GAMES -------------------------
-    awayset = Game.objects.filter(Q(hometeam=gm.awayteam, season=gm.season.id, gameweek__lt=gm.gameweek) |
-                                  Q(awayteam=gm.awayteam, season=gm.season.id, gameweek__lt=gm.gameweek))
-    awayfor = Game.objects.team_total_goals_scored(awaytm, season.id, gm.gameweek - 1)
-    awayagainst = Game.objects.team_total_goals_conceded(awaytm, season.id, gm.gameweek - 1)
+    awayset = Game.objects.filter(Q(hometeam=gm.awayteam, season=gm.season.id, date__lt=gm.date) |
+                                  Q(awayteam=gm.awayteam, season=gm.season.id, date__lt=gm.date))
+    awayfor = Game.objects.team_total_goals_scored_by_date_ex_current(awaytm, season.id, gm.gameweek)
+    awayagainst = Game.objects.team_total_goals_conceded_by_date_ex_current(awaytm, season.id, gm.gameweek)
     away_total_games = awayset.exclude(result__exact='').exclude(result__isnull=True).count()
-    away_scored_p_game = awayfor / float(away_total_games)
-    away_conceded_p_game = awayagainst / float(away_total_games)
+    try:
+        away_scored_p_game = awayfor / float(away_total_games)
+    except ZeroDivisionError:
+        away_scored_p_game = 0
+    try:
+        away_conceded_p_game = awayagainst / float(away_total_games)
+    except ZeroDivisionError:
+        away_conceded_p_game = 0
     awayset_with_results = awayset.exclude(result__exact='').exclude(result__isnull=True).annotate(diff=Sum(F('homegoals') + F('awaygoals')))
     away_over2p5_all = 0
     away_over2p5_all_pcnt = 0.0
@@ -272,9 +389,9 @@ def h2h(request, pk):
     away_over4p5_all_pcnt = 0.0
     away_gg_all = 0
     away_gg_all_pcnt = 0.0
-    away_cleansheets_all = Game.objects.team_total_cleansheets(gm.awayteam, gm.season.id, gm.gameweek)
+    away_cleansheets_all = Game.objects.team_total_cleansheets_by_date(gm.awayteam, gm.season.id, gm.date)
     away_cleansheets_all_pcnt = 0.0
-    away_failedtoscore_all = Game.objects.team_total_failedtoscore(gm.awayteam, gm.season.id, gm.gameweek)
+    away_failedtoscore_all = Game.objects.team_total_failedtoscore_by_date(gm.awayteam, gm.season.id, gm.date)
     away_failedtoscore_all_pcnt = 0.0
     for gmm in awayset_with_results:
         if gmm.diff > 2.5:
@@ -285,20 +402,44 @@ def h2h(request, pk):
             away_over4p5_all += 1
         if gmm.homegoals > 0 and gmm.awaygoals > 0:
             away_gg_all += 1
-    away_over2p5_all_pcnt = away_over2p5_all / float(away_total_games) * 100
-    away_over3p5_all_pcnt = away_over3p5_all / float(away_total_games) * 100
-    away_over4p5_all_pcnt = away_over4p5_all / float(away_total_games) * 100
-    away_gg_all_pcnt = away_gg_all / float(away_total_games) * 100
-    away_cleansheets_all_pcnt = away_cleansheets_all / float(away_total_games) * 100
-    away_failedtoscore_all_pcnt = away_failedtoscore_all / float(away_total_games) * 100
+    try:
+        away_over2p5_all_pcnt = away_over2p5_all / float(away_total_games) * 100
+    except ZeroDivisionError:
+        away_over2p5_all_pcnt = 0
+    try:
+        away_over3p5_all_pcnt = away_over3p5_all / float(away_total_games) * 100
+    except ZeroDivisionError:
+        away_over3p5_all_pcnt = 0
+    try:
+        away_over4p5_all_pcnt = away_over4p5_all / float(away_total_games) * 100
+    except ZeroDivisionError:
+        away_over4p5_all_pcnt = 0
+    try:
+        away_gg_all_pcnt = away_gg_all / float(away_total_games) * 100
+    except ZeroDivisionError:
+        away_gg_all_pcnt = 0
+    try:
+        away_cleansheets_all_pcnt = away_cleansheets_all / float(away_total_games) * 100
+    except ZeroDivisionError:
+        away_cleansheets_all_pcnt = 0
+    try:
+        away_failedtoscore_all_pcnt = away_failedtoscore_all / float(away_total_games) * 100
+    except ZeroDivisionError:
+        away_failedtoscore_all_pcnt = 0
     # AWAY TEAM HOME GAMES ----------------------------------------------------------
-    awayset_hm = Game.objects.filter(hometeam=gm.awayteam, season=gm.season.id, gameweek__lt=gm.gameweek)
+    awayset_hm = Game.objects.filter(hometeam=gm.awayteam, season=gm.season.id, date__lt=gm.date)
     # because the aggregation function returns a dictionary, the last part ['homefor_home'] is used to retrieve only the number
     awayfor_hm = awayset_hm.aggregate(awayfor_home=Sum('homegoals'))['awayfor_home']
     awayagainst_hm = awayset_hm.aggregate(awayagainst_home=Sum('awaygoals'))['awayagainst_home']
     away_total_games_hm = awayset_hm.exclude(result__exact='').exclude(result__isnull=True).count()
-    away_scored_p_game_hm = awayfor_hm / float(away_total_games_hm)
-    away_conceded_p_game_hm = awayagainst_hm / float(away_total_games_hm)
+    try:
+        away_scored_p_game_hm = awayfor_hm / float(away_total_games_hm)
+    except ZeroDivisionError:
+        away_scored_p_game_hm = 0
+    try:
+        away_conceded_p_game_hm = awayagainst_hm / float(away_total_games_hm)
+    except ZeroDivisionError:
+        away_conceded_p_game_hm = 0
     awayset_with_results_hm = awayset_hm.exclude(result__exact='').exclude(result__isnull=True).annotate(diff=Sum(F('homegoals') + F('awaygoals')))
     away_over2p5_all_hm = 0
     away_over2p5_all_pcnt_hm = 0.0
@@ -325,20 +466,44 @@ def h2h(request, pk):
             away_cleansheets_all_hm += 1
         if gmmm.homegoals == 0:
             away_failedtoscore_all_hm += 1
-    away_over2p5_all_pcnt_hm = away_over2p5_all_hm / float(away_total_games_hm) * 100
-    away_over3p5_all_pcnt_hm = away_over3p5_all_hm / float(away_total_games_hm) * 100
-    away_over4p5_all_pcnt_hm = away_over4p5_all_hm / float(away_total_games_hm) * 100
-    away_gg_all_pcnt_hm = away_gg_all_hm / float(away_total_games_hm) * 100
-    away_cleansheets_all_pcnt_hm = away_cleansheets_all_hm / float(away_total_games_hm) * 100
-    away_failedtoscore_all_pcnt_hm = away_failedtoscore_all_hm / float(away_total_games_hm) * 100
+    try:
+        away_over2p5_all_pcnt_hm = away_over2p5_all_hm / float(away_total_games_hm) * 100
+    except ZeroDivisionError:
+        away_over2p5_all_pcnt_hm = 0
+    try:
+        away_over3p5_all_pcnt_hm = away_over3p5_all_hm / float(away_total_games_hm) * 100
+    except ZeroDivisionError:
+        away_over3p5_all_pcnt_hm = 0
+    try:
+        away_over4p5_all_pcnt_hm = away_over4p5_all_hm / float(away_total_games_hm) * 100
+    except ZeroDivisionError:
+        away_over4p5_all_pcnt_hm = 0
+    try:
+        away_gg_all_pcnt_hm = away_gg_all_hm / float(away_total_games_hm) * 100
+    except ZeroDivisionError:
+        away_gg_all_pcnt_hm = 0
+    try:
+        away_cleansheets_all_pcnt_hm = away_cleansheets_all_hm / float(away_total_games_hm) * 100
+    except ZeroDivisionError:
+        away_cleansheets_all_pcnt_hm = 0
+    try:
+        away_failedtoscore_all_pcnt_hm = away_failedtoscore_all_hm / float(away_total_games_hm) * 100
+    except ZeroDivisionError:
+        away_failedtoscore_all_pcnt_hm = 0
     # AWAY TEAM AWAY GAMES ----------------------------------------------------------
-    awayset_aw = Game.objects.filter(awayteam=gm.awayteam, season=gm.season.id, gameweek__lt=gm.gameweek)
+    awayset_aw = Game.objects.filter(awayteam=gm.awayteam, season=gm.season.id, date__lt=gm.date)
     # because the aggregation function returns a dictionary, the last part ['homefor_home'] is used to retrieve only the number
     awayfor_aw = awayset_aw.aggregate(awayfor_away=Sum('awaygoals'))['awayfor_away']
     awayagainst_aw = awayset_aw.aggregate(awayagainst_away=Sum('homegoals'))['awayagainst_away']
     away_total_games_aw = awayset_aw.exclude(result__exact='').exclude(result__isnull=True).count()
-    away_scored_p_game_aw = awayfor_aw / float(away_total_games_aw)
-    away_conceded_p_game_aw = awayagainst_aw / float(away_total_games_aw)
+    try:
+        away_scored_p_game_aw = awayfor_aw / float(away_total_games_aw)
+    except ZeroDivisionError:
+        away_scored_p_game_aw = 0
+    try:
+        away_conceded_p_game_aw = awayagainst_aw / float(away_total_games_aw)
+    except ZeroDivisionError:
+        away_conceded_p_game_aw = 0
     awayset_with_results_aw = awayset_aw.exclude(result__exact='').exclude(result__isnull=True).annotate(diff=Sum(F('homegoals') + F('awaygoals')))
     away_over2p5_all_aw = 0
     away_over2p5_all_pcnt_aw = 0.0
@@ -365,15 +530,33 @@ def h2h(request, pk):
             away_cleansheets_all_aw += 1
         if gammm.awaygoals == 0:
             away_failedtoscore_all_aw += 1
-    away_over2p5_all_pcnt_aw = away_over2p5_all_aw / float(away_total_games_aw) * 100
-    away_over3p5_all_pcnt_aw = away_over3p5_all_aw / float(away_total_games_aw) * 100
-    away_over4p5_all_pcnt_aw = away_over4p5_all_aw / float(away_total_games_aw) * 100
-    away_gg_all_pcnt_aw = away_gg_all_aw / float(away_total_games_aw) * 100
-    away_cleansheets_all_pcnt_aw = away_cleansheets_all_aw / float(away_total_games_aw) * 100
-    away_failedtoscore_all_pcnt_aw = away_failedtoscore_all_aw / float(away_total_games_aw) * 100
+    try:
+        away_over2p5_all_pcnt_aw = away_over2p5_all_aw / float(away_total_games_aw) * 100
+    except ZeroDivisionError:
+        away_over2p5_all_pcnt_aw = 0
+    try:
+        away_over3p5_all_pcnt_aw = away_over3p5_all_aw / float(away_total_games_aw) * 100
+    except ZeroDivisionError:
+        away_over3p5_all_pcnt_aw = 0
+    try:
+        away_over4p5_all_pcnt_aw = away_over4p5_all_aw / float(away_total_games_aw) * 100
+    except ZeroDivisionError:
+        away_over4p5_all_pcnt_aw = 0
+    try:
+        away_gg_all_pcnt_aw = away_gg_all_aw / float(away_total_games_aw) * 100
+    except ZeroDivisionError:
+        away_gg_all_pcnt_aw = 0
+    try:
+        away_cleansheets_all_pcnt_aw = away_cleansheets_all_aw / float(away_total_games_aw) * 100
+    except ZeroDivisionError:
+        away_cleansheets_all_pcnt_aw = 0
+    try:
+        away_failedtoscore_all_pcnt_aw = away_failedtoscore_all_aw / float(away_total_games_aw) * 100
+    except ZeroDivisionError:
+        away_failedtoscore_all_pcnt_aw = 0
     # HOME/AWAY ADVANTAGE
-    home_points_at_home = Game.objects.team_total_home_points(hometm, gm.season.id, gm.gameweek)
-    home_points_away = Game.objects.team_total_away_points(hometm, gm.season.id, gm.gameweek)
+    home_points_at_home = Game.objects.team_total_home_points_by_date(hometm, gm.season.id, gm.gameweek)
+    home_points_away = Game.objects.team_total_away_points_by_date(hometm, gm.season.id, gm.gameweek)
     try:
         home_goals_at_home_pcnt = (float(homefor_hm) / homefor) * 100
     except ZeroDivisionError:
@@ -390,8 +573,8 @@ def h2h(request, pk):
         home_against_away_pcnt = (float(homeagainst_aw) / homeagainst) * 100
     except ZeroDivisionError:
         home_against_away_pcnt = 0
-    away_points_at_home = Game.objects.team_total_home_points(awaytm, gm.season.id, gm.gameweek)
-    away_points_away = Game.objects.team_total_away_points(awaytm, gm.season.id, gm.gameweek)
+    away_points_at_home = Game.objects.team_total_home_points_by_date(awaytm, gm.season.id, gm.gameweek)
+    away_points_away = Game.objects.team_total_away_points_by_date(awaytm, gm.season.id, gm.gameweek)
     try:
         away_goals_at_home_pcnt = (float(awayfor_hm) / awayfor) * 100
     except ZeroDivisionError:
@@ -424,7 +607,7 @@ def h2h(request, pk):
     away4to6 = awayset_annotated.filter(Q(result_total=4) | Q(result_total=5) | Q(result_total=6)).count() / float(away_total_games)
     away7plus = awayset_annotated.filter(result_total__gt=6).count() / float(away_total_games)
     # league
-    all_matches = Game.objects.filter(season=gm.season.id, gameweek__lt=gm.gameweek).exclude(result__exact='').exclude(result__isnull=True)
+    all_matches = Game.objects.filter(season=gm.season.id, date__lt=gm.date).exclude(result__exact='').exclude(result__isnull=True)
     all_matches_cnt = all_matches.count()
     all_matches_annotated = all_matches.annotate(result_total=Sum(F('homegoals') + F('awaygoals')))
     lg0to1 = all_matches_annotated.filter(result_total__lt=2).count() / float(all_matches_cnt)
@@ -471,8 +654,8 @@ def metrics(request):
     for gm in myset:
         h = gm.hometeam
         a = gm.awayteam
-        x.update({h: Game.objects.modified_hga(teamm=gm.hometeam, seasonn=gm.season, gmwk=gm.gameweek)})
-        x.update({a: Game.objects.modified_hga(teamm=gm.awayteam, seasonn=gm.season, gmwk=gm.gameweek)})
+        x.update({h: Game.objects.modified_hga_from_date(teamm=gm.hometeam, seasonn=gm.season, dt=gm.date)})
+        x.update({a: Game.objects.modified_hga_from_date(teamm=gm.awayteam, seasonn=gm.season, dt=gm.date)})
     return render(request, 'predictions/metrics.html', {'x': x})
 
 
@@ -496,6 +679,8 @@ def predictions(request):
     over_1p5 = 0
     over_2p5 = 0
     over_3p5 = 0
+    p = []
+    any_postponed = False
     new_predictions_cnt = 0
     past_predictions_cnt = 0
     seasons = Season.objects.all()
@@ -532,62 +717,107 @@ def predictions(request):
             goals_p_game = float(season_goals) / games_played
             bts = Game.objects.season_both_teams_scored(seasonid)
             bts_perc = format(float(bts) / games_played, "0.00%")
-            over_1p5 = format(float(Game.objects.over_one_half(seasonid)) / games_played, "0.00%")
-            over_2p5 = format(float(Game.objects.over_two_half(seasonid)) / games_played, "0.00%")
-            over_3p5 = format(float(Game.objects.over_three_half(seasonid)) / games_played, "0.00%")
+            over_1p5 = format(float(Game.objects.over_one_half_optimized(seasonid)) / games_played, "0.00%")
+            over_2p5 = format(float(Game.objects.over_two_half_optimized(seasonid)) / games_played, "0.00%")
+            over_3p5 = format(float(Game.objects.over_three_half_optimized(seasonid)) / games_played, "0.00%")
             lst = Season.objects.get(id=seasonid)
             lstout = lst.league.league_name
             ssnout = str(lst.get_start_year()) + "/" + str(lst.get_end_year())
-            leaderboard = Game.objects.last_gameweek(seasn=lst)
+            leaderboard = Game.objects.last_gameweek(seasn=lst).select_related('season', 'hometeam', 'awayteam')
+            datte = leaderboard.order_by('-date')[0].date
             gamewk = leaderboard[0].gameweek + 1
+            try:
+                last_date = Game.objects.filter(season=seasonid, gameweek=gamewk).order_by('-date')[0].date
+                predictions_exist = True
+            except IndexError:
+                last_date = Game.objects.last_gameweek(lst).order_by('-gameweek')[0].date
+                predictions_exist = False
             gamewk_out = gamewk - 1
             user_made_selection = True
             past_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__lte=gamewk_out).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).count()
             # new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__gt=6).count() - past_predictions_cnt
-            new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek=gamewk).count()
+            # new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek=gamewk).count()
+            if predictions_exist:
+                new_predictions_cnt = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK').exclude(prediction_elohist__exact='Not enough games to calculate prediction (the model needs at least 6 gameweeks)').count()
+                new_predictions_cnt = new_predictions_cnt - past_predictions_cnt
+            else:
+                new_predictions_cnt = 0
             # teams_total = Game.objects.filter(season=seasonid, gameweek=1).count() * 2
+            dateof_last_game = Game.objects.select_related('season').filter(season=seasonid).exclude(result__exact='').exclude(result__isnull=True).order_by('-date')[0].date
             for tm in leaderboard:
                 h = tm.hometeam
                 a = tm.awayteam
-                # In order to get this week's game, I have to give next week's gmwk as the function deducts 1 (so I add 1 at gamewk)
+                homeform = Game.objects.team_form_list_by_date(h, seasonid, datte)
+                awayform = Game.objects.team_form_list_by_date(a, seasonid, datte)
+                hometooltips = Game.objects.team_form_tooltip_by_date(h, seasonid, datte)
+                awaytooltips = Game.objects.team_form_tooltip_by_date(a, seasonid, datte)
+                hmform_and_tooltip = Game.objects.team_form_tooltip_joined_by_date(h, seasonid, datte)
+                awform_and_tooltip = Game.objects.team_form_tooltip_joined_by_date(a, seasonid, datte)
                 x.append(
                     {'team': h,
-                     'played': Game.objects.last_gameweek_played(h, seasonid),
-                     'wins': Game.objects.team_total_wins(h, seasonid, gamewk_out),
-                     'draws': Game.objects.team_total_draws(h, seasonid, gamewk_out),
-                     'losses': Game.objects.team_total_losses(h, seasonid, gamewk_out),
-                     'gf': Game.objects.team_total_goals_scored(h, seasonid, gamewk_out),
-                     'ga': Game.objects.team_total_goals_conceded(h, seasonid, gamewk_out),
-                     'f1': Game.objects.team_form(h, seasonid, gamewk - 6),
-                     'f2': Game.objects.team_form(h, seasonid, gamewk - 5),
-                     'f3': Game.objects.team_form(h, seasonid, gamewk - 4),
-                     'f4': Game.objects.team_form(h, seasonid, gamewk - 3),
-                     'f5': Game.objects.team_form(h, seasonid, gamewk - 2),
-                     'f6': Game.objects.team_form(h, seasonid, gamewk - 1),
-                     'points': round(Decimal(Game.objects.get_previous_elo(tm=tm.hometeam, seasn=lst, gmwk=gamewk)), 2)
+                     'played': Game.objects.team_total_season_matches(h, seasonid),
+                     'wins': Game.objects.team_total_wins_by_date_optimized(h, seasonid, datte),
+                     'draws': Game.objects.team_total_draws_by_date_optimized(h, seasonid, datte),
+                     'losses': Game.objects.team_total_losses_by_date_optimized(h, seasonid, datte),
+                     'gf': Game.objects.team_total_goals_scored_by_date(h, seasonid, gamewk),
+                     'ga': Game.objects.team_total_goals_conceded_by_date(h, seasonid, gamewk),
+                     'f1': hmform_and_tooltip[5][0],
+                     'f2': hmform_and_tooltip[4][0],
+                     'f3': hmform_and_tooltip[3][0],
+                     'f4': hmform_and_tooltip[2][0],
+                     'f5': hmform_and_tooltip[1][0],
+                     'f6': hmform_and_tooltip[0][0],
+                     'tltp1': hmform_and_tooltip[5][1],
+                     'tltp2': hmform_and_tooltip[4][1],
+                     'tltp3': hmform_and_tooltip[3][1],
+                     'tltp4': hmform_and_tooltip[2][1],
+                     'tltp5': hmform_and_tooltip[1][1],
+                     'tltp6': hmform_and_tooltip[0][1],
+                     # 'points': round(Decimal(Game.objects.get_previous_elo_by_date(tm=tm.hometeam, seasn=lst, gmwk=gamewk)), 2)
+                     'points': round(Decimal(tm.elo_rating_home), 2),
+                     'normal_points': Game.objects.team_points_optimized(seasonid, h, datte),
                      })
                 x.append(
                     {'team': a,
-                     'played': Game.objects.last_gameweek_played(a, seasonid),
-                     'wins': Game.objects.team_total_wins(a, seasonid, gamewk_out),
-                     'draws': Game.objects.team_total_draws(a, seasonid, gamewk_out),
-                     'losses': Game.objects.team_total_losses(a, seasonid, gamewk_out),
-                     'gf': Game.objects.team_total_goals_scored(a, seasonid, gamewk_out),
-                     'ga': Game.objects.team_total_goals_conceded(a, seasonid, gamewk_out),
-                     'f1': Game.objects.team_form(a, seasonid, gamewk - 6),
-                     'f2': Game.objects.team_form(a, seasonid, gamewk - 5),
-                     'f3': Game.objects.team_form(a, seasonid, gamewk - 4),
-                     'f4': Game.objects.team_form(a, seasonid, gamewk - 3),
-                     'f5': Game.objects.team_form(a, seasonid, gamewk - 2),
-                     'f6': Game.objects.team_form(a, seasonid, gamewk - 1),
-                     'points': round(Decimal(Game.objects.get_previous_elo(tm=tm.awayteam, seasn=lst, gmwk=gamewk)), 2)
+                     'played': Game.objects.team_total_season_matches(a, seasonid),
+                     'wins': Game.objects.team_total_wins_by_date_optimized(a, seasonid, datte),
+                     'draws': Game.objects.team_total_draws_by_date_optimized(a, seasonid, datte),
+                     'losses': Game.objects.team_total_losses_by_date_optimized(a, seasonid, datte),
+                     'gf': Game.objects.team_total_goals_scored_by_date(a, seasonid, gamewk),
+                     'ga': Game.objects.team_total_goals_conceded_by_date(a, seasonid, gamewk),
+                     'f1': awform_and_tooltip[5][0],
+                     'f2': awform_and_tooltip[4][0],
+                     'f3': awform_and_tooltip[3][0],
+                     'f4': awform_and_tooltip[2][0],
+                     'f5': awform_and_tooltip[1][0],
+                     'f6': awform_and_tooltip[0][0],
+                     'tltp1': awform_and_tooltip[5][1],
+                     'tltp2': awform_and_tooltip[4][1],
+                     'tltp3': awform_and_tooltip[3][1],
+                     'tltp4': awform_and_tooltip[2][1],
+                     'tltp5': awform_and_tooltip[1][1],
+                     'tltp6': awform_and_tooltip[0][1],
+                     # 'points': round(Decimal(Game.objects.get_previous_elo_by_date(tm=tm.awayteam, seasn=lst, gmwk=gamewk)), 2)
+                     'points': round(Decimal(tm.elo_rating_away), 2),
+                     'normal_points': Game.objects.team_points_optimized(seasonid, a, datte),
                      })
-            selected_season = Season.objects.get(id=seasonid)
-            country_code = selected_season.league.country_code
+            country_code = Season.objects.select_related('league').get(id=seasonid).league.country_code
             if country_code == 'England':
                 flag = 'gb-eng'
             else:
                 flag = country_code
+            p = []
+            postponed_games = Game.objects.filter(season=seasonid).exclude(game_status='OK')
+            if postponed_games.count() > 0:
+                any_postponed = True
+            for pgm in postponed_games:
+                p.append(
+                    {'phome': pgm.hometeam,
+                     'paway': pgm.awayteam,
+                     'pgw': pgm.gameweek,
+                     'pstatus': pgm.game_status,
+                     }
+                )
     sorted_x = sorted(x, key=itemgetter('points'), reverse=True)
     return render(request, 'predictions/predictions.html',
                   {'x': sorted_x, 'seasonid': seasonid, 'gamewkout': gamewk_out, 'seasons': seasons,
@@ -597,7 +827,7 @@ def predictions(request):
                    'games_played_perc_string': format(games_played_perc, "0.00%"), 'home_wins_total_perc': home_wins_total_perc,
                    'away_wins_total_perc': away_wins_total_perc, 'draws_total_perc': draws_total_perc, 'season_goals': season_goals,
                    'goals_p_game': goals_p_game, 'bts_perc': bts_perc, 'over_1p5': over_1p5, 'over_2p5': over_2p5, 'over_3p5': over_3p5,
-                   'new_predictions_cnt': new_predictions_cnt, 'past_predictions_cnt': past_predictions_cnt, 'flag': flag})
+                   'new_predictions_cnt': new_predictions_cnt, 'past_predictions_cnt': past_predictions_cnt, 'flag': flag, 'p': p, 'any_postponed': any_postponed})
 
 
 def testview(request):
@@ -626,13 +856,31 @@ def new_predictions(request, seasonid, gamewk):
     season_year = str(seasonn.get_start_year()) + "/" + str(seasonn.get_end_year())
     lastgw = Game.objects.last_gameweek(seasn=seasonid)
     prediction_gamewk = lastgw[0].gameweek + 1
+    try:
+        last_date = Game.objects.filter(season=seasonid, gameweek=prediction_gamewk).order_by('-date')[0].date
+        predictions_exist = True
+    except IndexError:
+        last_date = Game.objects.last_gameweek(seasonn).order_by('-gameweek')[0].date
+        predictions_exist = False
+    # last_date = Game.objects.filter(season=seasonid, gameweek=prediction_gamewk).order_by('-date')[0].date
     # new_predictions_set = Game.objects.filter(season=seasonid, gameweek=prediction_gamewk).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=False).order_by('date')
-    new_predictions_set = Game.objects.filter(season=seasonid, gameweek=prediction_gamewk).order_by('date')
-    new_predictions_cnt = new_predictions_set.count()
+    # new_predictions_set = Game.objects.filter(season=seasonid, gameweek=prediction_gamewk).order_by('date')
+    new_predictions_set = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK').exclude(homegoals__gte=0)
+    past_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__lte=prediction_gamewk - 1).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).count()
+    # new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__gt=6).count() - past_predictions_cnt
+    # new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek=gamewk).count()
+    if predictions_exist:
+        new_predictions_cnt = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK').exclude(prediction_elohist__exact='Not enough games to calculate prediction (the model needs at least 6 gameweeks)').count()
+        new_predictions_cnt = new_predictions_cnt - past_predictions_cnt
+    else:
+        new_predictions_cnt = 0
+    # new_predictions_cnt = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK').exclude(prediction_elohist__exact='Not enough games to calculate prediction (the model needs at least 6 gameweeks)').count()
+    # new_predictions_cnt = new_predictions_cnt - past_predictions_cnt
     x = []
     for gm in new_predictions_set:
-        matchh = str(gm.hometeam) + " vs " + str(gm.awayteam)
+        matchh = str(gm.hometeam) + " - " + str(gm.awayteam)
         x.append({
+            'gameweek': gm.gameweek,
             'match': matchh,
             'elohist': gm.prediction_elohist,
             'elol6': gm.prediction_elol6,
@@ -640,7 +888,7 @@ def new_predictions(request, seasonid, gamewk):
             'date': gm.date,
             'pk': gm.pk
         })
-    sorted_x = sorted(x, key=itemgetter('date'), reverse=False)
+    sorted_x = sorted(x, key=itemgetter('date'), reverse=True)
     # progress bars variables
     home_elohist_total_preds = Game.objects.total_model_predictions('elohist', seasonid, 'HOME')
     home_elohist_succ_preds = Game.objects.total_model_successful_predictions('elohist', seasonid, 'HOME')
@@ -1048,7 +1296,7 @@ def addscore(request):
     formset_to_save = ''
     msg = ''
     msg_class = ''
-    GameFormSet = modelformset_factory(Game, fields=('gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam', 'game_status'), extra=0)
+    GameFormSet = modelformset_factory(Game, fields=('gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam', 'game_status', 'flag'), extra=0)
     formset = GameFormSet(queryset=Game.objects.all())
     countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
     szns_drpdown = {}
@@ -1105,7 +1353,8 @@ def addgames(request):
             'homegoals': forms.Textarea(attrs={'cols': 8, 'rows': 1}),
             'awaygoals': forms.Textarea(attrs={'cols': 8, 'rows': 1}),
             'date': forms.DateInput()
-        })
+        },
+        fields=('date', 'gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam', 'season', 'game_status',))
     formset = GameFormSet(queryset=Game.objects.none())
     countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
     szns_drpdown = {}
@@ -1124,14 +1373,15 @@ def addgames(request):
             if lg_name == "select_league" or lg_name == '' or not lg_name or lg_name is None or period_end == 'None' or period_end == '':
                 return redirect('add_games')
             else:
-                games_selected = Game.objects.filter(season__league__league_name=lg_name, season__end_date=period_end)[0]
-                seasonid = games_selected.season.id
+                # games_selected = Game.objects.filter(season__league__league_name=lg_name, season__end_date=period_end)[0]
+                # seasonid = games_selected.season.id
+                seasonid = Season.objects.filter(league__league_name=lg_name, end_date=period_end)[0].id
                 user_made_selection = True
                 lst = Season.objects.get(id=seasonid)
                 lstout = lst.league.league_name
                 ssnout = str(lst.get_start_year()) + "/" + str(lst.get_end_year())
-                leaderboard = Game.objects.last_gameweek(seasn=lst)
-                gamewk = leaderboard[0].gameweek + 1
+                # leaderboard = Game.objects.last_gameweek(seasn=lst)
+                # gamewk = leaderboard[0].gameweek + 1
                 # override the hometeam, awayteam and season querysets (of each form in the formset) to only show the teams and season related to the selected season
                 for form in formset:
                     form.fields['hometeam'].queryset = Team.objects.filter(Q(hometeam__season__id=seasonid) | Q(awayteam__season__id=seasonid)).distinct()
@@ -1144,6 +1394,7 @@ def addgames(request):
                 # for frm in formset:
                 #     frm.fields['hometeam'] = frm.fields['homefield']
                 #     frm.fields['awayteam'] = frm.fields['awayfield']
+                # formset_to_save.save(commit=False)
                 formset_to_save.save()
                 msg = "Success! All games saved!"
                 msg_class = 'bg-success'
@@ -1152,13 +1403,13 @@ def addgames(request):
                 msg = "Something went wrong. Call krok"
                 msg_class = 'bg-danger'
     return render(request, 'predictions/addgame.html', {'formset': formset, 'user_made_selection': user_made_selection,
-                                                        'szns_drpdown': szns_drpdown, 'gamewk': gamewk, 'lstout': lstout,
+                                                        'szns_drpdown': szns_drpdown, 'lstout': lstout,
                                                         'ssnout': ssnout, 'countries': countries,
                                                         'formset_to_save': formset_to_save, 'msg': msg, 'msg_class': msg_class})
 
 
 def all_games(request):
-    tableset = Game.objects.all()
+    tableset = Game.objects.select_related('season')
     return render(request, 'predictions/all_games.html', {'tableset': tableset})
 
 
@@ -1339,9 +1590,12 @@ def faq(request):
 
 
 def top3(request):
-    allgames = Game.objects.all().order_by('-date')
-    current_start_year = allgames[0].season.start_date.year
-    current_end_year = allgames[0].season.end_date.year
+    # allgames = Game.objects.all().order_by('-date')
+    # current_start_year = allgames[0].season.start_date.year
+    # current_end_year = allgames[0].season.end_date.year
+    allseasons = Season.objects.all().order_by('-end_date')
+    current_start_year = allseasons[0].start_date.year
+    current_end_year = allseasons[0].end_date.year
     current_period = str(current_start_year) + "/" + str(current_end_year)
 
     # get the dicts
@@ -1438,3 +1692,29 @@ def edit_match(request, pk):
 def game_details(request, pk):
     match = get_object_or_404(Game, pk=pk)
     return render(request, 'predictions/game_details.html', {'match': match})
+
+
+def alerts(request):
+    today = datetime.today()
+    upcoming_games = Game.objects.filter(date__gte=today).exclude(homegoals__gte=0).count()
+    finished_games_without_score = Game.objects.filter(date__lt=today, homegoals__isnull=True).count()
+    games_to_refresh_formulas = Game.objects.filter(flag='Refresh').count()
+    return render(request, 'predictions/alerts.html', {'upcoming_games': upcoming_games, 'finished_games_without_score': finished_games_without_score, 'games_to_refresh_formulas': games_to_refresh_formulas})
+
+
+def alerts_upcoming_games(request):
+    today = datetime.today()
+    upcoming_games = Game.objects.filter(date__gte=today).exclude(homegoals__gte=0).order_by('date')
+    return render(request, 'predictions/alerts_upcoming_games.html', {'upcoming_games': upcoming_games})
+
+
+def alerts_finished_games(request):
+    today = datetime.today()
+    finished_games_without_score = GameSeasonFilter(request.GET, queryset=Game.objects.filter(date__lt=today, homegoals__isnull=True).order_by('season'))
+    # finished_games_without_score = Game.objects.filter(date__lt=today, homegoals__isnull=True).order_by('season')
+    return render(request, 'predictions/alerts_finished_games_without_score.html', {'finished_games_without_score': finished_games_without_score})
+
+
+def alerts_refresh_formulas(request):
+    games_to_refresh_formulas = GameSeasonFilter(request.GET, queryset=Game.objects.filter(flag='Refresh').order_by('season'))
+    return render(request, 'predictions/games_to_refresh.html', {'games_to_refresh_formulas': games_to_refresh_formulas})
