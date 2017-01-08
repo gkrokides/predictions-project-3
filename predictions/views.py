@@ -1094,57 +1094,75 @@ def dashboard(request):
     # variables strike rate
     if elohist_total_preds_home == 0:
         elohist_strike_rate_home = "NA*"
+        elohist_strike_rate_home_tltp = 'NA'
     else:
         elohist_strike_rate_home = (float(elohist_total_succ_home) / elohist_total_preds_home) * 100
         strongest_home_list.append(elohist_strike_rate_home)
+        elohist_strike_rate_home_tltp = str(elohist_total_succ_home) + ' / ' + str(elohist_total_preds_home)
 
     if elohist_total_preds_away == 0:
         elohist_strike_rate_away = "NA*"
+        elohist_strike_rate_away_tltp = 'NA'
     else:
         elohist_strike_rate_away = (float(elohist_total_succ_away) / elohist_total_preds_away) * 100
         strongest_away_list.append(elohist_strike_rate_away)
+        elohist_strike_rate_away_tltp = str(elohist_total_succ_away) + ' / ' + str(elohist_total_preds_away)
 
     if elohist_total_preds_draw == 0:
         elohist_strike_rate_draw = "NA*"
+        elohist_strike_rate_draw_tltp = 'NA'
     else:
         elohist_strike_rate_draw = (float(elohist_total_succ_draw) / elohist_total_preds_draw) * 100
         strongest_draw_list.append(elohist_strike_rate_draw)
+        elohist_strike_rate_draw_tltp = str(elohist_total_succ_draw) + ' / ' + str(elohist_total_preds_draw)
 
     if elol6_total_preds_home == 0:
         elol6_strike_rate_home = "NA*"
+        elol6_strike_rate_home_tltp = 'NA'
     else:
         elol6_strike_rate_home = (float(elol6_total_succ_home) / elol6_total_preds_home) * 100
         strongest_home_list.append(elol6_strike_rate_home)
+        elol6_strike_rate_home_tltp = str(elol6_total_succ_home) + ' / ' + str(elol6_total_preds_home)
 
     if elol6_total_preds_away == 0:
         elol6_strike_rate_away = "NA*"
+        elol6_strike_rate_away_tltp = 'NA'
     else:
         elol6_strike_rate_away = (float(elol6_total_succ_away) / elol6_total_preds_away) * 100
         strongest_away_list.append(elol6_strike_rate_away)
+        elol6_strike_rate_away_tltp = str(elol6_total_succ_away) + ' / ' + str(elol6_total_preds_away)
 
     if elol6_total_preds_draw == 0:
         elol6_strike_rate_draw = "NA*"
+        elol6_strike_rate_draw_tltp = 'NA'
     else:
         elol6_strike_rate_draw = (float(elol6_total_succ_draw) / elol6_total_preds_draw) * 100
         strongest_draw_list.append(elol6_strike_rate_draw)
+        elol6_strike_rate_draw_tltp = str(elol6_total_succ_draw) + ' / ' + str(elol6_total_preds_draw)
 
     if gsrs_total_preds_home == 0:
         gsrs_strike_rate_home = "NA*"
+        gsrs_strike_rate_home_tltp = 'NA'
     else:
         gsrs_strike_rate_home = (float(gsrs_total_succ_home) / gsrs_total_preds_home) * 100
         strongest_home_list.append(gsrs_strike_rate_home)
+        gsrs_strike_rate_home_tltp = str(gsrs_total_succ_home) + ' / ' + str(gsrs_total_preds_home)
 
     if gsrs_total_preds_away == 0:
         gsrs_strike_rate_away = "NA*"
+        gsrs_strike_rate_away_tltp = 'NA'
     else:
         gsrs_strike_rate_away = (float(gsrs_total_succ_away) / gsrs_total_preds_away) * 100
         strongest_away_list.append(gsrs_strike_rate_away)
+        gsrs_strike_rate_away_tltp = str(gsrs_total_succ_away) + ' / ' + str(gsrs_total_preds_away)
 
     if gsrs_total_preds_draw == 0:
         gsrs_strike_rate_draw = "NA*"
+        gsrs_strike_rate_draw_tltp = 'NA'
     else:
         gsrs_strike_rate_draw = (float(gsrs_total_succ_draw) / gsrs_total_preds_draw) * 100
         strongest_draw_list.append(gsrs_strike_rate_draw)
+        gsrs_strike_rate_draw_tltp = str(gsrs_total_succ_draw) + ' / ' + str(gsrs_total_preds_draw)
     # variable model strengths
     strongest_home = max(strongest_home_list)
     strongest_away = max(strongest_away_list)
@@ -1289,7 +1307,11 @@ def dashboard(request):
                    'gsrs_strike_rate_draw_out': gsrs_strike_rate_draw_out, 'allseasons': allseasons_json, 'allseasons_notjson': allseasons,
                    'period_end_canvas': period_end_canvas, 'elohist_distribution_strike_rate': elohist_distribution_strike_rate,
                    'elol6_distribution_strike_rate': elol6_distribution_strike_rate, 'gsrs_distribution_strike_rate': gsrs_distribution_strike_rate,
-                   'top3': top3srs})
+                   'top3': top3srs, 'elohist_strike_rate_home_tltp': elohist_strike_rate_home_tltp, 'elohist_strike_rate_away_tltp': elohist_strike_rate_away_tltp,
+                   'elohist_strike_rate_draw_tltp': elohist_strike_rate_draw_tltp, 'elol6_strike_rate_home_tltp': elol6_strike_rate_home_tltp,
+                   'elol6_strike_rate_away_tltp': elol6_strike_rate_away_tltp, 'elol6_strike_rate_draw_tltp': elol6_strike_rate_draw_tltp,
+                   'gsrs_strike_rate_home_tltp': gsrs_strike_rate_home_tltp, 'gsrs_strike_rate_away_tltp': gsrs_strike_rate_away_tltp,
+                   'gsrs_strike_rate_draw_tltp': gsrs_strike_rate_draw_tltp})
 
 
 def addscore(request):

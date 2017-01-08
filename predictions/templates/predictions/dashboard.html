@@ -112,6 +112,11 @@ window.onload = function () {
 }
 </script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    </script>
 {% endblock %}
 
 {% block header %}
@@ -199,21 +204,21 @@ window.onload = function () {
                         <tbody class="centred">
                         <tr>
                             <td class="left-al">Home</td>
-                            <td class={{elohist_strike_rate_home_out|strike_rate_colors}}>{{ elohist_strike_rate_home|floatformat:0 }}%</td>
-                            <td class={{elol6_strike_rate_home_out|strike_rate_colors}}>{{ elol6_strike_rate_home|floatformat:0 }}%</td>
-                            <td class={{gsrs_strike_rate_home_out|strike_rate_colors}}>{{ gsrs_strike_rate_home|floatformat:0 }}%</td>
+                            <td class={{elohist_strike_rate_home_out|strike_rate_colors}}><span data-toggle="tooltip" data-placement="top" title="{{ elohist_strike_rate_home_tltp }}">{{ elohist_strike_rate_home|floatformat:0 }}%</span></td>
+                            <td class={{elol6_strike_rate_home_out|strike_rate_colors}}><span data-toggle="tooltip" data-placement="top" title="{{ elol6_strike_rate_home_tltp }}">{{ elol6_strike_rate_home|floatformat:0 }}%</span></td>
+                            <td class={{gsrs_strike_rate_home_out|strike_rate_colors}}><span data-toggle="tooltip" data-placement="top" title="{{ gsrs_strike_rate_home_tltp }}">{{ gsrs_strike_rate_home|floatformat:0 }}%</span></td>
                         </tr>
                         <tr>
                             <td class="left-al">Away</td>
-                            <td class={{elohist_strike_rate_away_out|strike_rate_colors}}>{{ elohist_strike_rate_away|floatformat:0 }}%</td>
-                            <td class={{elol6_strike_rate_away_out|strike_rate_colors}}>{{ elol6_strike_rate_away|floatformat:0 }}%</td>
-                            <td class={{gsrs_strike_rate_away_out|strike_rate_colors}}>{{ gsrs_strike_rate_away|floatformat:0 }}%</td>
+                            <td class={{elohist_strike_rate_away_out|strike_rate_colors}}><span data-toggle="tooltip" data-placement="top" title="{{ elohist_strike_rate_away_tltp }}">{{ elohist_strike_rate_away|floatformat:0 }}%</span></td>
+                            <td class={{elol6_strike_rate_away_out|strike_rate_colors}}><span data-toggle="tooltip" data-placement="top" title="{{ elol6_strike_rate_away_tltp }}">{{ elol6_strike_rate_away|floatformat:0 }}%</span></td>
+                            <td class={{gsrs_strike_rate_away_out|strike_rate_colors}}><span data-toggle="tooltip" data-placement="top" title="{{ gsrs_strike_rate_away_tltp }}">{{ gsrs_strike_rate_away|floatformat:0 }}%</span></td>
                         </tr>
                         <tr>
                             <td class="left-al">Draw</td>
-                            <td class={{elohist_strike_rate_draw_out|strike_rate_colors}}>{{ elohist_strike_rate_draw|floatformat:0 }}%</td>
-                            <td class={{elol6_strike_rate_draw_out|strike_rate_colors}}>{{ elol6_strike_rate_draw|floatformat:0 }}%</td>
-                            <td class={{gsrs_strike_rate_draw_out|strike_rate_colors}}>{{ gsrs_strike_rate_draw|floatformat:0 }}%</td>
+                            <td class={{elohist_strike_rate_draw_out|strike_rate_colors}}><span data-toggle="tooltip" data-placement="top" title="{{ elohist_strike_rate_draw_tltp }}">{{ elohist_strike_rate_draw|floatformat:0 }}%</span></td>
+                            <td class={{elol6_strike_rate_draw_out|strike_rate_colors}}><span data-toggle="tooltip" data-placement="top" title="{{ elol6_strike_rate_draw_tltp }}">{{ elol6_strike_rate_draw|floatformat:0 }}%</span></td>
+                            <td class={{gsrs_strike_rate_draw_out|strike_rate_colors}}><span data-toggle="tooltip" data-placement="top" title="{{ gsrs_strike_rate_draw_tltp }}">{{ gsrs_strike_rate_draw|floatformat:0 }}%</span></td>
                         </tr>
                         </tbody>
                     </table>
