@@ -41,12 +41,15 @@
                 <th>Season</th>
                 <th>Gmwk</th>
                 <th>Date</th>
-                <th>Home rating</th>
+                <!--<th>Home rating</th>-->
                 <th class="right-al">Home</th>
                <th>Home goals</th>
                 <th>Away goals</th>
                 <th>Away</th>
-                <th>Away rating</th>
+                <th>BP</th>
+                <th>MP</th>
+                <th>YP</th>
+                <!--<th>Away rating</th>-->
                 <!--<th>Status Black</th>-->
                 <!--<th>Status Purple</th>-->
                 <!--<th>Status Yellow</th>-->
@@ -59,15 +62,18 @@
             <tr style="font-size:80%;">
                 <td width="1%">{{ obj.season.id }}</td>
                 <td width="1%">{{ obj.id }}</td>
-                <td width="15%">{{ obj.season }}</td>
+                <td width="20%">{{ obj.season }}</td>
                 <td width="1%">{{ obj.gameweek }}</td>
-                <td width="10%">{{ obj.date }}</td>
-                <td width="1%" class="">{{ obj.elo_rating_home|floatformat:2 }}</td>
-                <td width="12%" class="right-al">{{ obj.hometeam }}</td>
+                <td width="15%">{{ obj.date }}</td>
+                <!--<td width="1%" class="">{{ obj.elo_rating_home|floatformat:2 }}</td>-->
+                <td width="20%" class="right-al">{{ obj.hometeam }}</td>
                 <td class="centred" width="1%">{{ obj.homegoals }}</td>
                 <td class="centred" width="1%">{{ obj.awaygoals }}</td>
-                <td width="12%">{{ obj.awayteam }}</td>
-                <td width="1%" class="">{{ obj.elo_rating_away|floatformat:2 }}</td>
+                <td width="20%">{{ obj.awayteam }}</td>
+                <td width="1%">{{ obj.prediction_elohist }}</td>
+                <td width="1%">{{ obj.prediction_elol6 }}</td>
+                <td width="1%">{{ obj.prediction_gsrs }}</td>
+                <!--<td width="1%" class="">{{ obj.elo_rating_away|floatformat:2 }}</td>-->
                 <!--<td>{{ obj.prediction_status_elohist }}</td>-->
                 <!--<td>{{ obj.prediction_status_elol6 }}</td>-->
                 <!--<td>{{ obj.prediction_status_gsrs }}</td>-->
