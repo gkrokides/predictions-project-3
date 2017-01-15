@@ -9,7 +9,7 @@
         $(document).ready(function() {
         $('#example').DataTable( {
         "paging":   false,
-        "ordering": false,
+        "ordering": true,
         "info":     true
             } );
         } );
@@ -29,7 +29,7 @@
 {% block content30 %}
 
 <p style="border: solid; padding: 5px; background: grey;">
-<span style="color: white;"><strong>League Overview/Stats:</strong></span>
+<span style="color: white;"><strong>Overview/Stats:</strong></span>
 {% for item in sorted_x %}
 
 <!--<a href="{% url 'league_overview' sid=item.1 %}" data-toggle="tooltip" data-placement="top" title="{{ item.0 }}"><img src="" class="flag flag-{{ item.2 }}" alt=""/></a>-->
@@ -57,11 +57,12 @@
 
 {% load app_filters %}
 {% load humanize %}
-
-<table id="example" class="display compact" cellspacing="0" width="100%">
+<div class="table-responsive">
+<table id="example" class="table display compact" cellspacing="0" width="100%">
     <thead>
       <tr style="background: grey; color: white;">
-        <th class="centred">Season</th>
+        <th width="1%" class="centred">Country</th>
+        <th class="centred">League</th>
         <th class="centred">Gameweek</th>
         <th class="centred">Home</th>
         <th class="centred">vs</th>
@@ -77,8 +78,9 @@
 
     {% for itemm in upcoming_predictions %}
 
-      <tr>
-        <td>{{ itemm.season }}</td>
+      <tr style ="word-break:break-all;">
+        <td><img src="" class="flag flag-{{ itemm.season.league.country_code }}" alt=""/></td>
+        <td>{{ itemm.season.league.league_name }}</td>
         <td>{{ itemm.gameweek }}</td>
         <td>{{ itemm.hometeam }}</td>
         <td>-</td>
@@ -100,7 +102,7 @@
     {% endfor %}
     </tbody>
   </table>
-
+</div>
 
 
 {% endblock %}
