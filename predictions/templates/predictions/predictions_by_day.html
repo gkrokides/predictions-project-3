@@ -1,0 +1,111 @@
+{% extends 'predictions/base.html' %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function() {
+        $('#example').DataTable( {
+        "paging":   false,
+        "ordering": false,
+        "info":     true
+            } );
+        } );
+    </script>
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    </script>
+
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block content30 %}
+
+<p style="border: solid; padding: 5px; background: grey;">
+<span style="color: white;"><strong>League Overview/Stats:</strong></span>
+{% for item in sorted_x %}
+
+<!--<a href="{% url 'league_overview' sid=item.1 %}" data-toggle="tooltip" data-placement="top" title="{{ item.0 }}"><img src="" class="flag flag-{{ item.2 }}" alt=""/></a>-->
+    {% if item.2 == 'England' %}
+        <a href="{% url 'league_overview' sid=item.1 %}" data-toggle="tooltip" data-placement="top" title="{{ item.0 }}"><span class="flag-icon flag-icon-gb-eng" style="width: 40px; height: 20px;"></span></a>
+        <!--<span class="flag-icon flag-icon-gb-eng" style="width: 40px; height: 20px;"></span>-->
+       {% else %}
+        <a href="{% url 'league_overview' sid=item.1 %}" data-toggle="tooltip" data-placement="top" title="{{ item.0 }}"><span class="flag-icon flag-icon-{{ item.2 }}" style="width: 40px; height: 20px;"></span></a>
+        <!--<span class="flag-icon flag-icon-{{ item.2 }}" style="width: 40px; height: 20px;"></span>-->
+    {% endif %}
+{% endfor %}
+</p>
+        <!--<form class="" action="{% url 'predictions_by_day' %}" method="POST">-->
+
+            <!--<select name="cntries" id="cntries">-->
+                <!--<option value="" disabled selected>Select Country</option>-->
+                <!--{% for val in sorted_x %}-->
+                          <!--<option value="{{ val.1 }}">{{ val.0 }}</option>-->
+                <!--{% endfor %}{% csrf_token %}-->
+            <!--</select>-->
+
+        <!--<input type="submit" value="Submit">-->
+        <!--</form>-->
+<br>
+
+{% load app_filters %}
+{% load humanize %}
+
+<table id="example" class="display compact" cellspacing="0" width="100%">
+    <thead>
+      <tr style="background: grey; color: white;">
+        <th class="centred">Season</th>
+        <th class="centred">Gameweek</th>
+        <th class="centred">Home</th>
+        <th class="centred">vs</th>
+        <th class="centred">Away</th>
+        <th class="centred">Date</th>
+        <th class="centred elohist-background">BP</th>
+        <th class="centred elol6-background">MP</th>
+        <th class="centred gsrs-background">YP</th>
+        <th class="centred">H2H</th>
+      </tr>
+    </thead>
+    <tbody class="centred">
+
+    {% for itemm in upcoming_predictions %}
+
+      <tr>
+        <td>{{ itemm.season }}</td>
+        <td>{{ itemm.gameweek }}</td>
+        <td>{{ itemm.hometeam }}</td>
+        <td>-</td>
+        <td>{{ itemm.awayteam }}</td>
+
+        {% if itemm.date|naturalday  == 'today' %}
+        <td><span class="label label-danger">{{ itemm.date|naturalday }}</span></td>
+        {% elif itemm.date|naturalday  == 'tomorrow' %}
+        <td><span class="label label-warning">{{ itemm.date|naturalday }}</span></td>
+        {% else %}
+        <td>{{ itemm.date|naturalday }}</td>
+        {% endif %}
+        <td class="{{ itemm.prediction_elohist|apply_prediction_colors }}"><strong>{{ itemm.prediction_elohist }}</strong></td>
+        <td class="{{ itemm.prediction_elol6|apply_prediction_colors }}"><strong>{{ itemm.prediction_elol6 }}</strong></td>
+        <td class="{{ itemm.prediction_gsrs|apply_prediction_colors }}"><strong>{{ itemm.prediction_gsrs }}</strong></td>
+        <td class="prediction panel-body"><a href="{% url 'h2h' itemm.pk %}">H2H</a></td>
+      </tr>
+
+    {% endfor %}
+    </tbody>
+  </table>
+
+
+
+{% endblock %}
+
+
+
+
+

@@ -52,7 +52,7 @@ class SeasonManager(models.Manager):
         # sn_lst.append([str('CYP2 2014/2015'), 4])
         qset = self.filter(league__country=cntry).order_by('-end_date')
         for item in qset:
-            sn_lst.append([str(item), item.id, str(item.league.league_name), str(item.get_start_year()), str(item.get_end_year()), str(item.end_date), str(item.league.short_name)])
+            sn_lst.append([str(item), item.id, str(item.league.league_name), str(item.get_start_year()), str(item.get_end_year()), str(item.end_date), str(item.league.short_name), item.league.country_code])
         return sn_lst
 
     def get_distinct_season_ends(self):
@@ -996,8 +996,8 @@ class GameManager(models.Manager):
         return total_wins
 
     def team_total_wins_by_date_optimized(self, team, sid, dt):
-        wins_at_home = self.filter(Q(hometeam=team, season=sid, date__lte=dt, hm_result='W') | Q(awayteam=team, season=sid, date__lte=dt, aw_result='W')).count()
-        return wins_at_home
+        wins_total = self.filter(Q(hometeam=team, season=sid, date__lte=dt, hm_result='W') | Q(awayteam=team, season=sid, date__lte=dt, aw_result='W')).count()
+        return wins_total
 
     def team_total_wins_by_date_ex_current(self, team, seazn, gw):
         gm = self.filter(Q(hometeam=team, season=seazn, gameweek=gw) | Q(awayteam=team, season=seazn, gameweek=gw))[0].id
@@ -1011,6 +1011,30 @@ class GameManager(models.Manager):
                 if g.result == 'AWAY':
                     total_wins += 1
         return total_wins
+
+    def team_total_wins_home(self, team, sid, dt):
+        wins_at_home = self.select_related('season').filter(hometeam=team, season=sid, date__lt=dt, hm_result='W').count()
+        return wins_at_home
+
+    def team_total_wins_away(self, team, sid, dt):
+        wins_away = self.select_related('season').filter(awayteam=team, season=sid, date__lt=dt, aw_result='W').count()
+        return wins_away
+
+    def team_total_losses_home(self, team, sid, dt):
+        losses_at_home = self.select_related('season').filter(hometeam=team, season=sid, date__lt=dt, hm_result='L').count()
+        return losses_at_home
+
+    def team_total_losses_away(self, team, sid, dt):
+        losses_away = self.select_related('season').filter(awayteam=team, season=sid, date__lt=dt, aw_result='L').count()
+        return losses_away
+
+    def team_total_draws_home(self, team, sid, dt):
+        draws_at_home = self.select_related('season').filter(hometeam=team, season=sid, date__lt=dt, hm_result='D').count()
+        return draws_at_home
+
+    def team_total_draws_away(self, team, sid, dt):
+        draws_away = self.select_related('season').filter(awayteam=team, season=sid, date__lt=dt, aw_result='D').count()
+        return draws_away
 
     # def team_total_losses(self, team, seazn, gw):
     #     qryset = self.filter(Q(hometeam=team, season=seazn, gameweek__lte=gw) | Q(awayteam=team, season=seazn, gameweek__lte=gw))

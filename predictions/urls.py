@@ -7,7 +7,9 @@ urlpatterns = [
     url(r'^post/(?P<pk>[0-9]+)/$', views.post_detail, name='post_detail'),
     url(r'^post/new/$', views.post_new, name='post_new'),
     url(r'^post/(?P<pk>[0-9]+)/edit/$', views.post_edit, name='post_edit'),
-    url(r'^predictions/$', views.predictions, name='predictions'),
+    url(r'^league-overview/$', views.predictions, name='predictions'),
+    url(r'^predictions-by-day/$', views.predictions_by_day, name='predictions_by_day'),
+    url(r'^league-overview/(?P<sid>[0-9]+)/$', views.league_overview, name='league_overview'),
     url(r'^predictions/history/$', views.predictions_filter, name='predictions_history'),
     url(r'^$', views.top3, name='top3'),
     url(r'^contact-us/$', views.email, name='contactus'),
@@ -35,5 +37,6 @@ urlpatterns = [
     url(r'^alerts/upcoming-games/$', views.alerts_upcoming_games, name='alerts_upcoming_games'),
     url(r'^alerts/finished-games-without-score/$', views.alerts_finished_games, name='alerts_finished_games'),
     url(r'^alerts/games-to-refresh/$', views.alerts_refresh_formulas, name='alerts_refresh'),
+    url(r'^livescore/$', views.livescore, name='livescore'),
 
 ]

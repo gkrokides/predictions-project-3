@@ -376,6 +376,21 @@
         </thead>
         <tbody>
             <tr>
+                <td class="left-al">Wins</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ homewins_at_home }}</td>
+                <td class="right-al">{{ homewins_at_away }}</td>
+            </tr>
+            <tr>
+                <td class="left-al">Losses</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ homelosses_at_home }}</td>
+                <td class="right-al">{{ homelosses_at_away  }}</td>
+            </tr>
+            <tr>
+                <td class="left-al">Draws</td>
+                <td class="centred" style="background-color:#F4F4F4">{{ homedraws_at_home }}</td>
+                <td class="right-al">{{ homedraws_at_away  }}</td>
+            </tr>
+            <tr>
                 <td class="left-al">Rating points earned/lost</td>
                 <td class="centred" style="background-color:#F4F4F4">{{ home_points_at_home|floatformat:0 }}</td>
                 <td class="right-al">{{ home_points_away|floatformat:0 }}</td>
@@ -562,6 +577,21 @@
         </thead>
         <tbody>
             <tr>
+                <td class="left-al">Wins</td>
+                <td class="centred">{{ awaywins_at_home }}</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ awaywins_at_away }}</td>
+            </tr>
+            <tr>
+                <td class="left-al">Losses</td>
+                <td class="centred">{{ awaylosses_at_home }}</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ awaylosses_at_away  }}</td>
+            </tr>
+            <tr>
+                <td class="left-al">Draws</td>
+                <td class="centred">{{ awaydraws_at_home }}</td>
+                <td class="right-al" style="background-color:#F4F4F4">{{ awaydraws_at_away  }}</td>
+            </tr>
+            <tr>
                 <td class="left-al">Rating points earned/lost</td>
                 <td class="centred">{{ away_points_at_home|floatformat:0 }}</td>
                 <td class="right-al" style="background-color:#F4F4F4">{{ away_points_away|floatformat:0 }}</td>
@@ -581,5 +611,6 @@
 
     <div><span style="background-color: #F75D59; color: white;">{{ awaytm }} avg. goals</span> vs <span style="background-color: #e6e6e6; color: grey;">League avg. goals</span></div>
     <div id='colchart_diff_aw' style='width: 450px; height: 250px; display: inline-block'></div>
+
 
 {% endblock %}

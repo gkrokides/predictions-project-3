@@ -154,7 +154,7 @@ body {
     font-size: 13px;
     text-align: center !important;
     color: white;
-    background: #0C090A;
+    background: #333333;
     border: solid;
 }
 
@@ -232,7 +232,7 @@ background:#EAF2F8;
 
 .elo_hist_chart {
     color: white;
-    background: #0C090A;
+    background: #333333;
 }
 
 .elo_l6_chart {
@@ -327,7 +327,7 @@ background:#EAF2F8;
 }
 
 .elohist-background {
-    background: #0C090A;
+    background: #333333;
 }
 
 .elol6-background {

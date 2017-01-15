@@ -7,7 +7,7 @@ from decimal import Decimal
 from django.db.models import Q, F, Sum
 from operator import itemgetter
 from django.conf import settings
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 from django.forms import modelformset_factory
 from django import forms
@@ -174,11 +174,28 @@ def h2h(request, pk):
     #         chart_data.append(templist)
     # donut charts data ------------------------------------------
     homewins = Game.objects.team_total_wins_by_date_ex_current(hometm, season.id, gm.gameweek)
+    homewins_at_home = Game.objects.team_total_wins_home(hometm, season.id, gm.date)
+    homewins_at_away = Game.objects.team_total_wins_away(hometm, season.id, gm.date)
+
     awaywins = Game.objects.team_total_wins_by_date_ex_current(awaytm, season.id, gm.gameweek)
+    awaywins_at_home = Game.objects.team_total_wins_home(awaytm, season.id, gm.date)
+    awaywins_at_away = Game.objects.team_total_wins_away(awaytm, season.id, gm.date)
+
     homelosses = Game.objects.team_total_losses_by_date_ex_current(hometm, season.id, gm.gameweek)
+    homelosses_at_home = Game.objects.team_total_losses_home(hometm, season.id, gm.date)
+    homelosses_at_away = Game.objects.team_total_losses_away(hometm, season.id, gm.date)
+
     awaylosses = Game.objects.team_total_losses_by_date_ex_current(awaytm, season.id, gm.gameweek)
+    awaylosses_at_home = Game.objects.team_total_losses_home(awaytm, season.id, gm.date)
+    awaylosses_at_away = Game.objects.team_total_losses_away(awaytm, season.id, gm.date)
+
     homedraws = Game.objects.team_total_draws_by_date_ex_current(hometm, season.id, gm.gameweek)
+    homedraws_at_home = Game.objects.team_total_draws_home(hometm, season.id, gm.date)
+    homedraws_at_away = Game.objects.team_total_draws_away(hometm, season.id, gm.date)
+
     awaydraws = Game.objects.team_total_draws_by_date_ex_current(awaytm, season.id, gm.gameweek)
+    awaydraws_at_home = Game.objects.team_total_draws_home(awaytm, season.id, gm.date)
+    awaydraws_at_away = Game.objects.team_total_draws_away(awaytm, season.id, gm.date)
     # SCORING TABLE DATA ------------------------------------------
     # HOME TEAM ALL GAMES -------------------------
     homeset = Game.objects.filter(Q(hometeam=gm.hometeam, season=gm.season.id, date__lt=gm.date) |
@@ -645,7 +662,10 @@ def h2h(request, pk):
                    'home_against_away_pcnt': home_against_away_pcnt, 'away_goals_at_home_pcnt': away_goals_at_home_pcnt, 'away_goals_away_pcnt': away_goals_away_pcnt,
                    'away_against_at_home_pcnt': away_against_at_home_pcnt, 'away_against_away_pcnt': away_against_away_pcnt, 'home0to1': home0to1, 'home2to3': home2to3,
                    'home4to6': home4to6, 'home7plus': home7plus, 'away0to1': away0to1, 'away2to3': away2to3, 'away4to6': away4to6, 'away7plus': away7plus, 'lg0to1': lg0to1,
-                   'lg2to3': lg2to3, 'lg4to6': lg4to6, 'lg7plus': lg7plus, 'all_matches_cnt': all_matches_cnt})
+                   'lg2to3': lg2to3, 'lg4to6': lg4to6, 'lg7plus': lg7plus, 'all_matches_cnt': all_matches_cnt, 'homewins_at_home': homewins_at_home, 'homewins_at_away': homewins_at_away,
+                   'awaywins_at_home': awaywins_at_home, 'awaywins_at_away': awaywins_at_away, 'homelosses_at_home': homelosses_at_home, 'homelosses_at_away': homelosses_at_away,
+                   'awaylosses_at_home': awaylosses_at_home, 'awaylosses_at_away': awaylosses_at_away, 'homedraws_at_home': homedraws_at_home, 'homedraws_at_away': homedraws_at_away,
+                   'awaydraws_at_home': awaydraws_at_home, 'awaydraws_at_away': awaydraws_at_away})
 
 
 def metrics(request):
@@ -1632,57 +1652,57 @@ def top3(request):
     draw_gsrs = Game.objects.rank_seasons_by_strike_rate_for_model(current_end_year, 'gsrs', 'DRAW')
 
     home_elohist_top3 = [
-        {'code': home_elohist[0]['country_code'], 'country': home_elohist[0]['country'], 'league_name': home_elohist[0]['league_name'], 'strike_rate': home_elohist[0]['strike_rate']},
-        {'code': home_elohist[1]['country_code'], 'country': home_elohist[1]['country'], 'league_name': home_elohist[1]['league_name'], 'strike_rate': home_elohist[1]['strike_rate']},
-        {'code': home_elohist[2]['country_code'], 'country': home_elohist[2]['country'], 'league_name': home_elohist[2]['league_name'], 'strike_rate': home_elohist[2]['strike_rate']}
+        {'sid': home_elohist[0]['id'], 'code': home_elohist[0]['country_code'], 'country': home_elohist[0]['country'], 'league_name': home_elohist[0]['league_name'], 'strike_rate': home_elohist[0]['strike_rate']},
+        {'sid': home_elohist[1]['id'], 'code': home_elohist[1]['country_code'], 'country': home_elohist[1]['country'], 'league_name': home_elohist[1]['league_name'], 'strike_rate': home_elohist[1]['strike_rate']},
+        {'sid': home_elohist[2]['id'], 'code': home_elohist[2]['country_code'], 'country': home_elohist[2]['country'], 'league_name': home_elohist[2]['league_name'], 'strike_rate': home_elohist[2]['strike_rate']}
     ]
 
     away_elohist_top3 = [
-        {'code': away_elohist[0]['country_code'], 'country': away_elohist[0]['country'], 'league_name': away_elohist[0]['league_name'], 'strike_rate': away_elohist[0]['strike_rate']},
-        {'code': away_elohist[1]['country_code'], 'country': away_elohist[1]['country'], 'league_name': away_elohist[1]['league_name'], 'strike_rate': away_elohist[1]['strike_rate']},
-        {'code': away_elohist[2]['country_code'], 'country': away_elohist[2]['country'], 'league_name': away_elohist[2]['league_name'], 'strike_rate': away_elohist[2]['strike_rate']}
+        {'sid': away_elohist[0]['id'], 'code': away_elohist[0]['country_code'], 'country': away_elohist[0]['country'], 'league_name': away_elohist[0]['league_name'], 'strike_rate': away_elohist[0]['strike_rate']},
+        {'sid': away_elohist[1]['id'], 'code': away_elohist[1]['country_code'], 'country': away_elohist[1]['country'], 'league_name': away_elohist[1]['league_name'], 'strike_rate': away_elohist[1]['strike_rate']},
+        {'sid': away_elohist[2]['id'], 'code': away_elohist[2]['country_code'], 'country': away_elohist[2]['country'], 'league_name': away_elohist[2]['league_name'], 'strike_rate': away_elohist[2]['strike_rate']}
     ]
 
     draw_elohist_top3 = [
-        {'code': draw_elohist[0]['country_code'], 'country': draw_elohist[0]['country'], 'league_name': draw_elohist[0]['league_name'], 'strike_rate': draw_elohist[0]['strike_rate']},
-        {'code': draw_elohist[1]['country_code'], 'country': draw_elohist[1]['country'], 'league_name': draw_elohist[1]['league_name'], 'strike_rate': draw_elohist[1]['strike_rate']},
-        {'code': draw_elohist[2]['country_code'], 'country': draw_elohist[2]['country'], 'league_name': draw_elohist[2]['league_name'], 'strike_rate': draw_elohist[2]['strike_rate']}
+        {'sid': draw_elohist[0]['id'], 'code': draw_elohist[0]['country_code'], 'country': draw_elohist[0]['country'], 'league_name': draw_elohist[0]['league_name'], 'strike_rate': draw_elohist[0]['strike_rate']},
+        {'sid': draw_elohist[1]['id'], 'code': draw_elohist[1]['country_code'], 'country': draw_elohist[1]['country'], 'league_name': draw_elohist[1]['league_name'], 'strike_rate': draw_elohist[1]['strike_rate']},
+        {'sid': draw_elohist[2]['id'], 'code': draw_elohist[2]['country_code'], 'country': draw_elohist[2]['country'], 'league_name': draw_elohist[2]['league_name'], 'strike_rate': draw_elohist[2]['strike_rate']}
     ]
 
     home_elol6_top3 = [
-        {'code': home_elol6[0]['country_code'], 'country': home_elol6[0]['country'], 'league_name': home_elol6[0]['league_name'], 'strike_rate': home_elol6[0]['strike_rate']},
-        {'code': home_elol6[1]['country_code'], 'country': home_elol6[1]['country'], 'league_name': home_elol6[1]['league_name'], 'strike_rate': home_elol6[1]['strike_rate']},
-        {'code': home_elol6[2]['country_code'], 'country': home_elol6[2]['country'], 'league_name': home_elol6[2]['league_name'], 'strike_rate': home_elol6[2]['strike_rate']}
+        {'sid': home_elol6[0]['id'], 'code': home_elol6[0]['country_code'], 'country': home_elol6[0]['country'], 'league_name': home_elol6[0]['league_name'], 'strike_rate': home_elol6[0]['strike_rate']},
+        {'sid': home_elol6[1]['id'], 'code': home_elol6[1]['country_code'], 'country': home_elol6[1]['country'], 'league_name': home_elol6[1]['league_name'], 'strike_rate': home_elol6[1]['strike_rate']},
+        {'sid': home_elol6[2]['id'], 'code': home_elol6[2]['country_code'], 'country': home_elol6[2]['country'], 'league_name': home_elol6[2]['league_name'], 'strike_rate': home_elol6[2]['strike_rate']}
     ]
 
     away_elol6_top3 = [
-        {'code': away_elol6[0]['country_code'], 'country': away_elol6[0]['country'], 'league_name': away_elol6[0]['league_name'], 'strike_rate': away_elol6[0]['strike_rate']},
-        {'code': away_elol6[1]['country_code'], 'country': away_elol6[1]['country'], 'league_name': away_elol6[1]['league_name'], 'strike_rate': away_elol6[1]['strike_rate']},
-        {'code': away_elol6[2]['country_code'], 'country': away_elol6[2]['country'], 'league_name': away_elol6[2]['league_name'], 'strike_rate': away_elol6[2]['strike_rate']}
+        {'sid': away_elol6[0]['id'], 'code': away_elol6[0]['country_code'], 'country': away_elol6[0]['country'], 'league_name': away_elol6[0]['league_name'], 'strike_rate': away_elol6[0]['strike_rate']},
+        {'sid': away_elol6[1]['id'], 'code': away_elol6[1]['country_code'], 'country': away_elol6[1]['country'], 'league_name': away_elol6[1]['league_name'], 'strike_rate': away_elol6[1]['strike_rate']},
+        {'sid': away_elol6[2]['id'], 'code': away_elol6[2]['country_code'], 'country': away_elol6[2]['country'], 'league_name': away_elol6[2]['league_name'], 'strike_rate': away_elol6[2]['strike_rate']}
     ]
 
     draw_elol6_top3 = [
-        {'code': draw_elol6[0]['country_code'], 'country': draw_elol6[0]['country'], 'league_name': draw_elol6[0]['league_name'], 'strike_rate': draw_elol6[0]['strike_rate']},
-        {'code': draw_elol6[1]['country_code'], 'country': draw_elol6[1]['country'], 'league_name': draw_elol6[1]['league_name'], 'strike_rate': draw_elol6[1]['strike_rate']},
-        {'code': draw_elol6[2]['country_code'], 'country': draw_elol6[2]['country'], 'league_name': draw_elol6[2]['league_name'], 'strike_rate': draw_elol6[2]['strike_rate']}
+        {'sid': draw_elol6[0]['id'], 'code': draw_elol6[0]['country_code'], 'country': draw_elol6[0]['country'], 'league_name': draw_elol6[0]['league_name'], 'strike_rate': draw_elol6[0]['strike_rate']},
+        {'sid': draw_elol6[1]['id'], 'code': draw_elol6[1]['country_code'], 'country': draw_elol6[1]['country'], 'league_name': draw_elol6[1]['league_name'], 'strike_rate': draw_elol6[1]['strike_rate']},
+        {'sid': draw_elol6[2]['id'], 'code': draw_elol6[2]['country_code'], 'country': draw_elol6[2]['country'], 'league_name': draw_elol6[2]['league_name'], 'strike_rate': draw_elol6[2]['strike_rate']}
     ]
 
     home_gsrs_top3 = [
-        {'code': home_gsrs[0]['country_code'], 'country': home_gsrs[0]['country'], 'league_name': home_gsrs[0]['league_name'], 'strike_rate': home_gsrs[0]['strike_rate']},
-        {'code': home_gsrs[1]['country_code'], 'country': home_gsrs[1]['country'], 'league_name': home_gsrs[1]['league_name'], 'strike_rate': home_gsrs[1]['strike_rate']},
-        {'code': home_gsrs[2]['country_code'], 'country': home_gsrs[2]['country'], 'league_name': home_gsrs[2]['league_name'], 'strike_rate': home_gsrs[2]['strike_rate']}
+        {'sid': home_gsrs[0]['id'], 'code': home_gsrs[0]['country_code'], 'country': home_gsrs[0]['country'], 'league_name': home_gsrs[0]['league_name'], 'strike_rate': home_gsrs[0]['strike_rate']},
+        {'sid': home_gsrs[1]['id'], 'code': home_gsrs[1]['country_code'], 'country': home_gsrs[1]['country'], 'league_name': home_gsrs[1]['league_name'], 'strike_rate': home_gsrs[1]['strike_rate']},
+        {'sid': home_gsrs[2]['id'], 'code': home_gsrs[2]['country_code'], 'country': home_gsrs[2]['country'], 'league_name': home_gsrs[2]['league_name'], 'strike_rate': home_gsrs[2]['strike_rate']}
     ]
 
     away_gsrs_top3 = [
-        {'code': away_gsrs[0]['country_code'], 'country': away_gsrs[0]['country'], 'league_name': away_gsrs[0]['league_name'], 'strike_rate': away_gsrs[0]['strike_rate']},
-        {'code': away_gsrs[1]['country_code'], 'country': away_gsrs[1]['country'], 'league_name': away_gsrs[1]['league_name'], 'strike_rate': away_gsrs[1]['strike_rate']},
-        {'code': away_gsrs[2]['country_code'], 'country': away_gsrs[2]['country'], 'league_name': away_gsrs[2]['league_name'], 'strike_rate': away_gsrs[2]['strike_rate']}
+        {'sid': away_gsrs[0]['id'], 'code': away_gsrs[0]['country_code'], 'country': away_gsrs[0]['country'], 'league_name': away_gsrs[0]['league_name'], 'strike_rate': away_gsrs[0]['strike_rate']},
+        {'sid': away_gsrs[1]['id'], 'code': away_gsrs[1]['country_code'], 'country': away_gsrs[1]['country'], 'league_name': away_gsrs[1]['league_name'], 'strike_rate': away_gsrs[1]['strike_rate']},
+        {'sid': away_gsrs[2]['id'], 'code': away_gsrs[2]['country_code'], 'country': away_gsrs[2]['country'], 'league_name': away_gsrs[2]['league_name'], 'strike_rate': away_gsrs[2]['strike_rate']}
     ]
 
     draw_gsrs_top3 = [
-        {'code': draw_gsrs[0]['country_code'], 'country': draw_gsrs[0]['country'], 'league_name': draw_gsrs[0]['league_name'], 'strike_rate': draw_gsrs[0]['strike_rate']},
-        {'code': draw_gsrs[1]['country_code'], 'country': draw_gsrs[1]['country'], 'league_name': draw_gsrs[1]['league_name'], 'strike_rate': draw_gsrs[1]['strike_rate']},
-        {'code': draw_gsrs[2]['country_code'], 'country': draw_gsrs[2]['country'], 'league_name': draw_gsrs[2]['league_name'], 'strike_rate': draw_gsrs[2]['strike_rate']}
+        {'sid': draw_gsrs[0]['id'], 'code': draw_gsrs[0]['country_code'], 'country': draw_gsrs[0]['country'], 'league_name': draw_gsrs[0]['league_name'], 'strike_rate': draw_gsrs[0]['strike_rate']},
+        {'sid': draw_gsrs[1]['id'], 'code': draw_gsrs[1]['country_code'], 'country': draw_gsrs[1]['country'], 'league_name': draw_gsrs[1]['league_name'], 'strike_rate': draw_gsrs[1]['strike_rate']},
+        {'sid': draw_gsrs[2]['id'], 'code': draw_gsrs[2]['country_code'], 'country': draw_gsrs[2]['country'], 'league_name': draw_gsrs[2]['league_name'], 'strike_rate': draw_gsrs[2]['strike_rate']}
     ]
     return render(request, 'predictions/top3.html', {'home_elohist_top3': home_elohist_top3, 'away_elohist_top3': away_elohist_top3, 'draw_elohist_top3': draw_elohist_top3,
                                                      'home_elol6_top3': home_elol6_top3, 'away_elol6_top3': away_elol6_top3, 'draw_elol6_top3': draw_elol6_top3,
@@ -1740,3 +1760,171 @@ def alerts_finished_games(request):
 def alerts_refresh_formulas(request):
     games_to_refresh_formulas = GameSeasonFilter(request.GET, queryset=Game.objects.filter(flag='Refresh').order_by('season'))
     return render(request, 'predictions/games_to_refresh.html', {'games_to_refresh_formulas': games_to_refresh_formulas})
+
+
+def predictions_by_day(request):
+    today = datetime.today()
+    threshold = datetime.now() + timedelta(days=7)
+    upcoming_predictions = Game.objects.select_related('season').filter(date__gte=today, date__lte=threshold, game_status='OK').exclude(homegoals__gte=0).order_by('date')
+    countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
+    # country_codes = Leagues.objects.order_by('country').values_list('country_code', flat=True).distinct()
+    x = []
+    # i = 0
+    # for c in countries:
+    #     x.append([c, country_codes[i]])
+    #     i += 1
+    szns_drpdown = {}
+    # filling in a dictionary of leagues for each country
+    for cntr in countries:
+        szns_drpdown.update({str(cntr): Season.objects.get_seasons_full(cntr)})
+
+    for key, value in szns_drpdown.items():
+        x.append([key, szns_drpdown[key][0][1], szns_drpdown[key][0][7]])
+    # szns_drpdown = json.dumps(szns_drpdown)
+    sorted_x = sorted(x, key=itemgetter(0), reverse=False)
+    return render(request, 'predictions/predictions_by_day.html', {'x': x, 'sorted_x': sorted_x, 'upcoming_predictions': upcoming_predictions, 'threshold': threshold})
+
+
+def league_overview(request, sid):
+    seasonid = sid
+    selected_country = Season.objects.select_related('league').filter(id=sid)[0].league.country
+    countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
+    szns_drpdown = {}
+    # filling in a dictionary of leagues for each country
+    for cntr in countries:
+        szns_drpdown.update({str(cntr): Season.objects.get_seasons_full(cntr)})
+    x = []
+    szns_drpdown = json.dumps(szns_drpdown)
+    gamewk_out = ""
+    lstout = "no league selected"
+    ssnout = ""
+    any_postponed = False
+    games_played = Game.objects.total_season_games_played(seasonid)
+    games_total = Game.objects.total_season_games(seasonid)
+    games_played_perc = float(games_played) / games_total
+    home_wins_total = Game.objects.total_season_home_wins(seasonid)
+    home_wins_total_perc = format(float(home_wins_total) / games_played, "0.00%")
+    away_wins_total = Game.objects.total_season_away_wins(seasonid)
+    away_wins_total_perc = format(float(away_wins_total) / games_played, "0.00%")
+    draws_total = Game.objects.total_season_draws(seasonid)
+    draws_total_perc = format(float(draws_total) / games_played, "0.00%")
+    season_goals = Game.objects.total_season_goals(seasonid)
+    goals_p_game = float(season_goals) / games_played
+    bts = Game.objects.season_both_teams_scored(seasonid)
+    bts_perc = format(float(bts) / games_played, "0.00%")
+    over_1p5 = format(float(Game.objects.over_one_half_optimized(seasonid)) / games_played, "0.00%")
+    over_2p5 = format(float(Game.objects.over_two_half_optimized(seasonid)) / games_played, "0.00%")
+    over_3p5 = format(float(Game.objects.over_three_half_optimized(seasonid)) / games_played, "0.00%")
+    lst = Season.objects.get(id=seasonid)
+    lstout = lst.league.league_name
+    ssnout = str(lst.get_start_year()) + "/" + str(lst.get_end_year())
+    leaderboard = Game.objects.last_gameweek(seasn=lst).select_related('season', 'hometeam', 'awayteam')
+    datte = leaderboard.order_by('-date')[0].date
+    gamewk = leaderboard[0].gameweek + 1
+    try:
+        last_date = Game.objects.filter(season=seasonid, gameweek=gamewk).order_by('-date')[0].date
+        predictions_exist = True
+    except IndexError:
+        last_date = Game.objects.last_gameweek(lst).order_by('-gameweek')[0].date
+        predictions_exist = False
+    gamewk_out = gamewk - 1
+    user_made_selection = True
+    past_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__lte=gamewk_out).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).count()
+    # new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__gt=6).count() - past_predictions_cnt
+    # new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek=gamewk).count()
+    if predictions_exist:
+        new_predictions_cnt = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK').exclude(prediction_elohist__exact='Not enough games to calculate prediction (the model needs at least 6 gameweeks)').count()
+        new_predictions_cnt = new_predictions_cnt - past_predictions_cnt
+    else:
+        new_predictions_cnt = 0
+    # teams_total = Game.objects.filter(season=seasonid, gameweek=1).count() * 2
+    dateof_last_game = Game.objects.select_related('season').filter(season=seasonid).exclude(result__exact='').exclude(result__isnull=True).order_by('-date')[0].date
+    for tm in leaderboard:
+        h = tm.hometeam
+        a = tm.awayteam
+        homeform = Game.objects.team_form_list_by_date(h, seasonid, datte)
+        awayform = Game.objects.team_form_list_by_date(a, seasonid, datte)
+        hometooltips = Game.objects.team_form_tooltip_by_date(h, seasonid, datte)
+        awaytooltips = Game.objects.team_form_tooltip_by_date(a, seasonid, datte)
+        hmform_and_tooltip = Game.objects.team_form_tooltip_joined_by_date(h, seasonid, datte)
+        awform_and_tooltip = Game.objects.team_form_tooltip_joined_by_date(a, seasonid, datte)
+        x.append(
+            {'team': h,
+             'played': Game.objects.team_total_season_matches(h, seasonid),
+             'wins': Game.objects.team_total_wins_by_date_optimized(h, seasonid, datte),
+             'draws': Game.objects.team_total_draws_by_date_optimized(h, seasonid, datte),
+             'losses': Game.objects.team_total_losses_by_date_optimized(h, seasonid, datte),
+             'gf': Game.objects.team_total_goals_scored_by_date(h, seasonid, gamewk),
+             'ga': Game.objects.team_total_goals_conceded_by_date(h, seasonid, gamewk),
+             'f1': hmform_and_tooltip[5][0],
+             'f2': hmform_and_tooltip[4][0],
+             'f3': hmform_and_tooltip[3][0],
+             'f4': hmform_and_tooltip[2][0],
+             'f5': hmform_and_tooltip[1][0],
+             'f6': hmform_and_tooltip[0][0],
+             'tltp1': hmform_and_tooltip[5][1],
+             'tltp2': hmform_and_tooltip[4][1],
+             'tltp3': hmform_and_tooltip[3][1],
+             'tltp4': hmform_and_tooltip[2][1],
+             'tltp5': hmform_and_tooltip[1][1],
+             'tltp6': hmform_and_tooltip[0][1],
+             # 'points': round(Decimal(Game.objects.get_previous_elo_by_date(tm=tm.hometeam, seasn=lst, gmwk=gamewk)), 2)
+             'points': round(Decimal(tm.elo_rating_home), 2),
+             'normal_points': Game.objects.team_points_optimized(seasonid, h, datte),
+             })
+        x.append(
+            {'team': a,
+             'played': Game.objects.team_total_season_matches(a, seasonid),
+             'wins': Game.objects.team_total_wins_by_date_optimized(a, seasonid, datte),
+             'draws': Game.objects.team_total_draws_by_date_optimized(a, seasonid, datte),
+             'losses': Game.objects.team_total_losses_by_date_optimized(a, seasonid, datte),
+             'gf': Game.objects.team_total_goals_scored_by_date(a, seasonid, gamewk),
+             'ga': Game.objects.team_total_goals_conceded_by_date(a, seasonid, gamewk),
+             'f1': awform_and_tooltip[5][0],
+             'f2': awform_and_tooltip[4][0],
+             'f3': awform_and_tooltip[3][0],
+             'f4': awform_and_tooltip[2][0],
+             'f5': awform_and_tooltip[1][0],
+             'f6': awform_and_tooltip[0][0],
+             'tltp1': awform_and_tooltip[5][1],
+             'tltp2': awform_and_tooltip[4][1],
+             'tltp3': awform_and_tooltip[3][1],
+             'tltp4': awform_and_tooltip[2][1],
+             'tltp5': awform_and_tooltip[1][1],
+             'tltp6': awform_and_tooltip[0][1],
+             # 'points': round(Decimal(Game.objects.get_previous_elo_by_date(tm=tm.awayteam, seasn=lst, gmwk=gamewk)), 2)
+             'points': round(Decimal(tm.elo_rating_away), 2),
+             'normal_points': Game.objects.team_points_optimized(seasonid, a, datte),
+             })
+    country_code = Season.objects.select_related('league').get(id=seasonid).league.country_code
+    if country_code == 'England':
+        flag = 'gb-eng'
+    else:
+        flag = country_code
+    p = []
+    postponed_games = Game.objects.filter(season=seasonid).exclude(game_status='OK')
+    if postponed_games.count() > 0:
+        any_postponed = True
+    for pgm in postponed_games:
+        p.append(
+            {'phome': pgm.hometeam,
+             'paway': pgm.awayteam,
+             'pgw': pgm.gameweek,
+             'pstatus': pgm.game_status,
+             }
+        )
+    sorted_x = sorted(x, key=itemgetter('points'), reverse=True)
+    return render(request, 'predictions/league_overview.html',
+                  {'x': sorted_x, 'seasonid': seasonid, 'gamewkout': gamewk_out,
+                   'season': lstout, 'ssnout': ssnout, 'user_made_selection': user_made_selection,
+                   'countries': countries, 'szns_drpdown': szns_drpdown, 'games_played': games_played,
+                   'games_total': games_total, 'games_played_perc': games_played_perc,
+                   'games_played_perc_string': format(games_played_perc, "0.00%"), 'home_wins_total_perc': home_wins_total_perc,
+                   'away_wins_total_perc': away_wins_total_perc, 'draws_total_perc': draws_total_perc, 'season_goals': season_goals,
+                   'goals_p_game': goals_p_game, 'bts_perc': bts_perc, 'over_1p5': over_1p5, 'over_2p5': over_2p5, 'over_3p5': over_3p5,
+                   'new_predictions_cnt': new_predictions_cnt, 'past_predictions_cnt': past_predictions_cnt, 'flag': flag, 'p': p, 'any_postponed': any_postponed,
+                   'selected_country': selected_country})
+
+
+def livescore(request):
+    return render(request, 'predictions/livescore.html')
