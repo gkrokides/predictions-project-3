@@ -145,7 +145,13 @@ def h2h(request, pk):
     #         templist = [gweeks[g], home_elos[g], away_elos[g]]
     #         chart_data.append(templist)
     for g in range(0, hmteam_all.count()):
-        templist = [gweeks[g], home_elos[g], away_elos[g]]
+        # since I chose to go with the hometeam's data, and since gameweeks are built according to hometeam
+        # i need to handle the list index out of range for the away team in case it has less games
+        try:
+            aelos = away_elos[g]
+        except IndexError:
+            aelos = away_elos[g-1]
+        templist = [gweeks[g], home_elos[g], aelos]
         chart_data.append(templist)
     # gweeks = []
     # home_elos = []
