@@ -31,6 +31,16 @@
         <!--<link href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">-->
         {% block head %}{% endblock %}
 
+   <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-90629893-1', 'auto');
+      ga('send', 'pageview');
+  </script>
+        
     </head>
     <body>
     {% load alerts_filter %}
@@ -298,13 +308,15 @@
 
     <div class="navbar navbar-default navbar-fixed-bottom">
         <div class="container">
-          <p class="navbar-text pull-left">© 2016 - betaid.net </p>
+          <p class="navbar-text">© 2016 - betaid.net </p>
            <ul class="nav navbar-nav">
            <li {% if 'faq' in request.path %}class="activepage"{% endif %} id="about"> <a href="{% url 'faq' %}"><i class="fa fa-info-circle" aria-hidden="true"></i> FAQ</a> </li>
            <li {% if 'contact' in request.path %}class="activepage"{% endif %} id="contactus"> <a href="{% url 'contactus' %}"><i class="fa fa-envelope" aria-hidden="true"></i> Contact us</a> </li>
            </ul>
         </div>
     </div>
+
+
 
    </div>
 

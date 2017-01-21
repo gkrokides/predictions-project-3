@@ -58,12 +58,12 @@
 {% load app_filters %}
 {% load humanize %}
 <div class="table-responsive">
-<table id="example" class="table display compact" cellspacing="0" width="100%">
+<table id="example" class="table display compact" cellspacing="0" width="100%" style="font-size: 90%;">
     <thead>
       <tr style="background: grey; color: white;">
-        <th width="1%" class="centred">Country</th>
-        <th class="centred">League</th>
-        <th class="centred">Gameweek</th>
+        <th width="1%" class="centred">Cntr</th>
+        <th class="centred">Lg</th>
+        <th class="centred">Gmwk</th>
         <th class="centred">Home</th>
         <th class="centred">vs</th>
         <th class="centred">Away</th>
@@ -80,23 +80,23 @@
 
       <tr style ="word-break:break-all;">
         <td><img src="" class="flag flag-{{ itemm.season.league.country_code }}" alt=""/></td>
-        <td>{{ itemm.season.league.league_name }}</td>
+        <td width="7%">{{ itemm.season.league.short_name }}</td>
         <td>{{ itemm.gameweek }}</td>
-        <td>{{ itemm.hometeam }}</td>
+        <td style="font-size: 85%; text-align: right;" width="27%">{{ itemm.hometeam }}</td>
         <td>-</td>
-        <td>{{ itemm.awayteam }}</td>
+        <td style="font-size: 85%; text-align: left;" width="27%">{{ itemm.awayteam }}</td>
 
         {% if itemm.date|naturalday  == 'today' %}
         <td><span class="label label-danger">{{ itemm.date|naturalday }}</span></td>
         {% elif itemm.date|naturalday  == 'tomorrow' %}
         <td><span class="label label-warning">{{ itemm.date|naturalday }}</span></td>
         {% else %}
-        <td>{{ itemm.date|naturalday }}</td>
+        <td width="18%">{{ itemm.date|naturalday }}</td>
         {% endif %}
-        <td class="{{ itemm.prediction_elohist|apply_prediction_colors }}"><strong>{{ itemm.prediction_elohist }}</strong></td>
-        <td class="{{ itemm.prediction_elol6|apply_prediction_colors }}"><strong>{{ itemm.prediction_elol6 }}</strong></td>
-        <td class="{{ itemm.prediction_gsrs|apply_prediction_colors }}"><strong>{{ itemm.prediction_gsrs }}</strong></td>
-        <td class="prediction panel-body"><a href="{% url 'h2h' itemm.pk %}">H2H</a></td>
+        <td width="9%" class="{{ itemm.prediction_elohist|apply_prediction_colors }}"><strong>{{ itemm.prediction_elohist }}</strong></td>
+        <td width="9%" class="{{ itemm.prediction_elol6|apply_prediction_colors }}"><strong>{{ itemm.prediction_elol6 }}</strong></td>
+        <td width="9%" class="{{ itemm.prediction_gsrs|apply_prediction_colors }}"><strong>{{ itemm.prediction_gsrs }}</strong></td>
+        <td width="1%" class="prediction panel-body"><a href="{% url 'h2h' itemm.pk %}">H2H</a></td>
       </tr>
 
     {% endfor %}
