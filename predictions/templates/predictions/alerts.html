@@ -17,4 +17,9 @@
     <a href="{% url 'alerts_refresh' %}">Games to refresh formulas <span class="label label-danger">{{ games_to_refresh_formulas }}</span><br></a>
     </strong>
     </h4>
+
+    <h4><strong>
+    <a href="{% url 'alerts_upcoming_pst_games' %}">Change game status from 'PST' to 'OK' <span class="label label-danger">{{ upcoming_pst_games }}</span><br></a>
+    </strong>
+    </h4>
 {% endblock %}

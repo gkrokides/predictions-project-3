@@ -71,7 +71,7 @@
                 </ul>
                 {% if user.is_authenticated %}
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{% url 'alerts' %}"><i class="fa fa-bell-o" aria-hidden="true"></i> <span class="label label-danger">{{ ended_games_without_score|alerts_tag }}</span></a></li>
+                        <li><a href="{% url 'alerts' %}"><i class="fa fa-bell-o" aria-hidden="true"></i> <span class="label label-danger">{{ all_alerts|alerts_tag }}</span></a></li>
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">

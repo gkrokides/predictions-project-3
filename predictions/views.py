@@ -888,20 +888,21 @@ def new_predictions(request, seasonid, gamewk):
     except IndexError:
         last_date = Game.objects.last_gameweek(seasonn).order_by('-gameweek')[0].date
         predictions_exist = False
-    # last_date = Game.objects.filter(season=seasonid, gameweek=prediction_gamewk).order_by('-date')[0].date
-    # new_predictions_set = Game.objects.filter(season=seasonid, gameweek=prediction_gamewk).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=False).order_by('date')
-    # new_predictions_set = Game.objects.filter(season=seasonid, gameweek=prediction_gamewk).order_by('date')
-    new_predictions_set = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK').exclude(homegoals__gte=0)
-    past_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__lte=prediction_gamewk - 1).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).count()
-    # new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__gt=6).count() - past_predictions_cnt
-    # new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek=gamewk).count()
+    new_predictions_set = Game.objects\
+        .filter(season=seasonid, date__lte=last_date, game_status='OK')\
+        .exclude(homegoals__gte=0)
+    past_predictions_cnt = Game.objects\
+        .filter(season=seasonid, gameweek__lte=prediction_gamewk - 1)\
+        .exclude(prediction_status_elohist__exact='')\
+        .exclude(prediction_status_elohist__isnull=True)\
+        .count()
     if predictions_exist:
-        new_predictions_cnt = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK').exclude(prediction_elohist__exact='Not enough games to calculate prediction (the model needs at least 6 gameweeks)').count()
+        new_predictions_cnt = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK')\
+            .exclude(prediction_elohist__exact='Not enough games to calculate prediction (the model needs at least 6 gameweeks)')\
+            .count()
         new_predictions_cnt = new_predictions_cnt - past_predictions_cnt
     else:
         new_predictions_cnt = 0
-    # new_predictions_cnt = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK').exclude(prediction_elohist__exact='Not enough games to calculate prediction (the model needs at least 6 gameweeks)').count()
-    # new_predictions_cnt = new_predictions_cnt - past_predictions_cnt
     x = []
     for gm in new_predictions_set:
         matchh = str(gm.hometeam) + " - " + str(gm.awayteam)
@@ -1744,16 +1745,32 @@ def game_details(request, pk):
 
 def alerts(request):
     today = datetime.today()
+    threshold = datetime.now() + timedelta(days=7)
     upcoming_games = Game.objects.filter(date__gte=today).exclude(homegoals__gte=0).count()
     finished_games_without_score = Game.objects.filter(date__lt=today, homegoals__isnull=True).count()
     games_to_refresh_formulas = Game.objects.filter(flag='Refresh').count()
-    return render(request, 'predictions/alerts.html', {'upcoming_games': upcoming_games, 'finished_games_without_score': finished_games_without_score, 'games_to_refresh_formulas': games_to_refresh_formulas})
+    upcoming_pst_games = Game.objects \
+        .filter(date__gte=today, date__lte=threshold, game_status='PST') \
+        .exclude(homegoals__gte=0) \
+        .count()
+    return render(request, 'predictions/alerts.html', {'upcoming_games': upcoming_games, 'finished_games_without_score': finished_games_without_score,
+                                                       'games_to_refresh_formulas': games_to_refresh_formulas, 'upcoming_pst_games': upcoming_pst_games})
 
 
 def alerts_upcoming_games(request):
     today = datetime.today()
     upcoming_games = Game.objects.filter(date__gte=today).exclude(homegoals__gte=0).order_by('date')
     return render(request, 'predictions/alerts_upcoming_games.html', {'upcoming_games': upcoming_games})
+
+
+def alerts_upcoming_pst_games(request):
+    today = datetime.today()
+    threshold = datetime.now() + timedelta(days=7)
+    upcoming_games = Game.objects\
+        .filter(date__gte=today, date__lte=threshold, game_status='PST')\
+        .exclude(homegoals__gte=0)\
+        .order_by('date')
+    return render(request, 'predictions/alerts_upcoming_pst_games.html', {'upcoming_games': upcoming_games})
 
 
 def alerts_finished_games(request):
