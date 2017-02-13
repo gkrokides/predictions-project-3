@@ -8,6 +8,7 @@ import django_filters
 from datetime import datetime
 from predictions_project import elosettings
 from operator import itemgetter
+from django.utils.text import slugify
 
 
 class Leagues(models.Model):
@@ -16,7 +17,8 @@ class Leagues(models.Model):
     league_name = models.CharField(max_length=200)
     country_code = models.CharField(max_length=20)
     short_name = models.CharField(max_length=50, unique=True)
-    # the below fields (teamstotal, gwtotal) are redundant and will not be used in the future as they should have been included in the
+    # the below fields (teamstotal, gwtotal) are redundant and will not be used in the future as they should have been
+    #  included in the
     # season table and not here. I will remove them in the future or transfer them in the season table. They are only
     # used in the save function of this model for now.
     teamstotal = models.IntegerField(default=0, verbose_name='No. of teams')
@@ -2074,23 +2076,10 @@ class Game(models.Model):
             return ''
 
     def home_se(self):
-        # home_sa = 0.00
         away_r_old = self._default_manager.get_previous_elo_by_actual_date_for_initial(tm=self.awayteam, seasn=self.season, dt=self.date)
         home_r_old = self._default_manager.get_previous_elo_by_actual_date_for_initial(tm=self.hometeam, seasn=self.season, dt=self.date)
-        # previous_gw = self.gameweek - 1
         home_ground_adv = self._default_manager.modified_hga_from_date(teamm=self.hometeam, seasonn=self.season, dt=self.date)
-        # home_ground_adv = self._default_manager.modified_hga(teamm=self.hometeam, seasonn=self.season, gmwk=self.gameweek)
         home_sa = 1 / (1 + 10 ** ((away_r_old - home_r_old - home_ground_adv) / float(elosettings.ELO_S)))
-        # if self.gameweek == 1:
-        #     away_r_old = elosettings.STARTING_POINTS
-        #     home_r_old = elosettings.STARTING_POINTS
-        #     home_sa = 1 / (1 + 10 ** ((away_r_old - home_r_old - elosettings.ELO_HGA) / float(elosettings.ELO_S)))
-        # elif self.gameweek > 1:
-        #     away_r_old = self._default_manager.get_previous_elo_by_date(tm=self.awayteam, seasn=self.season, gmwk=self.gameweek)
-        #     home_r_old = self._default_manager.get_previous_elo_by_date(tm=self.hometeam, seasn=self.season, gmwk=self.gameweek)
-        #     previous_gw = self.gameweek - 1
-        #     home_ground_adv = self._default_manager.modified_hga(teamm=self.hometeam, seasonn=self.season, gmwk=self.gameweek)
-        #     home_sa = 1 / (1 + 10 ** ((away_r_old - home_r_old - home_ground_adv) / float(elosettings.ELO_S)))
         return home_sa
 
     def away_se(self):
@@ -2350,3 +2339,145 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Tip(models.Model):
+    TIPSTER_CHOICES = (
+        ('Alesantro', 'Alesantro'),
+        ('Krok', 'Krok'),
+        ('Mr X', 'Mr X'),
+        ('The Bomber', 'The Bomber'),
+        ('---', '---'),
+    )
+
+    TIPTYPE_CHOICES = (
+        ('1', '1'),
+        ('X', 'X'),
+        ('2', '2'),
+        ('Over 2.5', 'Over 2.5'),
+        ('Under 2.5', 'Under 2.5'),
+        ('Over 3.5', 'Over 3.5'),
+        ('Under 3.5', 'Under 3.5'),
+        ('Over 4.5', 'Over 4.5'),
+        ('Under 4.5', 'Under 4.5'),
+        ('GG Yes', 'GG Yes'),
+        ('GG No', 'GG No'),
+        ('---', '---'),
+    )
+    tipster = models.CharField(max_length=15, choices=TIPSTER_CHOICES, default='---', )
+    game = models.ForeignKey('Game')
+    time = models.TimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    tip_type = models.CharField(max_length=15, choices=TIPTYPE_CHOICES, default='---', )
+    tip_odds = models.FloatField(null=True, blank=True)
+    tip_status = models.CharField(max_length=15, null=True, blank=True)
+
+    # Returns Success and Fail depending on the tip_type. Returns N/A if tip_type='---' and Pending if game has no score
+    # Remember to add to this code any new tiptype choices!!!
+    def tipstatus(self):
+        if self.game.homegoals >= 0:
+            if self.tip_type == '1':
+                if self.game.homegoals > self.game.awaygoals:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'X':
+                if self.game.homegoals == self.game.awaygoals:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '2':
+                if self.game.homegoals < self.game.awaygoals:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'Over 2.5':
+                if self.game.homegoals + self.game.awaygoals > 2.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'Under 2.5':
+                if self.game.homegoals + self.game.awaygoals < 2.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'Over 3.5':
+                if self.game.homegoals + self.game.awaygoals > 3.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'Under 3.5':
+                if self.game.homegoals + self.game.awaygoals < 3.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'Over 4.5':
+                if self.game.homegoals + self.game.awaygoals > 4.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'Under 4.5':
+                if self.game.homegoals + self.game.awaygoals < 4.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'GG Yes':
+                if self.game.homegoals > 0 and self.game.awaygoals > 0:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'GG No':
+                if (self.game.homegoals > 0 and self.game.awaygoals == 0)\
+                        or (self.game.homegoals == 0 and self.game.awaygoals > 0):
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '---':
+                return 'N/A'
+        else:
+            return 'Pending'
+        return 0
+
+    def __str__(self):
+        return str(self.tipster) + " " + str(self.game) + " (" + str(self.tip_type) + ")"
+
+    def save(self, *args, **kwargs):
+        self.tip_status = self.tipstatus()
+        super(Tip, self).save(*args, **kwargs)
+
+
+class BetslipManager(models.Manager):
+    # Returns the number of betslips given by a tipster
+    def tipster_total_betslips(self, tipster):
+        cnt = self.filter(betslip_tipster=tipster).count()
+        return cnt
+
+
+class Betslip(models.Model):
+    BETSLIP_TIPSTER_CHOICES = (
+        ('Alesantro', 'Alesantro'),
+        ('Krok', 'Krok'),
+        ('Mr X', 'Mr X'),
+        ('The Bomber', 'The Bomber'),
+        ('---', '---'),
+    )
+    BETSLIP_TYPES = (
+        ('Singles', 'Singles'),
+        ('Any 2', 'Any 2'),
+        ('Any 3', 'Any 3'),
+        ('Any 4', 'Any 4'),
+        ('All', 'All'),
+        ('---', '---'),
+    )
+    betslip_tipster = models.CharField(max_length=15, choices=BETSLIP_TIPSTER_CHOICES, default='---', )
+    slug = models.SlugField(unique=False, blank=True, null=True)
+    tips = models.ManyToManyField(Tip)
+    bet_type = models.CharField(max_length=15, choices=BETSLIP_TYPES, default='---', )
+    created_date = models.DateTimeField(default=timezone.now)
+    objects = BetslipManager()
+
+    def __str__(self):
+        return str(self.betslip_tipster) + " " + str(self.created_date)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.betslip_tipster)
+        super(Betslip, self).save(*args, **kwargs)

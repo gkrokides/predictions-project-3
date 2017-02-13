@@ -68,6 +68,9 @@
                     </li>
                     <li {% if 'predictions_by_day' in request.path %}class="activepage"{% endif %} id="predictions"> <a href="{% url 'predictions_by_day' %}"><i class="fa fa-magic" aria-hidden="true"></i> Predictions</a> </li>
                     <li {% if 'posts' in request.path %}class="activepage"{% endif %} id="home"> <a href="{% url 'post_list' %}"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Posts</a> </li>
+                    {% if user.is_authenticated %}
+                    <li {% if 'betslips' in request.path %}class="activepage"{% endif %} id="betslip_list"> <a href="{% url 'betslip_list' %}"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Tipster Posts</a> </li>
+                    {% endif %}
                 </ul>
                 {% if user.is_authenticated %}
                     <ul class="nav navbar-nav navbar-right">
@@ -79,16 +82,22 @@
                             <button data-toggle="dropdown" class="btn btn-info navbar-btn dropdown-toggle"><i class="fa fa-user" aria-hidden="true"></i> {{ request.user.username }}
                                 <span class="glyphicon glyphicon-chevron-down"></span></button>
                             <ul class="dropdown-menu">
+                                <li class="activepage">Management</li>
                                 <li><a href="{% url 'post_new' %}"><i class="fa fa-pencil fa-fw" aria-hidden="true"> Add Post</i></a></li>
-                                <li><a href="{% url 'add_games' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Add Match</i></a></li>
-                                <li><a href="{% url 'add_score' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Add Score</i></a></li>
+                                <li><a href="{% url 'add_games' %}"><i class="fa fa-plus-square-o" aria-hidden="true"> Add Match</i></a></li>
+                                <li><a href="{% url 'add_score' %}"><i class="fa fa-plus-square-o" aria-hidden="true"> Add Score</i></a></li>
                                 <li><a href="{% url 'cancelled_postponed_list' %}"><i class="fa fa-futbol-o" aria-hidden="true"> Postponed/Cancelled Matches</i></a></li>
                                 <li><a href="{% url 'all_games' %}"><i class="fa fa-search" aria-hidden="true"> All Matches</i></a></li>
-                                <li class="divider"></li>
-                                <li><a href="{% url 'admin:index' %}"><span class="fa fa-lock" aria-hidden="true"></span> Admin Page</a></li>
-                                <li class="divider"></li>
+                                <li class="activepage">Tips</li>
+                                <li><a href="{% url 'tip_list' %}"><i class="fa fa-search" aria-hidden="true"> All Tips</i></a></li>
+                                <li><a href="{% url 'add_tip' %}"><i class="fa fa-plus-square-o" aria-hidden="true"> Add Tip</i></a></li>
+                                <li class="activepage">Betslips</li>
+                                <li><a href="{% url 'add_betslip' %}"><i class="fa fa-plus-square-o" aria-hidden="true"> Add Betslip</i></a></li>
+                                <li class="activepage">Other</li>
+                                <li ><a href="{% url 'admin:index' %}"><span class="fa fa-lock" aria-hidden="true"></span> Admin Page</a></li>
+
                                 <li><a href="{% url 'activeusers' %}"><span class="fa fa-users" aria-hidden="true"></span> Active Users</a></li>
-                                <li class="divider"></li>
+
                                 <li><a href="{% url 'admin:logout' %}"><span class="glyphicon glyphicon-log-out"></span> Sign out</a></li>
                             </ul>
                         </div>
@@ -301,6 +310,23 @@
             <div class="row">
                 <div class="col-md-12">
                     {% block content35 %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+        <div class="content container-fluid">
+            <div class="row">
+                <div class="col-md-2">
+                    {% block content36 %}
+                    {% endblock %}
+                </div>
+                <div class="col-md-5">
+                    {% block content37 %}
+                    {% endblock %}
+                </div>
+                <div class="col-md-5">
+                    {% block content38 %}
                     {% endblock %}
                 </div>
             </div>

@@ -72,6 +72,9 @@
         <th class="centred elol6-background">MP</th>
         <th class="centred gsrs-background">YP</th>
         <th class="centred">H2H</th>
+        {% if user.is_authenticated %}
+        <th class="centred">Add tip</th>
+        {% endif %}
       </tr>
     </thead>
     <tbody class="centred">
@@ -97,6 +100,9 @@
         <td width="9%" class="{{ itemm.prediction_elol6|apply_prediction_colors }}"><strong>{{ itemm.prediction_elol6 }}</strong></td>
         <td width="9%" class="{{ itemm.prediction_gsrs|apply_prediction_colors }}"><strong>{{ itemm.prediction_gsrs }}</strong></td>
         <td width="1%" class="prediction panel-body"><a href="{% url 'h2h' itemm.pk %}">H2H</a></td>
+        {% if user.is_authenticated %}
+        <td width="1%" class="prediction panel-body"><a href="{% url 'add_tip_from_pk' itemm.pk %}">+Tip</a></td>
+        {% endif %}
       </tr>
 
     {% endfor %}

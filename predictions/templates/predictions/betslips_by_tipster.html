@@ -1,0 +1,67 @@
+{% extends 'predictions/base.html' %}
+
+{% block content36 %}
+
+<div class="well">
+    <h3><strong>Betslips ({{ selected_tipster }})</strong></h3>
+    <a href="{% url 'betslip_list' %}">All &nbsp <span class="badge">{{ betslips_cnt }}</span></a><br>
+    {% for key, value in x.items %}
+        <a href="{% url 'betslips_by_tipster' key|slugify %}">{{ key }}&nbsp <span class="badge">{{ value }}</span></a><br>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block content37 %}
+
+{% if user.is_authenticated %}
+
+    {% for b in betslips %}
+        <div class="well">
+            <h3 class="activepage"><strong>Bet type: {{ b.bet_type }}</strong></h3>
+            <table class="table" style="font-size: 90%;">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th class="centred">LG</th>
+                    <th class="right-al">Home</th>
+                    <th class="centred">-</th>
+                    <th>Away</th>
+                    <th class="centred">Tip</th>
+                    <th class="centred">Odds</th>
+                    <th class="centred">Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for tip in b.tips.all %}
+                <tr>
+                    <td>{{ tip.game.date }} {{ tip.time }}</td>
+                    <td class="centred">{{ tip.game.season.league.short_name }}</td>
+                    <td class="right-al">{{ tip.game.hometeam }}</td>
+                    <td class="centred">vs</td>
+                    <td>{{ tip.game.awayteam }}</td>
+                    <td class="activepage centred">{{ tip.tip_type }}</td>
+                    <td class="centred">{{ tip.tip_odds|floatformat:2 }}</td>
+                    {% if tip.tip_status == 'Success' %}
+                    <td class="centred"><i style="color: #4CC552;" class="fa fa-check-circle fa-2x" aria-hidden="true"></i></td>
+                    {% elif  tip.tip_status == 'Fail' %}
+                    <td class="centred"><i style="color: #F62817;" class="fa fa-times-circle fa-2x" aria-hidden="true"></i></td>
+                    {% else %}
+                    <td class="centred">{{ tip.tip_status }}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <hr>
+            <div class="">
+            <h4><strong>Tipster: <span h4 style="color: #5DADE2;">{{ b.betslip_tipster }}</span></strong></h4>
+            {{ b.created_date }}
+                <span class="date"><a href="{% url 'betslip_edit' b.pk %}">Edit</a></span>
+            </div>
+
+        </div>
+    {% endfor %}
+{% endif %}
+{% endblock %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import Post, Team, Game, Season, GameFilter, Leagues, GameSeasonFilter
-from .forms import PostForm, GameForm, ContactForm
+from .models import Post, Team, Game, Season, GameFilter, Leagues, GameSeasonFilter, Tip, Betslip
+from .forms import PostForm, GameForm, ContactForm, TipForm, BetslipForm
 from dicts.sorteddict import ValueSortedDict
 from decimal import Decimal
 from django.db.models import Q, F, Sum
@@ -1422,8 +1422,6 @@ def addgames(request):
             if lg_name == "select_league" or lg_name == '' or not lg_name or lg_name is None or period_end == 'None' or period_end == '':
                 return redirect('add_games')
             else:
-                # games_selected = Game.objects.filter(season__league__league_name=lg_name, season__end_date=period_end)[0]
-                # seasonid = games_selected.season.id
                 seasonid = Season.objects.filter(league__league_name=lg_name, end_date=period_end)[0].id
                 user_made_selection = True
                 lst = Season.objects.get(id=seasonid)
@@ -1951,3 +1949,112 @@ def league_overview(request, sid):
 
 def livescore(request):
     return render(request, 'predictions/livescore.html')
+
+
+def addtip(request):
+    if request.method == "POST":
+        form = TipForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('tip_list')
+    else:
+        form = TipForm()
+    return render(request, 'predictions/addtips.html', {'form': form})
+
+
+def add_tip_from_pk(request, pk):
+
+    if request.method == "POST":
+        form = TipForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('predictions_by_day')
+    else:
+        form = TipForm()
+        form.fields['game'].queryset = Game.objects.filter(id=pk)
+    return render(request, 'predictions/add_tip_from_pk.html', {'form': form})
+
+
+def tip_list(request):
+    tips = Tip.objects.all().order_by('tipster')
+    return render(request, 'predictions/tip_list.html', {'tips': tips})
+
+
+def tip_detail(request, pk):
+    tip = get_object_or_404(Tip, pk=pk)
+    return render(request, 'predictions/tip_detail.html', {'tip': tip})
+
+
+def tip_edit(request, pk):
+    tip = get_object_or_404(Tip, pk=pk)
+    if request.method == "POST":
+        form = TipForm(request.POST, instance=tip)
+        if form.is_valid():
+            tip = form.save(commit=False)
+            tip.save()
+            return redirect('tip_list')
+    else:
+        form = TipForm(instance=tip)
+    return render(request, 'predictions/tip_edit.html', {'form': form})
+
+
+def addbetslip(request):
+    user_made_selection = False
+    tipsters = Tip.objects.order_by('tipster').values_list('tipster', flat=True).distinct()
+    if request.method == "POST":
+        if 'jsform' in request.POST:
+            user_made_selection = True
+            selected_tipster = request.POST.get('tpster')
+            form = BetslipForm(request.POST)
+            form.fields['tips'].queryset = Tip.objects.filter(tipster=selected_tipster, game__date__gte=timezone.now())
+        else:
+            form = BetslipForm(request.POST)
+        if 'djform' in request.POST:
+            if form.is_valid():
+                form.save()
+            return redirect('tip_list')
+    else:
+        form = BetslipForm()
+    return render(request, 'predictions/addbetslip.html', {'form': form, 'tipsters': tipsters,
+                                                           'user_made_selection': user_made_selection})
+
+
+def betslip_list(request):
+    betslips = Betslip.objects.all().order_by('-created_date')
+    betslips_cnt = betslips.count()
+    tipsters = Betslip.objects.order_by('betslip_tipster').values_list('betslip_tipster', flat=True).distinct()
+    x = {}
+    for t in tipsters:
+        x.update({t: Betslip.objects.tipster_total_betslips(t)})
+    return render(request, 'predictions/betslip_list.html', {'betslips': betslips, 'x': x, 'betslips_cnt': betslips_cnt})
+
+
+def betslip_detail(request, pk):
+    betslip = get_object_or_404(Betslip, pk=pk)
+    return render(request, 'predictions/betslip_detail.html', {'betslip': betslip})
+
+
+def betslip_edit(request, pk):
+    betslip = get_object_or_404(Betslip, pk=pk)
+    if request.method == "POST":
+        form = BetslipForm(request.POST, instance=betslip)
+        if form.is_valid():
+            betslip = form.save(commit=False)
+            betslip.save()
+            return redirect('betslip_list')
+    else:
+        form = BetslipForm(instance=betslip)
+    return render(request, 'predictions/betslip_edit.html', {'form': form})
+
+
+def betslips_by_tipster(request, tipster):
+    betslips = Betslip.objects.filter(slug=tipster).order_by('-created_date')
+    betslips_cnt = Betslip.objects.all().count()
+    selected_tipster = Betslip.objects.filter(slug=tipster)[0].betslip_tipster
+    tipsters = Betslip.objects.order_by('betslip_tipster').values_list('betslip_tipster', flat=True).distinct()
+    x = {}
+    for t in tipsters:
+        x.update({t: Betslip.objects.tipster_total_betslips(t)})
+    return render(request, 'predictions/betslips_by_tipster.html', {'betslips': betslips, 'x': x,
+                                                                    'betslips_cnt': betslips_cnt,
+                                                                    'selected_tipster': selected_tipster})

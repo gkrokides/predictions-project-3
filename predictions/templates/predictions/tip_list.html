@@ -1,0 +1,51 @@
+{% extends 'predictions/base.html' %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jqc-1.12.3/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-flash-1.2.2/b-html5-1.2.2/b-print-1.2.2/r-2.1.0/datatables.min.css"/>
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jqc-1.12.3/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-flash-1.2.2/b-html5-1.2.2/b-print-1.2.2/r-2.1.0/datatables.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+    $('#example').DataTable( {
+        "scrollY": "600px",
+        "paging": false,
+        "scrollCollapse": true,
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    } );
+} );
+</script>
+
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<table id="example" class="display compact" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th>Tipster</th>
+        <th>Game</th>
+        <th>Time</th>
+        <th>Tip</th>
+        <th>Odds</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for val in tips %}
+      <tr>
+        <td>{{ val.tipster }}</td>
+        <td>{{ val.game }}</td>
+        <td>{{ val.time }}</td>
+        <td>{{ val.tip_type }}</td>
+        <td>{{ val.tip_odds|floatformat:2 }}</td>
+        <td><a href="{% url 'tip_edit' val.pk %}">Edit</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+    {% endblock %}

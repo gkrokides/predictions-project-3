@@ -1,0 +1,41 @@
+{% extends 'predictions/base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+    <h1>New betslip</h1>
+
+    <form class="" action="{% url 'add_betslip' %}" method="POST">
+
+        <select name="tpster" id="tpster">
+            <option value="" disabled selected>Select Tipster</option>
+            {% for t in tipsters %}
+            <option value="{{ t }}">{{ t }}</option>
+            {% endfor %}{% csrf_token %}
+        </select>
+        <input type="submit" value="Submit" name="jsform">{% csrf_token %}
+    </form>
+
+    {% if user_made_selection %}
+    <form method="POST" class="post-form">{% csrf_token %}
+    <table class="table">
+        <thead>
+          <tr>
+            <th>Tipster</th>
+            <th>Tips</th>
+            <th>Bet Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            {% for val in form %}
+            <td>{{ val }}</td>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    <button type="submit" class="btn btn-warning" style ="float:right;" name="djform">Save</button>
+    </form>
+    {% endif %}
+{% endif %}
+{% endblock %}

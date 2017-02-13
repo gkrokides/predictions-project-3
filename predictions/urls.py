@@ -38,6 +38,16 @@ urlpatterns = [
     url(r'^alerts/upcoming-pst-games/$', views.alerts_upcoming_pst_games, name='alerts_upcoming_pst_games'),
     url(r'^alerts/finished-games-without-score/$', views.alerts_finished_games, name='alerts_finished_games'),
     url(r'^alerts/games-to-refresh/$', views.alerts_refresh_formulas, name='alerts_refresh'),
-    url(r'^livescore/$', views.livescore, name='livescore'),
+    # url(r'^livescore/$', views.livescore, name='livescore'),
+    url(r'^add-tip/$', views.addtip, name='add_tip'),
+    url(r'^add-tip/(?P<pk>[0-9]+)/$', views.add_tip_from_pk, name='add_tip_from_pk'),
+    url(r'^tips$', views.tip_list, name='tip_list'),
+    url(r'^tips/(?P<pk>[0-9]+)/$', views.tip_detail, name='tip_detail'),
+    url(r'^tips/(?P<pk>[0-9]+)/edit/$', views.tip_edit, name='tip_edit'),
+    url(r'^add-betslip/$', views.addbetslip, name='add_betslip'),
+    url(r'^betslips$', views.betslip_list, name='betslip_list'),
+    url(r'^betslips/(?P<pk>[0-9]+)/$', views.betslip_detail, name='betslip_detail'),
+    url(r'^betslips/(?P<pk>[0-9]+)/edit/$', views.betslip_edit, name='betslip_edit'),
+    url(r'^betslip-tipster/([\w\-]+)/$', views.betslips_by_tipster, name='betslips_by_tipster'),
 
 ]

@@ -1,0 +1,27 @@
+{% extends 'predictions/base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<h1>Edit Betslip</h1>
+<form method="POST" class="post-form">{% csrf_token %}
+<table class="table">
+        <thead>
+          <tr>
+            <th>Tipster</th>
+            <th>Tips</th>
+            <th>Bet Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            {% for val in form %}
+            <td>{{ val }}</td>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+<button type="submit" class="btn btn-warning" style ="float:right;">Save</button>
+</form>
+{% endif %}
+{% endblock %}
