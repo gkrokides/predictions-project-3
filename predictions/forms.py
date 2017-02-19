@@ -41,4 +41,4 @@ class TipForm(forms.ModelForm):
 class BetslipForm(forms.ModelForm):
     class Meta:
         model = Betslip
-        fields = ('betslip_tipster', 'tips', 'bet_type')
+        fields = ('betslip_tipster', 'tips', 'bet_type', 'stake')

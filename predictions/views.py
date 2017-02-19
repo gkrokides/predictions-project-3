@@ -2006,13 +2006,16 @@ def addbetslip(request):
             user_made_selection = True
             selected_tipster = request.POST.get('tpster')
             form = BetslipForm(request.POST)
-            form.fields['tips'].queryset = Tip.objects.filter(tipster=selected_tipster, game__date__gte=timezone.now())
+            if selected_tipster == 'All':
+                form.fields['tips'].queryset = Tip.objects.filter(game__date__gte=timezone.now())
+            else:
+                form.fields['tips'].queryset = Tip.objects.filter(tipster=selected_tipster, game__date__gte=timezone.now())
         else:
             form = BetslipForm(request.POST)
         if 'djform' in request.POST:
             if form.is_valid():
                 form.save()
-            return redirect('tip_list')
+            return redirect('betslip_list')
     else:
         form = BetslipForm()
     return render(request, 'predictions/addbetslip.html', {'form': form, 'tipsters': tipsters,
@@ -2024,9 +2027,15 @@ def betslip_list(request):
     betslips_cnt = betslips.count()
     tipsters = Betslip.objects.order_by('betslip_tipster').values_list('betslip_tipster', flat=True).distinct()
     x = {}
+    y = []
     for t in tipsters:
         x.update({t: Betslip.objects.tipster_total_betslips(t)})
-    return render(request, 'predictions/betslip_list.html', {'betslips': betslips, 'x': x, 'betslips_cnt': betslips_cnt})
+        y.append([t,
+                  Betslip.objects.tipster_total_nonpending_betslips(t),
+                  Betslip.objects.tipster_successful_betslips(t),
+                  Betslip.objects.tipster_sum_of_stakes(t),
+                  Betslip.objects.tipster_sum_of_profits(t)])
+    return render(request, 'predictions/betslip_list.html', {'betslips': betslips, 'x': x, 'betslips_cnt': betslips_cnt, 'y': y})
 
 
 def betslip_detail(request, pk):
@@ -2053,8 +2062,14 @@ def betslips_by_tipster(request, tipster):
     selected_tipster = Betslip.objects.filter(slug=tipster)[0].betslip_tipster
     tipsters = Betslip.objects.order_by('betslip_tipster').values_list('betslip_tipster', flat=True).distinct()
     x = {}
+    y = []
     for t in tipsters:
         x.update({t: Betslip.objects.tipster_total_betslips(t)})
+        y.append([t,
+                  Betslip.objects.tipster_total_nonpending_betslips(t),
+                  Betslip.objects.tipster_successful_betslips(t),
+                  Betslip.objects.tipster_sum_of_stakes(t),
+                  Betslip.objects.tipster_sum_of_profits(t)])
     return render(request, 'predictions/betslips_by_tipster.html', {'betslips': betslips, 'x': x,
                                                                     'betslips_cnt': betslips_cnt,
-                                                                    'selected_tipster': selected_tipster})
+                                                                    'selected_tipster': selected_tipster, 'y': y})

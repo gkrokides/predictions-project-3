@@ -1,14 +1,21 @@
 {% extends 'predictions/base.html' %}
 
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+
 {% block content %}
 
 {% if user.is_authenticated %}
-    <h1>New betslip</h1>
+    <h1>Show Tips from:</h1>
 
     <form class="" action="{% url 'add_betslip' %}" method="POST">
 
         <select name="tpster" id="tpster">
             <option value="" disabled selected>Select Tipster</option>
+            <option value="All">All</option>
             {% for t in tipsters %}
             <option value="{{ t }}">{{ t }}</option>
             {% endfor %}{% csrf_token %}
@@ -21,7 +28,7 @@
     <table class="table">
         <thead>
           <tr>
-            <th>Tipster</th>
+            <th>Betslip Tipster</th>
             <th>Tips</th>
             <th>Bet Type</th>
           </tr>

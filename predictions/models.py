@@ -9,6 +9,7 @@ from datetime import datetime
 from predictions_project import elosettings
 from operator import itemgetter
 from django.utils.text import slugify
+import itertools
 
 
 class Leagues(models.Model):
@@ -936,7 +937,8 @@ class GameManager(models.Manager):
         if exclude_first_6_games == 'No':
             qry = self.filter(Q(hometeam=team, season=g.season, date__lt=g.date, result__gte=0) | Q(awayteam=team, season=g.season, date__lt=g.date, result__gte=0)).order_by('-date')
         else:
-            qry = self.filter(Q(hometeam=team, season=g.season, date__lt=g.date, result__gte=0) | Q(awayteam=team, season=g.season, date__lt=g.date, result__gte=0)).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).order_by('-date')
+            qry = self.filter(Q(hometeam=team, season=g.season, date__lt=g.date, result__gte=0) | Q(awayteam=team, season=g.season, date__lt=g.date, result__gte=0)).exclude(prediction_status_elohist__exact='')\
+                .exclude(prediction_status_elohist__isnull=True).order_by('-date')
         return qry
 
     # same as above but accepts more variables
@@ -944,7 +946,8 @@ class GameManager(models.Manager):
         if exclude_first_6_games == 'No':
             qry = self.filter(Q(hometeam=team, season=season, date__lt=dt, result__gte=0) | Q(awayteam=team, season=season, date__lt=dt, result__gte=0)).order_by('-date')
         else:
-            qry = self.filter(Q(hometeam=team, season=season, date__lt=dt, result__gte=0) | Q(awayteam=team, season=season, date__lt=dt, result__gte=0)).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).order_by('-date')
+            qry = self.filter(Q(hometeam=team, season=season, date__lt=dt, result__gte=0) | Q(awayteam=team, season=season, date__lt=dt, result__gte=0)).exclude(prediction_status_elohist__exact='')\
+                .exclude(prediction_status_elohist__isnull=True).order_by('-date')
         return qry
 
     # returns a queryset of all games played by the given team up to and including the given date
@@ -953,7 +956,8 @@ class GameManager(models.Manager):
         if exclude_first_6_games == 'No':
             qry = self.filter(Q(hometeam=team, season=g.season, date__lte=g.date, result__gte=0) | Q(awayteam=team, season=g.season, date__lte=g.date, result__gte=0)).order_by('-date')
         else:
-            qry = self.filter(Q(hometeam=team, season=g.season, date__lte=g.date, result__gte=0) | Q(awayteam=team, season=g.season, date__lte=g.date, result__gte=0)).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).order_by('-date')
+            qry = self.filter(Q(hometeam=team, season=g.season, date__lte=g.date, result__gte=0) | Q(awayteam=team, season=g.season, date__lte=g.date, result__gte=0)).exclude(prediction_status_elohist__exact='')\
+                .exclude(prediction_status_elohist__isnull=True).order_by('-date')
         return qry
 
     # returns the total number of games played by the team in the given season
@@ -1557,7 +1561,7 @@ class GameManager(models.Manager):
             output = max(streaks)
         return output
 
-     # model losing streaks
+    # model losing streaks
     def total_model_losing_streaks(self, model, seasonidd):
         if seasonidd != 'all':
             if model == 'elohist':
@@ -2347,6 +2351,7 @@ class Tip(models.Model):
         ('Krok', 'Krok'),
         ('Mr X', 'Mr X'),
         ('The Bomber', 'The Bomber'),
+        ('Mr Combo', 'Mr Combo'),
         ('---', '---'),
     )
 
@@ -2362,6 +2367,30 @@ class Tip(models.Model):
         ('Under 4.5', 'Under 4.5'),
         ('GG Yes', 'GG Yes'),
         ('GG No', 'GG No'),
+        ('1 & Over 2.5', '1 & Over 2.5'),
+        ('1 & Under 2.5', '1 & Under 2.5'),
+        ('1 & Over 3.5', '1 & Over 3.5'),
+        ('1 & Under 3.5', '1 & Under 3.5'),
+        ('1 & Over 4.5', '1 & Over 4.5'),
+        ('1 & Under 4.5', '1 & Under 4.5'),
+        ('1 & GG Yes', '1 & GG Yes'),
+        ('1 & GG No', '1 & GG No'),
+        ('2 & Over 2.5', '2 & Over 2.5'),
+        ('2 & Under 2.5', '2 & Under 2.5'),
+        ('2 & Over 3.5', '2 & Over 3.5'),
+        ('2 & Under 3.5', '2 & Under 3.5'),
+        ('2 & Over 4.5', '2 & Over 4.5'),
+        ('2 & Under 4.5', '2 & Under 4.5'),
+        ('2 & GG Yes', '2 & GG Yes'),
+        ('2 & GG No', '2 & GG No'),
+        ('X & Over 2.5', 'X & Over 2.5'),
+        ('X & Under 2.5', 'X & Under 2.5'),
+        ('X & Over 3.5', 'X & Over 3.5'),
+        ('X & Under 3.5', 'X & Under 3.5'),
+        ('X & Over 4.5', 'X & Over 4.5'),
+        ('X & Under 4.5', 'X & Under 4.5'),
+        ('X & GG Yes', 'X & GG Yes'),
+        ('X & GG No', 'X & GG No'),
         ('---', '---'),
     )
     tipster = models.CharField(max_length=15, choices=TIPSTER_CHOICES, default='---', )
@@ -2372,7 +2401,7 @@ class Tip(models.Model):
     tip_status = models.CharField(max_length=15, null=True, blank=True)
 
     # Returns Success and Fail depending on the tip_type. Returns N/A if tip_type='---' and Pending if game has no score
-    # Remember to add to this code any new tiptype choices!!!
+    # Remember to add to this code every time you add new TIP_TYPE choices!!!
     def tipstatus(self):
         if self.game.homegoals >= 0:
             if self.tip_type == '1':
@@ -2431,11 +2460,134 @@ class Tip(models.Model):
                     return 'Success'
                 else:
                     return 'Fail'
+            elif self.tip_type == '1 & Over 2.5':
+                if self.game.homegoals > self.game.awaygoals and self.game.homegoals + self.game.awaygoals > 2.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '1 & Under 2.5':
+                if self.game.homegoals > self.game.awaygoals and self.game.homegoals + self.game.awaygoals < 2.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '1 & Over 3.5':
+                if self.game.homegoals > self.game.awaygoals and self.game.homegoals + self.game.awaygoals > 3.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '1 & Under 3.5':
+                if self.game.homegoals > self.game.awaygoals and self.game.homegoals + self.game.awaygoals < 3.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '1 & Over 4.5':
+                if self.game.homegoals > self.game.awaygoals and self.game.homegoals + self.game.awaygoals > 4.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '1 & Under 4.5':
+                if self.game.homegoals > self.game.awaygoals and self.game.homegoals + self.game.awaygoals < 4.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '1 & GG Yes':
+                if (self.game.homegoals > self.game.awaygoals) and (self.game.homegoals > 0 and self.game.awaygoals > 0):
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '1 & GG No':
+                if (self.game.homegoals > self.game.awaygoals) and\
+                        ((self.game.homegoals > 0 and self.game.awaygoals == 0) or (self.game.homegoals == 0 and self.game.awaygoals > 0)):
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '2 & Over 2.5':
+                if self.game.homegoals < self.game.awaygoals and self.game.homegoals + self.game.awaygoals > 2.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '2 & Under 2.5':
+                if self.game.homegoals < self.game.awaygoals and self.game.homegoals + self.game.awaygoals < 2.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '2 & Over 3.5':
+                if self.game.homegoals < self.game.awaygoals and self.game.homegoals + self.game.awaygoals > 3.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '2 & Under 3.5':
+                if self.game.homegoals < self.game.awaygoals and self.game.homegoals + self.game.awaygoals < 3.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '2 & Over 4.5':
+                if self.game.homegoals < self.game.awaygoals and self.game.homegoals + self.game.awaygoals > 4.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '2 & Under 4.5':
+                if self.game.homegoals < self.game.awaygoals and self.game.homegoals + self.game.awaygoals < 4.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '2 & GG Yes':
+                if (self.game.homegoals < self.game.awaygoals) and (self.game.homegoals > 0 and self.game.awaygoals > 0):
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == '2 & GG No':
+                if (self.game.homegoals < self.game.awaygoals) and\
+                        ((self.game.homegoals > 0 and self.game.awaygoals == 0) or (self.game.homegoals == 0 and self.game.awaygoals > 0)):
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'X & Over 2.5':
+                if self.game.homegoals == self.game.awaygoals and self.game.homegoals + self.game.awaygoals > 2.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'X & Under 2.5':
+                if self.game.homegoals == self.game.awaygoals and self.game.homegoals + self.game.awaygoals < 2.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'X & Over 3.5':
+                if self.game.homegoals == self.game.awaygoals and self.game.homegoals + self.game.awaygoals > 3.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'X & Under 3.5':
+                if self.game.homegoals == self.game.awaygoals and self.game.homegoals + self.game.awaygoals < 3.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'X & Over 4.5':
+                if self.game.homegoals == self.game.awaygoals and self.game.homegoals + self.game.awaygoals > 4.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'X & Under 4.5':
+                if self.game.homegoals == self.game.awaygoals and self.game.homegoals + self.game.awaygoals < 4.5:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'X & GG Yes':
+                if (self.game.homegoals == self.game.awaygoals) and (self.game.homegoals > 0 and self.game.awaygoals > 0):
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'X & GG No':
+                if (self.game.homegoals == self.game.awaygoals) and\
+                        ((self.game.homegoals > 0 and self.game.awaygoals == 0) or (self.game.homegoals == 0 and self.game.awaygoals > 0)):
+                    return 'Success'
+                else:
+                    return 'Fail'
             elif self.tip_type == '---':
                 return 'N/A'
         else:
             return 'Pending'
-        return 0
+        return 'NA'
 
     def __str__(self):
         return str(self.tipster) + " " + str(self.game) + " (" + str(self.tip_type) + ")"
@@ -2451,6 +2603,32 @@ class BetslipManager(models.Manager):
         cnt = self.filter(betslip_tipster=tipster).count()
         return cnt
 
+    # Returns the number of non pending betslips given by a tipster
+    def tipster_total_nonpending_betslips(self, tipster):
+        cnt = self.filter(betslip_tipster=tipster).exclude(betslip_status='Pending').count()
+        return cnt
+
+    # Returns the number of successful betslips given by a tipster
+    def tipster_successful_betslips(self, tipster):
+        cnt = self.filter(betslip_tipster=tipster, betslip_status='Success').count()
+        return cnt
+
+    # Returns the sum of stakes played by a tipster
+    def tipster_sum_of_stakes(self, tipster):
+        stakes_sum = self.filter(betslip_tipster=tipster).exclude(betslip_status='Pending').aggregate(Sum('stake'))
+        if stakes_sum['stake__sum']:
+            return stakes_sum['stake__sum']
+        else:
+            return 0
+
+    # Returns the sum of profits or losses for a tipster
+    def tipster_sum_of_profits(self, tipster):
+        profits_sum = self.filter(betslip_tipster=tipster).exclude(betslip_status='Pending').aggregate(Sum('profit'))
+        if profits_sum['profit__sum']:
+            return profits_sum['profit__sum']
+        else:
+            return 0
+
 
 class Betslip(models.Model):
     BETSLIP_TIPSTER_CHOICES = (
@@ -2458,6 +2636,7 @@ class Betslip(models.Model):
         ('Krok', 'Krok'),
         ('Mr X', 'Mr X'),
         ('The Bomber', 'The Bomber'),
+        ('Mr Combo', 'Mr Combo'),
         ('---', '---'),
     )
     BETSLIP_TYPES = (
@@ -2473,11 +2652,133 @@ class Betslip(models.Model):
     tips = models.ManyToManyField(Tip)
     bet_type = models.CharField(max_length=15, choices=BETSLIP_TYPES, default='---', )
     created_date = models.DateTimeField(default=timezone.now)
+    betslip_status = models.CharField(max_length=15, null=True, blank=True)
+    stake = models.FloatField(null=True, blank=True)
+    profit = models.FloatField(null=True, blank=True)
     objects = BetslipManager()
+
+    def betslipstatus(self):
+        pending_cnt = 0
+        for g in self.tips.all():
+            if g.tip_status == 'Pending':
+                pending_cnt += 1
+        if pending_cnt > 0:
+            return 'Pending'
+        else:
+            succ_cnt = 0
+            if self.bet_type == 'All' or self.bet_type == 'Singles':
+                tps_cnt = self.tips.count()
+                for t in self.tips.all():
+                    if t.tip_status == 'Success':
+                        succ_cnt += 1
+                if succ_cnt == tps_cnt:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.bet_type == 'Any 2':
+                for t in self.tips.all():
+                    if t.tip_status == 'Success':
+                        succ_cnt += 1
+                if succ_cnt >= 2:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.bet_type == 'Any 3':
+                for t in self.tips.all():
+                    if t.tip_status == 'Success':
+                        succ_cnt += 1
+                if succ_cnt >= 3:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.bet_type == 'Any 4':
+                for t in self.tips.all():
+                    if t.tip_status == 'Success':
+                        succ_cnt += 1
+                if succ_cnt >= 4:
+                    return 'Success'
+                else:
+                    return 'Fail'
+        return 'NA'
+
+    # Returns a list of accumulated odds in case of a successful betslip. Note that in case the bet type is any 2, 3 or 4
+    # the function returns more than one accumulated odds
+    # Remember to add to this code every time you add a new BETSLIP_TYPE!!!
+    def accum(self):
+        x = []
+        a = 1.0
+        if self.betslip_status == 'Success':
+            if self.bet_type == 'All' or self.bet_type == 'Singles':
+                for tp in self.tips.all():
+                    a *= tp.tip_odds
+                x.append(a)
+            if self.bet_type == 'Any 2':
+                # itertools.combinations returns all possible combinations of a list as a list of tuples
+                # i.e [1,2,3] returns [(1,2), (1,3), (2,3)]
+                combos = list(itertools.combinations(self.tips.all(), 2))
+                for tpl in combos:
+                    if tpl[0].tip_status == 'Success' and tpl[1].tip_status == 'Success':
+                        x.append(tpl[0].tip_odds * tpl[1].tip_odds)
+            if self.bet_type == 'Any 3':
+                # itertools.combinations returns all possible combinations of a list as a list of tuples
+                # i.e [1,2,3] returns [(1,2), (1,3), (2,3)]
+                combos = list(itertools.combinations(self.tips.all(), 3))
+                for tpl in combos:
+                    if tpl[0].tip_status == 'Success' and tpl[1].tip_status == 'Success' and tpl[2].tip_status == 'Success':
+                        x.append(tpl[0].tip_odds * tpl[1].tip_odds * tpl[2].tip_odds)
+            if self.bet_type == 'Any 4':
+                # itertools.combinations returns all possible combinations of a list as a list of tuples
+                # i.e [1,2,3] returns [(1,2), (1,3), (2,3)]
+                combos = list(itertools.combinations(self.tips.all(), 4))
+                for tpl in combos:
+                    if tpl[0].tip_status == 'Success' and tpl[1].tip_status == 'Success' and tpl[2].tip_status == 'Success' and tpl[3].tip_status == 'Success':
+                        x.append(tpl[0].tip_odds * tpl[1].tip_odds * tpl[2].tip_odds * tpl[3].tip_odds)
+        return x
+
+    # Returns the number of sub slips that are created according to bet type
+    # i.e when a betslip has 3 games and the type is Any 2, this should return 3
+    def subslips(self):
+        combos = 1
+        if self.bet_type == 'Any 2':
+            combo_list = list(itertools.combinations(self.tips.all(), 2))
+            combos = len(combo_list)
+        if self.bet_type == 'Any 3':
+            combo_list = list(itertools.combinations(self.tips.all(), 3))
+            combos = len(combo_list)
+        if self.bet_type == 'Any 4':
+            combo_list = list(itertools.combinations(self.tips.all(), 4))
+            combos = len(combo_list)
+        return combos
+
+    # Returns the accumulated profit or loss of the betslip.
+    # Remember to add to this code every time you add a new BETSLIP_TYPE!!!
+    def betslip_profit(self):
+        p = 0
+        if self.stake:
+            stk = float(self.stake)
+            if self.betslip_status == 'Success':
+                if self.bet_type == 'All' or self.bet_type == 'Singles':
+                    for accm in self.accum():
+                        p += (stk * accm) - stk
+                elif self.bet_type == 'Any 2' or self.bet_type == 'Any 3' or self.bet_type == 'Any 4':
+                    for accm in self.accum():
+                        p += ((stk / self.subslips()) * accm) - (stk / self.subslips())
+                else:
+                    pass
+                return p
+            elif self.betslip_status == 'Pending':
+                pass
+            elif self.betslip_status == 'NA':
+                pass
+            else:
+                return -stk
+        pass
 
     def __str__(self):
         return str(self.betslip_tipster) + " " + str(self.created_date)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.betslip_tipster)
+        self.betslip_status = self.betslipstatus()
+        self.profit = self.betslip_profit()
         super(Betslip, self).save(*args, **kwargs)

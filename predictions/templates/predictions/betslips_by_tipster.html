@@ -1,5 +1,15 @@
 {% extends 'predictions/base.html' %}
 
+{% block head %}
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+
+{% endblock %}
+
 {% block content36 %}
 
 <div class="well">
@@ -14,19 +24,39 @@
 
 {% block content37 %}
 
-{% if user.is_authenticated %}
+
 
     {% for b in betslips %}
-        <div class="well">
-            <h3 class="activepage"><strong>Bet type: {{ b.bet_type }}</strong></h3>
-            <table class="table" style="font-size: 90%;">
+        <div style="border: solid;" class="well">
+            {% if user.is_authenticated %}
+                {% if b.betslip_status == 'Success' %}
+                <h3 style="background: #4CC552; color: white; padding: 5px;"><strong>Bet type: {{ b.bet_type }}</strong><span class="date"><strong>+{{b.profit|floatformat:2 }}€</strong></span></h3>
+                <!--<span style="background: green;">Success</span><br>-->
+                {% elif b.betslip_status == 'Fail' %}
+                <h3 style="background: #F62817; color: white; padding: 5px;"><strong>Bet type: {{ b.bet_type }}</strong><span class="date"><strong>{{b.profit|floatformat:2 }}€</strong></span></h3>
+                {% else %}
+                <h3 class=""><strong>Bet type: {{ b.bet_type }}</strong> </h3><br>
+                {% endif %}
+            {% else %}
+                {% if b.betslip_status == 'Success' %}
+                <h3 style="background: #4CC552; color: white; padding: 5px;"><strong>Bet type: {{ b.bet_type }}</strong> <i class="fa fa-check-circle date" aria-hidden="true"></i></h3>
+                <!--<span style="background: green;">Success</span><br>-->
+                {% elif b.betslip_status == 'Fail' %}
+                <h3 style="background: #F62817; color: white; padding: 5px;"><strong>Bet type: {{ b.bet_type }}</strong> <i class="fa fa-times-circle date" aria-hidden="true"></i></h3>
+                {% else %}
+                <h3 class=""><strong>Bet type: {{ b.bet_type }}</strong> </h3><br>
+                {% endif %}
+            {% endif %}
+            <table class="table table-condensed" style="font-size: 90%;">
                 <thead>
                 <tr>
                     <th>Date</th>
+                    <th>Time</th>
                     <th class="centred">LG</th>
                     <th class="right-al">Home</th>
                     <th class="centred">-</th>
                     <th>Away</th>
+                    <th>Score</th>
                     <th class="centred">Tip</th>
                     <th class="centred">Odds</th>
                     <th class="centred">Status</th>
@@ -35,11 +65,17 @@
                 <tbody>
                 {% for tip in b.tips.all %}
                 <tr>
-                    <td>{{ tip.game.date }} {{ tip.time }}</td>
+                    <td>{{ tip.game.date|date:"j/m/Y" }}</td>
+                    <td>{{ tip.time|date:"G:i" }}</td>
                     <td class="centred">{{ tip.game.season.league.short_name }}</td>
                     <td class="right-al">{{ tip.game.hometeam }}</td>
-                    <td class="centred">vs</td>
+                    <td class="centred"><strong>&nbsp &nbsp vs &nbsp &nbsp</strong></td>
                     <td>{{ tip.game.awayteam }}</td>
+                    {% if tip.game.homegoals == None %}
+                    <td class="centred">(-)</td>
+                    {% else %}
+                    <td>({{ tip.game.homegoals }} - {{ tip.game.awaygoals }})</td>
+                    {% endif %}
                     <td class="activepage centred">{{ tip.tip_type }}</td>
                     <td class="centred">{{ tip.tip_odds|floatformat:2 }}</td>
                     {% if tip.tip_status == 'Success' %}
@@ -56,12 +92,63 @@
 
             <hr>
             <div class="">
-            <h4><strong>Tipster: <span h4 style="color: #5DADE2;">{{ b.betslip_tipster }}</span></strong></h4>
-            {{ b.created_date }}
-                <span class="date"><a href="{% url 'betslip_edit' b.pk %}">Edit</a></span>
+            <h4>
+                {% if user.is_authenticated %}
+                <strong>Stake: {{ b.stake|floatformat:2 }}€</strong><br>
+                {% endif %}
+                <strong>Tipster: <span style="color: #5DADE2;">{{ b.betslip_tipster }}</span></strong><br>
+                {{ b.created_date }}
+                <span class="date"><a href="{% url 'betslip_edit' b.pk %}"><strong>Edit</strong></a></span></h4>
             </div>
 
         </div>
     {% endfor %}
-{% endif %}
+
+{% endblock %}
+
+{% block content38 %}
+
+<style type="text/css">
+.v-divider{
+
+ height:100%;
+ border-right:2px solid #CACFD2;
+}
+</style>
+
+
+    {% if user.is_authenticated %}
+
+        <table style="border: solid;" class="table table-condensed">
+            <thead>
+              <tr style="background: #333333; color:white;">
+                <th class=""><span data-toggle="tooltip" title="Tipster">Tipster</span></th>
+                <th class="centred"><span data-toggle="tooltip" title="Total number of betslips">TB</span></th>
+                <th class="centred"><span data-toggle="tooltip" title="Total number of successful betslips">SB</span></th>
+                <th class="centred"><span data-toggle="tooltip" title="Total amount of stakes given">Total Stakes</span></th>
+                <th class="centred"><span data-toggle="tooltip" title="Total profit or loss">P&L</span></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for item in y %}
+              <tr>
+                <td class="v-divider">{{ item.0 }}</td>
+                <td class="centred">{{ item.1 }}</td>
+                <td class="v-divider centred">{{ item.2 }}</td>
+                <td class="centred">{{ item.3|floatformat:2 }} €</td>
+                {% if item.4 > 0 %}
+                    <td class="centred" style="color: #4CC552;">+{{ item.4|floatformat:2 }} €</td>
+                {% elif item.4 < 0 %}
+                    <td class="centred" style="color: #F62817;">{{ item.4|floatformat:2 }} €</td>
+                {% else %}
+                    <td class="centred">{{ item.4|floatformat:2 }} €</td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+        </table>
+
+    {% endif %}
+
+
+
 {% endblock %}
