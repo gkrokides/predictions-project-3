@@ -2910,6 +2910,9 @@ class Betslip(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.betslip_tipster)
-        self.betslip_status = self.betslipstatus()
+        if self.betslip_status:
+            self.betslip_status = self.betslipstatus()
+        else:
+            self.betslip_status = 'Pending'
         self.profit = self.betslip_profit()
         super(Betslip, self).save(*args, **kwargs)
