@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4d596332-3129-4e67-bd16-76785ce15d43" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/templates/predictions/addbetslip.html" afterPath="$PROJECT_DIR$/predictions/templates/predictions/addbetslip.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/templates/predictions/base.html" afterPath="$PROJECT_DIR$/predictions/templates/predictions/base.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -118,11 +118,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="base.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="base.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="72" column="31" lean-forward="false" selection-start-line="72" selection-start-column="31" selection-end-line="72" selection-end-column="31" />
+            <state relative-caret-position="255">
+              <caret line="69" column="20" lean-forward="false" selection-start-line="69" selection-start-column="24" selection-end-line="69" selection-end-column="201" />
               <folding />
             </state>
           </provider>
@@ -190,7 +190,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="addbetslip.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="addbetslip.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/addbetslip.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="510">
@@ -257,9 +257,9 @@
         <option value="$PROJECT_DIR$/predictions/views.py" />
         <option value="$PROJECT_DIR$/predictions/templates/predictions/betslips_by_tipster.html" />
         <option value="$PROJECT_DIR$/predictions/templates/predictions/betslip_list.html" />
-        <option value="$PROJECT_DIR$/predictions/templates/predictions/base.html" />
         <option value="$PROJECT_DIR$/predictions/models.py" />
         <option value="$PROJECT_DIR$/predictions/templates/predictions/addbetslip.html" />
+        <option value="$PROJECT_DIR$/predictions/templates/predictions/base.html" />
       </list>
     </option>
   </component>
@@ -1265,14 +1265,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="72" column="31" lean-forward="false" selection-start-line="72" selection-start-column="31" selection-end-line="72" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/predictions/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-425">
@@ -1346,6 +1338,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="33" column="21" lean-forward="false" selection-start-line="33" selection-start-column="21" selection-end-line="33" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="69" column="20" lean-forward="false" selection-start-line="69" selection-start-column="24" selection-end-line="69" selection-end-column="201" />
           <folding />
         </state>
       </provider>

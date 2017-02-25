@@ -67,10 +67,8 @@
                     </ul>
                     </li>
                     <li {% if 'predictions_by_day' in request.path %}class="activepage"{% endif %} id="predictions"> <a href="{% url 'predictions_by_day' %}"><i class="fa fa-magic" aria-hidden="true"></i> Predictions</a> </li>
-                    <li {% if 'posts' in request.path %}class="activepage"{% endif %} id="home"> <a href="{% url 'post_list' %}"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Posts</a> </li>
-                    {% if user.is_authenticated %}
+                    <!--<li {% if 'posts' in request.path %}class="activepage"{% endif %} id="home"> <a href="{% url 'post_list' %}"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Posts</a> </li>-->
                     <li {% if 'betslips' in request.path %}class="activepage"{% endif %} id="betslip_list"> <a href="{% url 'betslip_list' %}"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Tipster Picks</a> </li>
-                    {% endif %}
                 </ul>
                 {% if user.is_authenticated %}
                     <ul class="nav navbar-nav navbar-right">
