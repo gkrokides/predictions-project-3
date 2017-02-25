@@ -2740,13 +2740,13 @@ class Betslip(models.Model):
                     a *= tp.tip_odds
                 x.append(a)
                 return x
-            elif self.betslip_status == 'Failed':
+            elif self.betslip_status == 'Fail':
                 x.append(-1)
                 return x
             else:
                 return x
         elif self.bet_type == 'Any 2':
-            if self.betslip_status == 'Success' or self.betslip_status == 'Failed':
+            if self.betslip_status == 'Success' or self.betslip_status == 'Fail':
                 combos = list(itertools.combinations(self.tips.all(), 2))
                 for tpl in combos:
                     if tpl[0].tip_status == 'Success' and tpl[1].tip_status == 'Success':
@@ -2757,7 +2757,7 @@ class Betslip(models.Model):
             else:
                 return x
         elif self.bet_type == 'Any 3':
-            if self.betslip_status == 'Success' or self.betslip_status == 'Failed':
+            if self.betslip_status == 'Success' or self.betslip_status == 'Fail':
                 combos = list(itertools.combinations(self.tips.all(), 3))
                 for tpl in combos:
                     if tpl[0].tip_status == 'Success' and tpl[1].tip_status == 'Success' and tpl[2].tip_status == 'Success':
@@ -2768,7 +2768,7 @@ class Betslip(models.Model):
             else:
                 return x
         elif self.bet_type == 'Any 4':
-            if self.betslip_status == 'Success' or self.betslip_status == 'Failed':
+            if self.betslip_status == 'Success' or self.betslip_status == 'Fail':
                 combos = list(itertools.combinations(self.tips.all(), 4))
                 for tpl in combos:
                     if tpl[0].tip_status == 'Success' and tpl[1].tip_status == 'Success' and tpl[2].tip_status == 'Success' and tpl[3].tip_status == 'Success':
@@ -2781,7 +2781,7 @@ class Betslip(models.Model):
         elif self.bet_type == 'Any 2 or 3':
             expected_tips = 3
             if self.tips.count() == expected_tips:
-                if self.betslip_status == 'Success' or self.betslip_status == 'Failed':
+                if self.betslip_status == 'Success' or self.betslip_status == 'Fail':
                     cnt_succ = 0
                     for tp in self.tips.all():
                         if tp.tip_status == 'Success':
@@ -2804,7 +2804,7 @@ class Betslip(models.Model):
         elif self.bet_type == 'Any 3 or 4':
             expected_tips = 4
             if self.tips.count() == expected_tips:
-                if self.betslip_status == 'Success' or self.betslip_status == 'Failed':
+                if self.betslip_status == 'Success' or self.betslip_status == 'Fail':
                     cnt_succ = 0
                     for tp in self.tips.all():
                         if tp.tip_status == 'Success':
@@ -2827,7 +2827,7 @@ class Betslip(models.Model):
         elif self.bet_type == 'Any 4 or 5':
             expected_tips = 5
             if self.tips.count() == expected_tips:
-                if self.betslip_status == 'Success' or self.betslip_status == 'Failed':
+                if self.betslip_status == 'Success' or self.betslip_status == 'Fail':
                     cnt_succ = 0
                     for tp in self.tips.all():
                         if tp.tip_status == 'Success':
@@ -2890,7 +2890,7 @@ class Betslip(models.Model):
                         for accm in self.accum():
                             p += (stk * accm) - stk
                         return p
-                    elif self.betslip_status == 'Failed':
+                    elif self.betslip_status == 'Fail':
                         l = -stk
                         return l
                 elif self.bet_type == 'Any 2' or self.bet_type == 'Any 3' or self.bet_type == 'Any 4' or self.bet_type == 'Any 2 or 3' or self.bet_type == 'Any 3 or 4' or self.bet_type == 'Any 4 or 5':
