@@ -24,29 +24,28 @@ $(document).ready(function(){
 
 {% block content37 %}
 
-
-
     {% for b in betslips %}
         <div style="border: solid;" class="well">
             {% if user.is_authenticated %}
                 {% if b.betslip_status == 'Success' %}
-                <h3 style="background: #4CC552; color: white; padding: 5px;"><strong>Bet type: {{ b.bet_type }}</strong><span class="date"><strong>+{{b.profit|floatformat:2 }}€</strong></span></h3>
+                <p style="background: #4CC552; color: white; padding: 5px; font-size: 15px;">Bet type: <strong>"{{ b.bet_type }}"</strong><span class="date"><strong>+{{b.profit|floatformat:2 }}</strong></span></p>
                 <!--<span style="background: green;">Success</span><br>-->
                 {% elif b.betslip_status == 'Fail' %}
-                <h3 style="background: #F62817; color: white; padding: 5px;"><strong>Bet type: {{ b.bet_type }}</strong><span class="date"><strong>{{b.profit|floatformat:2 }}€</strong></span></h3>
+                <p style="background: #F62817; color: white; padding: 5px; font-size: 15px;">Bet type: <strong>"{{ b.bet_type }}"</strong><span class="date"><strong>{{b.profit|floatformat:2 }}</strong></span></p>
                 {% else %}
-                <h3 class=""><strong>Bet type: {{ b.bet_type }}</strong> </h3><br>
+                <p style="padding: 5px; font-size: 15px;">Bet type: <strong>"{{ b.bet_type }}"</strong> </p><br>
                 {% endif %}
             {% else %}
                 {% if b.betslip_status == 'Success' %}
-                <h3 style="background: #4CC552; color: white; padding: 5px;"><strong>Bet type: {{ b.bet_type }}</strong> <i class="fa fa-check-circle date" aria-hidden="true"></i></h3>
+                <h3 style="background: #4CC552; color: white; padding: 5px;">Bet type: <strong>"{{ b.bet_type }}"</strong> <i class="fa fa-check-circle date" aria-hidden="true"></i></h3>
                 <!--<span style="background: green;">Success</span><br>-->
                 {% elif b.betslip_status == 'Fail' %}
-                <h3 style="background: #F62817; color: white; padding: 5px;"><strong>Bet type: {{ b.bet_type }}</strong> <i class="fa fa-times-circle date" aria-hidden="true"></i></h3>
+                <h3 style="background: #F62817; color: white; padding: 5px;">Bet type: <strong>"{{ b.bet_type }}"</strong> <i class="fa fa-times-circle date" aria-hidden="true"></i></h3>
                 {% else %}
-                <h3 class=""><strong>Bet type: {{ b.bet_type }}</strong> </h3><br>
+                <h3 style="padding: 5px;">Bet type: <strong>"{{ b.bet_type }}"</strong> </h3><br>
                 {% endif %}
             {% endif %}
+
             <table class="table table-condensed" style="font-size: 90%;">
                 <thead>
                 <tr>
@@ -92,13 +91,16 @@ $(document).ready(function(){
 
             <hr>
             <div class="">
-            <h4>
+            <p>
                 {% if user.is_authenticated %}
-                <strong>Stake: {{ b.stake|floatformat:2 }}€</strong><br>
+                Stake: <strong>{{ b.stake|floatformat:2 }}</strong><br>
                 {% endif %}
-                <strong>Tipster: <span style="color: #5DADE2;">{{ b.betslip_tipster }}</span></strong><br>
-                {{ b.created_date }}
-                <span class="date"><a href="{% url 'betslip_edit' b.pk %}"><strong>Edit</strong></a></span></h4>
+                Tipster: <strong><span style="color: #5DADE2;">{{ b.betslip_tipster }}</span></strong><br>
+                Betslip date: {{ b.created_date }}
+                {% if user.is_authenticated %}
+                <span class="date"><a href="{% url 'betslip_edit' b.pk %}"><strong>Edit</strong></a></span>
+                {% endif %}
+            </p>
             </div>
 
         </div>

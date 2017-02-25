@@ -23,27 +23,12 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block content37 %}
-<!--{% if user.is_authenticated %}-->
-    <!--{% for b in betslips %}-->
-        <!--<div class="well">-->
-            <!--<p>{{ b.betslip_tipster }}</p>-->
-            <!--{% for tip in b.tips.all %}-->
-            <!--<p>{{ tip.game }} {{ tip.tip_odds }}</p>-->
-            <!--{% endfor %}-->
-            <!--<p>Bet type: {{ b.bet_type }}</p>-->
-
-        <!--</div>-->
-    <!--{% endfor %}-->
-<!--{% endif %}-->
-
-
 
     {% for b in betslips %}
         <div style="border: solid;" class="well">
-
             {% if user.is_authenticated %}
                 {% if b.betslip_status == 'Success' %}
-                <p style="background: #4CC552; color: white; padding: 5px; font-size: 15px;">Bet type:<strong> "{{ b.bet_type }}"</strong><span class="date"><strong>+{{b.profit|floatformat:2 }}</strong></span></p>
+                <p style="background: #4CC552; color: white; padding: 5px; font-size: 15px;">Bet type: <strong>"{{ b.bet_type }}"</strong><span class="date"><strong>+{{b.profit|floatformat:2 }}</strong></span></p>
                 <!--<span style="background: green;">Success</span><br>-->
                 {% elif b.betslip_status == 'Fail' %}
                 <p style="background: #F62817; color: white; padding: 5px; font-size: 15px;">Bet type: <strong>"{{ b.bet_type }}"</strong><span class="date"><strong>{{b.profit|floatformat:2 }}</strong></span></p>
