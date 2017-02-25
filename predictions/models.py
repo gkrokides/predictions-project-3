@@ -2359,6 +2359,9 @@ class Tip(models.Model):
         ('1', '1'),
         ('X', 'X'),
         ('2', '2'),
+        ('DC 1X', 'DC 1X'),
+        ('DC X2', 'DC X2'),
+        ('DC 12', 'DC 12'),
         ('Over 2.5', 'Over 2.5'),
         ('Under 2.5', 'Under 2.5'),
         ('Over 3.5', 'Over 3.5'),
@@ -2416,6 +2419,21 @@ class Tip(models.Model):
                     return 'Fail'
             elif self.tip_type == '2':
                 if self.game.homegoals < self.game.awaygoals:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'DC 1X':
+                if self.game.homegoals > self.game.awaygoals or self.game.homegoals == self.game.awaygoals:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'DC X2':
+                if self.game.homegoals < self.game.awaygoals or self.game.homegoals == self.game.awaygoals:
+                    return 'Success'
+                else:
+                    return 'Fail'
+            elif self.tip_type == 'DC 12':
+                if self.game.homegoals < self.game.awaygoals or self.game.homegoals > self.game.awaygoals:
                     return 'Success'
                 else:
                     return 'Fail'
