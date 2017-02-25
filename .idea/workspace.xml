@@ -2,15 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4d596332-3129-4e67-bd16-76785ce15d43" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/George.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/George.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/forms.py" afterPath="$PROJECT_DIR$/predictions/forms.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/models.py" afterPath="$PROJECT_DIR$/predictions/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/templates/predictions/addbetslip.html" afterPath="$PROJECT_DIR$/predictions/templates/predictions/addbetslip.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/templates/predictions/base.html" afterPath="$PROJECT_DIR$/predictions/templates/predictions/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/templates/predictions/betslip_edit.html" afterPath="$PROJECT_DIR$/predictions/templates/predictions/betslip_edit.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/templates/predictions/betslip_list.html" afterPath="$PROJECT_DIR$/predictions/templates/predictions/betslip_list.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/templates/predictions/betslips_by_tipster.html" afterPath="$PROJECT_DIR$/predictions/templates/predictions/betslips_by_tipster.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/views.py" afterPath="$PROJECT_DIR$/predictions/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -31,8 +26,8 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/predictions/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="2630" column="0" lean-forward="true" selection-start-line="2630" selection-start-column="0" selection-end-line="2630" selection-end-column="0" />
+            <state relative-caret-position="-606">
+              <caret line="2696" column="73" lean-forward="false" selection-start-line="2696" selection-start-column="73" selection-end-line="2696" selection-end-column="73" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
                 <element signature="e#127517#136379#0" expanded="false" />
@@ -70,10 +65,10 @@
                 <element signature="e#135246#135437#0" expanded="false" />
                 <element signature="e#135505#135696#0" expanded="false" />
                 <element signature="e#135761#135960#0" expanded="false" />
-                <element signature="e#139403#139693#0" expanded="false" />
-                <element signature="e#139753#139993#0" expanded="false" />
-                <element signature="e#140053#140293#0" expanded="false" />
-                <element signature="e#140353#140593#0" expanded="false" />
+                <element signature="e#140832#140949#0" expanded="false" />
+                <element signature="e#141379#147055#0" expanded="false" />
+                <element signature="e#147061#147133#0" expanded="false" />
+                <element signature="e#148200#148256#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -91,7 +86,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="betslips_by_tipster.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="betslips_by_tipster.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/betslips_by_tipster.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="170">
@@ -114,11 +109,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="base.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="base.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="317" column="36" lean-forward="false" selection-start-line="317" selection-start-column="36" selection-end-line="317" selection-end-column="36" />
+            <state relative-caret-position="306">
+              <caret line="72" column="31" lean-forward="false" selection-start-line="72" selection-start-column="31" selection-end-line="72" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -127,19 +122,21 @@
       <file leaf-file-name="betslip_list.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/betslip_list.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="11" lean-forward="false" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
+            <state relative-caret-position="387">
+              <caret line="95" column="92" lean-forward="true" selection-start-line="95" selection-start-column="92" selection-end-line="95" selection-end-column="98" />
               <folding>
                 <element signature="n#style#0;n#div#1;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#0;n#div#1;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#1;n#div#1;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#2;n#div#1;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#h3#0;n#div#1;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#h3#1;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#h3#3;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#h3#4;n#div#1;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#h3#2;n#div#1;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#table#0;n#div#1;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#i#0;n#td#10;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#i#0;n#td#11;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#td#12;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#strong#1;n#h4#0;n#div#0;n#div#1;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#strong#1;n#p#0;n#div#0;n#div#1;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#table#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#tr#0;n#thead#0;n#table#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#td#4;n#tr#0;n#tbody#0;n#table#0;n#!!top" expanded="true" />
@@ -152,8 +149,8 @@
       <file leaf-file-name="predictions.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/predictions/static/css/predictions.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="138" column="23" lean-forward="false" selection-start-line="138" selection-start-column="16" selection-end-line="138" selection-end-column="23" />
+            <state relative-caret-position="697">
+              <caret line="153" column="20" lean-forward="false" selection-start-line="153" selection-start-column="4" selection-end-line="153" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -162,8 +159,8 @@
       <file leaf-file-name="league_overview.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/league_overview.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
-              <caret line="125" column="69" lean-forward="false" selection-start-line="125" selection-start-column="20" selection-end-line="125" selection-end-column="69" />
+            <state relative-caret-position="61">
+              <caret line="117" column="64" lean-forward="false" selection-start-line="117" selection-start-column="22" selection-end-line="117" selection-end-column="64" />
               <folding>
                 <element signature="n#script#0;n#!!top" expanded="false" />
                 <element signature="n#script#1;n#!!top" expanded="false" />
@@ -247,12 +244,12 @@
         <option value="$PROJECT_DIR$/predictions/management/commands/save_all_betslips.py" />
         <option value="$PROJECT_DIR$/predictions/forms.py" />
         <option value="$PROJECT_DIR$/predictions/templates/predictions/betslip_edit.html" />
-        <option value="$PROJECT_DIR$/predictions/models.py" />
         <option value="$PROJECT_DIR$/predictions/templates/predictions/addbetslip.html" />
         <option value="$PROJECT_DIR$/predictions/views.py" />
-        <option value="$PROJECT_DIR$/predictions/templates/predictions/base.html" />
-        <option value="$PROJECT_DIR$/predictions/templates/predictions/betslip_list.html" />
         <option value="$PROJECT_DIR$/predictions/templates/predictions/betslips_by_tipster.html" />
+        <option value="$PROJECT_DIR$/predictions/models.py" />
+        <option value="$PROJECT_DIR$/predictions/templates/predictions/betslip_list.html" />
+        <option value="$PROJECT_DIR$/predictions/templates/predictions/base.html" />
       </list>
     </option>
   </component>
@@ -781,13 +778,13 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2528978" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24330357" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.50208336" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25195095" sideWeight="0.49791667" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17650159" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13823858" sideWeight="0.49791667" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -827,7 +824,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -873,10 +870,10 @@
             <element signature="e#135246#135437#0" expanded="false" />
             <element signature="e#135505#135696#0" expanded="false" />
             <element signature="e#135761#135960#0" expanded="false" />
-            <element signature="e#139403#139693#0" expanded="false" />
-            <element signature="e#139753#139993#0" expanded="false" />
-            <element signature="e#140053#140293#0" expanded="false" />
-            <element signature="e#140353#140593#0" expanded="false" />
+            <element signature="e#140832#140949#0" expanded="false" />
+            <element signature="e#141379#147055#0" expanded="false" />
+            <element signature="e#147061#147133#0" expanded="false" />
+            <element signature="e#148200#148256#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1161,55 +1158,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/predictions/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="2630" column="0" lean-forward="true" selection-start-line="2630" selection-start-column="0" selection-end-line="2630" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-            <element signature="e#127517#136379#0" expanded="false" />
-            <element signature="e#127558#127696#0" expanded="false" />
-            <element signature="e#127752#127891#0" expanded="false" />
-            <element signature="e#127947#128085#0" expanded="false" />
-            <element signature="e#128148#128292#0" expanded="false" />
-            <element signature="e#128356#128500#0" expanded="false" />
-            <element signature="e#128563#128707#0" expanded="false" />
-            <element signature="e#128771#128915#0" expanded="false" />
-            <element signature="e#128978#129122#0" expanded="false" />
-            <element signature="e#129186#129330#0" expanded="false" />
-            <element signature="e#129391#129539#0" expanded="false" />
-            <element signature="e#129599#129833#0" expanded="false" />
-            <element signature="e#129900#130090#0" expanded="false" />
-            <element signature="e#130158#130348#0" expanded="false" />
-            <element signature="e#130415#130605#0" expanded="false" />
-            <element signature="e#130673#130863#0" expanded="false" />
-            <element signature="e#130930#131120#0" expanded="false" />
-            <element signature="e#131188#131378#0" expanded="false" />
-            <element signature="e#131443#131641#0" expanded="false" />
-            <element signature="e#131705#131989#0" expanded="false" />
-            <element signature="e#132056#132246#0" expanded="false" />
-            <element signature="e#132314#132504#0" expanded="false" />
-            <element signature="e#132571#132761#0" expanded="false" />
-            <element signature="e#132829#133019#0" expanded="false" />
-            <element signature="e#133086#133276#0" expanded="false" />
-            <element signature="e#133344#133534#0" expanded="false" />
-            <element signature="e#133599#133797#0" expanded="false" />
-            <element signature="e#133861#134145#0" expanded="false" />
-            <element signature="e#134212#134403#0" expanded="false" />
-            <element signature="e#134471#134662#0" expanded="false" />
-            <element signature="e#134729#134920#0" expanded="false" />
-            <element signature="e#134988#135179#0" expanded="false" />
-            <element signature="e#135246#135437#0" expanded="false" />
-            <element signature="e#135505#135696#0" expanded="false" />
-            <element signature="e#135761#135960#0" expanded="false" />
-            <element signature="e#139403#139693#0" expanded="false" />
-            <element signature="e#139753#139993#0" expanded="false" />
-            <element signature="e#140053#140293#0" expanded="false" />
-            <element signature="e#140353#140593#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/addbetslip.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -1258,64 +1206,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/predictions/static/css/predictions.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="138" column="23" lean-forward="false" selection-start-line="138" selection-start-column="16" selection-end-line="138" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/league_overview.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="125" column="69" lean-forward="false" selection-start-line="125" selection-start-column="20" selection-end-line="125" selection-end-column="69" />
-          <folding>
-            <element signature="n#script#0;n#!!top" expanded="false" />
-            <element signature="n#script#1;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#tr#0;n#thead#0;n#table#0;n#!!top" expanded="true" />
-            <element signature="n#p#1;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/predictions/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="546">
           <caret line="2075" column="0" lean-forward="true" selection-start-line="2075" selection-start-column="0" selection-end-line="2075" selection-end-column="0" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="317" column="36" lean-forward="false" selection-start-line="317" selection-start-column="36" selection-end-line="317" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/betslip_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="11" lean-forward="false" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
-          <folding>
-            <element signature="n#style#0;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#0;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#1;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#3;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#4;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#table#0;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#i#0;n#td#10;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#i#0;n#td#11;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#12;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#strong#1;n#h4#0;n#div#0;n#div#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#table#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#tr#0;n#thead#0;n#table#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#4;n#tr#0;n#tbody#0;n#table#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#5;n#tr#0;n#tbody#0;n#table#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1338,6 +1234,109 @@
             <element signature="n#style#0;n#td#4;n#tr#0;n#tbody#0;n#table#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#td#5;n#tr#0;n#tbody#0;n#table#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/predictions/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-606">
+          <caret line="2696" column="73" lean-forward="false" selection-start-line="2696" selection-start-column="73" selection-end-line="2696" selection-end-column="73" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+            <element signature="e#127517#136379#0" expanded="false" />
+            <element signature="e#127558#127696#0" expanded="false" />
+            <element signature="e#127752#127891#0" expanded="false" />
+            <element signature="e#127947#128085#0" expanded="false" />
+            <element signature="e#128148#128292#0" expanded="false" />
+            <element signature="e#128356#128500#0" expanded="false" />
+            <element signature="e#128563#128707#0" expanded="false" />
+            <element signature="e#128771#128915#0" expanded="false" />
+            <element signature="e#128978#129122#0" expanded="false" />
+            <element signature="e#129186#129330#0" expanded="false" />
+            <element signature="e#129391#129539#0" expanded="false" />
+            <element signature="e#129599#129833#0" expanded="false" />
+            <element signature="e#129900#130090#0" expanded="false" />
+            <element signature="e#130158#130348#0" expanded="false" />
+            <element signature="e#130415#130605#0" expanded="false" />
+            <element signature="e#130673#130863#0" expanded="false" />
+            <element signature="e#130930#131120#0" expanded="false" />
+            <element signature="e#131188#131378#0" expanded="false" />
+            <element signature="e#131443#131641#0" expanded="false" />
+            <element signature="e#131705#131989#0" expanded="false" />
+            <element signature="e#132056#132246#0" expanded="false" />
+            <element signature="e#132314#132504#0" expanded="false" />
+            <element signature="e#132571#132761#0" expanded="false" />
+            <element signature="e#132829#133019#0" expanded="false" />
+            <element signature="e#133086#133276#0" expanded="false" />
+            <element signature="e#133344#133534#0" expanded="false" />
+            <element signature="e#133599#133797#0" expanded="false" />
+            <element signature="e#133861#134145#0" expanded="false" />
+            <element signature="e#134212#134403#0" expanded="false" />
+            <element signature="e#134471#134662#0" expanded="false" />
+            <element signature="e#134729#134920#0" expanded="false" />
+            <element signature="e#134988#135179#0" expanded="false" />
+            <element signature="e#135246#135437#0" expanded="false" />
+            <element signature="e#135505#135696#0" expanded="false" />
+            <element signature="e#135761#135960#0" expanded="false" />
+            <element signature="e#140832#140949#0" expanded="false" />
+            <element signature="e#141379#147055#0" expanded="false" />
+            <element signature="e#147061#147133#0" expanded="false" />
+            <element signature="e#148200#148256#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/predictions/static/css/predictions.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="153" column="20" lean-forward="false" selection-start-line="153" selection-start-column="4" selection-end-line="153" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/league_overview.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="61">
+          <caret line="117" column="64" lean-forward="false" selection-start-line="117" selection-start-column="22" selection-end-line="117" selection-end-column="64" />
+          <folding>
+            <element signature="n#script#0;n#!!top" expanded="false" />
+            <element signature="n#script#1;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#tr#0;n#thead#0;n#table#0;n#!!top" expanded="true" />
+            <element signature="n#p#1;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/betslip_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="387">
+          <caret line="95" column="92" lean-forward="true" selection-start-line="95" selection-start-column="92" selection-end-line="95" selection-end-column="98" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#div#1;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#1;n#div#1;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#2;n#div#1;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h3#0;n#div#1;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h3#1;n#div#1;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#h3#2;n#div#1;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#table#0;n#div#1;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#i#0;n#td#10;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#i#0;n#td#11;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#12;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#strong#1;n#p#0;n#div#0;n#div#1;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#table#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#tr#0;n#thead#0;n#table#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#4;n#tr#0;n#tbody#0;n#table#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#5;n#tr#0;n#tbody#0;n#table#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="72" column="31" lean-forward="false" selection-start-line="72" selection-start-column="31" selection-end-line="72" selection-end-column="31" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -2644,6 +2644,9 @@ class Betslip(models.Model):
         ('Any 2', 'Any 2'),
         ('Any 3', 'Any 3'),
         ('Any 4', 'Any 4'),
+        ('Any 2 or 3', 'Any 2 or 3'),
+        ('Any 3 or 4', 'Any 3 or 4'),
+        ('Any 4 or 5', 'Any 4 or 5'),
         ('All', 'All'),
         ('---', '---'),
     )
@@ -2675,7 +2678,7 @@ class Betslip(models.Model):
                     return 'Success'
                 else:
                     return 'Fail'
-            elif self.bet_type == 'Any 2':
+            elif self.bet_type == 'Any 2' or self.bet_type == 'Any 2 or 3':
                 for t in self.tips.all():
                     if t.tip_status == 'Success':
                         succ_cnt += 1
@@ -2683,7 +2686,7 @@ class Betslip(models.Model):
                     return 'Success'
                 else:
                     return 'Fail'
-            elif self.bet_type == 'Any 3':
+            elif self.bet_type == 'Any 3' or self.bet_type == 'Any 3 or 4':
                 for t in self.tips.all():
                     if t.tip_status == 'Success':
                         succ_cnt += 1
@@ -2691,7 +2694,7 @@ class Betslip(models.Model):
                     return 'Success'
                 else:
                     return 'Fail'
-            elif self.bet_type == 'Any 4':
+            elif self.bet_type == 'Any 4' or self.bet_type == 'Any 4 or 5':
                 for t in self.tips.all():
                     if t.tip_status == 'Success':
                         succ_cnt += 1
@@ -2703,36 +2706,129 @@ class Betslip(models.Model):
 
     # Returns a list of accumulated odds in case of a successful betslip. Note that in case the bet type is any 2, 3 or 4
     # the function returns more than one accumulated odds
+    # This assumes that Singles are entered one by one in betslips. DO NOT ENTER more than
+    # one single bet in a betslip.
+    # Additionally, accum only does calculations if the betslip type is either success or failed, otherwise it returns
+    # an empty list.
     # Remember to add to this code every time you add a new BETSLIP_TYPE!!!
     def accum(self):
+        # itertools.combinations returns all possible combinations of a list as a list of tuples
+        # i.e [1,2,3] returns [(1,2), (1,3), (2,3)]
         x = []
         a = 1.0
-        if self.betslip_status == 'Success':
-            if self.bet_type == 'All' or self.bet_type == 'Singles':
+        if self.bet_type == 'All' or self.bet_type == 'Singles':
+            if self.betslip_status == 'Success':
                 for tp in self.tips.all():
                     a *= tp.tip_odds
                 x.append(a)
-            if self.bet_type == 'Any 2':
-                # itertools.combinations returns all possible combinations of a list as a list of tuples
-                # i.e [1,2,3] returns [(1,2), (1,3), (2,3)]
+                return x
+            elif self.betslip_status == 'Failed':
+                x.append(-1)
+                return x
+            else:
+                return x
+        elif self.bet_type == 'Any 2':
+            if self.betslip_status == 'Success' or self.betslip_status == 'Failed':
                 combos = list(itertools.combinations(self.tips.all(), 2))
                 for tpl in combos:
                     if tpl[0].tip_status == 'Success' and tpl[1].tip_status == 'Success':
                         x.append(tpl[0].tip_odds * tpl[1].tip_odds)
-            if self.bet_type == 'Any 3':
-                # itertools.combinations returns all possible combinations of a list as a list of tuples
-                # i.e [1,2,3] returns [(1,2), (1,3), (2,3)]
+                    else:
+                        x.append(-1)
+                return x
+            else:
+                return x
+        elif self.bet_type == 'Any 3':
+            if self.betslip_status == 'Success' or self.betslip_status == 'Failed':
                 combos = list(itertools.combinations(self.tips.all(), 3))
                 for tpl in combos:
                     if tpl[0].tip_status == 'Success' and tpl[1].tip_status == 'Success' and tpl[2].tip_status == 'Success':
                         x.append(tpl[0].tip_odds * tpl[1].tip_odds * tpl[2].tip_odds)
-            if self.bet_type == 'Any 4':
-                # itertools.combinations returns all possible combinations of a list as a list of tuples
-                # i.e [1,2,3] returns [(1,2), (1,3), (2,3)]
+                    else:
+                        x.append(-1)
+                return x
+            else:
+                return x
+        elif self.bet_type == 'Any 4':
+            if self.betslip_status == 'Success' or self.betslip_status == 'Failed':
                 combos = list(itertools.combinations(self.tips.all(), 4))
                 for tpl in combos:
                     if tpl[0].tip_status == 'Success' and tpl[1].tip_status == 'Success' and tpl[2].tip_status == 'Success' and tpl[3].tip_status == 'Success':
                         x.append(tpl[0].tip_odds * tpl[1].tip_odds * tpl[2].tip_odds * tpl[3].tip_odds)
+                    else:
+                        x.append(-1)
+                return x
+            else:
+                return x
+        elif self.bet_type == 'Any 2 or 3':
+            expected_tips = 3
+            if self.tips.count() == expected_tips:
+                if self.betslip_status == 'Success' or self.betslip_status == 'Failed':
+                    cnt_succ = 0
+                    for tp in self.tips.all():
+                        if tp.tip_status == 'Success':
+                            cnt_succ += 1
+                    if cnt_succ == expected_tips:
+                        for tpp in self.tips.all():
+                            a *= tpp.tip_odds
+                        x.append(a)
+                    else:
+                        x.append(-1)
+                    combos = list(itertools.combinations(self.tips.all(), 2))
+                    for tpl in combos:
+                        if tpl[0].tip_status == 'Success' and tpl[1].tip_status == 'Success':
+                            x.append(tpl[0].tip_odds * tpl[1].tip_odds)
+                        else:
+                            x.append(-1)
+                    return x
+                else:
+                    return x
+        elif self.bet_type == 'Any 3 or 4':
+            expected_tips = 4
+            if self.tips.count() == expected_tips:
+                if self.betslip_status == 'Success' or self.betslip_status == 'Failed':
+                    cnt_succ = 0
+                    for tp in self.tips.all():
+                        if tp.tip_status == 'Success':
+                            cnt_succ += 1
+                    if cnt_succ == expected_tips:
+                        for tpp in self.tips.all():
+                            a *= tpp.tip_odds
+                        x.append(a)
+                    else:
+                        x.append(-1)
+                    combos = list(itertools.combinations(self.tips.all(), 2))
+                    for tpl in combos:
+                        if tpl[0].tip_status == 'Success' and tpl[1].tip_status == 'Success' and tpl[2].tip_status == 'Success':
+                            x.append(tpl[0].tip_odds * tpl[1].tip_odds * tpl[2].tip_odds)
+                        else:
+                            x.append(-1)
+                    return x
+                else:
+                    return x
+        elif self.bet_type == 'Any 4 or 5':
+            expected_tips = 5
+            if self.tips.count() == expected_tips:
+                if self.betslip_status == 'Success' or self.betslip_status == 'Failed':
+                    cnt_succ = 0
+                    for tp in self.tips.all():
+                        if tp.tip_status == 'Success':
+                            cnt_succ += 1
+                    if cnt_succ == expected_tips:
+                        for tpp in self.tips.all():
+                            a *= tpp.tip_odds
+                        x.append(a)
+                    else:
+                        x.append(-1)
+                    combos = list(itertools.combinations(self.tips.all(), 2))
+                    for tpl in combos:
+                        if tpl[0].tip_status == 'Success' and tpl[1].tip_status == 'Success' and tpl[2].tip_status == 'Success' and tpl[3].tip_status == 'Success':
+                            x.append(tpl[0].tip_odds * tpl[1].tip_odds * tpl[2].tip_odds * tpl[3].tip_odds)
+                        else:
+                            x.append(-1)
+                    return x
+                else:
+                    return x
         return x
 
     # Returns the number of sub slips that are created according to bet type
@@ -2748,31 +2844,48 @@ class Betslip(models.Model):
         if self.bet_type == 'Any 4':
             combo_list = list(itertools.combinations(self.tips.all(), 4))
             combos = len(combo_list)
+        if self.bet_type == 'Any 2 or 3':
+            combo_list = list(itertools.combinations(self.tips.all(), 2))
+            combos = len(combo_list) + 1
+        if self.bet_type == 'Any 3 or 4':
+            combo_list = list(itertools.combinations(self.tips.all(), 3))
+            combos = len(combo_list) + 1
+        if self.bet_type == 'Any 4 or 5':
+            combo_list = list(itertools.combinations(self.tips.all(), 4))
+            combos = len(combo_list) + 1
         return combos
 
     # Returns the accumulated profit or loss of the betslip.
     # Remember to add to this code every time you add a new BETSLIP_TYPE!!!
     def betslip_profit(self):
         p = 0
+        l = 0
         if self.stake:
-            stk = float(self.stake)
-            if self.betslip_status == 'Success':
-                if self.bet_type == 'All' or self.bet_type == 'Singles':
-                    for accm in self.accum():
-                        p += (stk * accm) - stk
-                elif self.bet_type == 'Any 2' or self.bet_type == 'Any 3' or self.bet_type == 'Any 4':
-                    for accm in self.accum():
-                        p += ((stk / self.subslips()) * accm) - (stk / self.subslips())
-                else:
-                    pass
-                return p
-            elif self.betslip_status == 'Pending':
+            if self.betslip_status == 'Pending':
                 pass
             elif self.betslip_status == 'NA':
                 pass
             else:
-                return -stk
-        pass
+                stk = float(self.stake)
+                if self.bet_type == 'All' or self.bet_type == 'Singles':
+                    if self.betslip_status == 'Success':
+                        for accm in self.accum():
+                            p += (stk * accm) - stk
+                        return p
+                    elif self.betslip_status == 'Failed':
+                        l = -stk
+                        return l
+                elif self.bet_type == 'Any 2' or self.bet_type == 'Any 3' or self.bet_type == 'Any 4' or self.bet_type == 'Any 2 or 3' or self.bet_type == 'Any 3 or 4' or self.bet_type == 'Any 4 or 5':
+                    for accm in self.accum():
+                        if accm > 0:
+                            p += ((stk / self.subslips()) * accm) - (stk / self.subslips())
+                        else:
+                            l += stk / self.subslips()
+                    return p - l
+                else:
+                    pass
+        else:
+            pass
 
     def __str__(self):
         return str(self.betslip_tipster) + " " + str(self.created_date)
