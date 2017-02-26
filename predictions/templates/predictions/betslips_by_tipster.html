@@ -126,9 +126,14 @@ $(document).ready(function(){
               <tr style="background: #333333; color:white;">
                 <th class=""><span data-toggle="tooltip" title="Tipster">Tipster</span></th>
                 <th class="centred"><span data-toggle="tooltip" title="Total number of betslips">TB</span></th>
-                <th class="centred"><span data-toggle="tooltip" title="Total number of successful betslips">SB</span></th>
-                <th class="centred"><span data-toggle="tooltip" title="Total amount of stakes given">Total Stakes</span></th>
-                <th class="centred"><span data-toggle="tooltip" title="Total profit or loss">P&L</span></th>
+                <th class="centred"><span data-toggle="tooltip" title="Successful betslips">SB</span></th>
+                <th class="centred"><span data-toggle="tooltip" title="Lost betslips">LB</span></th>
+                <th class="centred"><span data-toggle="tooltip" title="Active betslips">AB</span></th>
+                <!--<th class="centred"><span data-toggle="tooltip" title="Total amount of stakes (completed + active)">TS</span></th>-->
+                <th class="centred"><span data-toggle="tooltip" title="Completed stakes">CS</span></th>
+                <th class="centred"><span data-toggle="tooltip" title="Active stakes">AS</span></th>
+                <th class="centred"><span data-toggle="tooltip" title="Total return">TR</span></th>
+                <th class="centred"><span data-toggle="tooltip" title="Net profit or loss">P&L</span></th>
               </tr>
             </thead>
             <tbody>
@@ -136,14 +141,19 @@ $(document).ready(function(){
               <tr>
                 <td class="v-divider">{{ item.0 }}</td>
                 <td class="centred">{{ item.1 }}</td>
-                <td class="v-divider centred">{{ item.2 }}</td>
-                <td class="centred">{{ item.3|floatformat:2 }} €</td>
-                {% if item.4 > 0 %}
-                    <td class="centred" style="color: #4CC552;">+{{ item.4|floatformat:2 }} €</td>
-                {% elif item.4 < 0 %}
-                    <td class="centred" style="color: #F62817;">{{ item.4|floatformat:2 }} €</td>
+                <td class="centred">{{ item.2 }}</td>
+                <td class="centred">{{ item.3 }}</td>
+                <td class="v-divider centred">{{ item.4 }}</td>
+                <!--<td class="centred">{{ item.5|floatformat:2 }}</td>-->
+                <td class="centred">{{ item.6|floatformat:2 }}</td>
+                <td class="v-divider centred">{{ item.7|floatformat:2 }}</td>
+                <td class="centred">{{ item.8|floatformat:2 }}</td>
+                {% if item.9 > 0 %}
+                    <td class="centred" style="color: #4CC552;">+{{ item.9|floatformat:2 }}</td>
+                {% elif item.9 < 0 %}
+                    <td class="centred" style="color: #F62817;">{{ item.9|floatformat:2 }}</td>
                 {% else %}
-                    <td class="centred">{{ item.4|floatformat:2 }} €</td>
+                    <td class="centred">{{ item.9|floatformat:2 }}</td>
                 {% endif %}
               </tr>
             {% endfor %}

@@ -2626,14 +2626,32 @@ class BetslipManager(models.Manager):
         cnt = self.filter(betslip_tipster=tipster).exclude(betslip_status='Pending').count()
         return cnt
 
+    # Returns the number of active betslips given by a tipster
+    def tipster_total_active_betslips(self, tipster):
+        cnt = self.filter(betslip_tipster=tipster, betslip_status='Pending').count()
+        return cnt
+
     # Returns the number of successful betslips given by a tipster
     def tipster_successful_betslips(self, tipster):
         cnt = self.filter(betslip_tipster=tipster, betslip_status='Success').count()
         return cnt
 
+    # Returns the number of lost betslips given by a tipster
+    def tipster_lost_betslips(self, tipster):
+        cnt = self.filter(betslip_tipster=tipster, betslip_status='Fail').count()
+        return cnt
+
     # Returns the sum of stakes played by a tipster
     def tipster_sum_of_stakes(self, tipster):
         stakes_sum = self.filter(betslip_tipster=tipster).exclude(betslip_status='Pending').aggregate(Sum('stake'))
+        if stakes_sum['stake__sum']:
+            return stakes_sum['stake__sum']
+        else:
+            return 0
+
+    # Returns the sum of active stakes by a tipster
+    def tipster_sum_of_active_stakes(self, tipster):
+        stakes_sum = self.filter(betslip_tipster=tipster, betslip_status='Pending').aggregate(Sum('stake'))
         if stakes_sum['stake__sum']:
             return stakes_sum['stake__sum']
         else:

@@ -2031,9 +2031,14 @@ def betslip_list(request):
     for t in tipsters:
         x.update({t: Betslip.objects.tipster_total_betslips(t)})
         y.append([t,
-                  Betslip.objects.tipster_total_nonpending_betslips(t),
+                  Betslip.objects.tipster_total_betslips(t),
                   Betslip.objects.tipster_successful_betslips(t),
+                  Betslip.objects.tipster_lost_betslips(t),
+                  Betslip.objects.tipster_total_active_betslips(t),
+                  Betslip.objects.tipster_sum_of_stakes(t) + Betslip.objects.tipster_sum_of_active_stakes(t),
                   Betslip.objects.tipster_sum_of_stakes(t),
+                  Betslip.objects.tipster_sum_of_active_stakes(t),
+                  Betslip.objects.tipster_sum_of_stakes(t) + Betslip.objects.tipster_sum_of_profits(t),
                   Betslip.objects.tipster_sum_of_profits(t)])
     return render(request, 'predictions/betslip_list.html', {'betslips': betslips, 'x': x, 'betslips_cnt': betslips_cnt, 'y': y})
 
@@ -2066,9 +2071,14 @@ def betslips_by_tipster(request, tipster):
     for t in tipsters:
         x.update({t: Betslip.objects.tipster_total_betslips(t)})
         y.append([t,
-                  Betslip.objects.tipster_total_nonpending_betslips(t),
+                  Betslip.objects.tipster_total_betslips(t),
                   Betslip.objects.tipster_successful_betslips(t),
+                  Betslip.objects.tipster_lost_betslips(t),
+                  Betslip.objects.tipster_total_active_betslips(t),
+                  Betslip.objects.tipster_sum_of_stakes(t) + Betslip.objects.tipster_sum_of_active_stakes(t),
                   Betslip.objects.tipster_sum_of_stakes(t),
+                  Betslip.objects.tipster_sum_of_active_stakes(t),
+                  Betslip.objects.tipster_sum_of_stakes(t) + Betslip.objects.tipster_sum_of_profits(t),
                   Betslip.objects.tipster_sum_of_profits(t)])
     return render(request, 'predictions/betslips_by_tipster.html', {'betslips': betslips, 'x': x,
                                                                     'betslips_cnt': betslips_cnt,
