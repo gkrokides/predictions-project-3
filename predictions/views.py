@@ -4,7 +4,7 @@ from .models import Post, Team, Game, Season, GameFilter, Leagues, GameSeasonFil
 from .forms import PostForm, GameForm, ContactForm, TipForm, BetslipForm
 from dicts.sorteddict import ValueSortedDict
 from decimal import Decimal
-from django.db.models import Q, F, Sum
+from django.db.models import Q, F, Sum, Max
 from operator import itemgetter
 from django.conf import settings
 from datetime import datetime, timedelta
@@ -730,6 +730,11 @@ def predictions(request):
         else:
             games_selected = Game.objects.filter(season__league__league_name=lg_name, season__end_date=period_end)[0]
             seasonid = games_selected.season.id
+            playoff_cnt = Game.objects.filter(season=seasonid, type='PO').count()
+            if playoff_cnt > 0:
+                playoffs_started = True
+            else:
+                playoffs_started = False
             games_played = Game.objects.total_season_games_played(seasonid)
             games_total = Game.objects.total_season_games(seasonid)
             games_played_perc = float(games_played) / games_total
@@ -802,6 +807,7 @@ def predictions(request):
                      # 'points': round(Decimal(Game.objects.get_previous_elo_by_date(tm=tm.hometeam, seasn=lst, gmwk=gamewk)), 2)
                      'points': round(Decimal(tm.elo_rating_home), 2),
                      'normal_points': Game.objects.team_points_optimized(seasonid, h, datte),
+                     'po_points': Game.objects.team_playoff_points(seasonid, h, datte),
                      })
                 x.append(
                     {'team': a,
@@ -826,6 +832,7 @@ def predictions(request):
                      # 'points': round(Decimal(Game.objects.get_previous_elo_by_date(tm=tm.awayteam, seasn=lst, gmwk=gamewk)), 2)
                      'points': round(Decimal(tm.elo_rating_away), 2),
                      'normal_points': Game.objects.team_points_optimized(seasonid, a, datte),
+                     'po_points': Game.objects.team_playoff_points(seasonid, a, datte),
                      })
             country_code = Season.objects.select_related('league').get(id=seasonid).league.country_code
             if country_code == 'England':
@@ -853,7 +860,8 @@ def predictions(request):
                    'games_played_perc_string': format(games_played_perc, "0.00%"), 'home_wins_total_perc': home_wins_total_perc,
                    'away_wins_total_perc': away_wins_total_perc, 'draws_total_perc': draws_total_perc, 'season_goals': season_goals,
                    'goals_p_game': goals_p_game, 'bts_perc': bts_perc, 'over_1p5': over_1p5, 'over_2p5': over_2p5, 'over_3p5': over_3p5,
-                   'new_predictions_cnt': new_predictions_cnt, 'past_predictions_cnt': past_predictions_cnt, 'flag': flag, 'p': p, 'any_postponed': any_postponed})
+                   'new_predictions_cnt': new_predictions_cnt, 'past_predictions_cnt': past_predictions_cnt, 'flag': flag, 'p': p, 'any_postponed': any_postponed,
+                   'playoffs_started': playoffs_started})
 
 
 def testview(request):
@@ -1345,7 +1353,7 @@ def addscore(request):
     formset_to_save = ''
     msg = ''
     msg_class = ''
-    GameFormSet = modelformset_factory(Game, fields=('gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam', 'game_status', 'flag'), extra=0)
+    GameFormSet = modelformset_factory(Game, fields=('gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam', 'game_status', 'type', 'flag'), extra=0)
     formset = GameFormSet(queryset=Game.objects.all())
     countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
     szns_drpdown = {}
@@ -1403,7 +1411,7 @@ def addgames(request):
             'awaygoals': forms.Textarea(attrs={'cols': 8, 'rows': 1}),
             'date': forms.DateInput()
         },
-        fields=('date', 'gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam', 'season', 'game_status',))
+        fields=('date', 'gameweek', 'hometeam', 'homegoals', 'awaygoals', 'awayteam', 'season', 'game_status', 'type'))
     formset = GameFormSet(queryset=Game.objects.none())
     countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
     szns_drpdown = {}
@@ -1808,6 +1816,11 @@ def predictions_by_day(request):
 
 def league_overview(request, sid):
     seasonid = sid
+    playoff_cnt = Game.objects.filter(season=seasonid, type='PO').count()
+    if playoff_cnt > 0:
+        playoffs_started = True
+    else:
+        playoffs_started = False
     selected_country = Season.objects.select_related('league').filter(id=sid)[0].league.country
     countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
     szns_drpdown = {}
@@ -1892,6 +1905,7 @@ def league_overview(request, sid):
              # 'points': round(Decimal(Game.objects.get_previous_elo_by_date(tm=tm.hometeam, seasn=lst, gmwk=gamewk)), 2)
              'points': round(Decimal(tm.elo_rating_home), 2),
              'normal_points': Game.objects.team_points_optimized(seasonid, h, datte),
+             'po_points': Game.objects.team_playoff_points(seasonid, h, datte),
              })
         x.append(
             {'team': a,
@@ -1916,6 +1930,7 @@ def league_overview(request, sid):
              # 'points': round(Decimal(Game.objects.get_previous_elo_by_date(tm=tm.awayteam, seasn=lst, gmwk=gamewk)), 2)
              'points': round(Decimal(tm.elo_rating_away), 2),
              'normal_points': Game.objects.team_points_optimized(seasonid, a, datte),
+             'po_points': Game.objects.team_playoff_points(seasonid, a, datte),
              })
     country_code = Season.objects.select_related('league').get(id=seasonid).league.country_code
     if country_code == 'England':
@@ -1944,7 +1959,7 @@ def league_overview(request, sid):
                    'away_wins_total_perc': away_wins_total_perc, 'draws_total_perc': draws_total_perc, 'season_goals': season_goals,
                    'goals_p_game': goals_p_game, 'bts_perc': bts_perc, 'over_1p5': over_1p5, 'over_2p5': over_2p5, 'over_3p5': over_3p5,
                    'new_predictions_cnt': new_predictions_cnt, 'past_predictions_cnt': past_predictions_cnt, 'flag': flag, 'p': p, 'any_postponed': any_postponed,
-                   'selected_country': selected_country})
+                   'selected_country': selected_country, 'playoffs_started': playoffs_started})
 
 
 def livescore(request):
@@ -2023,24 +2038,45 @@ def addbetslip(request):
 
 
 def betslip_list(request):
-    betslips = Betslip.objects.all().order_by('-created_date')
+    # list of distinct season ends that will be used in the dropdown
+    season_ends = []
+    season_ends_full = {}
+    for s in Season.objects.all():
+        season_ends.append(s.get_end_year())
+    season_ends = list(set(season_ends))
+    season_ends.sort(reverse=True)
+    for endy in season_ends:
+        season_ends_full.update({endy: str(endy-1) + "/" + str(endy)})
+    season_ends_full = ValueSortedDict(season_ends_full, reverse=True)
+    current_end_year = season_ends[0]
+    betslips = Betslip.objects.exclude(tips__game__season__end_date__year__lt=current_end_year).exclude(tips__game__season__end_date__year__gt=current_end_year).order_by('-created_date')
     betslips_cnt = betslips.count()
     tipsters = Betslip.objects.order_by('betslip_tipster').values_list('betslip_tipster', flat=True).distinct()
+    if request.method == "POST":
+        if request.POST.get('seasonends') == 'no selection':
+            current_end_year = current_end_year
+        else:
+            current_end_year = int(request.POST.get('seasonends'))
+            betslips = Betslip.objects.exclude(tips__game__season__end_date__year__lt=current_end_year).exclude(tips__game__season__end_date__year__gt=current_end_year).order_by('-created_date')
+            betslips_cnt = betslips.count()
     x = {}
     y = []
     for t in tipsters:
-        x.update({t: Betslip.objects.tipster_total_betslips(t)})
+        x.update({t: Betslip.objects.tipster_total_betslips(t, current_end_year)})
         y.append([t,
-                  Betslip.objects.tipster_total_betslips(t),
-                  Betslip.objects.tipster_successful_betslips(t),
-                  Betslip.objects.tipster_lost_betslips(t),
-                  Betslip.objects.tipster_total_active_betslips(t),
-                  Betslip.objects.tipster_sum_of_stakes(t) + Betslip.objects.tipster_sum_of_active_stakes(t),
-                  Betslip.objects.tipster_sum_of_stakes(t),
-                  Betslip.objects.tipster_sum_of_active_stakes(t),
-                  Betslip.objects.tipster_sum_of_stakes(t) + Betslip.objects.tipster_sum_of_profits(t),
-                  Betslip.objects.tipster_sum_of_profits(t)])
-    return render(request, 'predictions/betslip_list.html', {'betslips': betslips, 'x': x, 'betslips_cnt': betslips_cnt, 'y': y})
+                  Betslip.objects.tipster_total_betslips(t, current_end_year),
+                  Betslip.objects.tipster_successful_betslips(t, current_end_year),
+                  Betslip.objects.tipster_lost_betslips(t, current_end_year),
+                  Betslip.objects.tipster_total_active_betslips(t, current_end_year),
+                  Betslip.objects.tipster_sum_of_stakes(t, current_end_year) + Betslip.objects.tipster_sum_of_active_stakes(t, current_end_year),
+                  Betslip.objects.tipster_sum_of_stakes(t, current_end_year),
+                  Betslip.objects.tipster_sum_of_active_stakes(t, current_end_year),
+                  Betslip.objects.tipster_sum_of_stakes(t, current_end_year) + Betslip.objects.tipster_sum_of_profits(t, current_end_year),
+                  Betslip.objects.tipster_sum_of_profits(t, current_end_year)])
+    current_end_year_for_title = str(int(current_end_year)-1) + "/" + str(current_end_year)
+    return render(request, 'predictions/betslip_list.html', {'betslips': betslips, 'x': x, 'betslips_cnt': betslips_cnt, 'y': y,
+                                                             'season_ends': season_ends, 'season_ends_full': season_ends_full,
+                                                             'current_end_year_for_title': current_end_year_for_title})
 
 
 def betslip_detail(request, pk):
@@ -2062,24 +2098,46 @@ def betslip_edit(request, pk):
 
 
 def betslips_by_tipster(request, tipster):
-    betslips = Betslip.objects.filter(slug=tipster).order_by('-created_date')
+    # list of distinct season ends that will be used in the dropdown
+    season_ends = []
+    season_ends_full = {}
+    for s in Season.objects.all():
+        season_ends.append(s.get_end_year())
+    season_ends = list(set(season_ends))
+    season_ends.sort(reverse=True)
+    for endy in season_ends:
+        season_ends_full.update({endy: str(endy - 1) + "/" + str(endy)})
+    season_ends_full = ValueSortedDict(season_ends_full, reverse=True)
+    current_end_year = season_ends[0]
+    betslips = Betslip.objects.filter(slug=tipster).exclude(tips__game__season__end_date__year__lt=current_end_year).exclude(tips__game__season__end_date__year__gt=current_end_year).order_by('-created_date')
     betslips_cnt = Betslip.objects.all().count()
     selected_tipster = Betslip.objects.filter(slug=tipster)[0].betslip_tipster
     tipsters = Betslip.objects.order_by('betslip_tipster').values_list('betslip_tipster', flat=True).distinct()
+    if request.method == "POST":
+        if request.POST.get('seasonends') == 'no selection':
+            current_end_year = current_end_year
+        else:
+            current_end_year = request.POST.get('seasonends')
+            betslips = Betslip.objects.filter(slug=tipster).exclude(tips__game__season__end_date__year__lt=current_end_year).exclude(tips__game__season__end_date__year__gt=current_end_year).order_by('-created_date')
+            betslips_cnt = betslips.count()
     x = {}
     y = []
     for t in tipsters:
-        x.update({t: Betslip.objects.tipster_total_betslips(t)})
+        x.update({t: Betslip.objects.tipster_total_betslips(t, current_end_year)})
         y.append([t,
-                  Betslip.objects.tipster_total_betslips(t),
-                  Betslip.objects.tipster_successful_betslips(t),
-                  Betslip.objects.tipster_lost_betslips(t),
-                  Betslip.objects.tipster_total_active_betslips(t),
-                  Betslip.objects.tipster_sum_of_stakes(t) + Betslip.objects.tipster_sum_of_active_stakes(t),
-                  Betslip.objects.tipster_sum_of_stakes(t),
-                  Betslip.objects.tipster_sum_of_active_stakes(t),
-                  Betslip.objects.tipster_sum_of_stakes(t) + Betslip.objects.tipster_sum_of_profits(t),
-                  Betslip.objects.tipster_sum_of_profits(t)])
+                  Betslip.objects.tipster_total_betslips(t, current_end_year),
+                  Betslip.objects.tipster_successful_betslips(t, current_end_year),
+                  Betslip.objects.tipster_lost_betslips(t, current_end_year),
+                  Betslip.objects.tipster_total_active_betslips(t, current_end_year),
+                  Betslip.objects.tipster_sum_of_stakes(t, current_end_year) + Betslip.objects.tipster_sum_of_active_stakes(t, current_end_year),
+                  Betslip.objects.tipster_sum_of_stakes(t, current_end_year),
+                  Betslip.objects.tipster_sum_of_active_stakes(t, current_end_year),
+                  Betslip.objects.tipster_sum_of_stakes(t, current_end_year) + Betslip.objects.tipster_sum_of_profits(t, current_end_year),
+                  Betslip.objects.tipster_sum_of_profits(t, current_end_year)])
+    current_end_year_for_title = str(int(current_end_year) - 1) + "/" + str(current_end_year)
     return render(request, 'predictions/betslips_by_tipster.html', {'betslips': betslips, 'x': x,
                                                                     'betslips_cnt': betslips_cnt,
-                                                                    'selected_tipster': selected_tipster, 'y': y})
+                                                                    'selected_tipster': selected_tipster, 'y': y,
+                                                                    'season_ends': season_ends, 'season_ends_full': season_ends_full,
+                                                                    'current_end_year': current_end_year,
+                                                                    'current_end_year_for_title': current_end_year_for_title, 'tipster': tipster})

@@ -13,7 +13,19 @@ $(document).ready(function(){
 {% block content36 %}
 
 <div class="well">
-    <h3><strong>Betslips ({{ selected_tipster }})</strong></h3>
+
+    {% if user.is_authenticated %}
+    <form action="{% url 'betslips_by_tipster' tipster %}" method="POST">
+        <select name="seasonends" id="seasonends"  onChange="form.submit();">
+            <option value="no selection">Change Season</option>
+            {% for key, value in season_ends_full.items %}
+                <option value="{{ key }}">{{ value }}</option>
+            {% endfor %}{% csrf_token %}
+        </select>
+    </form>
+    {% endif %}
+
+    <h4><strong>Betslips({{ selected_tipster }}): {{ current_end_year_for_title }}</strong></h4>
     <a href="{% url 'betslip_list' %}">All &nbsp <span class="badge">{{ betslips_cnt }}</span></a><br>
     {% for key, value in x.items %}
         <a href="{% url 'betslips_by_tipster' key|slugify %}">{{ key }}&nbsp <span class="badge">{{ value }}</span></a><br>
@@ -28,10 +40,10 @@ $(document).ready(function(){
         <div style="border: solid;" class="well">
             {% if user.is_authenticated %}
                 {% if b.betslip_status == 'Success' %}
-                <p style="background: #4CC552; color: white; padding: 5px; font-size: 15px;">Bet type: <strong>"{{ b.bet_type }}"</strong><span class="date"><strong>+{{b.profit|floatformat:2 }}</strong></span></p>
+                <p style="background: #4CC552; color: white; padding: 5px; font-size: 15px;">Bet type: <strong>"{{ b.bet_type }}"</strong><span class="date"><strong>+{{b.betslip_gross_profit|floatformat:2 }}</strong></span></p>
                 <!--<span style="background: green;">Success</span><br>-->
                 {% elif b.betslip_status == 'Fail' %}
-                <p style="background: #F62817; color: white; padding: 5px; font-size: 15px;">Bet type: <strong>"{{ b.bet_type }}"</strong><span class="date"><strong>{{b.profit|floatformat:2 }}</strong></span></p>
+                <p style="background: #F62817; color: white; padding: 5px; font-size: 15px;">Bet type: <strong>"{{ b.bet_type }}"</strong><span class="date"><strong>{{b.betslip_gross_profit|floatformat:2 }}</strong></span></p>
                 {% else %}
                 <p style="padding: 5px; font-size: 15px;">Bet type: <strong>"{{ b.bet_type }}"</strong> </p><br>
                 {% endif %}

@@ -110,6 +110,17 @@ class GameManager(models.Manager):
         total_points = homepts['hm_points__sum'] + awaypts['aw_points__sum']
         return total_points
 
+    def team_playoff_points(self, sn, tm, dt):
+        homepts = self.filter(hometeam=tm, season=sn, date__lte=dt, type='PO', homegoals__gte=0).aggregate(Sum('hm_points'))
+        awaypts = self.filter(awayteam=tm, season=sn, date__lte=dt, type='PO', homegoals__gte=0).aggregate(Sum('aw_points'))
+        if homepts['hm_points__sum'] is None:
+            homepts['hm_points__sum'] = 0
+        if awaypts['aw_points__sum'] is None:
+            awaypts['aw_points__sum'] = 0
+
+        total_points = homepts['hm_points__sum'] + awaypts['aw_points__sum']
+        return total_points
+
     # total games played by a team up to the given gameweek (not used)
     # def get_total_games(self, team, seasn, gmweek):
     #     tmgames = self.filter(Q(hometeam=team, season=seasn, gameweek__lte=gmweek) | Q(awayteam=team, season=seasn, gameweek__lte=gmweek))
@@ -1231,9 +1242,9 @@ class GameManager(models.Manager):
                 points += gm.elo_rating_away - gm.elo_rating_away_previous_week
         return points
 
-    # total games played for the given season
+    # total Regular Season (excluding playoffs) games played for the given season
     def total_season_games_played(self, sznn):
-        qrset = self.filter(season=sznn).exclude(homegoals__isnull=True).count()
+        qrset = self.filter(season=sznn, type='RS').exclude(homegoals__isnull=True).count()
         return qrset
 
     # total games that will be played for the given season
@@ -2000,11 +2011,17 @@ class Game(models.Model):
         ('Refresh', 'Refresh'),
     )
 
+    TYPE_CHOICES = (
+        ('RS', 'RS'),
+        ('PO', 'PO'),
+    )
+
     date = models.DateField()
     gameweek = models.PositiveIntegerField()
     season = models.ForeignKey('Season')
     game_status = models.CharField(max_length=10, choices=GAME_STATUS_CHOICES, default=ok,)
     flag = models.CharField(max_length=10, choices=FLAG_CHOICES, default='No flag',)
+    type = models.CharField(max_length=5, choices=TYPE_CHOICES, default='RS', )
     hometeam = models.ForeignKey(Team, related_name='hometeam')
     awayteam = models.ForeignKey(Team, related_name='awayteam')
     homegoals = models.IntegerField(null=True, blank=True)
@@ -2617,49 +2634,50 @@ class Tip(models.Model):
 
 class BetslipManager(models.Manager):
     # Returns the number of betslips given by a tipster
-    def tipster_total_betslips(self, tipster):
-        cnt = self.filter(betslip_tipster=tipster).count()
+    # ~Q means not equal
+    def tipster_total_betslips(self, tipster, end_year):
+        cnt = self.filter(betslip_tipster=tipster).exclude(tips__game__season__end_date__year__lt=end_year).exclude(tips__game__season__end_date__year__gt=end_year).count()
         return cnt
 
     # Returns the number of non pending betslips given by a tipster
-    def tipster_total_nonpending_betslips(self, tipster):
-        cnt = self.filter(betslip_tipster=tipster).exclude(betslip_status='Pending').count()
+    def tipster_total_nonpending_betslips(self, tipster, end_year):
+        cnt = self.filter(betslip_tipster=tipster).exclude(tips__game__season__end_date__year__lt=end_year).exclude(tips__game__season__end_date__year__gt=end_year).exclude(betslip_status='Pending').count()
         return cnt
 
     # Returns the number of active betslips given by a tipster
-    def tipster_total_active_betslips(self, tipster):
-        cnt = self.filter(betslip_tipster=tipster, betslip_status='Pending').count()
+    def tipster_total_active_betslips(self, tipster, end_year):
+        cnt = self.filter(betslip_tipster=tipster, betslip_status='Pending').exclude(tips__game__season__end_date__year__lt=end_year).exclude(tips__game__season__end_date__year__gt=end_year).count()
         return cnt
 
     # Returns the number of successful betslips given by a tipster
-    def tipster_successful_betslips(self, tipster):
-        cnt = self.filter(betslip_tipster=tipster, betslip_status='Success').count()
+    def tipster_successful_betslips(self, tipster, end_year):
+        cnt = self.filter(betslip_tipster=tipster, betslip_status='Success').exclude(tips__game__season__end_date__year__lt=end_year).exclude(tips__game__season__end_date__year__gt=end_year).count()
         return cnt
 
     # Returns the number of lost betslips given by a tipster
-    def tipster_lost_betslips(self, tipster):
-        cnt = self.filter(betslip_tipster=tipster, betslip_status='Fail').count()
+    def tipster_lost_betslips(self, tipster, end_year):
+        cnt = self.filter(betslip_tipster=tipster, betslip_status='Fail').exclude(tips__game__season__end_date__year__lt=end_year).exclude(tips__game__season__end_date__year__gt=end_year).count()
         return cnt
 
     # Returns the sum of stakes played by a tipster
-    def tipster_sum_of_stakes(self, tipster):
-        stakes_sum = self.filter(betslip_tipster=tipster).exclude(betslip_status='Pending').aggregate(Sum('stake'))
+    def tipster_sum_of_stakes(self, tipster, end_year):
+        stakes_sum = self.filter(betslip_tipster=tipster).exclude(tips__game__season__end_date__year__lt=end_year).exclude(tips__game__season__end_date__year__gt=end_year).exclude(betslip_status='Pending').aggregate(Sum('stake'))
         if stakes_sum['stake__sum']:
             return stakes_sum['stake__sum']
         else:
             return 0
 
     # Returns the sum of active stakes by a tipster
-    def tipster_sum_of_active_stakes(self, tipster):
-        stakes_sum = self.filter(betslip_tipster=tipster, betslip_status='Pending').aggregate(Sum('stake'))
+    def tipster_sum_of_active_stakes(self, tipster, end_year):
+        stakes_sum = self.filter(betslip_tipster=tipster, betslip_status='Pending').exclude(tips__game__season__end_date__year__lt=end_year).exclude(tips__game__season__end_date__year__gt=end_year).aggregate(Sum('stake'))
         if stakes_sum['stake__sum']:
             return stakes_sum['stake__sum']
         else:
             return 0
 
     # Returns the sum of profits or losses for a tipster
-    def tipster_sum_of_profits(self, tipster):
-        profits_sum = self.filter(betslip_tipster=tipster).exclude(betslip_status='Pending').aggregate(Sum('profit'))
+    def tipster_sum_of_profits(self, tipster, end_year):
+        profits_sum = self.filter(betslip_tipster=tipster).exclude(tips__game__season__end_date__year__lt=end_year).exclude(tips__game__season__end_date__year__gt=end_year).exclude(betslip_status='Pending').aggregate(Sum('profit'))
         if profits_sum['profit__sum']:
             return profits_sum['profit__sum']
         else:
@@ -2891,7 +2909,8 @@ class Betslip(models.Model):
             combos = len(combo_list) + 1
         return combos
 
-    # Returns the accumulated profit or loss of the betslip.
+    # Returns the accumulated profit or loss of the betslip. This returns the net profit or loss meaning that in case
+    # of a succesful betslip, it deducts the original stake amount from the profit.
     # Remember to add to this code every time you add a new BETSLIP_TYPE!!!
     def betslip_profit(self):
         p = 0
@@ -2918,6 +2937,38 @@ class Betslip(models.Model):
                         else:
                             l += stk / self.subslips()
                     return p - l
+                else:
+                    pass
+        else:
+            pass
+
+    # Returns the gross profit or loss of the betslip.
+    # Remember to add to this code every time you add a new BETSLIP_TYPE!!!
+    def betslip_gross_profit(self):
+        p = 0
+        l = 0
+        if self.stake:
+            if self.betslip_status == 'Pending':
+                pass
+            elif self.betslip_status == 'NA':
+                pass
+            else:
+                stk = float(self.stake)
+                if self.bet_type == 'All' or self.bet_type == 'Singles':
+                    if self.betslip_status == 'Success':
+                        for accm in self.accum():
+                            p += (stk * accm)
+                        return p
+                    elif self.betslip_status == 'Fail':
+                        l = -stk
+                        return l
+                elif self.bet_type == 'Any 2' or self.bet_type == 'Any 3' or self.bet_type == 'Any 4' or self.bet_type == 'Any 2 or 3' or self.bet_type == 'Any 3 or 4' or self.bet_type == 'Any 4 or 5':
+                    for accm in self.accum():
+                        if accm > 0:
+                            p += ((stk / self.subslips()) * accm)
+                        else:
+                            l += stk / self.subslips()
+                    return p
                 else:
                     pass
         else:

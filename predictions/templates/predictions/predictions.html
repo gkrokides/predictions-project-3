@@ -40,7 +40,6 @@
     });
     </script>
 
-
 {% endblock %}
 
 {% block header %}
@@ -116,7 +115,10 @@
                     <th class="centred"><span data-toggle="tooltip" data-placement="top" title="Goals against">GA</span></th>
                     <th colspan="6" class="centred">Last 6 Games</th>
                     <th class="centred"><span data-toggle="tooltip" data-placement="top" title="Points according to Betaid rating system">Rating</span></th>
-                    <th class="centred"><span data-toggle="tooltip" data-placement="top" title="Actual league points">Points</span></th>
+                    <th class="centred"><span data-toggle="tooltip" data-placement="top" title="Actual league points (includes playoffs if any)">Season Points</span></th>
+                    {% if playoffs_started %}
+                        <th class="centred"><span data-toggle="tooltip" data-placement="top" title="Playoff points">PO Points</span></th>
+                    {% endif %}
                   </tr>
                 </thead>
                 <tbody style="">
@@ -192,6 +194,9 @@
 
                     <td class="elo_hist"><strong>{{ itemm.points|floatformat:1 }}</strong></td>
                     <td class="elo_hist"><strong>{{ itemm.normal_points }}</strong></td>
+                    {% if playoffs_started %}
+                        <td class="elo_hist"><strong>{{ itemm.po_points }}</strong></td>
+                    {% endif %}
                   </tr>
                 {% endfor %}
 
