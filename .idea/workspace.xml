@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4d596332-3129-4e67-bd16-76785ce15d43" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/George.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/George.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/models.py" afterPath="$PROJECT_DIR$/predictions/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/templates/predictions/new_predictions.html" afterPath="$PROJECT_DIR$/predictions/templates/predictions/new_predictions.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/views.py" afterPath="$PROJECT_DIR$/predictions/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,7 +30,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/predictions/models.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="418">
@@ -85,11 +81,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/predictions/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="537">
-              <caret line="791" column="28" lean-forward="false" selection-start-line="791" selection-start-column="28" selection-end-line="791" selection-end-column="28" />
+            <state relative-caret-position="316">
+              <caret line="1450" column="16" lean-forward="false" selection-start-line="1450" selection-start-column="16" selection-end-line="1450" selection-end-column="16" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -280,8 +276,8 @@
         <option value="$PROJECT_DIR$/predictions/templates/predictions/predictions.html" />
         <option value="$PROJECT_DIR$/predictions/templates/predictions/new_predictions.html" />
         <option value="$PROJECT_DIR$/predictions/templates/predictions/league_overview.html" />
-        <option value="$PROJECT_DIR$/predictions/views.py" />
         <option value="$PROJECT_DIR$/predictions/models.py" />
+        <option value="$PROJECT_DIR$/predictions/views.py" />
       </list>
     </option>
   </component>
@@ -1259,16 +1255,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/predictions/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="537">
-          <caret line="791" column="28" lean-forward="false" selection-start-line="791" selection-start-column="28" selection-end-line="791" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/predictions/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="418">
@@ -1314,6 +1300,16 @@
             <element signature="e#137377#137576#0" expanded="false" />
             <element signature="e#144226#144343#0" expanded="false" />
             <element signature="e#150441#150513#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/predictions/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="1450" column="16" lean-forward="false" selection-start-line="1450" selection-start-column="16" selection-end-line="1450" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
           </folding>
         </state>
       </provider>
