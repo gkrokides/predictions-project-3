@@ -11,8 +11,11 @@
       <w>endblock</w>
       <w>endfor</w>
       <w>endy</w>
+      <w>gameweek</w>
+      <w>gamewk</w>
       <w>krok</w>
       <w>nonpending</w>
+      <w>seasonid</w>
       <w>succ</w>
       <w>tipstatus</w>
       <w>tiptype</w>

@@ -2369,6 +2369,7 @@ class Tip(models.Model):
         ('Mr X', 'Mr X'),
         ('The Bomber', 'The Bomber'),
         ('Mr Combo', 'Mr Combo'),
+        ('GG', 'GG'),
         ('---', '---'),
     )
 

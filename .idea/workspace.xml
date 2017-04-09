@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4d596332-3129-4e67-bd16-76785ce15d43" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/templates/predictions/league_overview.html" afterPath="$PROJECT_DIR$/predictions/templates/predictions/league_overview.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/templates/predictions/predictions.html" afterPath="$PROJECT_DIR$/predictions/templates/predictions/predictions.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/George.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/George.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/models.py" afterPath="$PROJECT_DIR$/predictions/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/templates/predictions/new_predictions.html" afterPath="$PROJECT_DIR$/predictions/templates/predictions/new_predictions.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/predictions/views.py" afterPath="$PROJECT_DIR$/predictions/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,59 +27,59 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/predictions/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="813">
+            <state relative-caret-position="796">
               <caret line="50" column="93" lean-forward="false" selection-start-line="50" selection-start-column="74" selection-end-line="50" selection-end-column="93" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/predictions/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
-              <caret line="1248" column="0" lean-forward="true" selection-start-line="1248" selection-start-column="0" selection-end-line="1248" selection-end-column="0" />
+            <state relative-caret-position="418">
+              <caret line="2374" column="0" lean-forward="true" selection-start-line="2374" selection-start-column="0" selection-end-line="2374" selection-end-column="0" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
-                <element signature="e#128421#128559#0" expanded="false" />
-                <element signature="e#128615#128754#0" expanded="false" />
-                <element signature="e#128810#128948#0" expanded="false" />
-                <element signature="e#129008#129192#0" expanded="false" />
-                <element signature="e#129252#129436#0" expanded="false" />
-                <element signature="e#129496#129679#0" expanded="false" />
-                <element signature="e#129742#129886#0" expanded="false" />
-                <element signature="e#129950#130094#0" expanded="false" />
-                <element signature="e#130157#130301#0" expanded="false" />
-                <element signature="e#130365#130509#0" expanded="false" />
-                <element signature="e#130572#130716#0" expanded="false" />
-                <element signature="e#130780#130924#0" expanded="false" />
-                <element signature="e#130985#131133#0" expanded="false" />
-                <element signature="e#131193#131427#0" expanded="false" />
-                <element signature="e#131494#131684#0" expanded="false" />
-                <element signature="e#131752#131942#0" expanded="false" />
-                <element signature="e#132009#132199#0" expanded="false" />
-                <element signature="e#132267#132457#0" expanded="false" />
-                <element signature="e#132524#132714#0" expanded="false" />
-                <element signature="e#132782#132972#0" expanded="false" />
-                <element signature="e#133037#133235#0" expanded="false" />
-                <element signature="e#133299#133583#0" expanded="false" />
-                <element signature="e#133650#133840#0" expanded="false" />
-                <element signature="e#133908#134098#0" expanded="false" />
-                <element signature="e#134165#134355#0" expanded="false" />
-                <element signature="e#134423#134613#0" expanded="false" />
-                <element signature="e#134680#134870#0" expanded="false" />
-                <element signature="e#134938#135128#0" expanded="false" />
-                <element signature="e#135193#135391#0" expanded="false" />
-                <element signature="e#135455#135739#0" expanded="false" />
-                <element signature="e#135806#135997#0" expanded="false" />
-                <element signature="e#136065#136256#0" expanded="false" />
-                <element signature="e#136323#136514#0" expanded="false" />
-                <element signature="e#136582#136773#0" expanded="false" />
-                <element signature="e#136840#137031#0" expanded="false" />
-                <element signature="e#137099#137290#0" expanded="false" />
-                <element signature="e#137355#137554#0" expanded="false" />
-                <element signature="e#144204#144321#0" expanded="false" />
-                <element signature="e#150419#150491#0" expanded="false" />
+                <element signature="e#128443#128581#0" expanded="false" />
+                <element signature="e#128637#128776#0" expanded="false" />
+                <element signature="e#128832#128970#0" expanded="false" />
+                <element signature="e#129030#129214#0" expanded="false" />
+                <element signature="e#129274#129458#0" expanded="false" />
+                <element signature="e#129518#129701#0" expanded="false" />
+                <element signature="e#129764#129908#0" expanded="false" />
+                <element signature="e#129972#130116#0" expanded="false" />
+                <element signature="e#130179#130323#0" expanded="false" />
+                <element signature="e#130387#130531#0" expanded="false" />
+                <element signature="e#130594#130738#0" expanded="false" />
+                <element signature="e#130802#130946#0" expanded="false" />
+                <element signature="e#131007#131155#0" expanded="false" />
+                <element signature="e#131215#131449#0" expanded="false" />
+                <element signature="e#131516#131706#0" expanded="false" />
+                <element signature="e#131774#131964#0" expanded="false" />
+                <element signature="e#132031#132221#0" expanded="false" />
+                <element signature="e#132289#132479#0" expanded="false" />
+                <element signature="e#132546#132736#0" expanded="false" />
+                <element signature="e#132804#132994#0" expanded="false" />
+                <element signature="e#133059#133257#0" expanded="false" />
+                <element signature="e#133321#133605#0" expanded="false" />
+                <element signature="e#133672#133862#0" expanded="false" />
+                <element signature="e#133930#134120#0" expanded="false" />
+                <element signature="e#134187#134377#0" expanded="false" />
+                <element signature="e#134445#134635#0" expanded="false" />
+                <element signature="e#134702#134892#0" expanded="false" />
+                <element signature="e#134960#135150#0" expanded="false" />
+                <element signature="e#135215#135413#0" expanded="false" />
+                <element signature="e#135477#135761#0" expanded="false" />
+                <element signature="e#135828#136019#0" expanded="false" />
+                <element signature="e#136087#136278#0" expanded="false" />
+                <element signature="e#136345#136536#0" expanded="false" />
+                <element signature="e#136604#136795#0" expanded="false" />
+                <element signature="e#136862#137053#0" expanded="false" />
+                <element signature="e#137121#137312#0" expanded="false" />
+                <element signature="e#137377#137576#0" expanded="false" />
+                <element signature="e#144226#144343#0" expanded="false" />
+                <element signature="e#150441#150513#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -85,8 +88,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/predictions/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="1816" column="4" lean-forward="false" selection-start-line="1816" selection-start-column="4" selection-end-line="1816" selection-end-column="4" />
+            <state relative-caret-position="537">
+              <caret line="791" column="28" lean-forward="false" selection-start-line="791" selection-start-column="28" selection-end-line="791" selection-end-column="28" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -94,14 +97,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="addscore.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/addscore.html">
+      <file leaf-file-name="new_predictions.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/new_predictions.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="918">
-              <caret line="85" column="24" lean-forward="false" selection-start-line="85" selection-start-column="24" selection-end-line="85" selection-end-column="24" />
-              <folding>
-                <element signature="n#script#0;n#!!top" expanded="false" />
-              </folding>
+            <state relative-caret-position="651">
+              <caret line="160" column="0" lean-forward="true" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -182,8 +183,8 @@
       <file leaf-file-name="league_overview.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/league_overview.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="588">
-              <caret line="204" column="4" lean-forward="false" selection-start-line="204" selection-start-column="4" selection-end-line="204" selection-end-column="61" />
+            <state relative-caret-position="442">
+              <caret line="205" column="0" lean-forward="false" selection-start-line="205" selection-start-column="0" selection-end-line="205" selection-end-column="0" />
               <folding>
                 <element signature="n#script#0;n#!!top" expanded="false" />
                 <element signature="n#script#1;n#!!top" expanded="false" />
@@ -196,7 +197,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="predictions.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="predictions.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/predictions.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="426">
@@ -276,10 +277,11 @@
         <option value="$PROJECT_DIR$/predictions/templates/predictions/addscore.html" />
         <option value="$PROJECT_DIR$/predictions/templates/predictions/betslip_list.html" />
         <option value="$PROJECT_DIR$/predictions/templates/predictions/betslips_by_tipster.html" />
+        <option value="$PROJECT_DIR$/predictions/templates/predictions/predictions.html" />
+        <option value="$PROJECT_DIR$/predictions/templates/predictions/new_predictions.html" />
+        <option value="$PROJECT_DIR$/predictions/templates/predictions/league_overview.html" />
         <option value="$PROJECT_DIR$/predictions/views.py" />
         <option value="$PROJECT_DIR$/predictions/models.py" />
-        <option value="$PROJECT_DIR$/predictions/templates/predictions/league_overview.html" />
-        <option value="$PROJECT_DIR$/predictions/templates/predictions/predictions.html" />
       </list>
     </option>
   </component>
@@ -324,6 +326,146 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions_project" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templatetags" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions-project-3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="predictions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="management" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -497,146 +639,6 @@
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions_project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templatetags" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions-project-3" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="predictions" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="management" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -781,6 +783,9 @@
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
+  </component>
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -957,13 +962,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/new_predictions.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="148" column="104" lean-forward="false" selection-start-line="148" selection-start-column="81" selection-end-line="148" selection-end-column="104" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/tip_list.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
@@ -1130,7 +1128,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
           <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1138,7 +1135,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1479">
           <caret line="87" column="30" lean-forward="false" selection-start-line="87" selection-start-column="30" selection-end-line="87" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1217,88 +1213,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/predictions/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="813">
-          <caret line="50" column="93" lean-forward="false" selection-start-line="50" selection-start-column="74" selection-end-line="50" selection-end-column="93" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/predictions/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="1816" column="4" lean-forward="false" selection-start-line="1816" selection-start-column="4" selection-end-line="1816" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/predictions/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="1248" column="0" lean-forward="true" selection-start-line="1248" selection-start-column="0" selection-end-line="1248" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-            <element signature="e#128421#128559#0" expanded="false" />
-            <element signature="e#128615#128754#0" expanded="false" />
-            <element signature="e#128810#128948#0" expanded="false" />
-            <element signature="e#129008#129192#0" expanded="false" />
-            <element signature="e#129252#129436#0" expanded="false" />
-            <element signature="e#129496#129679#0" expanded="false" />
-            <element signature="e#129742#129886#0" expanded="false" />
-            <element signature="e#129950#130094#0" expanded="false" />
-            <element signature="e#130157#130301#0" expanded="false" />
-            <element signature="e#130365#130509#0" expanded="false" />
-            <element signature="e#130572#130716#0" expanded="false" />
-            <element signature="e#130780#130924#0" expanded="false" />
-            <element signature="e#130985#131133#0" expanded="false" />
-            <element signature="e#131193#131427#0" expanded="false" />
-            <element signature="e#131494#131684#0" expanded="false" />
-            <element signature="e#131752#131942#0" expanded="false" />
-            <element signature="e#132009#132199#0" expanded="false" />
-            <element signature="e#132267#132457#0" expanded="false" />
-            <element signature="e#132524#132714#0" expanded="false" />
-            <element signature="e#132782#132972#0" expanded="false" />
-            <element signature="e#133037#133235#0" expanded="false" />
-            <element signature="e#133299#133583#0" expanded="false" />
-            <element signature="e#133650#133840#0" expanded="false" />
-            <element signature="e#133908#134098#0" expanded="false" />
-            <element signature="e#134165#134355#0" expanded="false" />
-            <element signature="e#134423#134613#0" expanded="false" />
-            <element signature="e#134680#134870#0" expanded="false" />
-            <element signature="e#134938#135128#0" expanded="false" />
-            <element signature="e#135193#135391#0" expanded="false" />
-            <element signature="e#135455#135739#0" expanded="false" />
-            <element signature="e#135806#135997#0" expanded="false" />
-            <element signature="e#136065#136256#0" expanded="false" />
-            <element signature="e#136323#136514#0" expanded="false" />
-            <element signature="e#136582#136773#0" expanded="false" />
-            <element signature="e#136840#137031#0" expanded="false" />
-            <element signature="e#137099#137290#0" expanded="false" />
-            <element signature="e#137355#137554#0" expanded="false" />
-            <element signature="e#144204#144321#0" expanded="false" />
-            <element signature="e#150419#150491#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/league_overview.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="588">
-          <caret line="204" column="4" lean-forward="false" selection-start-line="204" selection-start-column="4" selection-end-line="204" selection-end-column="61" />
-          <folding>
-            <element signature="n#script#0;n#!!top" expanded="false" />
-            <element signature="n#script#1;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#tr#0;n#thead#0;n#table#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/predictions.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="426">
@@ -1310,6 +1224,96 @@
             <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#1;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/new_predictions.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="651">
+          <caret line="160" column="0" lean-forward="true" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/predictions/templates/predictions/league_overview.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="205" column="0" lean-forward="false" selection-start-line="205" selection-start-column="0" selection-end-line="205" selection-end-column="0" />
+          <folding>
+            <element signature="n#script#0;n#!!top" expanded="false" />
+            <element signature="n#script#1;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#tr#0;n#thead#0;n#table#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/predictions/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="796">
+          <caret line="50" column="93" lean-forward="false" selection-start-line="50" selection-start-column="74" selection-end-line="50" selection-end-column="93" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/predictions/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="537">
+          <caret line="791" column="28" lean-forward="false" selection-start-line="791" selection-start-column="28" selection-end-line="791" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/predictions/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="2374" column="0" lean-forward="true" selection-start-line="2374" selection-start-column="0" selection-end-line="2374" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+            <element signature="e#128443#128581#0" expanded="false" />
+            <element signature="e#128637#128776#0" expanded="false" />
+            <element signature="e#128832#128970#0" expanded="false" />
+            <element signature="e#129030#129214#0" expanded="false" />
+            <element signature="e#129274#129458#0" expanded="false" />
+            <element signature="e#129518#129701#0" expanded="false" />
+            <element signature="e#129764#129908#0" expanded="false" />
+            <element signature="e#129972#130116#0" expanded="false" />
+            <element signature="e#130179#130323#0" expanded="false" />
+            <element signature="e#130387#130531#0" expanded="false" />
+            <element signature="e#130594#130738#0" expanded="false" />
+            <element signature="e#130802#130946#0" expanded="false" />
+            <element signature="e#131007#131155#0" expanded="false" />
+            <element signature="e#131215#131449#0" expanded="false" />
+            <element signature="e#131516#131706#0" expanded="false" />
+            <element signature="e#131774#131964#0" expanded="false" />
+            <element signature="e#132031#132221#0" expanded="false" />
+            <element signature="e#132289#132479#0" expanded="false" />
+            <element signature="e#132546#132736#0" expanded="false" />
+            <element signature="e#132804#132994#0" expanded="false" />
+            <element signature="e#133059#133257#0" expanded="false" />
+            <element signature="e#133321#133605#0" expanded="false" />
+            <element signature="e#133672#133862#0" expanded="false" />
+            <element signature="e#133930#134120#0" expanded="false" />
+            <element signature="e#134187#134377#0" expanded="false" />
+            <element signature="e#134445#134635#0" expanded="false" />
+            <element signature="e#134702#134892#0" expanded="false" />
+            <element signature="e#134960#135150#0" expanded="false" />
+            <element signature="e#135215#135413#0" expanded="false" />
+            <element signature="e#135477#135761#0" expanded="false" />
+            <element signature="e#135828#136019#0" expanded="false" />
+            <element signature="e#136087#136278#0" expanded="false" />
+            <element signature="e#136345#136536#0" expanded="false" />
+            <element signature="e#136604#136795#0" expanded="false" />
+            <element signature="e#136862#137053#0" expanded="false" />
+            <element signature="e#137121#137312#0" expanded="false" />
+            <element signature="e#137377#137576#0" expanded="false" />
+            <element signature="e#144226#144343#0" expanded="false" />
+            <element signature="e#150441#150513#0" expanded="false" />
           </folding>
         </state>
       </provider>

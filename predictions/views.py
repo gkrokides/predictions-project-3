@@ -757,20 +757,41 @@ def predictions(request):
             leaderboard = Game.objects.last_gameweek(seasn=lst).select_related('season', 'hometeam', 'awayteam')
             datte = leaderboard.order_by('-date')[0].date
             gamewk = leaderboard[0].gameweek + 1
-            try:
-                last_date = Game.objects.filter(season=seasonid, gameweek=gamewk).order_by('-date')[0].date
+            lastgw = leaderboard[0].gameweek
+            last_gamewk_no_scores_cnt = Game.objects.filter(season=seasonid, gameweek=lastgw).exclude(homegoals__gte=0).count()
+
+            if last_gamewk_no_scores_cnt > 0:
                 predictions_exist = True
-            except IndexError:
-                last_date = Game.objects.last_gameweek(lst).order_by('-gameweek')[0].date
-                predictions_exist = False
+                try:
+                    last_date = Game.objects.filter(season=seasonid, gameweek=gamewk).order_by('-date')[0].date
+                except IndexError:
+                    last_date = Game.objects.last_gameweek(seasonid).order_by('-date')[0].date
+            else:
+                try:
+                    last_date = Game.objects.filter(season=seasonid, gameweek=gamewk).order_by('-date')[0].date
+                    predictions_exist = True
+                except IndexError:
+                    last_date = Game.objects.last_gameweek(lst).order_by('-gameweek')[0].date
+                    predictions_exist = False
+
+            # try:
+            #     last_date = Game.objects.filter(season=seasonid, gameweek=gamewk).order_by('-date')[0].date
+            #     predictions_exist = True
+            # except IndexError:
+            #     last_date = Game.objects.last_gameweek(lst).order_by('-gameweek')[0].date
+            #     predictions_exist = False
             gamewk_out = gamewk - 1
             user_made_selection = True
             past_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__lte=gamewk_out).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).count()
             # new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__gt=6).count() - past_predictions_cnt
             # new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek=gamewk).count()
             if predictions_exist:
-                new_predictions_cnt = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK').exclude(prediction_elohist__exact='Not enough games to calculate prediction (the model needs at least 6 gameweeks)').count()
-                new_predictions_cnt = new_predictions_cnt - past_predictions_cnt
+                new_predictions_cnt = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK') \
+                    .exclude(prediction_elohist__exact='Not enough games to calculate prediction (the model needs at least 6 gameweeks)') \
+                    .exclude(homegoals__gte=0) \
+                    .count()
+                # new_predictions_cnt = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK').exclude(prediction_elohist__exact='Not enough games to calculate prediction (the model needs at least 6 gameweeks)').count()
+                # new_predictions_cnt = new_predictions_cnt - past_predictions_cnt
             else:
                 new_predictions_cnt = 0
             # teams_total = Game.objects.filter(season=seasonid, gameweek=1).count() * 2
@@ -890,12 +911,32 @@ def new_predictions(request, seasonid, gamewk):
     season_year = str(seasonn.get_start_year()) + "/" + str(seasonn.get_end_year())
     lastgw = Game.objects.last_gameweek(seasn=seasonid)
     prediction_gamewk = lastgw[0].gameweek + 1
-    try:
-        last_date = Game.objects.filter(season=seasonid, gameweek=prediction_gamewk).order_by('-date')[0].date
+    last_gamewk = lastgw[0].gameweek
+    # count of games in the last gmwk where no scores have been entered
+    last_gamewk_no_scores_cnt = Game.objects.filter(season=seasonid, gameweek=last_gamewk).exclude(homegoals__gte=0).count()
+
+    if last_gamewk_no_scores_cnt > 0:
         predictions_exist = True
-    except IndexError:
-        last_date = Game.objects.last_gameweek(seasonn).order_by('-gameweek')[0].date
-        predictions_exist = False
+        try:
+            last_date = Game.objects.filter(season=seasonid, gameweek=prediction_gamewk).order_by('-date')[0].date
+        except IndexError:
+            last_date = Game.objects.last_gameweek(seasonn).order_by('-date')[0].date
+            prediction_gamewk = last_gamewk
+    else:
+        try:
+            last_date = Game.objects.filter(season=seasonid, gameweek=prediction_gamewk).order_by('-date')[0].date
+            predictions_exist = True
+        except IndexError:
+            last_date = Game.objects.last_gameweek(seasonn).order_by('-gameweek')[0].date
+            predictions_exist = False
+
+    # try:
+    #     last_date = Game.objects.filter(season=seasonid, gameweek=prediction_gamewk).order_by('-date')[0].date
+    #     predictions_exist = True
+    # except IndexError:
+    #     last_date = Game.objects.last_gameweek(seasonn).order_by('-gameweek')[0].date
+    #     predictions_exist = False
+
     new_predictions_set = Game.objects\
         .filter(season=seasonid, date__lte=last_date, game_status='OK')\
         .exclude(homegoals__gte=0)
@@ -904,6 +945,7 @@ def new_predictions(request, seasonid, gamewk):
         .exclude(prediction_status_elohist__exact='')\
         .exclude(prediction_status_elohist__isnull=True)\
         .count()
+
     if predictions_exist:
         new_predictions_cnt = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK')\
             .exclude(prediction_elohist__exact='Not enough games to calculate prediction (the model needs at least 6 gameweeks)')\
@@ -911,6 +953,7 @@ def new_predictions(request, seasonid, gamewk):
         new_predictions_cnt = new_predictions_cnt - past_predictions_cnt
     else:
         new_predictions_cnt = 0
+
     x = []
     for gm in new_predictions_set:
         matchh = str(gm.hometeam) + " - " + str(gm.awayteam)
@@ -1855,20 +1898,40 @@ def league_overview(request, sid):
     leaderboard = Game.objects.last_gameweek(seasn=lst).select_related('season', 'hometeam', 'awayteam')
     datte = leaderboard.order_by('-date')[0].date
     gamewk = leaderboard[0].gameweek + 1
-    try:
-        last_date = Game.objects.filter(season=seasonid, gameweek=gamewk).order_by('-date')[0].date
+    lastgw = leaderboard[0].gameweek
+    last_gamewk_no_scores_cnt = Game.objects.filter(season=seasonid, gameweek=lastgw).exclude(homegoals__gte=0).count()
+
+    if last_gamewk_no_scores_cnt > 0:
         predictions_exist = True
-    except IndexError:
-        last_date = Game.objects.last_gameweek(lst).order_by('-gameweek')[0].date
-        predictions_exist = False
+        try:
+            last_date = Game.objects.filter(season=seasonid, gameweek=gamewk).order_by('-date')[0].date
+        except IndexError:
+            last_date = Game.objects.last_gameweek(seasonid).order_by('-date')[0].date
+    else:
+        try:
+            last_date = Game.objects.filter(season=seasonid, gameweek=gamewk).order_by('-date')[0].date
+            predictions_exist = True
+        except IndexError:
+            last_date = Game.objects.last_gameweek(lst).order_by('-gameweek')[0].date
+            predictions_exist = False
+
+    # try:
+    #     last_date = Game.objects.filter(season=seasonid, gameweek=gamewk).order_by('-date')[0].date
+    #     predictions_exist = True
+    # except IndexError:
+    #     last_date = Game.objects.last_gameweek(lst).order_by('-gameweek')[0].date
+    #     predictions_exist = False
     gamewk_out = gamewk - 1
     user_made_selection = True
     past_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__lte=gamewk_out).exclude(prediction_status_elohist__exact='').exclude(prediction_status_elohist__isnull=True).count()
     # new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek__gt=6).count() - past_predictions_cnt
     # new_predictions_cnt = Game.objects.filter(season=seasonid, gameweek=gamewk).count()
     if predictions_exist:
-        new_predictions_cnt = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK').exclude(prediction_elohist__exact='Not enough games to calculate prediction (the model needs at least 6 gameweeks)').count()
-        new_predictions_cnt = new_predictions_cnt - past_predictions_cnt
+        new_predictions_cnt = Game.objects.filter(season=seasonid, date__lte=last_date, game_status='OK')\
+            .exclude(prediction_elohist__exact='Not enough games to calculate prediction (the model needs at least 6 gameweeks)')\
+            .exclude(homegoals__gte=0)\
+            .count()
+        # new_predictions_cnt = new_predictions_cnt - past_predictions_cnt
     else:
         new_predictions_cnt = 0
     # teams_total = Game.objects.filter(season=seasonid, gameweek=1).count() * 2
@@ -1959,7 +2022,8 @@ def league_overview(request, sid):
                    'away_wins_total_perc': away_wins_total_perc, 'draws_total_perc': draws_total_perc, 'season_goals': season_goals,
                    'goals_p_game': goals_p_game, 'bts_perc': bts_perc, 'over_1p5': over_1p5, 'over_2p5': over_2p5, 'over_3p5': over_3p5,
                    'new_predictions_cnt': new_predictions_cnt, 'past_predictions_cnt': past_predictions_cnt, 'flag': flag, 'p': p, 'any_postponed': any_postponed,
-                   'selected_country': selected_country, 'playoffs_started': playoffs_started})
+                   'selected_country': selected_country, 'playoffs_started': playoffs_started,
+                   'last_gamewk_no_scores_cnt': last_gamewk_no_scores_cnt, 'predictions_exist': predictions_exist})
 
 
 def livescore(request):
