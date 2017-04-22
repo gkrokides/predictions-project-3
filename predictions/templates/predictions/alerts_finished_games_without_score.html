@@ -16,6 +16,7 @@
         <th class="gsrs_chart centred">Home</th>
         <th class="gsrs_chart centred"></th>
         <th class="gsrs_chart centred">Away</th>
+        <th class="gsrs_chart centred">Add score</th>
       </tr>
     </thead>
     <tbody class="centred">
@@ -29,6 +30,7 @@
         <td>{{ itemm.hometeam }}</td>
         <td> - </td>
         <td>{{ itemm.awayteam }}</td>
+        <td><a href="{% url 'edit_match' pk=itemm.id %}"><button type="button" class="btn btn-warning btn-xs"> + </button></a></td>
       </tr>
 
     {% endfor %}
