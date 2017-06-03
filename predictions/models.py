@@ -2875,7 +2875,7 @@ class Betslip(models.Model):
                         x.append(a)
                     else:
                         x.append(-1)
-                    combos = list(itertools.combinations(self.tips.all(), 2))
+                    combos = list(itertools.combinations(self.tips.all(), 4))
                     for tpl in combos:
                         if tpl[0].tip_status == 'Success' and tpl[1].tip_status == 'Success' and tpl[2].tip_status == 'Success' and tpl[3].tip_status == 'Success':
                             x.append(tpl[0].tip_odds * tpl[1].tip_odds * tpl[2].tip_odds * tpl[3].tip_odds)
