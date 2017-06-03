@@ -2969,7 +2969,10 @@ class Betslip(models.Model):
                             p += ((stk / self.subslips()) * accm)
                         else:
                             l += stk / self.subslips()
-                    return p
+                    if self.betslip_status == 'Success':
+                        return p
+                    elif self.betslip_status == 'Fail':
+                        return l
                 else:
                     pass
         else:
