@@ -2972,7 +2972,7 @@ class Betslip(models.Model):
                     if self.betslip_status == 'Success':
                         return p
                     elif self.betslip_status == 'Fail':
-                        return -stk
+                        return p - l
                 else:
                     pass
         else:
