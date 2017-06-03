@@ -23,8 +23,8 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/predictions/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="622">
-              <caret line="2978" column="16" lean-forward="true" selection-start-line="2978" selection-start-column="16" selection-end-line="2978" selection-end-column="16" />
+            <state relative-caret-position="554">
+              <caret line="2858" column="29" lean-forward="true" selection-start-line="2858" selection-start-column="29" selection-end-line="2858" selection-end-column="29" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
                 <element signature="e#128443#128581#0" expanded="false" />
@@ -64,7 +64,6 @@
                 <element signature="e#136862#137053#0" expanded="false" />
                 <element signature="e#137121#137312#0" expanded="false" />
                 <element signature="e#137377#137576#0" expanded="false" />
-                <element signature="e#150441#150513#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -1160,8 +1159,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/predictions/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="622">
-          <caret line="2978" column="16" lean-forward="true" selection-start-line="2978" selection-start-column="16" selection-end-line="2978" selection-end-column="16" />
+        <state relative-caret-position="554">
+          <caret line="2858" column="29" lean-forward="true" selection-start-line="2858" selection-start-column="29" selection-end-line="2858" selection-end-column="29" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
             <element signature="e#128443#128581#0" expanded="false" />
@@ -1201,7 +1200,6 @@
             <element signature="e#136862#137053#0" expanded="false" />
             <element signature="e#137121#137312#0" expanded="false" />
             <element signature="e#137377#137576#0" expanded="false" />
-            <element signature="e#150441#150513#0" expanded="false" />
           </folding>
         </state>
       </provider>
