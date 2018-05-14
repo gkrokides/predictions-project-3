@@ -18,7 +18,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 # from django.db.models import Count
 
-# from itertools import chain
+# from itertools import  chain
 # from django.db.models import Q, Max
 
 
