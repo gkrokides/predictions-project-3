@@ -152,3 +152,4 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS', '')
 EMAIL_PORT = 465
 # EMAIL_USE_TLS = True
 EMAIL_USE_SSL = True
+# test comment
