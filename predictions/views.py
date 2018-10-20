@@ -1668,7 +1668,7 @@ def email(request):
             message = form.cleaned_data['message']
             message = message + '\n ' + '\n Sent from: ' + name
             try:
-                send_mail(subject, message, from_email, ['support@betaid.net'])
+                send_mail(subject, message, from_email, ['georgekrokides@gmail.com'])
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
             return redirect('success')
