@@ -146,10 +146,16 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 SECURE_SSL_REDIRECT = True
 
-EMAIL_HOST = 'smtpout.europe.secureserver.net'
-EMAIL_HOST_USER = 'support@betaid.net'
+# EMAIL_HOST = 'smtpout.europe.secureserver.net'
+# EMAIL_HOST_USER = 'support@betaid.net'
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS', '')
+# EMAIL_PORT = 465
+# # EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = True
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'georgekrokides@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS', '')
-EMAIL_PORT = 465
+EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
 EMAIL_USE_SSL = True
-# test comment
