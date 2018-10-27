@@ -1,0 +1,1301 @@
+[
+{
+  "model": "predictions.betslip",
+  "pk": 1,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-02-17T09:21:17Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      1,
+      2,
+      3
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 2,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-02-18T09:21:45Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 22.0,
+    "tips": [
+      4
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 3,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-02-18T09:22:18Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 33.3,
+    "tips": [
+      5
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 4,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-02-25T10:29:25Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      6,
+      7,
+      8
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 5,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Singles",
+    "created_date": "2017-02-25T10:34:06Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 18.7,
+    "tips": [
+      9
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 6,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Singles",
+    "created_date": "2017-02-25T10:34:37Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      10
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 7,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Singles",
+    "created_date": "2017-02-25T10:34:53Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      11
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 9,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Singles",
+    "created_date": "2017-03-04T06:06:31Z",
+    "betslip_status": "Fail",
+    "stake": 5.0,
+    "profit": -5.0,
+    "tips": [
+      13
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 10,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Singles",
+    "created_date": "2017-03-04T06:07:00Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      14
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 11,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-03-04T06:07:29Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 24.0,
+    "tips": [
+      15
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 12,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-03-04T06:07:49Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      16
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 13,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "Any 2 or 3",
+    "created_date": "2017-03-04T06:08:13Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      17,
+      18,
+      19
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 14,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Any 2 or 3",
+    "created_date": "2017-03-10T19:55:42Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 4.1,
+    "tips": [
+      20,
+      21,
+      22
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 15,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-03-10T20:02:54Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      25,
+      26,
+      27
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 16,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-03-10T20:03:27Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      23
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 17,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-03-10T20:03:47Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      24
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 18,
+  "fields": {
+    "betslip_tipster": "Krok",
+    "slug": "krok",
+    "bet_type": "Any 2 or 3",
+    "created_date": "2017-03-11T11:43:49Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": -4.204,
+    "tips": [
+      28,
+      29,
+      30
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 19,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-03-17T16:55:03Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      31
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 20,
+  "fields": {
+    "betslip_tipster": "Krok",
+    "slug": "krok",
+    "bet_type": "Any 2 or 3",
+    "created_date": "2017-03-18T08:49:42Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": -1.375,
+    "tips": [
+      32,
+      33,
+      34
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 21,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-03-18T11:12:45Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      35
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 22,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-03-18T11:19:46Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 44.043,
+    "tips": [
+      36,
+      37,
+      38
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 23,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Singles",
+    "created_date": "2017-03-18T11:24:06Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      39
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 24,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Singles",
+    "created_date": "2017-03-18T20:14:51Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      40
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 25,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-03-25T15:12:17Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 20.5,
+    "tips": [
+      41
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 26,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-03-31T08:03:27Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      42,
+      46,
+      53
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 27,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "All",
+    "created_date": "2017-03-31T08:04:57Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      48,
+      54
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 28,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-03-31T08:07:26Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      45
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 29,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-03-31T08:07:41Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      44
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 30,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Singles",
+    "created_date": "2017-04-04T08:16:23Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 21.5,
+    "tips": [
+      55
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 31,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "Any 2 or 3",
+    "created_date": "2017-04-08T11:27:24Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": -0.6425,
+    "tips": [
+      56,
+      57,
+      58
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 32,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-04-08T11:35:53Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 21.5,
+    "tips": [
+      60
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 33,
+  "fields": {
+    "betslip_tipster": "Krok",
+    "slug": "krok",
+    "bet_type": "All",
+    "created_date": "2017-04-14T11:56:19Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 37.5,
+    "tips": [
+      63,
+      64
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 34,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-04-14T16:25:28Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      69
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 35,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-04-14T16:25:55Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      70
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 36,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Singles",
+    "created_date": "2017-04-14T16:26:43Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      68
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 37,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-04-14T16:28:27Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      65,
+      66
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 38,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-04-21T12:51:11Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      71
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 39,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "Singles",
+    "created_date": "2017-04-21T12:51:26Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      72
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 40,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Any 2 or 3",
+    "created_date": "2017-04-21T12:57:43Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 15.1125,
+    "tips": [
+      73,
+      74,
+      75
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 41,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-04-21T13:01:16Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 46.65625,
+    "tips": [
+      76,
+      77,
+      78
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 42,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Any 2 or 3",
+    "created_date": "2017-04-28T16:42:42Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 21.625,
+    "tips": [
+      80,
+      81,
+      83
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 43,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "All",
+    "created_date": "2017-04-28T16:43:04Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      82
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 44,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-04-28T16:43:33Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 33.05,
+    "tips": [
+      79,
+      84
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 45,
+  "fields": {
+    "betslip_tipster": "Krok",
+    "slug": "krok",
+    "bet_type": "All",
+    "created_date": "2017-04-29T07:13:12Z",
+    "betslip_status": "Fail",
+    "stake": 20.0,
+    "profit": -20.0,
+    "tips": [
+      85,
+      86
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 46,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-05-05T17:28:27Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      87,
+      88,
+      91
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 47,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Any 2 or 3",
+    "created_date": "2017-05-05T17:29:36Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      92,
+      93,
+      94
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 48,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-05-05T17:32:43Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      95
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 49,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-05-12T17:46:04Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 61.82,
+    "tips": [
+      102,
+      103,
+      105
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 50,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-05-12T17:46:51Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      104
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 51,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Any 3 or 4",
+    "created_date": "2017-05-12T17:50:24Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      98,
+      99,
+      100,
+      101
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 52,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "All",
+    "created_date": "2017-05-19T06:57:02Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      107,
+      112
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 53,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-05-19T06:57:41Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 26.0,
+    "tips": [
+      108
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 54,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-05-19T07:06:45Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 62.24,
+    "tips": [
+      110,
+      111,
+      113
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 55,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-11-17T09:00:49Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      114,
+      115,
+      116
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 56,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Any 2 or 3",
+    "created_date": "2017-11-17T09:01:22Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      118,
+      119,
+      120
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 57,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "All",
+    "created_date": "2017-11-17T09:01:41Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      117
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 58,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2017-11-25T10:56:28Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      131
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 59,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "All",
+    "created_date": "2017-11-25T11:00:18Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      130,
+      132
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 60,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-11-25T11:14:27Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": 54.575,
+    "tips": [
+      133,
+      134,
+      135
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 61,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-12-01T09:17:46Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      136,
+      138,
+      142
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 62,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "Any 2 or 3",
+    "created_date": "2017-12-01T09:19:08Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      140,
+      143,
+      144
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 63,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-12-01T09:19:45Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      139
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 64,
+  "fields": {
+    "betslip_tipster": "Krok",
+    "slug": "krok",
+    "bet_type": "All",
+    "created_date": "2017-12-08T19:07:25Z",
+    "betslip_status": "Fail",
+    "stake": 20.0,
+    "profit": -20.0,
+    "tips": [
+      148,
+      149,
+      150
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 65,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-12-09T11:15:58Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      151,
+      152,
+      154
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 66,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Singles",
+    "created_date": "2017-12-09T11:17:38Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      153,
+      158
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 67,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "All",
+    "created_date": "2017-12-09T11:18:07Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      157
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 69,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2017-12-15T17:04:52Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      161,
+      162,
+      167
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 70,
+  "fields": {
+    "betslip_tipster": "Krok",
+    "slug": "krok",
+    "bet_type": "All",
+    "created_date": "2017-12-15T17:12:54Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      159,
+      169
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 71,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "Any 3 or 4",
+    "created_date": "2017-12-15T17:13:36Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      164,
+      165,
+      166,
+      168
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 72,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Singles",
+    "created_date": "2018-01-20T14:36:24Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      171
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 73,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2018-02-03T11:56:34Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      172,
+      173,
+      174
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 74,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Any 2",
+    "created_date": "2018-02-10T11:10:48Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      175,
+      176,
+      177,
+      178,
+      179
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 75,
+  "fields": {
+    "betslip_tipster": "Mr X",
+    "slug": "mr-x",
+    "bet_type": "Any 2 or 3",
+    "created_date": "2018-02-17T10:50:26Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      180,
+      181,
+      182
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 76,
+  "fields": {
+    "betslip_tipster": "The Bomber",
+    "slug": "the-bomber",
+    "bet_type": "Any 2",
+    "created_date": "2018-02-17T10:52:04Z",
+    "betslip_status": "Success",
+    "stake": 10.0,
+    "profit": -4.95,
+    "tips": [
+      183,
+      184,
+      185,
+      186,
+      187
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 77,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "Any 3",
+    "created_date": "2018-02-17T12:43:48Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      183,
+      184,
+      185,
+      186,
+      187
+    ]
+  }
+},
+{
+  "model": "predictions.betslip",
+  "pk": 78,
+  "fields": {
+    "betslip_tipster": "Alesantro",
+    "slug": "alesantro",
+    "bet_type": "All",
+    "created_date": "2018-03-16T08:51:48Z",
+    "betslip_status": "Fail",
+    "stake": 10.0,
+    "profit": -10.0,
+    "tips": [
+      188,
+      189,
+      190
+    ]
+  }
+}
+]

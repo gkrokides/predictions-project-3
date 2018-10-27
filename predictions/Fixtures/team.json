@@ -1,0 +1,1172 @@
+[
+{
+  "model": "predictions.team",
+  "pk": "1860 Munchen",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "ADO Den Haag",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "AEK Larnaca",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "AEL Limassol",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "AEZ Zakakiou",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "AFC Bournemouth",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Ajaccio",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Ajax",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Alki Oroklinis",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Amiens SC",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Anagennisi Derynias",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Anderlecht",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Angers",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Anorthosis",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "APOEL",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Apollon Limassol",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Aris Limassol",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Arminia Bielefeld",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Arouca",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Arsenal",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "AS Eupen",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Ascoli",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Atalanta",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Athletic Club",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Atletico Madrid",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Augsburg",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Auxerre",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Avellino",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "AZ Alkmaar",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Barcelona",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Bari 1908",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Bastia",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Bayer Leverkusen",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Bayern Munchen",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Belenenses",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Benevento",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Benfica",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Boavista",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Bochum",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Bologna",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Bordeaux",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Borussia Dortmund",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Borussia M'gladbach",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Bourg en Bresse",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Braga",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Brescia",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Brest",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Brighton",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Burnley",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Caen",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Cagliari",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Carpi",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Celta de Vigo",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Cesena",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Chaves",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Chelsea",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Chievo",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Cittadella",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Clermont",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Club Brugge",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Crotone",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Crystal Palace",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Darmstadt 98",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Deportivo Alaves",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Deportivo La Coruna",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Dijon",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Doxa Katwkopias",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Dynamo Dresden",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Eibar",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Eintracht Braunschweig",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Eintracht Frankfurt",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Empoli",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Ermis Aradippou",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Erzgebirge Aue",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Espanyol",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Estoril",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Ethnikos Achnas",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Everton",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Excelsior",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Feirense",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Feyenoord",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Fiorentina",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Fortuna Dusseldorf",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Freiburg",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Frosinone",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Gazelec Ajaccio",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Genk",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Genoa",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Gent",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Getafe",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Girona",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Go Ahead Eagles",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Granada",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Greuther Furth",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Groningen",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Guingamp",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Hamburger SV",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Hannover 96",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Heerenveen",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Heidenheim",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Hellas Verona",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Heracles",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Hertha BSC",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Hoffenheim",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Huddersfield",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Hull City",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Ingolstadt",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Inter Milan",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Juventus",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Kaiserslautern",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Karlsruher SC",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Karmiwtissa",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Koln",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Kortrijk",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "KV Oostende",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Las Palmas",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Latina",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Laval",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Lazio",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Le Havre",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Leganes",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Leicester City",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Lens",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Levante",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Lille",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Liverpool",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Lokeren",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Lorient",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Mainz 05",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Malaga",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Manchester City",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Manchester United",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Maritimo",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Marseille",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Mechelen",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Metz",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Middlesbrough",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Milan",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Monaco",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Montpellier",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Moreirense",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Nacional",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Nancy",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Nantes",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Napoli",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Nea Salamina",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "NEC Nijmegen",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Newcastle",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Nice",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Nimes",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Niort",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Novara",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Nurnberg",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Olympiacos Nicosia",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Olympique Lyonnais",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Omonoia Nicosia",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Orleans",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Osasuna",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Pacos de Ferreira",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Palermo",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Paphos FC",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "PEC Zwolle",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Perugia",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Pescara",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Pisa",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Porto",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Pro Vercelli",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "PSG",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "PSV Eindhoven",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "RB Leipzig",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Real Betis",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Real Madrid",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Real Sociedad",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Red Star",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Reims",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Rennes",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Rio Ave",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Roda JC",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Roma",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Royal Excel Mouscron",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Saint-Etienne",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Salernitana",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Sampdoria",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Sandhausen",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Sassuolo",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Schalke 04",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Sevilla",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Sint-Truiden",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Sochaux",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Southampton",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "SPAL",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Sparta Rotterdam",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Spezia",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Sporting Charleroi",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Sporting CP",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Sporting Gijon",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "St. Pauli",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Standard Liege",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Stoke City",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Strasbourg",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Stuttgart",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Sunderland",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Swansea City",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Ternana",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Tondela",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Torino",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Tottenham Hotspur",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Toulouse",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Tours",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Trapani",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Troyes",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Twente",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Udinese",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Union Berlin",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Utrecht",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Valencia",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Valenciennes",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Verona",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Vicenza",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Villarreal",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Virtus Entella",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Vitesse",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Vitoria Guimaraes",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Vitoria Setubal",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Waasland-Beveren",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Watford",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Werder Bremen",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "West Bromwich",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "West Ham United",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Westerlo",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Willem II",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Wolfsburg",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Wurzburger Kickers",
+  "fields": {}
+},
+{
+  "model": "predictions.team",
+  "pk": "Zulte-Waregem",
+  "fields": {}
+}
+]

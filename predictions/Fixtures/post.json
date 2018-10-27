@@ -1,0 +1,314 @@
+[
+{
+  "model": "predictions.post",
+  "pk": 9,
+  "fields": {
+    "author": 2,
+    "home_team": "Hoffenheim",
+    "away_team": "Borussia Dortmund",
+    "title": "betslip by Alesantro",
+    "text": "HOFFENHEIM VS BORUSSIA DORTMUND   DC 1X   (1.95)\r\nSCHALE VS FREIBURG                                        1     (1.66)\r\nCLERMONT VS ORLEANS                                   1     (2.30)\r\n\r\n\r\nODDS:7.44",
+    "created_date": "2016-12-16T18:50:40Z",
+    "published_date": "2016-12-16T18:50:40Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 10,
+  "fields": {
+    "author": 2,
+    "home_team": "Juventus",
+    "away_team": "Roma",
+    "title": "betslip by Betkrok",
+    "text": "JUVENTUS VS ROMA         1 (1.70)\r\nSEVILLA VS MALAGA         1 (1.50)\r\nFEYENOORD VS VITESSE 1 (1.44)\r\n\r\nODDS: 3.672",
+    "created_date": "2016-12-16T19:01:43Z",
+    "published_date": "2016-12-16T19:01:43Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 11,
+  "fields": {
+    "author": 3,
+    "home_team": "Sassuolo",
+    "away_team": "Inter Milan",
+    "title": "Sunday Predictions By Alesantro",
+    "text": "1)  Portugal Primeira Liga \r\n18:00  Rio Ave Vs Nacional    1. (1.80)\r\n2) Italy Serie A \r\n13:30 Sassuola Vs Inter Milan 2  (1.80)\r\n3) Germany Bundesliga\r\n18:30 Bayern Leverkusen Vs Ingolstadt 1 (1.55)\r\n\r\nOdds:5.022",
+    "created_date": "2016-12-18T08:47:23Z",
+    "published_date": "2016-12-18T09:03:45Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 12,
+  "fields": {
+    "author": 3,
+    "home_team": "AEL Limassol",
+    "away_team": "AFC Bournemouth",
+    "title": "Wednesday 21/12/16 betslip by Alesantro",
+    "text": "GER1 21:00  HOFFENHEIM VS WERDER BREMEN     1 (1.66)\r\n BEL1  21:30  ZULTE WAREGEN VS GENK                    1 (2.10)\r\n FRA1 21:50  SAINT ETIENNE VS NANCY                     1 (2.00)",
+    "created_date": "2016-12-21T08:53:36Z",
+    "published_date": "2016-12-21T09:04:50Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 13,
+  "fields": {
+    "author": 3,
+    "home_team": "Bordeaux",
+    "away_team": "Nice",
+    "title": "Wednesday 21/12/16 Alesantro high risk",
+    "text": "GER1 21:00 KOLN VS BAYER LEVERKUSEN     1 (2.75)\r\nFRA1 21:50 BORDEAUX VS NICE                       2 (3.10)",
+    "created_date": "2016-12-21T09:00:08Z",
+    "published_date": "2016-12-21T09:05:27Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 14,
+  "fields": {
+    "author": 3,
+    "home_team": "AFC Bournemouth",
+    "away_team": "Arsenal",
+    "title": "Alesantro",
+    "text": "ENG PL 02/01/2017  17:00    EVERTON VS SOUTHAMPTON         1  (2.20)\r\nENG PL 03/01/2017   21:45   AFC BOURNEMOUTH VS ARSENAL X  (3.90)",
+    "created_date": "2017-01-01T23:22:32Z",
+    "published_date": "2017-01-01T23:22:32Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 15,
+  "fields": {
+    "author": 3,
+    "home_team": "Sampdoria",
+    "away_team": "Empoli",
+    "title": "Mr \"X\"  (singles)",
+    "text": "15/1/2017   13:00     Valencia vs Espanyol  X 3.60\r\n15/1/2017   16:00     Sampdoria vs Empoli  X 3.50",
+    "created_date": "2017-01-13T22:29:26Z",
+    "published_date": "2017-01-13T22:29:26Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 16,
+  "fields": {
+    "author": 3,
+    "home_team": "Amiens SC",
+    "away_team": "AFC Bournemouth",
+    "title": "\"The Bomber\" - Single Bets",
+    "text": "14/01/2017  17:00 Burnley vs Southampton  1   3.60\r\n14/01/2017  17:00 Sunderland vs Stoke City 1   3.10",
+    "created_date": "2017-01-14T13:15:46Z",
+    "published_date": "2017-01-14T13:15:46Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 17,
+  "fields": {
+    "author": 3,
+    "home_team": "Everton",
+    "away_team": "Manchester City",
+    "title": "\"The Bomber\"",
+    "text": "15/01/2017  15:30  Everton vs Manchester City 1 4.60",
+    "created_date": "2017-01-15T07:45:32Z",
+    "published_date": "2017-01-15T07:45:32Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 18,
+  "fields": {
+    "author": 3,
+    "home_team": "Udinese",
+    "away_team": "Roma",
+    "title": "betslip by Alesantro",
+    "text": "15/01/2017  16:00  Sassuolo vs Palermo                  1    1.66\r\n15/01/2017  16:00  Udinese  vs Roma                      2    1.85\r\n15/01/2017  18:00  Maritimo vs Pacos de Ferreira   1    2.15\r\n\r\nOdds:6.60",
+    "created_date": "2017-01-15T07:57:50Z",
+    "published_date": "2017-01-15T07:57:50Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 19,
+  "fields": {
+    "author": 3,
+    "home_team": "Darmstadt 98",
+    "away_team": "Borussia M'gladbach",
+    "title": "Mr \"X\"  (singles)",
+    "text": "21/01/2017  16:30  DARMSTADT98 VS BORUSSIA M'GLADBACH  X   3.60\r\n21/01/2017  20:15  MARITIMO VS SPORTING CP                           X    3.60",
+    "created_date": "2017-01-20T09:36:19Z",
+    "published_date": "2017-01-20T09:41:31Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 20,
+  "fields": {
+    "author": 3,
+    "home_team": "West Bromwich",
+    "away_team": "Sunderland",
+    "title": "betslip by Alesantro",
+    "text": "21/01/2017 17:00  WEST BROMWICH VS SUNDERLAND   1  1.70\r\n21/01/2017 16:00  CARPI VS VICENZA                                1  1.72\r\n22/01/2017 19:00  ATALANTA VS SAMPDORIA                   1   1.66\r\n\r\nODDS:4.85",
+    "created_date": "2017-01-20T09:40:41Z",
+    "published_date": "2017-01-20T09:40:41Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 21,
+  "fields": {
+    "author": 3,
+    "home_team": "Empoli",
+    "away_team": "Udinese",
+    "title": "\"The Bomber\" (singles)",
+    "text": "21/01/2017  21:00  ROYAL EXCEL MOUSCRON VS LOKEREN   2   2.35\r\n21/01/2017  21:00  DIJON VS LILLE                                             1   3.00\r\n22/01/2017  16:00  EMPOLI  VS  UDINESE                                  2   2.80",
+    "created_date": "2017-01-20T09:45:22Z",
+    "published_date": "2017-01-20T09:46:38Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 22,
+  "fields": {
+    "author": 3,
+    "home_team": "Roda JC",
+    "away_team": "Excelsior",
+    "title": "Mr \"X\"  (singles)",
+    "text": "NED1 28/1 20:45  RODA JC VS EXCELSIOR                                 X     3.30\r\nBEL1 29/1  21:00 ROYAL EXCEL MOUSCRON VS AS EUPEN      X 3.60",
+    "created_date": "2017-01-27T09:38:24Z",
+    "published_date": "2017-01-27T09:42:02Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 23,
+  "fields": {
+    "author": 3,
+    "home_team": "Torino",
+    "away_team": "Atalanta",
+    "title": "\"The Bomber\" (singles)",
+    "text": "POR1  27/1  22:30  BOAVISTA VS BELENENSES       1   2.30\r\nITA1    29/1  13:30  TORINO  VS ATALANTA               2   3.10\r\nITA1    29/1  16:00  CROTONE VS EMPOLI                2   3.10",
+    "created_date": "2017-01-27T09:40:57Z",
+    "published_date": "2017-01-27T09:40:57Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 24,
+  "fields": {
+    "author": 3,
+    "home_team": "Sampdoria",
+    "away_team": "Roma",
+    "title": "betslip by Alesantro",
+    "text": "GER1 28/1 16:30 WOLFSBUR VS AUGSBURG                1     1.95\r\nPOR1 28/1  18:00 VITORIA GUIMARAES VS MARITIMO 1      2.00\r\nITA1   29/1   16:00 SAMPDORIA VS ROMA                       2     1.75\r\n\r\nODDS:6.825",
+    "created_date": "2017-01-27T09:45:18Z",
+    "published_date": "2017-01-27T09:45:19Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 25,
+  "fields": {
+    "author": 3,
+    "home_team": "Ajaccio",
+    "away_team": "Clermont",
+    "title": "\"The Bomber\" (singles)",
+    "text": "3/2/17  21:00 FRA2  AJACCIO VS CLERMONT    2       3.30 \r\n4/2/17 16:00  ITA2    LATINA VS FROSINONE     1        2.90\r\n5/2/17 19:00  ITA1    PALERMO VS CROTONE    2       3.20",
+    "created_date": "2017-02-03T09:16:16Z",
+    "published_date": "2017-02-03T09:16:16Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 26,
+  "fields": {
+    "author": 3,
+    "home_team": "Niort",
+    "away_team": "Bourg en Bresse",
+    "title": "Mr \"X\"  (singles)",
+    "text": "3/2/17 21:00 FRA2 NIORT VS BOURG EN BRESSE  X   3.10\r\n6/2/17 23:00 POR1 FEIRENSE VS RIO AVE               X   3.20",
+    "created_date": "2017-02-03T09:17:46Z",
+    "published_date": "2017-02-03T09:17:46Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 27,
+  "fields": {
+    "author": 3,
+    "home_team": "Koln",
+    "away_team": "Wolfsburg",
+    "title": "betslip by Alesantro",
+    "text": "3/2/17 19:30 GER2 GREUTHER FURTH VS HANNOVER 96  (2)        2.10\r\n4/2/17 16:30 GER1 KOLN VS WOLFSBURG                           (1)        2.10\r\n4/2/17 16:30 GER1 HOFFENHEIM VS MAINZ05                     (1)       1.85\r\n\r\nODDS:  8.15",
+    "created_date": "2017-02-03T09:20:43Z",
+    "published_date": "2017-02-03T09:20:43Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 28,
+  "fields": {
+    "author": 3,
+    "home_team": "Koln",
+    "away_team": "Schalke 04",
+    "title": "\"The Bomber\" (singles)",
+    "text": "17/2 GER1 21:30 AUGSBURG VS BAYERN LEVERKUSEN 1     (3.30)\r\n19/2 GER1 18:30 KOLN VS SCHALKE 04                            1     (2.50)",
+    "created_date": "2017-02-17T09:03:24Z",
+    "published_date": "2017-02-17T09:03:24Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 29,
+  "fields": {
+    "author": 3,
+    "home_team": "Maritimo",
+    "away_team": "Nacional",
+    "title": "betslip by Alesantro",
+    "text": "1) 17/02 21:00 FRA2  GAZELEC AJACCIO VS NIORT              DC X2  (1.85)\r\n2) 18/02 21:30 BEL1  ZULTE WAREGEM VS SINT TRUIDEN   1          (1.75)\r\n3) 20/02 22:00 POR1 MARITIMO VS NACIONAL                      1          (1.83)\r\n\r\nODDS: 5.92",
+    "created_date": "2017-02-17T09:15:22Z",
+    "published_date": "2017-02-17T09:15:22Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 30,
+  "fields": {
+    "author": 4,
+    "home_team": "AEL Limassol",
+    "away_team": "AEZ Zakakiou",
+    "title": "Mr \"X\" (singles)",
+    "text": "18/02   GER1   16:30  HERTHA BSC vs BAYERN MUNCHEN  X 4.33 \r\n19/02  GER2     14:30 ARMINIA BIELEFELD vs ST. PAULI X 3.20",
+    "created_date": "2017-02-18T08:34:56Z",
+    "published_date": "2017-02-18T08:34:56Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 31,
+  "fields": {
+    "author": 3,
+    "home_team": "Genoa",
+    "away_team": "Bologna",
+    "title": "\"The Bomber\" (singles)",
+    "text": "25/02/2017 NED1   20:45 EXCELSIOR VS WILLEM II                            2 (2.87)\r\n26/02/2017 GER2  14:30 ERZGEBIRGE AUE VS DYNAMO DRESDEN\t1 (3.30)\r\n26/02/2017 ITA1     16:00 GENOA VS BOLOGNA                                   2 (4.20)",
+    "created_date": "2017-02-24T17:38:40Z",
+    "published_date": "2017-02-24T17:48:44Z"
+  }
+},
+{
+  "model": "predictions.post",
+  "pk": 32,
+  "fields": {
+    "author": 3,
+    "home_team": "West Bromwich",
+    "away_team": "AFC Bournemouth",
+    "title": "betslip by Alesantro",
+    "text": "25/02/2017 ENG1 17:00 WEST BROMWICH VS AFC BOURNEMOUTH   1  (2.10)\r\n25/02/2017 BEL1  19:00 SPORTING CHERLEROI VS SINT-TRUIDEN      1  (1.66)\r\n25/02/2017 POR1 22:30 RIO AVE VS PACOS DE FERREIRA                    1  (1.85)\r\n\r\nODDS:6.44",
+    "created_date": "2017-02-24T17:46:52Z",
+    "published_date": "2017-02-24T17:46:52Z"
+  }
+}
+]

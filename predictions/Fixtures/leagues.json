@@ -1,0 +1,158 @@
+[
+{
+  "model": "predictions.leagues",
+  "pk": 1,
+  "fields": {
+    "country": "Cyprus",
+    "division": 1,
+    "league_name": "Cyprus-division-1",
+    "country_code": "CY",
+    "short_name": "CYP1",
+    "teamstotal": 14,
+    "gwtotal": 26
+  }
+},
+{
+  "model": "predictions.leagues",
+  "pk": 2,
+  "fields": {
+    "country": "Germany",
+    "division": 1,
+    "league_name": "Bundesliga",
+    "country_code": "DE",
+    "short_name": "GER1",
+    "teamstotal": 18,
+    "gwtotal": 34
+  }
+},
+{
+  "model": "predictions.leagues",
+  "pk": 3,
+  "fields": {
+    "country": "Italy",
+    "division": 1,
+    "league_name": "Serie-A",
+    "country_code": "IT",
+    "short_name": "ITA1",
+    "teamstotal": 20,
+    "gwtotal": 38
+  }
+},
+{
+  "model": "predictions.leagues",
+  "pk": 4,
+  "fields": {
+    "country": "France",
+    "division": 1,
+    "league_name": "Ligue1",
+    "country_code": "FR",
+    "short_name": "FRA1",
+    "teamstotal": 20,
+    "gwtotal": 38
+  }
+},
+{
+  "model": "predictions.leagues",
+  "pk": 5,
+  "fields": {
+    "country": "Spain",
+    "division": 1,
+    "league_name": "Primera-Division",
+    "country_code": "ES",
+    "short_name": "ESP1",
+    "teamstotal": 20,
+    "gwtotal": 38
+  }
+},
+{
+  "model": "predictions.leagues",
+  "pk": 6,
+  "fields": {
+    "country": "England",
+    "division": 1,
+    "league_name": "Premier-League",
+    "country_code": "England",
+    "short_name": "ENG1",
+    "teamstotal": 20,
+    "gwtotal": 38
+  }
+},
+{
+  "model": "predictions.leagues",
+  "pk": 7,
+  "fields": {
+    "country": "Portugal",
+    "division": 1,
+    "league_name": "Primeira-Liga",
+    "country_code": "PT",
+    "short_name": "POR1",
+    "teamstotal": 18,
+    "gwtotal": 34
+  }
+},
+{
+  "model": "predictions.leagues",
+  "pk": 8,
+  "fields": {
+    "country": "Germany",
+    "division": 2,
+    "league_name": "Bundesliga2",
+    "country_code": "DE",
+    "short_name": "GER2",
+    "teamstotal": 18,
+    "gwtotal": 34
+  }
+},
+{
+  "model": "predictions.leagues",
+  "pk": 9,
+  "fields": {
+    "country": "France",
+    "division": 2,
+    "league_name": "Ligue2",
+    "country_code": "FR",
+    "short_name": "FRA2",
+    "teamstotal": 20,
+    "gwtotal": 38
+  }
+},
+{
+  "model": "predictions.leagues",
+  "pk": 10,
+  "fields": {
+    "country": "Netherlands",
+    "division": 1,
+    "league_name": "Eredivisie",
+    "country_code": "NL",
+    "short_name": "NLD1",
+    "teamstotal": 18,
+    "gwtotal": 34
+  }
+},
+{
+  "model": "predictions.leagues",
+  "pk": 11,
+  "fields": {
+    "country": "Italy",
+    "division": 2,
+    "league_name": "Serie-B",
+    "country_code": "IT",
+    "short_name": "ITA2",
+    "teamstotal": 22,
+    "gwtotal": 42
+  }
+},
+{
+  "model": "predictions.leagues",
+  "pk": 12,
+  "fields": {
+    "country": "Belgium",
+    "division": 1,
+    "league_name": "First-Division-A",
+    "country_code": "BE",
+    "short_name": "BEL1",
+    "teamstotal": 16,
+    "gwtotal": 30
+  }
+}
+]

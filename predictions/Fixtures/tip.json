@@ -1,0 +1,2282 @@
+[
+{
+  "model": "predictions.tip",
+  "pk": 1,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 2687,
+    "time": "21:00:00",
+    "tip_type": "DC X2",
+    "tip_odds": 1.85,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 2,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 2663,
+    "time": "21:30:00",
+    "tip_type": "1",
+    "tip_odds": 1.75,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 3,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 2739,
+    "time": "22:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.83,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 4,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 2709,
+    "time": "14:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.2,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 5,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 2697,
+    "time": "16:30:00",
+    "tip_type": "X",
+    "tip_odds": 4.33,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 6,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 2774,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.1,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 7,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 2762,
+    "time": "19:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.66,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 8,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 2838,
+    "time": "22:30:00",
+    "tip_type": "1",
+    "tip_odds": 1.85,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 9,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 2800,
+    "time": "20:45:00",
+    "tip_type": "2",
+    "tip_odds": 2.87,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 10,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 2821,
+    "time": "14:30:00",
+    "tip_type": "1",
+    "tip_odds": 3.3,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 11,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 2791,
+    "time": "16:00:00",
+    "tip_type": "2",
+    "tip_odds": 4.2,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 12,
+  "fields": {
+    "tipster": "Krok",
+    "game": 2808,
+    "time": "17:00:00",
+    "tip_type": "2",
+    "tip_odds": 3.3,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 13,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 2905,
+    "time": "19:00:00",
+    "tip_type": "2",
+    "tip_odds": 4.25,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 14,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 2913,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 3.6,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 15,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 2956,
+    "time": "21:15:00",
+    "tip_type": "X",
+    "tip_odds": 3.4,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 16,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 2961,
+    "time": "16:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.2,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 17,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 2899,
+    "time": "21:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.73,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 18,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 2944,
+    "time": "16:30:00",
+    "tip_type": "1",
+    "tip_odds": 1.75,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 19,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 2960,
+    "time": "13:30:00",
+    "tip_type": "1",
+    "tip_odds": 1.91,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 20,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3105,
+    "time": "17:00:00",
+    "tip_type": "2",
+    "tip_odds": 11.0,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 21,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3040,
+    "time": "16:00:00",
+    "tip_type": "2",
+    "tip_odds": 2.35,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 22,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3048,
+    "time": "13:30:00",
+    "tip_type": "1",
+    "tip_odds": 2.4,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 23,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3027,
+    "time": "16:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.35,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 24,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3090,
+    "time": "18:30:00",
+    "tip_type": "X",
+    "tip_odds": 2.8,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 25,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3028,
+    "time": "16:30:00",
+    "tip_type": "2",
+    "tip_odds": 2.25,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 26,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3035,
+    "time": "13:30:00",
+    "tip_type": "1",
+    "tip_odds": 1.93,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 27,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3039,
+    "time": "16:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.05,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 28,
+  "fields": {
+    "tipster": "Krok",
+    "game": 3055,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.61,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 29,
+  "fields": {
+    "tipster": "Krok",
+    "game": 3056,
+    "time": "17:00:00",
+    "tip_type": "2",
+    "tip_odds": 3.0,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 30,
+  "fields": {
+    "tipster": "Krok",
+    "game": 3016,
+    "time": "17:45:00",
+    "tip_type": "1",
+    "tip_odds": 1.44,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 31,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3166,
+    "time": "19:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.15,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 32,
+  "fields": {
+    "tipster": "Krok",
+    "game": 3117,
+    "time": "14:30:00",
+    "tip_type": "DC 1X",
+    "tip_odds": 2.3,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 33,
+  "fields": {
+    "tipster": "Krok",
+    "game": 3119,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.5,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 34,
+  "fields": {
+    "tipster": "Krok",
+    "game": 3121,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.6,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 35,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3145,
+    "time": "18:30:00",
+    "tip_type": "X",
+    "tip_odds": 4.85,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 36,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3175,
+    "time": "19:30:00",
+    "tip_type": "1",
+    "tip_odds": 1.7,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 37,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3151,
+    "time": "13:30:00",
+    "tip_type": "2",
+    "tip_odds": 1.7,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 38,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3200,
+    "time": "18:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.87,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 39,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3205,
+    "time": "14:00:00",
+    "tip_type": "2",
+    "tip_odds": 4.3,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 40,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3177,
+    "time": "16:00:00",
+    "tip_type": "2",
+    "tip_odds": 3.3,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 41,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3229,
+    "time": "15:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.05,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 42,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3244,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.02,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 43,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3258,
+    "time": "22:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.3,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 44,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3281,
+    "time": "19:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.15,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 45,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3287,
+    "time": "14:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.15,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 46,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3309,
+    "time": "19:30:00",
+    "tip_type": "1",
+    "tip_odds": 1.65,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 47,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3313,
+    "time": "21:45:00",
+    "tip_type": "1",
+    "tip_odds": 1.67,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 48,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3318,
+    "time": "21:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.12,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 49,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3321,
+    "time": "20:15:00",
+    "tip_type": "1",
+    "tip_odds": 2.65,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 50,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3327,
+    "time": "21:45:00",
+    "tip_type": "1",
+    "tip_odds": 2.25,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 51,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3328,
+    "time": "14:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.83,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 52,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3336,
+    "time": "21:45:00",
+    "tip_type": "1",
+    "tip_odds": 1.95,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 53,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3294,
+    "time": "16:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.85,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 54,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3296,
+    "time": "21:45:00",
+    "tip_type": "2 & Over 2.5",
+    "tip_odds": 4.85,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 55,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3349,
+    "time": "21:00:00",
+    "tip_type": "1",
+    "tip_odds": 3.15,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 56,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3439,
+    "time": "16:30:00",
+    "tip_type": "1",
+    "tip_odds": 1.9,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 57,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3400,
+    "time": "21:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.8,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 58,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3493,
+    "time": "19:30:00",
+    "tip_type": "1",
+    "tip_odds": 1.97,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 59,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3423,
+    "time": "22:00:00",
+    "tip_type": "DC 1X",
+    "tip_odds": 2.02,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 60,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3416,
+    "time": "17:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.15,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 61,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3441,
+    "time": "16:30:00",
+    "tip_type": "1",
+    "tip_odds": 1.9,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 62,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3490,
+    "time": "21:45:00",
+    "tip_type": "Over 2.5",
+    "tip_odds": 1.8,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 63,
+  "fields": {
+    "tipster": "Krok",
+    "game": 3523,
+    "time": "17:00:00",
+    "tip_type": "Over 2.5",
+    "tip_odds": 1.9,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 64,
+  "fields": {
+    "tipster": "Krok",
+    "game": 3527,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.5,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 65,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3523,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.75,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 66,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3527,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.45,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 67,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3526,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.95,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 68,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3528,
+    "time": "19:30:00",
+    "tip_type": "1",
+    "tip_odds": 4.3,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 69,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3575,
+    "time": "16:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.2,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 70,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3591,
+    "time": "14:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.25,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 71,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3585,
+    "time": "16:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.65,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 72,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3667,
+    "time": "17:45:00",
+    "tip_type": "X",
+    "tip_odds": 3.65,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 73,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3659,
+    "time": "21:00:00",
+    "tip_type": "DC X2",
+    "tip_odds": 2.3,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 74,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3660,
+    "time": "19:30:00",
+    "tip_type": "2",
+    "tip_odds": 2.87,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 75,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3665,
+    "time": "15:30:00",
+    "tip_type": "2",
+    "tip_odds": 3.5,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 76,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3533,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.75,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 77,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3604,
+    "time": "14:30:00",
+    "tip_type": "1",
+    "tip_odds": 1.75,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 78,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3678,
+    "time": "18:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.85,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 79,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3767,
+    "time": "21:45:00",
+    "tip_type": "2",
+    "tip_odds": 2.05,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 80,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3826,
+    "time": "16:00:00",
+    "tip_type": "2",
+    "tip_odds": 5.5,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 81,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3832,
+    "time": "21:45:00",
+    "tip_type": "2",
+    "tip_odds": 2.3,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 82,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3770,
+    "time": "21:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.2,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 83,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3753,
+    "time": "16:05:00",
+    "tip_type": "1",
+    "tip_odds": 3.8,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 84,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3929,
+    "time": "19:30:00",
+    "tip_type": "1",
+    "tip_odds": 2.1,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 85,
+  "fields": {
+    "tipster": "Krok",
+    "game": 3748,
+    "time": "17:00:00",
+    "tip_type": "Over 2.5",
+    "tip_odds": 1.85,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 86,
+  "fields": {
+    "tipster": "Krok",
+    "game": 3756,
+    "time": "22:00:00",
+    "tip_type": "Over 2.5",
+    "tip_odds": 1.7,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 87,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3835,
+    "time": "13:30:00",
+    "tip_type": "2",
+    "tip_odds": 1.8,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 88,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3839,
+    "time": "16:00:00",
+    "tip_type": "2",
+    "tip_odds": 1.75,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 89,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3780,
+    "time": "21:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.25,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 90,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3880,
+    "time": "15:30:00",
+    "tip_type": "1",
+    "tip_odds": 2.0,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 91,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3882,
+    "time": "15:30:00",
+    "tip_type": "2",
+    "tip_odds": 2.0,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 92,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3729,
+    "time": "21:30:00",
+    "tip_type": "1",
+    "tip_odds": 3.8,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 93,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3759,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.25,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 94,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3804,
+    "time": "18:30:00",
+    "tip_type": "1",
+    "tip_odds": 3.3,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 95,
+  "fields": {
+    "tipster": "Krok",
+    "game": 3765,
+    "time": "18:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.6,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 96,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3905,
+    "time": "20:15:00",
+    "tip_type": "X",
+    "tip_odds": 3.1,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 97,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 3908,
+    "time": "18:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.3,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 98,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4065,
+    "time": "16:30:00",
+    "tip_type": "1",
+    "tip_odds": 2.37,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 99,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 3968,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.4,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 100,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4118,
+    "time": "22:30:00",
+    "tip_type": "2",
+    "tip_odds": 2.3,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 101,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4097,
+    "time": "16:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.75,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 102,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3993,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.9,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 103,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3997,
+    "time": "14:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.1,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 104,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 4048,
+    "time": "16:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.2,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 105,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 3962,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.8,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 106,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4070,
+    "time": "16:30:00",
+    "tip_type": "1",
+    "tip_odds": 2.05,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 107,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4072,
+    "time": "16:30:00",
+    "tip_type": "1",
+    "tip_odds": 2.6,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 108,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 4075,
+    "time": "16:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.6,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 109,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4090,
+    "time": "16:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.8,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 110,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4028,
+    "time": "22:00:00",
+    "tip_type": "2",
+    "tip_odds": 2.0,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 111,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4139,
+    "time": "20:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.72,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 112,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4140,
+    "time": "17:45:00",
+    "tip_type": "2",
+    "tip_odds": 3.8,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 113,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4008,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.1,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 114,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4599,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.1,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 115,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4641,
+    "time": "16:30:00",
+    "tip_type": "1",
+    "tip_odds": 2.02,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 116,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4624,
+    "time": "16:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.97,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 117,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 4605,
+    "time": "18:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.45,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 118,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4606,
+    "time": "22:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.4,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 119,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4619,
+    "time": "13:30:00",
+    "tip_type": "1",
+    "tip_odds": 3.05,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 120,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4662,
+    "time": "19:30:00",
+    "tip_type": "2",
+    "tip_odds": 3.9,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 121,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4611,
+    "time": "17:00:00",
+    "tip_type": "2",
+    "tip_odds": 2.7,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 122,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4613,
+    "time": "19:30:00",
+    "tip_type": "2",
+    "tip_odds": -13.35,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 123,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4610,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.22,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 124,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4666,
+    "time": "14:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.6,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 125,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4670,
+    "time": "13:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.7,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 126,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4673,
+    "time": "21:45:00",
+    "tip_type": "1",
+    "tip_odds": 3.85,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 127,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4674,
+    "time": "22:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.08,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 128,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4650,
+    "time": "16:30:00",
+    "tip_type": "1",
+    "tip_odds": 2.63,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 129,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4651,
+    "time": "16:30:00",
+    "tip_type": "1",
+    "tip_odds": 2.3,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 130,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4611,
+    "time": "17:00:00",
+    "tip_type": "2 & Under 2.5",
+    "tip_odds": 5.0,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 131,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 4674,
+    "time": "22:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.3,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 132,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4673,
+    "time": "21:45:00",
+    "tip_type": "DC 1X",
+    "tip_odds": 2.05,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 133,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4628,
+    "time": "19:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.8,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 134,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4608,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.05,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 135,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4630,
+    "time": "21:45:00",
+    "tip_type": "2",
+    "tip_odds": 1.75,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 136,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4705,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.7,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 137,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4706,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.8,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 138,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4707,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.9,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 139,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 4738,
+    "time": "13:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.15,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 140,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4739,
+    "time": "17:15:00",
+    "tip_type": "2",
+    "tip_odds": 2.35,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 141,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4741,
+    "time": "21:45:00",
+    "tip_type": "2",
+    "tip_odds": 3.05,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 142,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4679,
+    "time": "16:30:00",
+    "tip_type": "1",
+    "tip_odds": 2.25,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 143,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4675,
+    "time": "21:30:00",
+    "tip_type": "1",
+    "tip_odds": 2.4,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 144,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4715,
+    "time": "21:45:00",
+    "tip_type": "1",
+    "tip_odds": 2.45,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 145,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4721,
+    "time": "20:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.75,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 146,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 4717,
+    "time": "16:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.45,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 147,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4717,
+    "time": "16:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.05,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 148,
+  "fields": {
+    "tipster": "Krok",
+    "game": 4754,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.6,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 149,
+  "fields": {
+    "tipster": "Krok",
+    "game": 4758,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.28,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 150,
+  "fields": {
+    "tipster": "Krok",
+    "game": 4761,
+    "time": "16:15:00",
+    "tip_type": "1",
+    "tip_odds": 1.3,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 151,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4747,
+    "time": "21:45:00",
+    "tip_type": "1",
+    "tip_odds": 1.75,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 152,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4744,
+    "time": "14:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.05,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 153,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4750,
+    "time": "19:30:00",
+    "tip_type": "1",
+    "tip_odds": 3.35,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 154,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4692,
+    "time": "19:00:00",
+    "tip_type": "Over 2.5",
+    "tip_odds": 2.12,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 155,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4692,
+    "time": "19:00:00",
+    "tip_type": "1 & Over 2.5",
+    "tip_odds": 3.3,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 156,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4727,
+    "time": "16:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.05,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 157,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 4730,
+    "time": "21:45:00",
+    "tip_type": "X",
+    "tip_odds": 4.2,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 158,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4759,
+    "time": "19:30:00",
+    "tip_type": "2",
+    "tip_odds": 2.8,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 159,
+  "fields": {
+    "tipster": "Krok",
+    "game": 4837,
+    "time": "17:30:00",
+    "tip_type": "DC X2",
+    "tip_odds": 2.6,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 160,
+  "fields": {
+    "tipster": "Krok",
+    "game": 4833,
+    "time": "17:00:00",
+    "tip_type": "2",
+    "tip_odds": 2.2,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 161,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4831,
+    "time": "14:30:00",
+    "tip_type": "1",
+    "tip_odds": 1.87,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 162,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4836,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.75,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 163,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4840,
+    "time": "22:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.75,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 164,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4833,
+    "time": "17:00:00",
+    "tip_type": "2",
+    "tip_odds": 3.25,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 165,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4812,
+    "time": "17:15:00",
+    "tip_type": "1",
+    "tip_odds": 2.22,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 166,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4813,
+    "time": "19:30:00",
+    "tip_type": "2",
+    "tip_odds": 2.55,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 167,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 4798,
+    "time": "16:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.8,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 168,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4799,
+    "time": "19:00:00",
+    "tip_type": "2",
+    "tip_odds": 2.63,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 169,
+  "fields": {
+    "tipster": "Krok",
+    "game": 4833,
+    "time": "17:00:00",
+    "tip_type": "2",
+    "tip_odds": 3.25,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 170,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 4906,
+    "time": "16:00:00",
+    "tip_type": "2",
+    "tip_odds": 3.45,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 171,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 4863,
+    "time": "16:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.45,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 172,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 5068,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.87,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 173,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 5021,
+    "time": "16:30:00",
+    "tip_type": "1",
+    "tip_odds": 1.75,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 174,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 5056,
+    "time": "22:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.22,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 175,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 5079,
+    "time": "17:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.2,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 176,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 5080,
+    "time": "17:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.0,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 177,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 5089,
+    "time": "16:30:00",
+    "tip_type": "X",
+    "tip_odds": 4.0,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 178,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 5090,
+    "time": "16:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.55,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 179,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 5092,
+    "time": "16:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.55,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 180,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 5098,
+    "time": "16:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.45,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 181,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 5101,
+    "time": "19:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.7,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 182,
+  "fields": {
+    "tipster": "Mr X",
+    "game": 5099,
+    "time": "16:30:00",
+    "tip_type": "X",
+    "tip_odds": 3.55,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 183,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 5129,
+    "time": "16:00:00",
+    "tip_type": "2",
+    "tip_odds": 2.85,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 184,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 5126,
+    "time": "19:00:00",
+    "tip_type": "2",
+    "tip_odds": 3.3,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 185,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 5132,
+    "time": "19:00:00",
+    "tip_type": "1",
+    "tip_odds": 2.35,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 186,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 5104,
+    "time": "21:30:00",
+    "tip_type": "1",
+    "tip_odds": 2.5,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 187,
+  "fields": {
+    "tipster": "The Bomber",
+    "game": 5149,
+    "time": "21:45:00",
+    "tip_type": "2",
+    "tip_odds": 2.02,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 188,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 5254,
+    "time": "17:00:00",
+    "tip_type": "1",
+    "tip_odds": 1.83,
+    "tip_status": "Success"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 189,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 5257,
+    "time": "17:00:00",
+    "tip_type": "X",
+    "tip_odds": 3.3,
+    "tip_status": "Fail"
+  }
+},
+{
+  "model": "predictions.tip",
+  "pk": 190,
+  "fields": {
+    "tipster": "Alesantro",
+    "game": 5294,
+    "time": "16:00:00",
+    "tip_type": "2",
+    "tip_odds": 2.8,
+    "tip_status": "Success"
+  }
+}
+]

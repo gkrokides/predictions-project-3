@@ -1,0 +1,162 @@
+[
+{
+  "model": "predictions.season",
+  "pk": 1,
+  "fields": {
+    "start_date": "2016-08-20",
+    "end_date": "2017-08-20",
+    "league": "CYP1",
+    "teamstotal": 14
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 2,
+  "fields": {
+    "start_date": "2016-08-26",
+    "end_date": "2017-05-20",
+    "league": "GER1",
+    "teamstotal": 18
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 3,
+  "fields": {
+    "start_date": "2016-08-20",
+    "end_date": "2017-05-28",
+    "league": "ITA1",
+    "teamstotal": 20
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 4,
+  "fields": {
+    "start_date": "2016-08-12",
+    "end_date": "2017-05-20",
+    "league": "FRA1",
+    "teamstotal": 20
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 5,
+  "fields": {
+    "start_date": "2016-08-19",
+    "end_date": "2017-05-21",
+    "league": "ESP1",
+    "teamstotal": 20
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 6,
+  "fields": {
+    "start_date": "2016-08-13",
+    "end_date": "2017-05-21",
+    "league": "ENG1",
+    "teamstotal": 20
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 7,
+  "fields": {
+    "start_date": "2016-08-12",
+    "end_date": "2017-05-21",
+    "league": "POR1",
+    "teamstotal": 18
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 8,
+  "fields": {
+    "start_date": "2016-08-05",
+    "end_date": "2017-05-21",
+    "league": "GER2",
+    "teamstotal": 18
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 9,
+  "fields": {
+    "start_date": "2016-07-29",
+    "end_date": "2017-05-19",
+    "league": "FRA2",
+    "teamstotal": 20
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 10,
+  "fields": {
+    "start_date": "2016-08-05",
+    "end_date": "2017-05-14",
+    "league": "NLD1",
+    "teamstotal": 18
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 11,
+  "fields": {
+    "start_date": "2016-08-26",
+    "end_date": "2017-05-19",
+    "league": "ITA2",
+    "teamstotal": 22
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 12,
+  "fields": {
+    "start_date": "2016-07-29",
+    "end_date": "2017-03-12",
+    "league": "BEL1",
+    "teamstotal": 16
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 13,
+  "fields": {
+    "start_date": "2017-08-11",
+    "end_date": "2018-05-13",
+    "league": "ENG1",
+    "teamstotal": 20
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 14,
+  "fields": {
+    "start_date": "2017-08-18",
+    "end_date": "2018-05-12",
+    "league": "GER1",
+    "teamstotal": 18
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 15,
+  "fields": {
+    "start_date": "2017-08-19",
+    "end_date": "2018-05-20",
+    "league": "ITA1",
+    "teamstotal": 20
+  }
+},
+{
+  "model": "predictions.season",
+  "pk": 16,
+  "fields": {
+    "start_date": "2017-08-18",
+    "end_date": "2018-05-20",
+    "league": "ESP1",
+    "teamstotal": 20
+  }
+}
+]

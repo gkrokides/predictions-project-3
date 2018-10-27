@@ -2174,16 +2174,19 @@ def betslips_by_tipster(request, tipster):
     season_ends_full = ValueSortedDict(season_ends_full, reverse=True)
     current_end_year = season_ends[0]
     betslips = Betslip.objects.filter(slug=tipster).exclude(tips__game__season__end_date__year__lt=current_end_year).exclude(tips__game__season__end_date__year__gt=current_end_year).order_by('-created_date')
-    betslips_cnt = Betslip.objects.all().count()
+    # betslips_cnt = Betslip.objects.all().count()
+    betslips_cnt = Betslip.objects.exclude(tips__game__season__end_date__year__lt=current_end_year).exclude(tips__game__season__end_date__year__gt=current_end_year).order_by('-created_date').count()
     selected_tipster = Betslip.objects.filter(slug=tipster)[0].betslip_tipster
     tipsters = Betslip.objects.order_by('betslip_tipster').values_list('betslip_tipster', flat=True).distinct()
     if request.method == "POST":
         if request.POST.get('seasonends') == 'no selection':
             current_end_year = current_end_year
+
         else:
             current_end_year = request.POST.get('seasonends')
-            betslips = Betslip.objects.filter(slug=tipster).exclude(tips__game__season__end_date__year__lt=current_end_year).exclude(tips__game__season__end_date__year__gt=current_end_year).order_by('-created_date')
-            betslips_cnt = betslips.count()
+            # betslips = Betslip.objects.filter(slug=tipster).exclude(tips__game__season__end_date__year__lt=current_end_year).exclude(tips__game__season__end_date__year__gt=current_end_year).order_by('-created_date')
+            # betslips_cnt = betslips.count()
+            betslips_cnt = Betslip.objects.exclude(tips__game__season__end_date__year__lt=current_end_year).exclude(tips__game__season__end_date__year__gt=current_end_year).order_by('-created_date').count()
     x = {}
     y = []
     for t in tipsters:
