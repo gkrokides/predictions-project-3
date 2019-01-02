@@ -150,7 +150,7 @@ def h2h(request, pk):
         try:
             aelos = away_elos[g]
         except IndexError:
-            aelos = away_elos[g-1]
+            aelos = away_elos[-1] #return the last value of the list
         templist = [gweeks[g], home_elos[g], aelos]
         chart_data.append(templist)
     # gweeks = []

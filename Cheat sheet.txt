@@ -1,0 +1,42 @@
+Cheat sheet
+
+To create an ERD of the database:
+-----------------
+Step 1: Install django-extensions and graphviz. Run the below (note I added the "--user" because I was getting errors before but you might not need to)
+
+ "pip install --user django-extensions && pip install --user graphviz
+-----------------
+Step 2: Add django_extensions to settings.py"
+
+INSTALLED_APPS = [
+    ...
+    'django_extensions',
+    ...
+]
+-----------------
+Step 3 Create the .dot output and convert to .png
+
+Run manage.py graph_models from the environment you may normally use:
+
+"python manage.py graph_models -a > output.dot" 
+
+Note, I need to run "python manage.py graph_models -a > output.dot --setting=predictions_project.settings.local"
+
+------------------
+From your mac, change the format to png using graphviz"
+
+"brew install graphviz"
+"dot -Tpng output.dot -o output.png"
+
+------------------
+source: https://wadewilliams.com/technology-software/generating-erd-for-django-applications/
+
+**************************************************************
+**************************************************************
+**************************************************************
+
+To run the local server using the local settings:
+--------------------------------
+
+python manage.py runserver --settings=predictions_project.settings.local
+
