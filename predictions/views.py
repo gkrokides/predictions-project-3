@@ -2208,3 +2208,48 @@ def betslips_by_tipster(request, tipster):
                                                                     'season_ends': season_ends, 'season_ends_full': season_ends_full,
                                                                     'current_end_year': current_end_year,
                                                                     'current_end_year_for_title': current_end_year_for_title, 'tipster': tipster})
+
+def smleaguedata(request):
+    # API call to get data for selected league (by Id) from sportmonks
+
+    import requests
+    import json
+    from predictions_project.settings import production
+    #from django.conf import settings
+    
+
+    http1 = 'https://soccer.sportmonks.com/api/v2.0/leagues/'
+    leagueID = str(181)
+    http2 = '?api_token='
+    if production.sm_API == '':
+        from predictions_project.settings import local
+        api_token = local.sm_API
+    else:
+        api_token = production.sm_API    
+    http3 = '&include=country,season'
+
+    requestString = http1+leagueID+http2+api_token+http3
+
+    # response = requests.get("https://soccer.sportmonks.com/api/v2.0/leagues/181?api_token=UtfTQXmWeltdNWnWsL53IbP3t7YDyezdR0fMuVbAl9gk9ErXbJOyxQJAEVGB&include=country,season")
+    response = requests.get(requestString)
+
+    smleague = response.json()
+    leaguesJson = json.dumps(smleague, sort_keys=True, indent=4)
+    leaguesDict = json.loads(leaguesJson)
+    smleague_data = {}
+    # populate the dict to be used to update the sm_League database table
+    smleague_data['league_id'] = leaguesDict['data']['id']
+    smleague_data['legacy_id'] = leaguesDict['data']['legacy_id']
+    smleague_data['name'] = leaguesDict['data']['name']
+    smleague_data['country_id'] = leaguesDict['data']['country_id']
+    smleague_data['is_cup'] = leaguesDict['data']['is_cup']
+    smleague_data['live_standings'] = leaguesDict['data']['live_standings']
+    smleague_data['topscorer_goals'] = leaguesDict['data']['coverage']['topscorer_goals']
+    smleague_data['topscorer_assists'] = leaguesDict['data']['coverage']['topscorer_assists']
+    smleague_data['topscorer_cards'] = leaguesDict['data']['coverage']['topscorer_cards']
+
+    return render(request, 'predictions/smleaguedata.html', {'leaguesDict': leaguesDict,
+        'response': response, 'smleague_data': smleague_data})
+
+
+

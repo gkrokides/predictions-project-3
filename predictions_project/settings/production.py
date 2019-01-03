@@ -161,3 +161,6 @@ EMAIL_HOST_USER = 'georgekrokides@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS', '')
 EMAIL_PORT = 587
 # EMAIL_USE_SSL = True
+
+#sportmonks
+sm_API = ''
