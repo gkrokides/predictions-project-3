@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 # API call to get data for selected league (by Id) from sportmonks and convert it to dict
 def SMcall_LeagueById(leagueId):
     import requests
@@ -25,7 +27,6 @@ def SMcall_LeagueById(leagueId):
 
     # populate the dict to be used to update the smLeague database table
     smleague_data['league_id'] = leaguesDict['data']['id']
-    smleague_data['legacy_id'] = leaguesDict['data']['legacy_id']
     smleague_data['name'] = leaguesDict['data']['name']
     smleague_data['country_id'] = leaguesDict['data']['country_id']
     smleague_data['is_cup'] = leaguesDict['data']['is_cup']
@@ -130,7 +131,6 @@ def SMcall_TeamById(Id):
     db_data['team_id'] = smDict['data']['id']
     db_data['name'] = smDict['data']['name']
     db_data['short_code'] = smDict['data']['short_code']
-    db_data['twitter'] = smDict['data']['twitter']
     db_data['country_id'] = smDict['data']['country_id']
     db_data['founded'] = smDict['data']['founded']
     db_data['logo_path'] = smDict['data']['logo_path']
@@ -165,6 +165,8 @@ def SMcall_FixtureById(Id):
     # populate the dict to be used to update the smFixture database table
     db_data['fixture_id'] = smDict['data']['id']
     db_data['season'] = smDict['data']['season_id']
+    db_data['hometeam'] = smDict['data']['localteam_id']
+    db_data['awayteam'] = smDict['data']['visitorteam_id']
     db_data['weather_code'] = smDict['data']['weather_report']['code']
     db_data['weather_type'] = smDict['data']['weather_report']['type']
     db_data['weather_icon'] = smDict['data']['weather_report']['icon']
@@ -197,3 +199,42 @@ def SMcall_FixtureById(Id):
     db_data['away_coach_image'] = smDict['data']['visitorCoach']['data']['image_path']
 
     return db_data
+
+# API call to get data for all countries (in your plan i think) from sportmonks and convert it to dict
+def SMcall_allCountries():
+    import requests
+    import json
+    from predictions_project.settings import production
+
+    http1 = 'https://soccer.sportmonks.com/api/v2.0/countries?api_token='
+    if production.sm_API == '':
+        from predictions_project.settings import local
+        api_token = local.sm_API
+    else:
+        api_token = production.sm_API
+
+    requestString = http1+api_token
+
+    response = requests.get(requestString)
+
+    smResponse = response.json()
+    smJson = json.dumps(smResponse, sort_keys=True, indent=4)
+    smDict = json.loads(smJson)
+    final_list = []
+
+    # populate the list of dicts to be used to update the smCountry database table
+    for i in range(0, len(smDict['data'])):
+        try:
+            final_list.append({
+                'country_id': smDict['data'][i]['id'],
+                'name': smDict['data'][i]['name'],
+                'continent': smDict['data'][i]['extra']['continent'],
+                'fifa_code': smDict['data'][i]['extra']['fifa'],
+                'iso_code': smDict['data'][i]['extra']['iso'],
+                'flag': smDict['data'][i]['extra']['flag']
+                })
+        except TypeError as er:
+            print 'Warning:' + smDict['data'][i]['name'] + ' is missing one or more values and has been excluded.'  
+
+    return final_list
+

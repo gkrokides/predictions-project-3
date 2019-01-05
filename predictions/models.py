@@ -10,6 +10,7 @@ from predictions_project import elosettings
 from operator import itemgetter
 from django.utils.text import slugify
 import itertools
+from django.utils.encoding import python_2_unicode_compatible
 
 
 class Leagues(models.Model):
@@ -2989,3 +2990,112 @@ class Betslip(models.Model):
             self.betslip_status = 'Pending'
         self.profit = self.betslip_profit()
         super(Betslip, self).save(*args, **kwargs)
+
+# SportMonks tables
+@python_2_unicode_compatible
+class CountrySM(models.Model):
+    country_id = models.IntegerField(unique=True, primary_key=True)
+    name = models.CharField(max_length=200)
+    continent = models.CharField(max_length=200, null=True, blank=True)
+    fifa_code = models.CharField(max_length=200, null=True, blank=True)
+    iso_code = models.CharField(max_length=200, null=True, blank=True)
+    flag = models.TextField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = "SM Country"
+        verbose_name_plural = "SM Countries"
+
+    def __str__(self):
+        return self.name
+
+class LeagueSM(models.Model):
+    league_id = models.IntegerField(unique=True, primary_key=True)
+    name = models.CharField(max_length=100)
+    country_id = models.ForeignKey('CountrySM', null=True)
+    is_cup = models.CharField(max_length=200, null=True, blank=True)
+    live_standings = models.CharField(max_length=200, null=True, blank=True)
+    topscorer_goals = models.CharField(max_length=200, null=True, blank=True)
+    topscorer_assists = models.CharField(max_length=200, null=True, blank=True)
+    topscorer_cards = models.CharField(max_length=200, null=True, blank=True)
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = "SM League"
+        verbose_name_plural = "SM Leagues"
+
+    def __str__(self):
+        return self.name                
+
+class SeasonSM(models.Model):
+    season_id = models.IntegerField(unique=True, primary_key=True)
+    name = models.CharField(max_length=100)
+    league = models.ForeignKey('LeagueSM', null=True)
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = "SM Season"
+        verbose_name_plural = "SM Seasons"
+
+    def __str__(self):
+        return "(id: " + str(self.season_id) + ") " + str(self.name)
+
+class TeamSM(models.Model):
+    team_id = models.IntegerField(unique=True, primary_key=True)
+    name = models.CharField(max_length=100)
+    short_code = models.CharField(max_length=200, null=True, blank=True)
+    country_id = models.ForeignKey('CountrySM', null=True)
+    founded = models.IntegerField(null=True)
+    logo_path = models.TextField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = "SM Team"
+        verbose_name_plural = "SM Teams"
+
+    def __str__(self):
+        return self.name           
+
+class FixtureSM(models.Model):
+    fixture_id = models.IntegerField(unique=True, primary_key=True)
+    season = models.ForeignKey('SeasonSM', null=True)
+    hometeam = models.ForeignKey('TeamSM', null=True, related_name='hometeam')
+    awayteam = models.ForeignKey('TeamSM', null=True, related_name='awayteam')
+    weather_code = models.CharField(max_length=200, null=True, blank=True)
+    weather_type = models.CharField(max_length=200, null=True, blank=True)
+    weather_icon = models.TextField(null=True, blank=True)
+    attendance = models.IntegerField(null=True)
+    pitch_status = models.CharField(max_length=200, null=True, blank=True)
+    home_formation = models.CharField(max_length=200, null=True, blank=True)
+    away_formation = models.CharField(max_length=200, null=True, blank=True)
+    home_goals = models.IntegerField(null=True)
+    away_goals = models.IntegerField(null=True)
+    ht_score = models.CharField(max_length=200, null=True, blank=True)
+    ft_score = models.CharField(max_length=200, null=True, blank=True)
+    match_status = models.CharField(max_length=200, null=True, blank=True)
+    match_date = models.CharField(max_length=200, null=True, blank=True)
+    match_time = models.CharField(max_length=200, null=True, blank=True)
+    gameweek = models.IntegerField(null=True)
+    stage = models.CharField(max_length=200, null=True, blank=True)
+    venue_name = models.CharField(max_length=200, null=True, blank=True)
+    venue_surface = models.CharField(max_length=200, null=True, blank=True)
+    venue_city = models.CharField(max_length=200, null=True, blank=True)
+    venue_capacity = models.IntegerField(null=True)
+    venue_image = models.TextField(null=True)
+    odds_1 = models.FloatField(null=True, blank=True)
+    odds_x = models.FloatField(null=True, blank=True)
+    odds_2 = models.FloatField(null=True, blank=True)
+    home_coach = models.CharField(max_length=200, null=True, blank=True)
+    home_coach_nationality = models.CharField(max_length=200, null=True, blank=True)
+    home_coach_image = models.TextField(null=True, blank=True)
+    away_coach = models.CharField(max_length=200, null=True, blank=True)
+    away_coach_nationality = models.CharField(max_length=200, null=True, blank=True)
+    away_coach_image = models.TextField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["match_date"]
+        verbose_name = "SM Fixture"
+        verbose_name_plural = "SM Fixtures"
+
+    def __str__(self):
+        return str(self.match_date) + " " + str(self.hometeam) + " vs " + str(self.awayteam)           
