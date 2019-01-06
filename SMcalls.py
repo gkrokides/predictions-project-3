@@ -241,7 +241,7 @@ def SMcall_allCountries():
                 'flag': smDict['data'][i]['extra']['flag']
                 })
         except TypeError as er:
-            print 'Warning:' + smDict['data'][i]['name'] + ' is missing one or more values and has been excluded.'  
+            print 'Warning: ' + smDict['data'][i]['name'] + ' is missing one or more values and has been excluded.'  
 
     return final_list
 
@@ -276,13 +276,16 @@ def SMcall_teamsBySeason(seasonId):
         # convert none values to empty strings so the db does not raise errors
         if smDict['data'][i]['short_code'] == None:
             short_code = ''
+            print 'Warning: ' + smDict['data'][i]['name'] + ' missing short_code'
         else:
             short_code = smDict['data'][i]['short_code']
 
         if smDict['data'][i]['logo_path'] == None:
             logo_path = ''
+            print 'Warning: ' + smDict['data'][i]['name'] + ' missing logo_path'
         else:
-            logo_path = smDict['data'][i]['logo_path']    
+            logo_path = smDict['data'][i]['logo_path']
+
 
         # populate the dict 
         try:
@@ -295,7 +298,7 @@ def SMcall_teamsBySeason(seasonId):
                 'logo_path': logo_path
                 })
         except TypeError as er:
-            print 'Warning:' + smDict['data'][i]['name'] + ' is missing one or more values and has been excluded.'  
+            print 'Serious Warning: ' + smDict['data'][i]['name'] + ' is missing one or more vital values and has been excluded.'  
 
     return final_list
 
