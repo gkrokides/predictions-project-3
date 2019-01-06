@@ -3012,7 +3012,7 @@ class CountrySM(models.Model):
 class LeagueSM(models.Model):
     league_id = models.IntegerField(unique=True, primary_key=True)
     name = models.CharField(max_length=100)
-    country_id = models.ForeignKey('CountrySM', null=True)
+    country = models.ForeignKey('CountrySM', null=True)
     is_cup = models.CharField(max_length=200, null=True, blank=True)
     live_standings = models.CharField(max_length=200, null=True, blank=True)
     topscorer_goals = models.CharField(max_length=200, null=True, blank=True)
@@ -3038,13 +3038,14 @@ class SeasonSM(models.Model):
         verbose_name_plural = "SM Seasons"
 
     def __str__(self):
-        return "(id: " + str(self.season_id) + ") " + str(self.name)
+        # return "(id: " + str(self.season_id) + ") " + str(self.name)
+        return self.league.name + " " + self.name
 
 class TeamSM(models.Model):
     team_id = models.IntegerField(unique=True, primary_key=True)
     name = models.CharField(max_length=100)
     short_code = models.CharField(max_length=200, null=True, blank=True)
-    country_id = models.ForeignKey('CountrySM', null=True)
+    country = models.ForeignKey('CountrySM', null=True)
     founded = models.IntegerField(null=True)
     logo_path = models.TextField(null=True, blank=True)
 

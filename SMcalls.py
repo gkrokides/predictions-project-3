@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from predictions.models import CountrySM, LeagueSM, SeasonSM, TeamSM, FixtureSM
 
 # API call to get data for selected league (by Id) from sportmonks and convert it to dict
 def SMcall_LeagueById(leagueId):
@@ -25,10 +26,12 @@ def SMcall_LeagueById(leagueId):
     leaguesDict = json.loads(leaguesJson)
     smleague_data = {}
 
+    countryObj = CountrySM.objects.get(pk=leaguesDict['data']['country_id'])
+
     # populate the dict to be used to update the smLeague database table
     smleague_data['league_id'] = leaguesDict['data']['id']
     smleague_data['name'] = leaguesDict['data']['name']
-    smleague_data['country_id'] = leaguesDict['data']['country_id']
+    smleague_data['country'] = countryObj
     smleague_data['is_cup'] = leaguesDict['data']['is_cup']
     smleague_data['live_standings'] = leaguesDict['data']['live_standings']
     smleague_data['topscorer_goals'] = leaguesDict['data']['coverage']['topscorer_goals']
@@ -95,10 +98,12 @@ def SMcall_SeasonById(Id):
     smDict = json.loads(smJson)
     db_data = {}
 
+    leagueObj = LeagueSM.objects.get(pk=smDict['data']['league_id'])
+
     # populate the dict to be used to update the smSeason database table
     db_data['season_id'] = smDict['data']['id']
     db_data['name'] = smDict['data']['name']
-    db_data['league'] = smDict['data']['league_id']
+    db_data['league'] = leagueObj
 
     return db_data
 
@@ -127,11 +132,13 @@ def SMcall_TeamById(Id):
     smDict = json.loads(smJson)
     db_data = {}
 
+    countryObj = CountrySM.objects.get(pk=smDict['data']['country_id'])
+
     # populate the dict to be used to update the smTeam database table
     db_data['team_id'] = smDict['data']['id']
     db_data['name'] = smDict['data']['name']
     db_data['short_code'] = smDict['data']['short_code']
-    db_data['country_id'] = smDict['data']['country_id']
+    db_data['country'] = countryObj
     db_data['founded'] = smDict['data']['founded']
     db_data['logo_path'] = smDict['data']['logo_path']
    
@@ -200,7 +207,7 @@ def SMcall_FixtureById(Id):
 
     return db_data
 
-# API call to get data for all countries (in your plan i think) from sportmonks and convert it to dict
+# API call to get data for all countries (in your plan) from sportmonks and convert it to dict
 def SMcall_allCountries():
     import requests
     import json
@@ -232,6 +239,60 @@ def SMcall_allCountries():
                 'fifa_code': smDict['data'][i]['extra']['fifa'],
                 'iso_code': smDict['data'][i]['extra']['iso'],
                 'flag': smDict['data'][i]['extra']['flag']
+                })
+        except TypeError as er:
+            print 'Warning:' + smDict['data'][i]['name'] + ' is missing one or more values and has been excluded.'  
+
+    return final_list
+
+# API call to get the teams for the selected season from sportmonks and convert it to dict
+def SMcall_teamsBySeason(seasonId):
+    import requests
+    import json
+    from predictions_project.settings import production
+
+    http1 = 'https://soccer.sportmonks.com/api/v2.0/teams/season/'
+    http2 = str(seasonId)
+    http3 = '?api_token='
+    if production.sm_API == '':
+        from predictions_project.settings import local
+        api_token = local.sm_API
+    else:
+        api_token = production.sm_API
+
+    requestString = http1 + http2 + http3 + api_token
+
+    response = requests.get(requestString)
+
+    smResponse = response.json()
+    smJson = json.dumps(smResponse, sort_keys=True, indent=4)
+    smDict = json.loads(smJson)
+    final_list = []
+
+    # populate the list of dicts to be used to update the smCountry database table
+    for i in range(0, len(smDict['data'])):
+        countryObj = CountrySM.objects.get(pk=smDict['data'][i]['country_id'])
+        
+        # convert none values to empty strings so the db does not raise errors
+        if smDict['data'][i]['short_code'] == None:
+            short_code = ''
+        else:
+            short_code = smDict['data'][i]['short_code']
+
+        if smDict['data'][i]['logo_path'] == None:
+            logo_path = ''
+        else:
+            logo_path = smDict['data'][i]['logo_path']    
+
+        # populate the dict 
+        try:
+            final_list.append({
+                'team_id': smDict['data'][i]['id'],
+                'name': smDict['data'][i]['name'],
+                'short_code': short_code,    
+                'country': countryObj,
+                'founded': smDict['data'][i]['founded'],
+                'logo_path': logo_path
                 })
         except TypeError as er:
             print 'Warning:' + smDict['data'][i]['name'] + ' is missing one or more values and has been excluded.'  
