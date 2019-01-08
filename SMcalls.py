@@ -282,20 +282,6 @@ def SMcall_allCountries():
             'flag': flag
             })
 
-    # # populate the list of dicts to be used to update the smCountry database table
-    # for i in range(0, len(smDict['data'])):
-    #     try:
-    #         final_list.append({
-    #             'country_id': smDict['data'][i]['id'],
-    #             'name': smDict['data'][i]['name'],
-    #             'continent': smDict['data'][i]['extra']['continent'],
-    #             'fifa_code': smDict['data'][i]['extra']['fifa'],
-    #             'iso_code': smDict['data'][i]['extra']['iso'],
-    #             'flag': smDict['data'][i]['extra']['flag']
-    #             })
-    #     except TypeError as er:
-    #         print 'Warning: ' + smDict['data'][i]['name'] + ' is missing one or more values and has been excluded.'  
-
     return final_list
 
 # API call to get the teams for the selected season from sportmonks and convert it to dict
