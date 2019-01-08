@@ -67,10 +67,29 @@ def SMcall_CountryById(Id):
     # populate the dict to be used to update the smCountry database table
     db_data['country_id'] = smDict['data']['id']
     db_data['name'] = smDict['data']['name']
-    db_data['continent'] = smDict['data']['extra']['continent']
-    db_data['fifa_code'] = smDict['data']['extra']['fifa']
-    db_data['iso_code'] = smDict['data']['extra']['iso']
-    db_data['flag'] = smDict['data']['extra']['flag']
+    try:
+        db_data['continent'] = smDict['data']['extra']['continent']
+    except TypeError as er:
+        db_data['continent'] = ''
+        print 'Warning: ' + smDict['data']['name'] + ' is missing the continent.'
+
+    try:        
+        db_data['fifa_code'] = smDict['data']['extra']['fifa']
+    except TypeError as er:
+        db_data['fifa_code'] = ''
+        print 'Warning: ' + smDict['data']['name'] + ' is missing the fifa_code.'
+            
+    try:
+        db_data['iso_code'] = smDict['data']['extra']['iso']
+    except TypeError as er:
+        db_data['iso_code'] = ''
+        print 'Warning: ' + smDict['data']['name'] + ' is missing the iso_code.'
+
+    try:        
+        db_data['flag'] = smDict['data']['extra']['flag']
+    except TypeError as er:
+        db_data['flag'] = ''
+        print 'Warning: ' + smDict['data']['name'] + ' is missing the flag.'
 
     return db_data
 
@@ -229,19 +248,53 @@ def SMcall_allCountries():
     smDict = json.loads(smJson)
     final_list = []
 
-    # populate the list of dicts to be used to update the smCountry database table
     for i in range(0, len(smDict['data'])):
         try:
-            final_list.append({
-                'country_id': smDict['data'][i]['id'],
-                'name': smDict['data'][i]['name'],
-                'continent': smDict['data'][i]['extra']['continent'],
-                'fifa_code': smDict['data'][i]['extra']['fifa'],
-                'iso_code': smDict['data'][i]['extra']['iso'],
-                'flag': smDict['data'][i]['extra']['flag']
-                })
+            continent = smDict['data'][i]['extra']['continent']
         except TypeError as er:
-            print 'Warning: ' + smDict['data'][i]['name'] + ' is missing one or more values and has been excluded.'  
+            continent = ''
+            print 'Warning: ' + smDict['data'][i]['name'] + ' is missing the continent.'
+
+        try:
+            fifa = smDict['data'][i]['extra']['fifa']
+        except TypeError as er:
+            fifa = ''
+            print 'Warning: ' + smDict['data'][i]['name'] + ' is missing the fifa_code.'
+
+        try:
+            iso = smDict['data'][i]['extra']['iso']
+        except TypeError as er:
+            iso = ''
+            print 'Warning: ' + smDict['data'][i]['name'] + ' is missing the iso_code.'
+        
+        try:
+            flag = smDict['data'][i]['extra']['flag']
+        except TypeError as er:
+            flag = ''
+            print 'Warning: ' + smDict['data'][i]['name'] + ' is missing the flag.'            
+
+        final_list.append({
+            'country_id': smDict['data'][i]['id'],
+            'name': smDict['data'][i]['name'],
+            'continent': continent,
+            'fifa_code': fifa,
+            'iso_code': iso,
+            'flag': flag
+            })
+
+    # # populate the list of dicts to be used to update the smCountry database table
+    # for i in range(0, len(smDict['data'])):
+    #     try:
+    #         final_list.append({
+    #             'country_id': smDict['data'][i]['id'],
+    #             'name': smDict['data'][i]['name'],
+    #             'continent': smDict['data'][i]['extra']['continent'],
+    #             'fifa_code': smDict['data'][i]['extra']['fifa'],
+    #             'iso_code': smDict['data'][i]['extra']['iso'],
+    #             'flag': smDict['data'][i]['extra']['flag']
+    #             })
+    #     except TypeError as er:
+    #         print 'Warning: ' + smDict['data'][i]['name'] + ' is missing one or more values and has been excluded.'  
 
     return final_list
 

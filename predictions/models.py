@@ -3020,12 +3020,12 @@ class LeagueSM(models.Model):
     topscorer_cards = models.CharField(max_length=200, null=True, blank=True)
 
     class Meta:
-        ordering = ["name"]
+        ordering = ["country__name"]
         verbose_name = "SM League"
         verbose_name_plural = "SM Leagues"
 
     def __str__(self):
-        return self.name                
+        return self.country.name + ' ' + self.name                
 
 class SeasonSM(models.Model):
     season_id = models.IntegerField(unique=True, primary_key=True)
@@ -3033,13 +3033,13 @@ class SeasonSM(models.Model):
     league = models.ForeignKey('LeagueSM', null=True)
 
     class Meta:
-        ordering = ["name"]
+        ordering = ["league__country__name"]
         verbose_name = "SM Season"
         verbose_name_plural = "SM Seasons"
 
     def __str__(self):
         # return "(id: " + str(self.season_id) + ") " + str(self.name)
-        return self.league.name + " " + self.name
+        return self.league.country.name + ' ' + self.league.name + " " + self.name
 
 class TeamSM(models.Model):
     team_id = models.IntegerField(unique=True, primary_key=True)
