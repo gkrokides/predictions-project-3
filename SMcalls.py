@@ -290,6 +290,7 @@ def SMcall_teamsBySeason(seasonId):
     import json
     from predictions_project.settings import production
 
+    # create the http address that will get me the data
     http1 = 'https://soccer.sportmonks.com/api/v2.0/teams/season/'
     http2 = str(seasonId)
     http3 = '?api_token='
@@ -298,16 +299,15 @@ def SMcall_teamsBySeason(seasonId):
         api_token = local.sm_API
     else:
         api_token = production.sm_API
-
     requestString = http1 + http2 + http3 + api_token
 
+    # get the data from the http address, convert them to json and then to dict
     response = requests.get(requestString)
-
     smResponse = response.json()
     smJson = json.dumps(smResponse, sort_keys=True, indent=4)
     smDict = json.loads(smJson)
-    final_list = []
 
+    final_list = []
     # populate the list of dicts to be used to update the smCountry database table
     for i in range(0, len(smDict['data'])):
         countryObj = CountrySM.objects.get(pk=smDict['data'][i]['country_id'])
