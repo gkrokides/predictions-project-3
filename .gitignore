@@ -5,5 +5,4 @@ db.sqlite3
 /static
 .DS_Store
 local.py
-APItest.py
 updateLeaguebyId.py
