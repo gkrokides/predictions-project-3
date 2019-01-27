@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from predictions.models import CountrySM, LeagueSM, SeasonSM, TeamSM, FixtureSM
+from predictions_project.smhelpers.emptyIfNone import emptyIfNone
 
 # API call to get data for selected league (by Id) from sportmonks and convert it to dict
 def SMcall_LeagueById(leagueId):
@@ -193,37 +194,55 @@ def SMcall_FixtureById(Id):
     db_data['season'] = smDict['data']['season_id'] # FOREIGN KEY
     db_data['hometeam'] = smDict['data']['localteam_id'] # FOREIGN KEY
     db_data['awayteam'] = smDict['data']['visitorteam_id'] # FOREIGN KEY
-    db_data['weather_code'] = smDict['data']['weather_report']['code'] # CHARFIELD
-    db_data['weather_type'] = smDict['data']['weather_report']['type'] # CHARFIELD
-    db_data['weather_icon'] = smDict['data']['weather_report']['icon'] # TEXTFIELD
-    db_data['attendance'] = smDict['data']['attendance'] # INTEGERFIELD
-    db_data['pitch_status'] = smDict['data']['pitch'] # CHARFIELD
-    db_data['home_formation'] = smDict['data']['formations']['localteam_formation'] # CHARFIELD
-    db_data['away_formation'] = smDict['data']['formations']['visitorteam_formation'] # CHARFIELD
+    if smDict['data']['weather_report'] != None:
+        db_data['weather_code'] = emptyIfNone(smDict['data']['weather_report']['code']) # CHARFIELD
+        db_data['weather_type'] = emptyIfNone(smDict['data']['weather_report']['type']) # CHARFIELD
+        db_data['weather_icon'] = emptyIfNone(smDict['data']['weather_report']['icon']) # TEXTFIELD
+    else:
+        db_data['weather_code'] = ''
+        db_data['weather_type'] = ''
+        db_data['weather_icon'] = ''   
+    db_data['attendance'] = emptyIfNone(smDict['data']['attendance']) # INTEGERFIELD
+    db_data['pitch_status'] = emptyIfNone(smDict['data']['pitch']) # CHARFIELD
+    db_data['home_formation'] = emptyIfNone(smDict['data']['formations']['localteam_formation']) # CHARFIELD
+    db_data['away_formation'] = emptyIfNone(smDict['data']['formations']['visitorteam_formation']) # CHARFIELD
     db_data['home_goals'] = smDict['data']['scores']['localteam_score'] # INTEGERFIElD
     db_data['away_goals'] = smDict['data']['scores']['visitorteam_score'] # INTEGERFIELD
-    db_data['ht_score'] = smDict['data']['scores']['ht_score'] # CHARFIELD
-    db_data['ft_score'] = smDict['data']['scores']['ft_score'] # CHARFIELD
-    db_data['match_status'] = smDict['data']['time']['status'] # CHARFIELD
+    db_data['ht_score'] = emptyIfNone(smDict['data']['scores']['ht_score']) # CHARFIELD
+    db_data['ft_score'] = emptyIfNone(smDict['data']['scores']['ft_score']) # CHARFIELD
+    db_data['match_status'] = emptyIfNone(smDict['data']['time']['status']) # CHARFIELD
     db_data['match_date'] = smDict['data']['time']['starting_at']['date'] # CONVERT TO DATE
     db_data['match_time'] = smDict['data']['time']['starting_at']['time'] # NO NEED TO CONVERT TO TIME IF IT IS TEXT
     db_data['gameweek'] = smDict['data']['round']['data']['name'] # INTEGERFIELD
     db_data['stage'] = smDict['data']['stage']['data']['name'] # CHARFIELD
-    db_data['venue_name'] = smDict['data']['venue']['data']['name'] # CHARFIELD
-    db_data['venue_surface'] = smDict['data']['venue']['data']['surface'] # CHARFIELD
-    db_data['venue_city'] = smDict['data']['venue']['data']['city'] # CHARFIELD
+    db_data['venue_name'] = emptyIfNone(smDict['data']['venue']['data']['name']) # CHARFIELD
+    db_data['venue_surface'] = emptyIfNone(smDict['data']['venue']['data']['surface']) # CHARFIELD
+    db_data['venue_city'] = emptyIfNone(smDict['data']['venue']['data']['city']) # CHARFIELD
     db_data['venue_capacity'] = smDict['data']['venue']['data']['capacity'] # LONG INTEGERFIELD
-    db_data['venue_image'] = smDict['data']['venue']['data']['image_path'] # TEXTFIELD
-    db_data['odds_1'] = smDict['data']['flatOdds']['data'][0]['odds'][0]['value']
-    db_data['odds_x'] = smDict['data']['flatOdds']['data'][0]['odds'][1]['value']
-    db_data['odds_2'] = smDict['data']['flatOdds']['data'][0]['odds'][2]['value']
-    db_data['home_coach'] = smDict['data']['localCoach']['data']['fullname'] # CHARFIELD
-    db_data['home_coach_nationality'] = smDict['data']['localCoach']['data']['nationality'] # CHARFIELD
-    db_data['home_coach_image'] = smDict['data']['localCoach']['data']['image_path'] # TEXTFIELD
-    db_data['away_coach'] = smDict['data']['visitorCoach']['data']['fullname'] # CHARFIELD
-    db_data['away_coach_nationality'] = smDict['data']['visitorCoach']['data']['nationality'] # CHARFIELD
-    db_data['away_coach_image'] = smDict['data']['visitorCoach']['data']['image_path'] # TEXTFIELD
+    db_data['venue_image'] = emptyIfNone(smDict['data']['venue']['data']['image_path']) # TEXTFIELD
 
+    if 'localCoach' in smDict['data']:
+        db_data['home_coach'] = emptyIfNone(smDict['data']['localCoach']['data']['fullname']) # CHARFIELD
+        db_data['home_coach_nationality'] = emptyIfNone(smDict['data']['localCoach']['data']['nationality']) # CHARFIELD
+        db_data['home_coach_image'] = emptyIfNone(smDict['data']['localCoach']['data']['image_path']) # TEXTFIELD
+    else:
+        db_data['home_coach'] = ''
+        db_data['home_coach_nationality'] = ''
+        db_data['home_coach_image'] = ''
+    
+    if 'visitorCoach' in smDict['data']:
+        db_data['away_coach'] = emptyIfNone(smDict['data']['visitorCoach']['data']['fullname']) # CHARFIELD
+        db_data['away_coach_nationality'] = emptyIfNone(smDict['data']['visitorCoach']['data']['nationality']) # CHARFIELD
+        db_data['away_coach_image'] = emptyIfNone(smDict['data']['visitorCoach']['data']['image_path']) # TEXTFIELD
+    else:
+        db_data['away_coach'] = ''
+        db_data['away_coach_nationality'] = ''
+        db_data['away_coach_image'] = ''
+
+    return db_data
+
+# API call to get fixtures json for selected season from sportmonks and convert it to dict
+def SMcall_FixtureBySeason(season):
     return db_data
 
 # API call to get data for all countries (in your plan) from sportmonks and convert it to dict
