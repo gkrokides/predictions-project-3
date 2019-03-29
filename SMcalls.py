@@ -349,7 +349,7 @@ def SMcall_teamsBySeason(seasonId):
         try:
             final_list.append({
                 'team_id': smDict['data'][i]['id'],
-                'name': unicode(smDict['data'][i]['name']),
+                'name': smDict['data'][i]['name'],
                 'short_code': short_code,    
                 'country': countryObj,
                 'founded': smDict['data'][i]['founded'],

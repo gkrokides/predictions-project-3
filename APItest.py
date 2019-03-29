@@ -2,11 +2,9 @@ import requests
 import json
 from predictions_project.settings import production
 
-# This function returns a dict of the selected odds. It does not choose from 
-# a particular bookie because some bookies might have odds for selected markets
-# only. So it chooses the first available odd set from the pool of data.
+# This function returns a dict of the selected odds for the selected fixture id.
 
-market_id = 12 #enter the market for which you want the odds
+market_id = 1 #enter the market for which you want the odds
 fixtureId = 10350335 #enter the fixture id
 over = 2.5 # This is taken into consideration ONLY if the market_id is set to 12
 

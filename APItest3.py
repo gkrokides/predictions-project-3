@@ -1,4 +1,4 @@
-import requests
+import requests 
 import json
 from predictions_project.settings import production
 from predictions_project.smhelpers.emptyIfNone import emptyIfNone

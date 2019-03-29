@@ -3074,7 +3074,7 @@ class FixtureSM(models.Model):
     ht_score = models.CharField(max_length=200, null=True, blank=True)
     ft_score = models.CharField(max_length=200, null=True, blank=True)
     match_status = models.CharField(max_length=200, null=True, blank=True)
-    match_date = models.CharField(max_length=200, null=True, blank=True)
+    match_date = models.DateField(null=True, blank=True)
     match_time = models.CharField(max_length=200, null=True, blank=True)
     gameweek = models.IntegerField(null=True)
     stage = models.CharField(max_length=200, null=True, blank=True)
