@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 from predictions.models import CountrySM, LeagueSM, SeasonSM, TeamSM, FixtureSM
 from predictions_project.smhelpers.emptyIfNone import emptyIfNone
+import datetime
+from datetime import timedelta
 
 # API call to get data for selected league (by Id) from sportmonks and convert it to dict
 def SMcall_LeagueById(leagueId):
@@ -242,8 +244,85 @@ def SMcall_FixtureById(Id):
     return db_data
 
 # API call to get fixtures json for selected season from sportmonks and convert it to dict
-def SMcall_FixtureBySeason(season):
-    return db_data
+def SMcall_LeagueFixturesByDaterange(league, season, start_date, end_date):
+    import requests
+    import json
+    from predictions_project.settings import production
+    # league = 253 #cyprus division 1
+    # season = 13045
+    market_id = 1
+
+    http1 = 'https://soccer.sportmonks.com/api/v2.0/fixtures/between/'
+    # start_date = '2019-03-29' #YYYY-MM-DD
+    # end_date = '2019-03-31' #YYYY-MM-DD
+    # idConcat = str(season)
+    http2 = '?api_token='
+    if production.sm_API == '':
+        from predictions_project.settings import local
+        api_token = local.sm_API
+    else:
+        api_token = production.sm_API
+    http3 = '&include=round,stage,odds&leagues='
+    http4 = str(league)
+
+    requestString = http1+start_date+'/'+end_date+http2+api_token+http3+http4
+
+    response = requests.get(requestString)
+    smData= response.json()
+    dataJson = json.dumps(smData, sort_keys=True, indent=4)
+    fixtures_for_date = json.loads(dataJson)
+
+    f = fixtures_for_date['data']
+
+    final_list = []
+
+    for i in range(0, len(f)):
+        if f[i]['season_id'] == season:
+            match_datetime_str = f[i]['time']['starting_at']['date'] + " " + f[i]['time']['starting_at']['time']
+            match_date = datetime.datetime.strptime(match_datetime_str, '%Y-%m-%d %H:%M:%S')
+            allOdds = f[i]['odds']['data']
+            oddslist = [x for x in allOdds if x['id'] == market_id]
+            odds1x2 = [x for x in oddslist[0]['bookmaker']['data']]
+            finalData = {k['label']:k['value'] for k in odds1x2[0]['odds']['data']}
+            if '1' in finalData:
+                odds_1 = finalData['1']
+            else:
+                odds_1 = ''
+
+            if 'X' in finalData:
+                odds_x = finalData['X']
+            else:
+                odds_x = ''
+
+            if '2' in finalData:
+                odds_2 = finalData['2']
+            else:
+                odds_2 = ''    
+
+            final_list.append({
+                'fixture_id': f[i]['id'],
+                'season': f[i]['season_id'],
+                'hometeam': f[i]['localteam_id'],
+                'awayteam': f[i]['visitorteam_id'],
+                'home_goals': f[i]['scores']['localteam_score'],
+                'away_goals': f[i]['scores']['visitorteam_score'],
+                'ht_score': emptyIfNone(f[i]['scores']['ht_score']),
+                'ft_score': emptyIfNone(f[i]['scores']['ft_score']),
+                'match_status': emptyIfNone(f[i]['time']['status']),
+                'match_date': match_date,
+                'match_time': f[i]['time']['starting_at']['time'],
+                'gameweek': f[i]['round']['data']['name'],
+                'stage': f[i]['stage']['data']['type'],
+                'odds_1': odds_1,
+                'odds_x': odds_x,
+                'odds_2': odds_2
+
+                # 'odds_1': finalData['1'],
+                # 'odds_x': finalData['X'],
+                # 'odds_2': finalData['2']      
+                })
+
+    return final_list
 
 # API call to get data for all countries (in your plan) from sportmonks and convert it to dict
 def SMcall_allCountries():
