@@ -278,8 +278,10 @@ def SMcall_LeagueFixturesByDaterange(league, season, start_date, end_date):
 
     for i in range(0, len(f)):
         if f[i]['season_id'] == season:
-            match_datetime_str = f[i]['time']['starting_at']['date'] + " " + f[i]['time']['starting_at']['time']
-            match_date = datetime.datetime.strptime(match_datetime_str, '%Y-%m-%d %H:%M:%S')
+            match_date_str = f[i]['time']['starting_at']['date']
+            match_date = datetime.datetime.strptime(match_date_str, '%Y-%m-%d')
+            match_time_str = f[i]['time']['starting_at']['time']
+            match_time = datetime.datetime.strptime(match_time_str, '%H:%M:%S')
             allOdds = f[i]['odds']['data']
             oddslist = [x for x in allOdds if x['id'] == market_id]
             odds1x2 = [x for x in oddslist[0]['bookmaker']['data']]
@@ -310,16 +312,13 @@ def SMcall_LeagueFixturesByDaterange(league, season, start_date, end_date):
                 'ft_score': emptyIfNone(f[i]['scores']['ft_score']),
                 'match_status': emptyIfNone(f[i]['time']['status']),
                 'match_date': match_date,
+                'match_time': match_time,
                 'match_time': f[i]['time']['starting_at']['time'],
                 'gameweek': f[i]['round']['data']['name'],
                 'stage': f[i]['stage']['data']['type'],
                 'odds_1': odds_1,
                 'odds_x': odds_x,
                 'odds_2': odds_2
-
-                # 'odds_1': finalData['1'],
-                # 'odds_x': finalData['X'],
-                # 'odds_2': finalData['2']      
                 })
 
     return final_list
