@@ -9,8 +9,8 @@ season = 13045
 market_id = 1
 
 http1 = 'https://soccer.sportmonks.com/api/v2.0/fixtures/between/'
-start_date = '2018-08-01' #YYYY-MM-DD
-end_date = '2019-04-01' #YYYY-MM-DD
+start_date = '2018-08-25' #YYYY-MM-DD
+end_date = '2018-10-22' #YYYY-MM-DD
 # idConcat = str(season)
 http2 = '?api_token='
 if production.sm_API == '':
@@ -57,7 +57,7 @@ for i in range(0, len(f)-1):
             'match_date': f[i]['time']['starting_at']['date'],
             'match_time': f[i]['time']['starting_at']['time'],
             'gameweek': f[i]['round']['data']['name'],
-            'stage': f[i]['stage']['data']['type'],
+            'stage': f[i]['stage']['data']['name'],
             'odds_1': finalData['1'],
             'odds_x': finalData['X'],
             'odds_2': finalData['2']

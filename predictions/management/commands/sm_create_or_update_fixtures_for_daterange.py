@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from predictions.models import FixtureSM
+from predictions.models import FixtureSM, LeagueSM, SeasonSM, TeamSM
 from SMcalls import SMcall_LeagueFixturesByDaterange
 
 
@@ -20,7 +20,7 @@ class Command(BaseCommand):
         smSeasonId = options['smSeasonId']
         startDate = options['startDate']
         endDate = options['endDate']
-        allFixtures = SMcall_LeagueFixturesByDaterange(smLeagueId, smSeasonId, startDate, startDate)
+        allFixtures = SMcall_LeagueFixturesByDaterange(smLeagueId, smSeasonId, startDate, endDate)
 
         cntUpdated = 0
         cntCreated = 0
@@ -28,7 +28,7 @@ class Command(BaseCommand):
         for x in allFixtures:
             if FixtureSM.objects.filter(fixture_id=x['fixture_id']).exists():
                 FixtureSM.objects.filter(fixture_id=x['fixture_id']).update(**x)
-                self.stdout.write('"%s" has been updated' % x['fixture_id'])
+                self.stdout.write(self.style.WARNING('"%s" has been updated' % x['fixture_id']))
                 cntUpdated += 1
                 # current_obj = FixtureSM.objects.get(pk=x['fixture_id'])
                 # for i in x:
@@ -37,6 +37,6 @@ class Command(BaseCommand):
             else:
                 FixtureSM.objects.create(**x)
                 cntCreated += 1
-                self.stdout.write('"%s" has been created' % x['fixture_id'])
+                self.stdout.write(self.style.SUCCESS('"%s" has been created' % x['fixture_id']))
 
-        self.stdout.write('Fixtures created: "%i". Updated: "%i"' % (cntCreated, cntUpdated)                
+        self.stdout.write('Fixtures created: "%i". Updated: "%i"' % (cntCreated, cntUpdated))
