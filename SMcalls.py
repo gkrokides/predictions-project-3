@@ -284,8 +284,13 @@ def SMcall_LeagueFixturesByDaterange(league, season, start_date, end_date):
             match_time = datetime.datetime.strptime(match_time_str, '%H:%M:%S')
             allOdds = f[i]['odds']['data']
             oddslist = [x for x in allOdds if x['id'] == market_id]
-            odds1x2 = [x for x in oddslist[0]['bookmaker']['data']]
-            finalData = {k['label']:k['value'] for k in odds1x2[0]['odds']['data']}
+            if len(oddslist) < 1:
+            # if there are no available odds for that match the odds fields will be empty
+                finalData = {'1': '', 'X': '', '2': ''}
+            else:
+                odds1x2 = [x for x in oddslist[0]['bookmaker']['data']]
+                finalData = {k['label']:k['value'] for k in odds1x2[0]['odds']['data']}
+
             if '1' in finalData:
                 odds_1 = finalData['1']
             else:

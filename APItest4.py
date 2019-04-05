@@ -9,8 +9,8 @@ season = 13045
 market_id = 1
 
 http1 = 'https://soccer.sportmonks.com/api/v2.0/fixtures/between/'
-start_date = '2019-03-29' #YYYY-MM-DD
-end_date = '2019-03-31' #YYYY-MM-DD
+start_date = '2018-08-01' #YYYY-MM-DD
+end_date = '2019-04-01' #YYYY-MM-DD
 # idConcat = str(season)
 http2 = '?api_token='
 if production.sm_API == '':
@@ -31,13 +31,19 @@ fixtures_for_date = json.loads(dataJson)
 f = fixtures_for_date['data']
 
 final_list = []
+fixtures_with_no_odds = []
 
-for i in range(0, len(f)):
+for i in range(0, len(f)-1):
     if f[i]['season_id'] == season:
         allOdds = f[i]['odds']['data']
         oddslist = [x for x in allOdds if x['id'] == market_id]
-        odds1x2 = [x for x in oddslist[0]['bookmaker']['data']]
-        finalData = {k['label']:k['value'] for k in odds1x2[0]['odds']['data']}
+        if len(oddslist) < 1:
+            # if there are no available odds for that match the fields will be empty
+            finalData = {'1': '', 'X': '', '2': ''}
+        else:
+            odds1x2 = [x for x in oddslist[0]['bookmaker']['data']]
+            finalData = {k['label']:k['value'] for k in odds1x2[0]['odds']['data']}    
+        
         final_list.append({
             'fixture_id': f[i]['id'],
             'season': f[i]['season_id'],

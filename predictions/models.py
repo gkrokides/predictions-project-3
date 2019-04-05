@@ -2991,6 +2991,7 @@ class Betslip(models.Model):
         self.profit = self.betslip_profit()
         super(Betslip, self).save(*args, **kwargs)
 
+
 # SportMonks tables
 @python_2_unicode_compatible
 class CountrySM(models.Model):
@@ -3008,6 +3009,7 @@ class CountrySM(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class LeagueSM(models.Model):
     league_id = models.IntegerField(unique=True, primary_key=True)
@@ -3027,6 +3029,7 @@ class LeagueSM(models.Model):
     def __str__(self):
         return self.country.name + ' ' + self.name                
 
+
 class SeasonSM(models.Model):
     season_id = models.IntegerField(unique=True, primary_key=True)
     name = models.CharField(max_length=100)
@@ -3040,6 +3043,7 @@ class SeasonSM(models.Model):
     def __str__(self):
         # return "(id: " + str(self.season_id) + ") " + str(self.name)
         return self.league.country.name + ' ' + self.league.name + " " + self.name
+
 
 class TeamSM(models.Model):
     team_id = models.IntegerField(unique=True, primary_key=True)
@@ -3056,6 +3060,7 @@ class TeamSM(models.Model):
 
     def __str__(self):
         return self.name           
+
 
 class FixtureSM(models.Model):
     fixture_id = models.IntegerField(unique=True, primary_key=True)
