@@ -15,10 +15,10 @@ else:
     api_token = production.sm_API
 http3 = '&include=fixtures'
 
-requestString = http1+idConcat+http2+api_token+http3
+requestString = http1 + idConcat + http2 + api_token + http3
 
 response = requests.get(requestString)
-smData= response.json()
+smData = response.json()
 dataJson = json.dumps(smData, sort_keys=True, indent=4)
 fixtures_for_season = json.loads(dataJson)
 
@@ -39,12 +39,11 @@ else:
     api_token2 = production.sm_API
 http6 = '&include=round,stage,venue,localCoach,visitorCoach'
 
-requestString = http4+all_fixtures+http5+api_token2+http6
+requestString = http4 + all_fixtures + http5 + api_token2 + http6
 
 response = requests.get(requestString)
-smData= response.json()
+smData = response.json()
 dataJson = json.dumps(smData, sort_keys=True, indent=4)
 fixtures_for_ids = json.loads(dataJson)
 
 print fixtures_for_ids
-

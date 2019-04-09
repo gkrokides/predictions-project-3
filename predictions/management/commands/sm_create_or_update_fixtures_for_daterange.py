@@ -5,9 +5,9 @@ from SMcalls import SMcall_LeagueFixturesByDaterange
 
 class Command(BaseCommand):
     help = 'Gets all the fixtures for the selected league, season and daterange from the sportmonks API,' \
-    ' it checks one by one. The teams that are already in the db'\
-    ' are updated. The ones that are not in the TeamSM table' \
-    ' are created.'
+        ' it checks one by one. The fixtures that are already in the db'\
+        ' are updated. The ones that are not in the FixtureSM table' \
+        ' are created.'
 
     def add_arguments(self, parser):
         parser.add_argument('smLeagueId', type=int)

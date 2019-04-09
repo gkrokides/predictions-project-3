@@ -5,6 +5,8 @@ import datetime
 from datetime import timedelta
 
 # API call to get data for selected league (by Id) from sportmonks and convert it to dict
+
+
 def SMcall_LeagueById(leagueId):
     import requests
     import json
@@ -20,7 +22,7 @@ def SMcall_LeagueById(leagueId):
         api_token = production.sm_API
     http3 = '&include=country,season'
 
-    requestString = http1+leagueID+http2+api_token+http3
+    requestString = http1 + leagueID + http2 + api_token + http3
 
     response = requests.get(requestString)
 
@@ -44,6 +46,8 @@ def SMcall_LeagueById(leagueId):
     return smleague_data
 
 # API call to get data for selected Country (by Id) from sportmonks and convert it to dict
+
+
 def SMcall_CountryById(Id):
     import requests
     import json
@@ -58,7 +62,7 @@ def SMcall_CountryById(Id):
     else:
         api_token = production.sm_API
 
-    requestString = http1+idConcat+http2+api_token
+    requestString = http1 + idConcat + http2 + api_token
 
     response = requests.get(requestString)
 
@@ -76,19 +80,19 @@ def SMcall_CountryById(Id):
         db_data['continent'] = ''
         print 'Warning: ' + smDict['data']['name'] + ' is missing the continent.'
 
-    try:        
+    try:
         db_data['fifa_code'] = smDict['data']['extra']['fifa']
     except TypeError as er:
         db_data['fifa_code'] = ''
         print 'Warning: ' + smDict['data']['name'] + ' is missing the fifa_code.'
-            
+
     try:
         db_data['iso_code'] = smDict['data']['extra']['iso']
     except TypeError as er:
         db_data['iso_code'] = ''
         print 'Warning: ' + smDict['data']['name'] + ' is missing the iso_code.'
 
-    try:        
+    try:
         db_data['flag'] = smDict['data']['extra']['flag']
     except TypeError as er:
         db_data['flag'] = ''
@@ -97,6 +101,8 @@ def SMcall_CountryById(Id):
     return db_data
 
 # API call to get data for selected Season (by Id) from sportmonks and convert it to dict
+
+
 def SMcall_SeasonById(Id):
     import requests
     import json
@@ -111,7 +117,7 @@ def SMcall_SeasonById(Id):
     else:
         api_token = production.sm_API
 
-    requestString = http1+idConcat+http2+api_token
+    requestString = http1 + idConcat + http2 + api_token
 
     response = requests.get(requestString)
 
@@ -130,6 +136,8 @@ def SMcall_SeasonById(Id):
     return db_data
 
 # API call to get data for selected Team (by Id) from sportmonks and convert it to dict
+
+
 def SMcall_TeamById(Id):
     import requests
     import json
@@ -143,9 +151,9 @@ def SMcall_TeamById(Id):
         api_token = local.sm_API
     else:
         api_token = production.sm_API
-    http3 = '&include=venue'    
+    http3 = '&include=venue'
 
-    requestString = http1+idConcat+http2+api_token+http3
+    requestString = http1 + idConcat + http2 + api_token + http3
 
     response = requests.get(requestString)
 
@@ -163,10 +171,12 @@ def SMcall_TeamById(Id):
     db_data['country'] = countryObj
     db_data['founded'] = smDict['data']['founded']
     db_data['logo_path'] = smDict['data']['logo_path']
-   
+
     return db_data
 
 # API call to get data for selected Fixture (by Id) from sportmonks and convert it to dict
+
+
 def SMcall_FixtureById(Id):
     import requests
     import json
@@ -180,9 +190,9 @@ def SMcall_FixtureById(Id):
         api_token = local.sm_API
     else:
         api_token = production.sm_API
-    http3 = '&include=round,stage,flatOdds,venue,localCoach,visitorCoach'    
+    http3 = '&include=round,stage,flatOdds,venue,localCoach,visitorCoach'
 
-    requestString = http1+idConcat+http2+api_token+http3
+    requestString = http1 + idConcat + http2 + api_token + http3
 
     response = requests.get(requestString)
 
@@ -193,49 +203,49 @@ def SMcall_FixtureById(Id):
 
     # populate the dict to be used to update the smFixture database table
     db_data['fixture_id'] = smDict['data']['id']
-    db_data['season'] = smDict['data']['season_id'] # FOREIGN KEY
-    db_data['hometeam'] = smDict['data']['localteam_id'] # FOREIGN KEY
-    db_data['awayteam'] = smDict['data']['visitorteam_id'] # FOREIGN KEY
+    db_data['season'] = smDict['data']['season_id']  # FOREIGN KEY
+    db_data['hometeam'] = smDict['data']['localteam_id']  # FOREIGN KEY
+    db_data['awayteam'] = smDict['data']['visitorteam_id']  # FOREIGN KEY
     if smDict['data']['weather_report'] != None:
-        db_data['weather_code'] = emptyIfNone(smDict['data']['weather_report']['code']) # CHARFIELD
-        db_data['weather_type'] = emptyIfNone(smDict['data']['weather_report']['type']) # CHARFIELD
-        db_data['weather_icon'] = emptyIfNone(smDict['data']['weather_report']['icon']) # TEXTFIELD
+        db_data['weather_code'] = emptyIfNone(smDict['data']['weather_report']['code'])  # CHARFIELD
+        db_data['weather_type'] = emptyIfNone(smDict['data']['weather_report']['type'])  # CHARFIELD
+        db_data['weather_icon'] = emptyIfNone(smDict['data']['weather_report']['icon'])  # TEXTFIELD
     else:
         db_data['weather_code'] = ''
         db_data['weather_type'] = ''
-        db_data['weather_icon'] = ''   
-    db_data['attendance'] = emptyIfNone(smDict['data']['attendance']) # INTEGERFIELD
-    db_data['pitch_status'] = emptyIfNone(smDict['data']['pitch']) # CHARFIELD
-    db_data['home_formation'] = emptyIfNone(smDict['data']['formations']['localteam_formation']) # CHARFIELD
-    db_data['away_formation'] = emptyIfNone(smDict['data']['formations']['visitorteam_formation']) # CHARFIELD
-    db_data['home_goals'] = smDict['data']['scores']['localteam_score'] # INTEGERFIElD
-    db_data['away_goals'] = smDict['data']['scores']['visitorteam_score'] # INTEGERFIELD
-    db_data['ht_score'] = emptyIfNone(smDict['data']['scores']['ht_score']) # CHARFIELD
-    db_data['ft_score'] = emptyIfNone(smDict['data']['scores']['ft_score']) # CHARFIELD
-    db_data['match_status'] = emptyIfNone(smDict['data']['time']['status']) # CHARFIELD
-    db_data['match_date'] = smDict['data']['time']['starting_at']['date'] # CONVERT TO DATE
-    db_data['match_time'] = smDict['data']['time']['starting_at']['time'] # NO NEED TO CONVERT TO TIME IF IT IS TEXT
-    db_data['gameweek'] = smDict['data']['round']['data']['name'] # INTEGERFIELD
-    db_data['stage'] = smDict['data']['stage']['data']['name'] # CHARFIELD
-    db_data['venue_name'] = emptyIfNone(smDict['data']['venue']['data']['name']) # CHARFIELD
-    db_data['venue_surface'] = emptyIfNone(smDict['data']['venue']['data']['surface']) # CHARFIELD
-    db_data['venue_city'] = emptyIfNone(smDict['data']['venue']['data']['city']) # CHARFIELD
-    db_data['venue_capacity'] = smDict['data']['venue']['data']['capacity'] # LONG INTEGERFIELD
-    db_data['venue_image'] = emptyIfNone(smDict['data']['venue']['data']['image_path']) # TEXTFIELD
+        db_data['weather_icon'] = ''
+    db_data['attendance'] = emptyIfNone(smDict['data']['attendance'])  # INTEGERFIELD
+    db_data['pitch_status'] = emptyIfNone(smDict['data']['pitch'])  # CHARFIELD
+    db_data['home_formation'] = emptyIfNone(smDict['data']['formations']['localteam_formation'])  # CHARFIELD
+    db_data['away_formation'] = emptyIfNone(smDict['data']['formations']['visitorteam_formation'])  # CHARFIELD
+    db_data['home_goals'] = smDict['data']['scores']['localteam_score']  # INTEGERFIElD
+    db_data['away_goals'] = smDict['data']['scores']['visitorteam_score']  # INTEGERFIELD
+    db_data['ht_score'] = emptyIfNone(smDict['data']['scores']['ht_score'])  # CHARFIELD
+    db_data['ft_score'] = emptyIfNone(smDict['data']['scores']['ft_score'])  # CHARFIELD
+    db_data['match_status'] = emptyIfNone(smDict['data']['time']['status'])  # CHARFIELD
+    db_data['match_date'] = smDict['data']['time']['starting_at']['date']  # CONVERT TO DATE
+    db_data['match_time'] = smDict['data']['time']['starting_at']['time']  # NO NEED TO CONVERT TO TIME IF IT IS TEXT
+    db_data['gameweek'] = smDict['data']['round']['data']['name']  # INTEGERFIELD
+    db_data['stage'] = smDict['data']['stage']['data']['name']  # CHARFIELD
+    db_data['venue_name'] = emptyIfNone(smDict['data']['venue']['data']['name'])  # CHARFIELD
+    db_data['venue_surface'] = emptyIfNone(smDict['data']['venue']['data']['surface'])  # CHARFIELD
+    db_data['venue_city'] = emptyIfNone(smDict['data']['venue']['data']['city'])  # CHARFIELD
+    db_data['venue_capacity'] = smDict['data']['venue']['data']['capacity']  # LONG INTEGERFIELD
+    db_data['venue_image'] = emptyIfNone(smDict['data']['venue']['data']['image_path'])  # TEXTFIELD
 
     if 'localCoach' in smDict['data']:
-        db_data['home_coach'] = emptyIfNone(smDict['data']['localCoach']['data']['fullname']) # CHARFIELD
-        db_data['home_coach_nationality'] = emptyIfNone(smDict['data']['localCoach']['data']['nationality']) # CHARFIELD
-        db_data['home_coach_image'] = emptyIfNone(smDict['data']['localCoach']['data']['image_path']) # TEXTFIELD
+        db_data['home_coach'] = emptyIfNone(smDict['data']['localCoach']['data']['fullname'])  # CHARFIELD
+        db_data['home_coach_nationality'] = emptyIfNone(smDict['data']['localCoach']['data']['nationality'])  # CHARFIELD
+        db_data['home_coach_image'] = emptyIfNone(smDict['data']['localCoach']['data']['image_path'])  # TEXTFIELD
     else:
         db_data['home_coach'] = ''
         db_data['home_coach_nationality'] = ''
         db_data['home_coach_image'] = ''
-    
+
     if 'visitorCoach' in smDict['data']:
-        db_data['away_coach'] = emptyIfNone(smDict['data']['visitorCoach']['data']['fullname']) # CHARFIELD
-        db_data['away_coach_nationality'] = emptyIfNone(smDict['data']['visitorCoach']['data']['nationality']) # CHARFIELD
-        db_data['away_coach_image'] = emptyIfNone(smDict['data']['visitorCoach']['data']['image_path']) # TEXTFIELD
+        db_data['away_coach'] = emptyIfNone(smDict['data']['visitorCoach']['data']['fullname'])  # CHARFIELD
+        db_data['away_coach_nationality'] = emptyIfNone(smDict['data']['visitorCoach']['data']['nationality'])  # CHARFIELD
+        db_data['away_coach_image'] = emptyIfNone(smDict['data']['visitorCoach']['data']['image_path'])  # TEXTFIELD
     else:
         db_data['away_coach'] = ''
         db_data['away_coach_nationality'] = ''
@@ -244,6 +254,8 @@ def SMcall_FixtureById(Id):
     return db_data
 
 # API call to get fixtures json for selected season from sportmonks and convert it to dict
+
+
 def SMcall_LeagueFixturesByDaterange(league, season, start_date, end_date):
     import requests
     import json
@@ -266,10 +278,10 @@ def SMcall_LeagueFixturesByDaterange(league, season, start_date, end_date):
     http3 = '&include=round,stage,odds&leagues='
     http4 = str(league)
 
-    requestString = http1+start_date+'/'+end_date+http2+api_token+http3+http4
+    requestString = http1 + start_date + '/' + end_date + http2 + api_token + http3 + http4
 
     response = requests.get(requestString)
-    smData= response.json()
+    smData = response.json()
     dataJson = json.dumps(smData, sort_keys=True, indent=4)
     fixtures_for_date = json.loads(dataJson)
 
@@ -288,11 +300,11 @@ def SMcall_LeagueFixturesByDaterange(league, season, start_date, end_date):
             allOdds = f[i]['odds']['data']
             oddslist = [x for x in allOdds if x['id'] == market_id]
             if len(oddslist) < 1:
-            # if there are no available odds for that match the odds fields will be empty
+                # if there are no available odds for that match the odds fields will be empty
                 finalData = {'1': None, 'X': None, '2': None}
             else:
                 odds1x2 = [x for x in oddslist[0]['bookmaker']['data']]
-                finalData = {k['label']:k['value'] for k in odds1x2[0]['odds']['data']}
+                finalData = {k['label']: k['value'] for k in odds1x2[0]['odds']['data']}
 
             if '1' in finalData:
                 odds_1 = finalData['1']
@@ -307,7 +319,7 @@ def SMcall_LeagueFixturesByDaterange(league, season, start_date, end_date):
             if '2' in finalData:
                 odds_2 = finalData['2']
             else:
-                odds_2 = None   
+                odds_2 = None
 
             final_list.append({
                 'fixture_id': f[i]['id'],
@@ -327,11 +339,13 @@ def SMcall_LeagueFixturesByDaterange(league, season, start_date, end_date):
                 'odds_1': odds_1,
                 'odds_x': odds_x,
                 'odds_2': odds_2
-                })
+            })
 
     return final_list
 
 # API call to get data for all countries (in your plan) from sportmonks and convert it to dict
+
+
 def SMcall_allCountries():
     import requests
     import json
@@ -344,7 +358,7 @@ def SMcall_allCountries():
     else:
         api_token = production.sm_API
 
-    requestString = http1+api_token
+    requestString = http1 + api_token
 
     response = requests.get(requestString)
 
@@ -371,12 +385,12 @@ def SMcall_allCountries():
         except TypeError as er:
             iso = ''
             print 'Warning: ' + smDict['data'][i]['name'] + ' is missing the iso_code.'
-        
+
         try:
             flag = smDict['data'][i]['extra']['flag']
         except TypeError as er:
             flag = ''
-            print 'Warning: ' + smDict['data'][i]['name'] + ' is missing the flag.'            
+            print 'Warning: ' + smDict['data'][i]['name'] + ' is missing the flag.'
 
         final_list.append({
             'country_id': smDict['data'][i]['id'],
@@ -385,11 +399,13 @@ def SMcall_allCountries():
             'fifa_code': fifa,
             'iso_code': iso,
             'flag': flag
-            })
+        })
 
     return final_list
 
 # API call to get the teams for the selected season from sportmonks and convert it to dict
+
+
 def SMcall_teamsBySeason(seasonId):
     import requests
     import json
@@ -416,7 +432,7 @@ def SMcall_teamsBySeason(seasonId):
     # populate the list of dicts to be used to update the smCountry database table
     for i in range(0, len(smDict['data'])):
         countryObj = CountrySM.objects.get(pk=smDict['data'][i]['country_id'])
-        
+
         # convert none values to empty strings so the db does not raise errors
         if smDict['data'][i]['short_code'] == None:
             short_code = ''
@@ -430,19 +446,17 @@ def SMcall_teamsBySeason(seasonId):
         else:
             logo_path = smDict['data'][i]['logo_path']
 
-
-        # populate the dict 
+        # populate the dict
         try:
             final_list.append({
                 'team_id': smDict['data'][i]['id'],
                 'name': smDict['data'][i]['name'],
-                'short_code': short_code,    
+                'short_code': short_code,
                 'country': countryObj,
                 'founded': smDict['data'][i]['founded'],
                 'logo_path': logo_path
-                })
+            })
         except TypeError as er:
-            print 'Serious Warning: ' + smDict['data'][i]['name'] + ' is missing one or more vital values and has been excluded.'  
+            print 'Serious Warning: ' + smDict['data'][i]['name'] + ' is missing one or more vital values and has been excluded.'
 
     return final_list
-

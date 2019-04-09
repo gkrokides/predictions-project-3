@@ -14,6 +14,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 
 class Leagues(models.Model):
+    league_sm = models.ForeignKey('LeagueSM', blank=True, null=True)
     country = models.CharField(max_length=200, verbose_name='Country', unique=False, null=False)
     division = models.IntegerField()
     league_name = models.CharField(max_length=200)
@@ -72,6 +73,7 @@ class SeasonManager(models.Manager):
 class Season(models.Model):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
+    season_sm = models.ForeignKey('SeasonSM', blank=True, null=True)
     league = models.ForeignKey('Leagues', to_field='short_name', null=True, related_name='league')
     teamstotal = models.IntegerField(default=0, verbose_name='No. of teams', blank=True, null=True)
     objects = SeasonManager()
@@ -87,6 +89,7 @@ class Season(models.Model):
 
 
 class Team(models.Model):
+    team_sm = models.ForeignKey('TeamSM', blank=True, null=True)
     name = models.CharField(max_length=250, unique=True, primary_key=True)
     # points = models.IntegerField(null=True, blank=True)
 
@@ -2019,6 +2022,7 @@ class Game(models.Model):
 
     date = models.DateField()
     gameweek = models.PositiveIntegerField()
+    fixture_sm = models.ForeignKey('FixtureSM', blank=True, null=True)
     season = models.ForeignKey('Season')
     game_status = models.CharField(max_length=10, choices=GAME_STATUS_CHOICES, default=ok,)
     flag = models.CharField(max_length=10, choices=FLAG_CHOICES, default='No flag',)
