@@ -18,12 +18,13 @@ class Command(BaseCommand):
         smSeasonId = options['smSeasonId']
         startDate = options['startDate']
         endDate = options['endDate']
-        allFixtures_sm = FixtureSM.objects.filter(Q(season=smSeasonId, match_date__gte=startDate) & Q(season=smSeasonId, match_date__lte=endDate))
+        allFixtures_sm = FixtureSM.objects.filter(Q(season=smSeasonId, match_date__gte=startDate) & Q(season=smSeasonId, match_date__lte=endDate)).order_by('match_date')
 
         cntUpdated = 0
         cntCreated = 0
 
         for sm_obj in allFixtures_sm:
+            # self.stdout.write(self.style.WARNING('"%s"' % sm_obj.pk))
             seasonobj = Season.objects.get(season_sm=smSeasonId)
             hm_obj = Team.objects.get(team_sm=sm_obj.hometeam)
             aw_obj = Team.objects.get(team_sm=sm_obj.awayteam)
@@ -37,9 +38,9 @@ class Command(BaseCommand):
                 if sm_obj.match_status in {'NS', 'LIVE', 'HT', 'FT', 'PEN_LIVE', 'AET', 'BREAK', 'FT_PEN'}:
                     current_obj.game_status = 'OK'
                 elif sm_obj.match_status in {'POSTP', 'INT', 'ABAN', 'SUSP', 'DELAYED', 'TBA', 'AU', 'DELETED'}:
-                    current_obj.game_status = 'Postponed'
+                    current_obj.game_status = 'PST'
                 else:
-                    current_obj.game_status = 'Cancelled'
+                    current_obj.game_status = 'CNC'
 
                 if sm_obj.stage == 'Regular Season':
                     current_obj.type = 'RS'
@@ -53,29 +54,47 @@ class Command(BaseCommand):
                 if sm_obj.match_status in {'NS', 'LIVE', 'HT', 'FT', 'PEN_LIVE', 'AET', 'BREAK', 'FT_PEN'}:
                     mstatus = 'OK'
                 elif sm_obj.match_status in {'POSTP', 'INT', 'ABAN', 'SUSP', 'DELAYED', 'TBA', 'AU', 'DELETED'}:
-                    mstatus = 'Postponed'
+                    mstatus = 'PST'
                 else:
-                    mstatus = 'Cancelled'
+                    mstatus = 'CNC'
 
                 if sm_obj.stage == 'Regular Season':
                     mstage = 'RS'
                 else:
                     mstage = 'PO'
 
+                # Here I'm making sure the score will be entered only for the gmwk 1 games when
+                # they are first created
+                if sm_obj.gameweek == 1:
+                    hg = sm_obj.home_goals
+                    ag = sm_obj.away_goals
+                else:
+                    hg = None
+                    ag = None
+
                 current_obj = Game.objects.create(
+                    pk=sm_obj.pk,
                     date=sm_obj.match_date,
                     gameweek=sm_obj.gameweek,
                     fixture_sm=sm_obj,
                     season=seasonobj,
                     hometeam=hm_obj,
                     awayteam=aw_obj,
-                    homegoals=sm_obj.home_goals,
-                    awaygoals=sm_obj.away_goals,
+                    homegoals=hg,
+                    awaygoals=ag,
                     game_status=mstatus,
                     type=mstage,
                     flag='No flag')
 
-                current_obj.save()
+                # Above, I'm creating a db record without a score (for games after gmwk 1) 
+                # as this creates an issue when a team has ess than 6 games. 
+                # So below I'm requesting the same object, adding the score and saving it again.
+                recatched = Game.objects.get(pk=sm_obj.pk)
+                recatched.homegoals = sm_obj.home_goals
+                recatched.awaygoals = sm_obj.away_goals
+                recatched.save()
+
+                # current_obj.save()
                 cntCreated += 1
                 self.stdout.write(self.style.SUCCESS('"%s" has been created' % sm_obj.pk))
 
