@@ -32,8 +32,12 @@ class Command(BaseCommand):
                 current_obj = Game.objects.get(pk=sm_obj.pk)
                 current_obj.date = sm_obj.match_date
                 current_obj.gameweek = sm_obj.gameweek
-                current_obj.homegoals = sm_obj.home_goals
-                current_obj.awaygoals = sm_obj.away_goals
+                if sm_obj.match_status in {'FT', 'AET', 'FT_PEN'}:
+                    current_obj.homegoals = sm_obj.home_goals
+                    current_obj.awaygoals = sm_obj.away_goals
+                else:
+                    current_obj.homegoals = None
+                    current_obj.awaygoals = None
 
                 if sm_obj.match_status in {'NS', 'LIVE', 'HT', 'FT', 'PEN_LIVE', 'AET', 'BREAK', 'FT_PEN'}:
                     current_obj.game_status = 'OK'
@@ -86,12 +90,16 @@ class Command(BaseCommand):
                     type=mstage,
                     flag='No flag')
 
-                # Above, I'm creating a db record without a score (for games after gmwk 1) 
-                # as this creates an issue when a team has ess than 6 games. 
+                # Above, I'm creating a db record without a score (for games after gmwk 1)
+                # as this creates an issue when a team has less than 6 games.
                 # So below I'm requesting the same object, adding the score and saving it again.
                 recatched = Game.objects.get(pk=sm_obj.pk)
-                recatched.homegoals = sm_obj.home_goals
-                recatched.awaygoals = sm_obj.away_goals
+                if sm_obj.match_status in {'FT', 'AET', 'FT_PEN'}:
+                    recatched.homegoals = sm_obj.home_goals
+                    recatched.awaygoals = sm_obj.away_goals
+                else:
+                    recatched.homegoals = None
+                    recatched.awaygoals = None
                 recatched.save()
 
                 # current_obj.save()
