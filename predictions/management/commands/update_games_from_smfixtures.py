@@ -31,7 +31,7 @@ class Command(BaseCommand):
             if Game.objects.filter(pk=sm_obj.pk).exists():
                 current_obj = Game.objects.get(pk=sm_obj.pk)
                 current_obj.date = sm_obj.match_date
-                current_obj.gameweek = sm_obj.gameweek
+
                 if sm_obj.match_status in {'FT', 'AET', 'FT_PEN'}:
                     current_obj.homegoals = sm_obj.home_goals
                     current_obj.awaygoals = sm_obj.away_goals
@@ -48,8 +48,11 @@ class Command(BaseCommand):
 
                 if sm_obj.stage == 'Regular Season':
                     current_obj.type = 'RS'
+                    current_obj.gameweek = sm_obj.gameweek
                 else:
                     current_obj.type = 'PO'
+                    lastgw = FixtureSM.objects.filter(season=sm_obj.season).order_by('-gameweek')[0]
+                    current_obj.gameweek = lastgw.gameweek + sm_obj.gameweek
 
                 current_obj.save()
                 cntUpdated += 1
@@ -64,12 +67,15 @@ class Command(BaseCommand):
 
                 if sm_obj.stage == 'Regular Season':
                     mstage = 'RS'
+                    gw = sm_obj.gameweek
                 else:
                     mstage = 'PO'
+                    lastgw = FixtureSM.objects.filter(season=sm_obj.season).order_by('-gameweek')[0]
+                    gw = lastgw.gameweek + sm_obj.gameweek
 
                 # Here I'm making sure the score will be entered only for the gmwk 1 games when
                 # they are first created
-                if sm_obj.gameweek == 1:
+                if sm_obj.gameweek == 1 and sm_obj.stage == 'Regular Season':
                     hg = sm_obj.home_goals
                     ag = sm_obj.away_goals
                 else:
@@ -79,7 +85,7 @@ class Command(BaseCommand):
                 current_obj = Game.objects.create(
                     pk=sm_obj.pk,
                     date=sm_obj.match_date,
-                    gameweek=sm_obj.gameweek,
+                    gameweek=gw,
                     fixture_sm=sm_obj,
                     season=seasonobj,
                     hometeam=hm_obj,
