@@ -56,7 +56,9 @@ class Command(BaseCommand):
 
                 current_obj.save()
                 cntUpdated += 1
-                self.stdout.write(self.style.WARNING('"%s" has been updated' % sm_obj.pk))
+                # self.stdout.write(self.style.WARNING('"%s" has been updated' % sm_obj.pk), ending='\r')
+                self.stdout.write(self.style.WARNING('"\r%%%s" updated ' % (100 * float(cntUpdated) / float(allFixtures_sm.count()))), ending='\r')
+                self.stdout.flush()
             else:
                 if sm_obj.match_status in {'NS', 'LIVE', 'HT', 'FT', 'PEN_LIVE', 'AET', 'BREAK', 'FT_PEN'}:
                     mstatus = 'OK'
@@ -110,6 +112,7 @@ class Command(BaseCommand):
 
                 # current_obj.save()
                 cntCreated += 1
-                self.stdout.write(self.style.SUCCESS('"%s" has been created' % sm_obj.pk))
+                self.stdout.write(self.style.WARNING('"\r%%%s" created ' % (100 * float(cntCreated) / float(allFixtures_sm.count()))), ending='\r')
+                self.stdout.flush()
 
         self.stdout.write('Fixtures created: "%i". Updated: "%i"' % (cntCreated, cntUpdated))

@@ -380,7 +380,6 @@ def SMcall_LeagueFixturesByDaterange_paginated(league, season, start_date, end_d
     for j in range(1, total_pages + 1):
         http5 = "&page=" + str(j)
         requestString = http1 + start_date + '/' + end_date + http2 + api_token + http3 + http4 + http5
-        print requestString
 
         response = requests.get(requestString)
         smData = response.json()
