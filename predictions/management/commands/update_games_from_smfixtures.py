@@ -76,15 +76,11 @@ class Command(BaseCommand):
                     lastgw = FixtureSM.objects.filter(season=sm_obj.season).order_by('-gameweek')[0]
                     gw = lastgw.gameweek + sm_obj.gameweek
 
-                # Here I'm making sure the score will be entered only for the gmwk 1 games when
+                # Here I'm making sure the score will be entered only for the first games when
                 # they are first created
-                # if sm_obj.gameweek == 1 and sm_obj.stage == 'Regular Season':
-                #     hg = sm_obj.home_goals
-                #     ag = sm_obj.away_goals
-                # else:
-                #     hg = None
-                #     ag = None
-
+                # If you ever get an error on the below, it's probably bon situations where it's the first season game
+                # for one team and not the first for the other. Try and handle that manuylly for now however it's
+                # unlikely it will happen
                 if (Game.objects.is_first_game(hm_obj, gameseason.id, sm_obj.match_date) == 'Yes' or Game.objects.is_first_game(aw_obj, gameseason.id, sm_obj.match_date) == 'Yes')\
                         and sm_obj.stage == 'Regular Season':
                     hg = sm_obj.home_goals

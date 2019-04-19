@@ -250,10 +250,6 @@ class GameManager(models.Manager):
     def get_previous_elo_from_lookback_by_date(self, tm, seasn, dt, lookback):
         # identify the date of the current game and set as threshold
         qs = self.filter(Q(hometeam=tm, season=seasn, date__lt=dt) | Q(awayteam=tm, season=seasn, date__lt=dt)).order_by('-date')
-        # date_threshold = qs[0].date
-        # qs = self.filter(Q(hometeam=tm, season=seasn, date__lte=date_threshold) | Q(awayteam=tm, season=seasn, date__lte=date_threshold)).order_by('-date')
-        # identify the first gameweek by reversing the queryset and getting the first gameweek of the first object
-        # firstgw = qs.reverse()[0].gameweek
         out = 0
         if qs.count() <= 5:
             pass
@@ -548,8 +544,8 @@ class GameManager(models.Manager):
         if cnt_home < 6 or cnt_away < 6:
             prediction = "Not enough games to calculate prediction (the model needs at least 6 gameweeks)"
         else:
-            home_r = self.get_previous_elo_by_date(tm=g.hometeam, seasn=g.season, gmwk=g.gameweek)
-            away_r = self.get_previous_elo_by_date(tm=g.awayteam, seasn=g.season, gmwk=g.gameweek)
+            home_r = self.get_previous_elo_by_actual_date(tm=g.hometeam, seasn=g.season, gw=g.gameweek, dt=g.date)
+            away_r = self.get_previous_elo_by_actual_date(tm=g.awayteam, seasn=g.season, gw=g.gameweek, dt=g.date)
             rdiff = home_r - away_r
             draw_threshold = self.elo_draw_threshold_by_id(gameid)
             if rdiff > draw_threshold:
@@ -569,8 +565,8 @@ class GameManager(models.Manager):
         if cnt_home < 6 or cnt_away < 6:
             prediction = "Not enough games to calculate prediction (the model needs at least 6 gameweeks)"
         else:
-            home_r = self.get_previous_elo_by_date(tm=home, seasn=season, gmwk=gw)
-            away_r = self.get_previous_elo_by_date(tm=away, seasn=season, gmwk=gw)
+            home_r = self.get_previous_elo_by_actual_date(tm=home, seasn=season, gw=gw, dt=dt)
+            away_r = self.get_previous_elo_by_actual_date(tm=away, seasn=season, gw=gw, dt=dt)
             rdiff = home_r - away_r
             draw_threshold = self.elo_draw_threshold_by_date(season, dt)
             if rdiff > draw_threshold:
@@ -631,8 +627,8 @@ class GameManager(models.Manager):
         if cnt_home < 6 or cnt_away < 6:
             prediction = "Not enough games to calculate prediction (the model needs at least 6 gameweeks)"
         else:
-            home_r = self.get_previous_elo_by_date(tm=g.hometeam, seasn=g.season, gmwk=g.gameweek) - self.get_previous_elo_from_lookback_by_date(g.hometeam, g.season, g.date, 6)
-            away_r = self.get_previous_elo_by_date(tm=g.awayteam, seasn=g.season, gmwk=g.gameweek) - self.get_previous_elo_from_lookback_by_date(g.awayteam, g.season, g.date, 6)
+            home_r = self.get_previous_elo_by_actual_date(tm=g.hometeam, seasn=g.season, gw=g.gameweek, dt=g.date) - self.get_previous_elo_from_lookback_by_date(g.hometeam, g.season, g.date, 6)
+            away_r = self.get_previous_elo_by_actual_date(tm=g.awayteam, seasn=g.season, gw=g.gameweek, dt=g.date) - self.get_previous_elo_from_lookback_by_date(g.awayteam, g.season, g.date, 6)
             rdiff = home_r - away_r
             draw_threshold = self.elol6_draw_threshold_by_id(gameid)
             if rdiff > draw_threshold:
@@ -661,8 +657,8 @@ class GameManager(models.Manager):
             prediction = "Not enough games to calculate prediction (the model needs at least 6 gameweeks)"
         else:
             # t1 = datetime.now()
-            home_r = self.get_previous_elo_by_date(tm=home, seasn=season, gmwk=gw) - self.get_previous_elo_from_lookback_by_date(home, season, dt, 6)
-            away_r = self.get_previous_elo_by_date(tm=away, seasn=season, gmwk=gw) - self.get_previous_elo_from_lookback_by_date(away, season, dt, 6)
+            home_r = self.get_previous_elo_by_actual_date(tm=home, seasn=season, gw=gw, dt=dt) - self.get_previous_elo_from_lookback_by_date(home, season, dt, 6)
+            away_r = self.get_previous_elo_by_actual_date(tm=away, seasn=season, gw=gw, dt=dt) - self.get_previous_elo_from_lookback_by_date(away, season, dt, 6)
             # t2 = datetime.now()
             # t3 = (t2 - t1).total_seconds()
             # print('get previous elo and from lookback:', t3)
