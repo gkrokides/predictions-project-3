@@ -6,11 +6,11 @@
 
 4. Use the management command "python manage.py sm_create_or_update_teams_for_season <smSeasonId>" to enter the related teams into the TeamSM table. Check you have no team names with strange ascii characters. For example change St. Pölten to St. Polten. You will have to do this from the python shell as the admin does not allow you to see the team details if there is a strange ASCII character.
 
-5. From the admin site, manualy create the league in the Leagues table (not the LeagueSM table) and select the associated League sm foreign key from the dropdown.
+5. Use the management command "python manage.py update_teams_from_teamsm <smSeasonId>" to create any missing teams in the Team table (not the TeamSM table).
 
-6. Similarly, manualy create the season in the Seasons table (not the SeasonSM tabe) and select the associated Season sm foreign key from the dropdown.
+6. From the admin site, manualy create the league in the Leagues table (not the LeagueSM table) and select the associated League sm foreign key from the dropdown.
 
-7. Similarly, manualy create the teams in the Teams table (not the TeamSM table) and seledct the associated Team sm foreign key from the dropdown.
+7. Similarly, manualy create the season in the Seasons table (not the SeasonSM tabe) and select the associated Season sm foreign key from the dropdown.
 
 8. Populate the FixtureSM table using the management command "python manage.py sm_create_or_update_fixtures_for_daterange_paginated <smLeagueId> <smSeasonId> <startDate> <endDate>".
 

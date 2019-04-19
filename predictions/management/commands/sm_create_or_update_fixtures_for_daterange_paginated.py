@@ -29,7 +29,7 @@ class Command(BaseCommand):
             if FixtureSM.objects.filter(fixture_id=x['fixture_id']).exists():
                 FixtureSM.objects.filter(fixture_id=x['fixture_id']).update(**x)
                 # self.stdout.write(self.style.WARNING('"%s" has been updated' % x['fixture_id']))
-                self.stdout.write(self.style.WARNING('"\r%%%s" updated ' % (100 * float(cntUpdated) / float(len(allFixtures)))), ending='\r')
+                self.stdout.write(self.style.SUCCESS('"\r%%%s" updated ' % (100 * float(cntUpdated) / float(len(allFixtures)))), ending='\r')
                 cntUpdated += 1
                 # current_obj = FixtureSM.objects.get(pk=x['fixture_id'])
                 # for i in x:
@@ -39,6 +39,6 @@ class Command(BaseCommand):
                 FixtureSM.objects.create(**x)
                 cntCreated += 1
                 # self.stdout.write(self.style.SUCCESS('"%s" has been created' % x['fixture_id']))
-                self.stdout.write(self.style.WARNING('"\r%%%s" created ' % (100 * float(cntCreated) / float(len(allFixtures)))), ending='\r')
+                self.stdout.write(self.style.SUCCESS('"\r%%%s" created ' % (100 * float(cntCreated) / float(len(allFixtures)))), ending='\r')
 
         self.stdout.write('Fixtures created: "%i". Updated: "%i"' % (cntCreated, cntUpdated))

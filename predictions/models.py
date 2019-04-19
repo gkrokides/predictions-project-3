@@ -889,6 +889,14 @@ class GameManager(models.Manager):
         last_gameweek = qry[0].gameweek
         return last_gameweek
 
+    # def last_gameweek_played(self, team, seazn):
+    #     if self.filter(Q(hometeam=team, season=seazn) | Q(awayteam=team, season=seazn)).exclude(result__exact='').exclude(result__isnull=True).order_by('-date').exists():
+    #         qry = self.filter(Q(hometeam=team, season=seazn) | Q(awayteam=team, season=seazn)).exclude(result__exact='').exclude(result__isnull=True).order_by('-date')
+    #         last_gameweek = qry[0].gameweek
+    #     else:
+    #         last_gameweek = 1
+    #     return last_gameweek
+
     # returns the date of the most recent match played for the given team
     def last_date_played(self, team, seazn):
         qry = self.filter(Q(hometeam=team, season=seazn) | Q(awayteam=team, season=seazn)).exclude(result__exact='').exclude(result__isnull=True).order_by('-date')
