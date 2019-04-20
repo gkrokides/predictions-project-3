@@ -8,7 +8,8 @@ class Command(BaseCommand):
     help = 'Gets all the fixtures for the selected league, season and daterange from the sportmonks API,' \
         ' it checks one by one. The fixtures that are already in the db'\
         ' are updated. The ones that are not in the FixtureSM table' \
-        ' are created.'
+        ' are created. Then it creates or updated the relevant Game table instances' \
+        'as per the FixtureSM table'
 
     def add_arguments(self, parser):
         parser.add_argument('smSeasonId', type=int)
