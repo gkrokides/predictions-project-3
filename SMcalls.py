@@ -368,9 +368,9 @@ def SMcall_LeagueFixturesByDaterange_paginated(league, season, start_date, end_d
         api_token = production.sm_API
     http3 = '&include=round,stage,odds&leagues='
     http4 = str(league)
+    timezone = "&tz=Europe/Athens"
 
-    requestString = http1 + start_date + '/' + end_date + http2 + api_token + http3 + http4
-
+    requestString = http1 + start_date + '/' + end_date + http2 + api_token + http3 + http4 + timezone
     response = requests.get(requestString)
     smData = response.json()
     dataJson = json.dumps(smData, sort_keys=True, indent=4)

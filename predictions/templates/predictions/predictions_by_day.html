@@ -27,7 +27,6 @@
 {% endblock %}
 
 {% block content30 %}
-
 <p style="border: solid; padding: 5px; background: grey;">
 <span style="color: white;"><strong>Overview/Stats:</strong></span>
 {% for item in sorted_x %}
@@ -68,6 +67,7 @@
         <th class="centred">vs</th>
         <th class="centred">Away</th>
         <th class="centred">Date</th>
+        <th class="centred">Time</th>
         <th class="centred elohist-background">BP</th>
         <th class="centred elol6-background">MP</th>
         <th class="centred gsrs-background">YP</th>
@@ -85,9 +85,9 @@
         <td><img src="" class="flag flag-{{ itemm.season.league.country_code }}" alt=""/></td>
         <td width="7%">{{ itemm.season.league.short_name }}</td>
         <td>{{ itemm.gameweek }}</td>
-        <td style="font-size: 85%; text-align: right;" width="27%">{{ itemm.hometeam }}</td>
+        <td style="font-size: 85%; text-align: right;" width="22%">{{ itemm.hometeam }}</td>
         <td>-</td>
-        <td style="font-size: 85%; text-align: left;" width="27%">{{ itemm.awayteam }}</td>
+        <td style="font-size: 85%; text-align: left;" width="22%">{{ itemm.awayteam }}</td>
 
         {% if itemm.date|naturalday  == 'today' %}
         <td><span class="label label-danger">{{ itemm.date|naturalday }}</span></td>
@@ -96,6 +96,7 @@
         {% else %}
         <td width="18%">{{ itemm.date|naturalday }}</td>
         {% endif %}
+        <td width="6%">{{ itemm.fixture_sm.match_time|time:"H:i"}}</td>
         <td width="9%" class="{{ itemm.prediction_elohist|apply_prediction_colors }}"><strong>{{ itemm.prediction_elohist }}</strong></td>
         <td width="9%" class="{{ itemm.prediction_elol6|apply_prediction_colors }}"><strong>{{ itemm.prediction_elol6 }}</strong></td>
         <td width="9%" class="{{ itemm.prediction_gsrs|apply_prediction_colors }}"><strong>{{ itemm.prediction_gsrs }}</strong></td>

@@ -1850,7 +1850,7 @@ def alerts_refresh_formulas(request):
 def predictions_by_day(request):
     today = datetime.today()
     threshold = datetime.now() + timedelta(days=3)
-    upcoming_predictions = Game.objects.select_related('season').filter(date__gte=today, date__lte=threshold, game_status='OK').exclude(homegoals__gte=0).order_by('date')
+    upcoming_predictions = Game.objects.select_related('season').filter(date__gte=today, date__lte=threshold, game_status='OK').exclude(homegoals__gte=0).order_by('date', 'fixture_sm__match_time')
     countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
     # country_codes = Leagues.objects.order_by('country').values_list('country_code', flat=True).distinct()
     x = []
