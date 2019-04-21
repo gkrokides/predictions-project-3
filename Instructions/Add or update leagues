@@ -26,6 +26,8 @@ to create any missing teams in the Team table (not the TeamSM table).
 python manage.py update_games_boilerplate <smSeasonId> <startDate> <endDate>
 to request the match data from the sportmonks API, update or create the FixtureSM and Game instances. 
 
+OR
+
 8. Download the Fixtures from sportmonks and populate the FixtureSM table using the management command 
 "python manage.py sm_create_or_update_fixtures_for_daterange_paginated <smLeagueId> <smSeasonId> <startDate> <endDate>".
 

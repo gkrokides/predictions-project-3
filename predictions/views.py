@@ -1825,8 +1825,21 @@ def alerts_upcoming_pst_games(request):
 def alerts_finished_games(request):
     today = datetime.today()
     finished_games_without_score = GameSeasonFilter(request.GET, queryset=Game.objects.filter(date__lt=today, homegoals__isnull=True).order_by('season'))
-    # finished_games_without_score = Game.objects.filter(date__lt=today, homegoals__isnull=True).order_by('season')
-    return render(request, 'predictions/alerts_finished_games_without_score.html', {'finished_games_without_score': finished_games_without_score})
+    x = []
+    for g in finished_games_without_score:
+        x.append({
+            'season': g.season,
+            'gameweek': g.gameweek,
+            'date': g.date,
+            'hometeam': g.hometeam,
+            'awayteam': g.awayteam,
+            'command': "python manage.py update_games_boilerplate " + 
+                str(g.season.season_sm.season_id) + " " + 
+                str(g.date) + " " + 
+                str(g.date + timedelta(days=15))
+            })
+
+    return render(request, 'predictions/alerts_finished_games_without_score.html', {'finished_games_without_score': finished_games_without_score, 'x': x})
 
 
 def alerts_refresh_formulas(request):
