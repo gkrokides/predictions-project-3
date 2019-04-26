@@ -38,7 +38,6 @@ urlpatterns = [
     url(r'^alerts/upcoming-pst-games/$', views.alerts_upcoming_pst_games, name='alerts_upcoming_pst_games'),
     url(r'^alerts/finished-games-without-score/$', views.alerts_finished_games, name='alerts_finished_games'),
     url(r'^alerts/games-to-refresh/$', views.alerts_refresh_formulas, name='alerts_refresh'),
-    # url(r'^livescore/$', views.livescore, name='livescore'),
     url(r'^add-tip/$', views.addtip, name='add_tip'),
     url(r'^add-tip/(?P<pk>[0-9]+)/$', views.add_tip_from_pk, name='add_tip_from_pk'),
     url(r'^tips$', views.tip_list, name='tip_list'),
@@ -50,6 +49,6 @@ urlpatterns = [
     url(r'^betslips/(?P<pk>[0-9]+)/edit/$', views.betslip_edit, name='betslip_edit'),
     url(r'^betslip-tipster/([\w\-]+)/$', views.betslips_by_tipster, name='betslips_by_tipster'),
     url(r'^smleaguedata$', views.smleaguedata, name='smleaguedata'),
-
-
+    url(r'^smlivescorerawview$', views.external_sm_api_view),
+    url(r'^livescore/$', views.livescore, name='livescore')
 ]

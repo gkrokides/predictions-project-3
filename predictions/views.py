@@ -14,7 +14,12 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.core.mail import send_mail, BadHeaderError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+
+import requests
+import time
+# from rest_framework import status
+# from rest_framework.response import Response
 
 # from django.db.models import Count
 
@@ -2039,10 +2044,6 @@ def league_overview(request, sid):
                    'last_gamewk_no_scores_cnt': last_gamewk_no_scores_cnt, 'predictions_exist': predictions_exist})
 
 
-def livescore(request):
-    return render(request, 'predictions/livescore.html')
-
-
 def addtip(request):
     if request.method == "POST":
         form = TipForm(request.POST)
@@ -2222,14 +2223,14 @@ def betslips_by_tipster(request, tipster):
                                                                     'current_end_year': current_end_year,
                                                                     'current_end_year_for_title': current_end_year_for_title, 'tipster': tipster})
 
+
 def smleaguedata(request):
     # API call to get data for selected league (by Id) from sportmonks
 
     import requests
     import json
     from predictions_project.settings import production
-    #from django.conf import settings
-    
+    # from django.conf import settings
 
     http1 = 'https://soccer.sportmonks.com/api/v2.0/leagues/'
     leagueID = str(181)
@@ -2238,10 +2239,10 @@ def smleaguedata(request):
         from predictions_project.settings import local
         api_token = local.sm_API
     else:
-        api_token = production.sm_API    
+        api_token = production.sm_API
     http3 = '&include=country,season'
 
-    requestString = http1+leagueID+http2+api_token+http3
+    requestString = http1 + leagueID + http2 + api_token + http3
 
     # response = requests.get("https://soccer.sportmonks.com/api/v2.0/leagues/181?api_token=UtfTQXmWeltdNWnWsL53IbP3t7YDyezdR0fMuVbAl9gk9ErXbJOyxQJAEVGB&include=country,season")
     response = requests.get(requestString)
@@ -2265,4 +2266,33 @@ def smleaguedata(request):
         'response': response, 'smleague_data': smleague_data})
 
 
+def external_sm_api_view(request):
+    from predictions_project.settings import production
+    MAX_RETRIES = 5
+    if production.sm_API == '':
+        from predictions_project.settings import local
+        api_token = {'api_token': local.sm_API}
+    else:
+        api_token = {'api_token': production.sm_API}
+
+    url = "https://soccer.sportmonks.com/api/v2.0/livescores"
+
+    if request.method == "GET":
+        attempt_num = 0  # keep track of how many times we've retried
+        while attempt_num < MAX_RETRIES:
+            r = requests.get(url, params=api_token, timeout=10)
+            if r.status_code == 200:
+                data = r.json()
+                return JsonResponse(data)
+            else:
+                attempt_num += 1
+                # You can probably use a logger to log the error here
+                time.sleep(5)  # Wait for 5 seconds before re-trying
+        return JsonResponse({"error": "Request failed"})
+    else:
+        return JsonResponse({"error": "Method not allowed"})
+
+
+def livescore(request):
+    return render(request, 'predictions/livescore.html')
 

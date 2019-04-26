@@ -1,27 +1,91 @@
 {% extends 'predictions/base.html' %}
+{% block head %}
 
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jqc-1.12.3/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-flash-1.2.2/b-html5-1.2.2/b-print-1.2.2/r-2.1.0/datatables.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jqc-1.12.3/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-flash-1.2.2/b-html5-1.2.2/b-print-1.2.2/r-2.1.0/datatables.min.css"/>
+
+
+
+<script>
+    $(document).ready(function() {
+    $('#livetable').DataTable( {
+        "scrollY": "600px",
+        "paging": false,
+        "scrollCollapse": true,
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    } );
+} );
+</script>
+
+
+
+{% endblock %}
 {% block header %}{% endblock %}
-{% block content12 %}
 
-<!--<iframe src="http://livescores.website/widgetsoccerblue" frameborder="0" scrolling="no" style="border:none;width:660px;min-height:1080px;overflow: scroll"></iframe><div><a href="http://livescores.website/soccer/" title="Soccer livescores" target="_blank">Soccer livescores</a> by livescores.website.</div>-->
+{% block content30 %}
 
-<!--<iframe src="https://www.ligascore.com/widget/soccer" width="100%" height="800" frameborder="0"></iframe>-->
 
-<!--<iframe id="inscore-xdc-428823" src="http://www.livescore.in/free/428823/" width="624" height="500" frameborder="0" scrolling="no"></iframe>-->
 
-<!--<script type="text/javascript">/*<![CDATA[*/try{function inscore_428823_xdc(){this.elm = null;this.hash = null;var times_resized = 0;var times_not_resized = 0;this.resize = function(){times_resized == 1023 && (times_resized = 0);times_not_resized == 1023 && (times_not_resized = 0);if(this.getElm() && location.hash && location.hash != this.hash){this.hash = location.hash;var reggg = new RegExp(".*inscore_ifheight_xdc_([0-9]{2,5}).*");if(result=reggg.exec(location.hash)){this.getElm().style.height = (typeof result[1] == "undefined" ? "10000":(result[1] > 500 && result[1] <= 30000 ? parseInt(result[1]):500)) + "px";times_resized ++;}} else if(location.hash && location.hash == this.hash) times_not_resized ++;else return resize_later(75);resize_later(250);};var resize_later = function(time){setTimeout(function(){ inscore_428823_xdc_run.resize(); }, time);};this.getElm = function(){try {(typeof this.elm == "undefined" || this.elm === null || !this.elm) && (this.elm = document.getElementById("inscore-xdc-428823"));} catch(e) { this.elm = null; }return this.elm;};var show_links = function(){if((times_resized >= 1 || times_not_resized >= 2) && (obj = document.getElementById("freescore_links_428823"))){obj.style.visibility = "visible";obj.style.display = "block";} else show_links_later();};var show_links_later = function() { setTimeout(function(){ show_links(); }, 100); };if (typeof window.postMessage == "undefined"){show_links_later();resize_later();}else{var ev = function(event){try{var data = JSON.parse(event.data);}catch (e){return;}if (data instanceof Array && data[0] == 428823 && typeof data[1] != "undefined"){eval(data[1]);}};if (window.addEventListener){window.addEventListener( "message", ev);}else if ( window.attachEvent ) {window.attachEvent("onmessage", ev);}setTimeout(function(){ document.getElementById("inscore-xdc-428823").contentWindow.postMessage(JSON.stringify(["428823", "run"]), "*"); }, 2000);show_links_later();resize_later();}};var inscore_428823_xdc_run = new inscore_428823_xdc();}catch(e){document.getElementById("inscore-xdc-428823").style.height = "10000px";}-->
-<!--/*]]>*/</script>-->
+    <div id="list">
+    </div>
 
-<!--<script src="http://www.btfscores.com/widgets/widget-main.min.js" async></script>-->
-<!--<div id="soccer-main-goal"></div>-->
+    <table id="livetable" class="display compact" cellspacing="0" width="100%">
+        <thead>
+            <tr style="font-size:80%;">
+                <th>Game_ID</th>
+                <th>Homegoals</th>
+                <th>Awaygoals</th>
+            </tr>
+        </thead>
+        <tbody>
 
-<!--<iframe src="https://www.ligascore.com/widget/soccer" width="100%" height="800" frameborder="0"></iframe>-->
 
-<!--<iframe id="inscore-xdc-837751" src="https://www.livescore.in/free/837751/" width="624" height="500" frameborder="0" scrolling="no"></iframe>-->
+        </tbody>
+    </table>
 
-<!--<script type="text/javascript">/*<![CDATA[*/try{function inscore_837751_xdc(){this.elm = null;this.hash = null;var times_resized = 0;var times_not_resized = 0;this.resize = function(){times_resized == 1023 && (times_resized = 0);times_not_resized == 1023 && (times_not_resized = 0);if(this.getElm() && location.hash && location.hash != this.hash){this.hash = location.hash;var reggg = new RegExp(".*inscore_ifheight_xdc_([0-9]{2,5}).*");if(result=reggg.exec(location.hash)){this.getElm().style.height = (typeof result[1] == "undefined" ? "10000":(result[1] > 500 && result[1] <= 30000 ? parseInt(result[1]):500)) + "px";times_resized ++;}} else if(location.hash && location.hash == this.hash) times_not_resized ++;else return resize_later(75);resize_later(250);};var resize_later = function(time){setTimeout(function(){ inscore_837751_xdc_run.resize(); }, time);};this.getElm = function(){try {(typeof this.elm == "undefined" || this.elm === null || !this.elm) && (this.elm = document.getElementById("inscore-xdc-837751"));} catch(e) { this.elm = null; }return this.elm;};var show_links = function(){if((times_resized >= 1 || times_not_resized >= 2) && (obj = document.getElementById("freescore_links_837751"))){obj.style.visibility = "visible";obj.style.display = "block";} else show_links_later();};var show_links_later = function() { setTimeout(function(){ show_links(); }, 100); };if (typeof window.postMessage == "undefined"){show_links_later();resize_later();}else{var ev = function(event){try{var data = JSON.parse(event.data);}catch (e){return;}if (data instanceof Array && data[0] == 837751 && typeof data[1] != "undefined"){eval(data[1]);}};if (window.addEventListener){window.addEventListener( "message", ev);}else if ( window.attachEvent ) {window.attachEvent("onmessage", ev);}setTimeout(function(){ document.getElementById("inscore-xdc-837751").contentWindow.postMessage(JSON.stringify(["837751", "run"]), "*"); }, 2000);show_links_later();resize_later();}};var inscore_837751_xdc_run = new inscore_837751_xdc();}catch(e){document.getElementById("inscore-xdc-837751").style.height = "10000px";}-->
-<!--/*]]>*/</script>-->
 
-<!--<iframe src="http://free.scorespro.com/soccer2.php?style=ffffff,007591,919191,FFFFFF,000033,F4F4F4,FFFFFF,tahoma,8,468,dedede" frameborder="0" height="4000" scrolling="No" width="468" marginheight="0" marginwidth="0"></iframe>-->
 
+<script>
+$(document).ready(function(){
+    $.ajax({
+    url: '/smlivescorerawview',
+    type: 'get', // This is the default though, you don't actually need to always mention it
+    success: function(data) {
+        var smdata = data['data'];
+        var tr;
+
+        $.each(smdata, function(index,smdata) {        
+        $('#list').append(smdata['id']+", ")
+        });
+
+        $("#livetable tbody").empty();
+        $.each(smdata, function (index,smdata) {
+            $("tbody").append(
+               "<tr>" +
+               "<td>" + smdata['id'] + "</td>" +
+               "<td>" + smdata['scores']['localteam_score'] + "</td>" +
+               "<td>" + smdata['scores']['visitorteam_score'] + "</td>" +
+               "</tr>"
+            )
+        })
+
+        //  $('#livetable tbody').html("");
+        // $.each(smdata, function(index,smdata) {        
+        //     tr = $('<tr>');
+        //     tr.append("<td>" + smdata['id'] + "</td>");
+        //      $('#myTable tbody').append(tr);
+        //     console.log(tr);
+        // });
+
+    },
+    failure: function(data) { 
+        alert('Something went wrong');
+    }
+}); 
+});    
+</script>
 {% endblock %}
