@@ -28,7 +28,7 @@
 
 {% block content30 %}
 
-
+    <h1>Example text to make sure not the whole page is refreshing.</h1>
 
     <div id="list">
     </div>
@@ -37,8 +37,12 @@
         <thead>
             <tr style="font-size:80%;">
                 <th>Game_ID</th>
-                <th>Homegoals</th>
-                <th>Awaygoals</th>
+                <th>Match Time</th>
+                <th>Home Team</th>
+                <th>Score</th>
+                <th>Away Team</th>
+                <th>Minute</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -58,17 +62,24 @@ $(document).ready(function(){
         var smdata = data['data'];
         var tr;
 
-        $.each(smdata, function(index,smdata) {        
-        $('#list').append(smdata['id']+", ")
-        });
-
         $("#livetable tbody").empty();
         $.each(smdata, function (index,smdata) {
+            var score = ''
+            var minute = ''
+            
+            if (smdata['time']['minute'] != null){
+                minute = smdata['time']['minute'] + "'";
+                score = smdata['scores']['localteam_score'] + " - " + smdata['scores']['visitorteam_score'];
+            }
             $("tbody").append(
                "<tr>" +
                "<td>" + smdata['id'] + "</td>" +
-               "<td>" + smdata['scores']['localteam_score'] + "</td>" +
-               "<td>" + smdata['scores']['visitorteam_score'] + "</td>" +
+               "<td>" + smdata['time']['starting_at']['time'] + "</td>" +
+               "<td>" + smdata['localTeam']['data']['name'] + "</td>" +
+               "<td>" + score + "</td>" +
+               "<td>" + smdata['visitorTeam']['data']['name'] + "</td>" +
+               "<td>" + minute + "</td>" +
+               "<td>" + smdata['time']['status'] + "</td>" +
                "</tr>"
             )
         })

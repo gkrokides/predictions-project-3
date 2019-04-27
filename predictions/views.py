@@ -2271,16 +2271,23 @@ def external_sm_api_view(request):
     MAX_RETRIES = 5
     if production.sm_API == '':
         from predictions_project.settings import local
-        api_token = {'api_token': local.sm_API}
+        api_token = local.sm_API
     else:
-        api_token = {'api_token': production.sm_API}
+        api_token = production.sm_API
 
+    # timezone = "&tz=Europe/Athens"
     url = "https://soccer.sportmonks.com/api/v2.0/livescores"
+    params = (
+        ('api_token', api_token),
+        ('include', 'localTeam,visitorTeam,tvstations'),
+        ('tz', 'Europe/Athens'),
+        )
 
     if request.method == "GET":
         attempt_num = 0  # keep track of how many times we've retried
         while attempt_num < MAX_RETRIES:
-            r = requests.get(url, params=api_token, timeout=10)
+            r = requests.get(url, params=params, timeout=10)
+            # print r.url
             if r.status_code == 200:
                 data = r.json()
                 return JsonResponse(data)
