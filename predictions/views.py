@@ -2300,6 +2300,104 @@ def external_sm_api_view(request):
         return JsonResponse({"error": "Method not allowed"})
 
 
+def livescore_sm_api_view(request):
+    today = datetime.today()
+    threshold = datetime.now() + timedelta(days=3)
+    upcoming_predictions = Game.objects.select_related('season').filter(date__gte=today, date__lte=threshold, game_status='OK').exclude(homegoals__gte=0).order_by('date', 'fixture_sm__match_time')
+    leagues = [l.fixture_sm.season.league.league_id for l in upcoming_predictions]
+    final_data = []
+
+    from predictions_project.settings import production
+    MAX_RETRIES = 5
+    if production.sm_API == '':
+        from predictions_project.settings import local
+        api_token = local.sm_API
+    else:
+        api_token = production.sm_API
+
+    # timezone = "&tz=Europe/Athens"
+    url = "https://soccer.sportmonks.com/api/v2.0/livescores"
+    params = (
+        ('api_token', api_token),
+        ('include', 'localTeam,visitorTeam,tvstations'),
+        ('tz', 'Europe/Athens'),
+        )
+
+    if request.method == "GET":
+        attempt_num = 0  # keep track of how many times we've retried
+        while attempt_num < MAX_RETRIES:
+            r = requests.get(url, params=params, timeout=10)
+            # print r.url
+            if r.status_code == 200:
+                data = r.json()
+                dataJson = json.dumps(data, sort_keys=True, indent=4)
+                dataDict = json.loads(dataJson)
+                for d in dataDict['data']:
+                    if d['league_id'] in leagues:
+                        currentMatch_id = int(d['id'])
+                        minute = ''
+                        score = '-'
+                        gameObj = Game.objects.get(fixture_sm__fixture_id=currentMatch_id)
+                        tm = gameObj.fixture_sm.match_time
+                        tm_formatted = tm.strftime("%H:%M")
+                        if d['time']['minute'] != None:
+                            minute = str(d['time']['minute']) + "'"
+                            score = str(d['scores']['localteam_score']) + " - " + str(d['scores']['visitorteam_score'])
+
+                        final_data.append(
+                            {
+                                'cntr': gameObj.season.league.country_code,
+                                'lg': gameObj.season.league.short_name,
+                                'gmwk': gameObj.gameweek,
+                                'home': gameObj.hometeam.name,
+                                'vs': '-',
+                                'away': gameObj.awayteam.name,
+                                'date': gameObj.date,
+                                'time': tm_formatted,
+                                'bp': gameObj.prediction_elohist,
+                                'mp': gameObj.prediction_elol6,
+                                'yp': gameObj.prediction_gsrs,
+                                'pk': gameObj.pk,
+                                'score': score,
+                                'minute': minute,
+                                'status': d['time']['status']
+                            }
+                        )
+                # final_data_json = json.dumps(final_data)
+                return JsonResponse(final_data, safe=False)
+            else:
+                attempt_num += 1
+                # You can probably use a logger to log the error here
+                time.sleep(5)  # Wait for 5 seconds before re-trying
+        return JsonResponse({"error": "Request failed"})
+    else:
+        return JsonResponse({"error": "Method not allowed"})
+
+
 def livescore(request):
-    return render(request, 'predictions/livescore.html')
+    from SMcalls import SMcall_livescore
+    today = datetime.today()
+    threshold = datetime.now() + timedelta(days=3)
+    upcoming_predictions = Game.objects.select_related('season').filter(date__gte=today, date__lte=threshold, game_status='OK').exclude(homegoals__gte=0).order_by('date', 'fixture_sm__match_time')
+    countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
+    live_table = SMcall_livescore(request)
+    # live_table_json = json.dumps(live_table, indent=4)
+    # live_table_dict = json.loads(live_table_json)
+    # country_codes = Leagues.objects.order_by('country').values_list('country_code', flat=True).distinct()
+    x = []
+    # i = 0
+    # for c in countries:
+    #     x.append([c, country_codes[i]])
+    #     i += 1
+    szns_drpdown = {}
+    # filling in a dictionary of leagues for each country
+    for cntr in countries:
+        szns_drpdown.update({str(cntr): Season.objects.get_seasons_full(cntr)})
+
+    for key, value in szns_drpdown.items():
+        x.append([key, szns_drpdown[key][0][1], szns_drpdown[key][0][7]])
+    # szns_drpdown = json.dumps(szns_drpdown)
+    sorted_x = sorted(x, key=itemgetter(0), reverse=False)
+    return render(request, 'predictions/livescore3.html', {'x': x, 'sorted_x': sorted_x,
+        'upcoming_predictions': upcoming_predictions, 'threshold': threshold, 'live_table': live_table})
 

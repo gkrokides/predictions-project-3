@@ -1,8 +1,11 @@
 from __future__ import unicode_literals
-from predictions.models import CountrySM, LeagueSM, SeasonSM, TeamSM, FixtureSM
+from predictions.models import CountrySM, LeagueSM, SeasonSM, TeamSM, FixtureSM, Game
 from predictions_project.smhelpers.emptyIfNone import emptyIfNone
 import datetime
-from datetime import timedelta
+from datetime import timedelta, datetime
+import requests
+import json
+
 
 # API call to get data for selected league (by Id) from sportmonks and convert it to dict
 
@@ -292,9 +295,9 @@ def SMcall_LeagueFixturesByDaterange(league, season, start_date, end_date):
     for i in range(0, len(f)):
         if f[i]['season_id'] == season:
             match_date_str = f[i]['time']['starting_at']['date']
-            match_date = datetime.datetime.strptime(match_date_str, '%Y-%m-%d')
+            match_date = datetime.strptime(match_date_str, '%Y-%m-%d')
             match_time_str = f[i]['time']['starting_at']['time']
-            match_time = datetime.datetime.strptime(match_time_str, '%H:%M:%S')
+            match_time = datetime.strptime(match_time_str, '%H:%M:%S')
             current_hometeam = TeamSM.objects.get(pk=f[i]['localteam_id'])
             current_awayteam = TeamSM.objects.get(pk=f[i]['visitorteam_id'])
             allOdds = f[i]['odds']['data']
@@ -391,9 +394,9 @@ def SMcall_LeagueFixturesByDaterange_paginated(league, season, start_date, end_d
         for i in range(0, len(f)):
             if f[i]['season_id'] == season:
                 match_date_str = f[i]['time']['starting_at']['date']
-                match_date = datetime.datetime.strptime(match_date_str, '%Y-%m-%d')
+                match_date = datetime.strptime(match_date_str, '%Y-%m-%d')
                 match_time_str = f[i]['time']['starting_at']['time']
-                match_time = datetime.datetime.strptime(match_time_str, '%H:%M:%S')
+                match_time = datetime.strptime(match_time_str, '%H:%M:%S')
                 current_hometeam = TeamSM.objects.get(pk=f[i]['localteam_id'])
                 current_awayteam = TeamSM.objects.get(pk=f[i]['visitorteam_id'])
                 allOdds = f[i]['odds']['data']
@@ -560,3 +563,78 @@ def SMcall_teamsBySeason(seasonId):
             print 'Serious Warning: ' + smDict['data'][i]['name'] + ' is missing one or more vital values and has been excluded.'
 
     return final_list
+
+
+def SMcall_livescore(request):
+    today = datetime.today()
+    threshold = datetime.now() + timedelta(days=3)
+    upcoming_predictions = Game.objects.select_related('season').filter(date__gte=today, date__lte=threshold, game_status='OK').exclude(homegoals__gte=0).order_by('date', 'fixture_sm__match_time')
+    leagues = [l.fixture_sm.season.league.league_id for l in upcoming_predictions]
+    final_data = []
+    from predictions_project.settings import production
+    MAX_RETRIES = 5
+    if production.sm_API == '':
+        from predictions_project.settings import local
+        api_token = local.sm_API
+    else:
+        api_token = production.sm_API
+
+    # timezone = "&tz=Europe/Athens"
+    url = "https://soccer.sportmonks.com/api/v2.0/livescores"
+    params = (
+        ('api_token', api_token),
+        ('include', 'localTeam,visitorTeam,tvstations'),
+        ('tz', 'Europe/Athens'),
+    )
+
+    if request.method == "GET":
+        attempt_num = 0  # keep track of how many times we've retried
+        while attempt_num < MAX_RETRIES:
+            r = requests.get(url, params=params, timeout=10)
+            # print r.url
+            if r.status_code == 200:
+                data = r.json()
+                dataJson = json.dumps(data, sort_keys=True, indent=4)
+                dataDict = json.loads(dataJson)
+                for d in dataDict['data']:
+                    if d['league_id'] in leagues:
+                        currentMatch_id = int(d['id'])
+                        minute = ''
+                        score = '-'
+                        gameObj = Game.objects.get(fixture_sm__fixture_id=currentMatch_id)
+                        tm = gameObj.fixture_sm.match_time
+                        tm_formatted = tm.strftime("%H:%M")
+                        if d['time']['minute'] != None:
+                            minute = str(d['time']['minute']) + "'"
+                            score = str(d['scores']['localteam_score']) + " - " + str(d['scores']['visitorteam_score'])
+
+                        final_data.append(
+                            {
+                                'cntr': gameObj.season.league.country_code,
+                                'lg': gameObj.season.league.short_name,
+                                'gmwk': gameObj.gameweek,
+                                'home': gameObj.hometeam.name,
+                                'vs': '-',
+                                'away': gameObj.awayteam.name,
+                                'date': gameObj.date,
+                                'time': tm_formatted,
+                                'bp': gameObj.prediction_elohist,
+                                'mp': gameObj.prediction_elol6,
+                                'yp': gameObj.prediction_gsrs,
+                                'pk': gameObj.pk,
+                                'score': score,
+                                'minute': minute,
+                                'status': d['time']['status']
+                            }
+                        )
+                # final_data_json = json.dumps(final_data)
+                return final_data
+            else:
+                attempt_num += 1
+                errormsg = "Request failed"
+                # You can probably use a logger to log the error here
+                time.sleep(5)  # Wait for 5 seconds before re-trying
+        return errormsg
+    else:
+        errormsg = "Method not allowed"
+        return errormsg

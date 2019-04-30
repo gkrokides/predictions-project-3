@@ -1,13 +1,11 @@
 {% extends 'predictions/base.html' %}
-
 {% block head %}
-
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
 
     <script>
         $(document).ready(function() {
-        $('#example').DataTable( {
+        $('#livetable').DataTable( {
         "paging":   false,
         "ordering": true,
         "info":     true
@@ -22,13 +20,16 @@
     </script>
 
 {% endblock %}
-
-{% block header %}
-{% endblock %}
+{% block header %}{% endblock %}
 
 {% block content30 %}
+
+<h1>Example text to make sure not the whole page is refreshing.</h1>
+
+
 <p style="border: solid; padding: 5px; background: grey;">
 <span style="color: white;"><strong>Overview/Stats:</strong></span>
+
 {% for item in sorted_x %}
 
 <!--<a href="{% url 'league_overview' sid=item.1 %}" data-toggle="tooltip" data-placement="top" title="{{ item.0 }}"><img src="" class="flag flag-{{ item.2 }}" alt=""/></a>-->
@@ -41,23 +42,12 @@
     {% endif %}
 {% endfor %}
 </p>
-        <!--<form class="" action="{% url 'predictions_by_day' %}" method="POST">-->
-
-            <!--<select name="cntries" id="cntries">-->
-                <!--<option value="" disabled selected>Select Country</option>-->
-                <!--{% for val in sorted_x %}-->
-                          <!--<option value="{{ val.1 }}">{{ val.0 }}</option>-->
-                <!--{% endfor %}{% csrf_token %}-->
-            <!--</select>-->
-
-        <!--<input type="submit" value="Submit">-->
-        <!--</form>-->
 <br>
 
 {% load app_filters %}
 {% load humanize %}
 <div class="table-responsive">
-<table id="example" class="table display compact" cellspacing="0" width="100%" style="font-size: 90%;">
+<table id="livetable" class="table display compact" cellspacing="0" width="100%" style="font-size: 90%;">
     <thead>
       <tr style="background: grey; color: white;">
         <th width="1%" class="centred">Cntr</th>
@@ -75,6 +65,9 @@
         {% if user.is_authenticated %}
         <th class="centred">Add tip</th>
         {% endif %}
+        <th class="centred">Score</th>
+        <th class="centred">Minute</th>
+        <th class="centred">Status</th>
       </tr>
     </thead>
     <tbody class="centred">
@@ -90,11 +83,11 @@
         <td style="font-size: 85%; text-align: left;" width="22%">{{ itemm.awayteam }}</td>
 
         {% if itemm.date|naturalday  == 'today' %}
-        <td style="vertical-align: middle;"><span class="label label-danger">{{ itemm.date|naturalday }}</span></td>
+        <td><span class="label label-danger">{{ itemm.date|naturalday }}</span></td>
         {% elif itemm.date|naturalday  == 'tomorrow' %}
-        <td style="vertical-align: middle;"><span class="label label-warning">{{ itemm.date|naturalday }}</span></td>
+        <td><span class="label label-warning">{{ itemm.date|naturalday }}</span></td>
         {% else %}
-        <td width="18%" style="vertical-align: middle;">{{ itemm.date|naturalday }}</td>
+        <td width="18%">{{ itemm.date|naturalday }}</td>
         {% endif %}
         <td width="6%">{{ itemm.fixture_sm.match_time|time:"H:i"}}</td>
         <td width="9%" class="{{ itemm.prediction_elohist|apply_prediction_colors }}"><strong>{{ itemm.prediction_elohist }}</strong></td>
@@ -112,9 +105,55 @@
 </div>
 
 
+<script>
+$(document).ready(function(){
+    $.ajax({
+    url: '/smlivescorerawview',
+    type: 'get', // This is the default though, you don't actually need to always mention it
+    success: function(data) {
+        var smdata = data['data'];
+        var tr;
+        // var rows = $('#livetable tbody tr').length
+
+        // for (var i = 0; i < rows; i++) {
+        //     current_row = $("#livetable tbody")
+        //     if ()
+        // }
+        var newPredictions = {{ upcoming_predictions }}
+
+        // for (itemm in newPredictions){
+        // }
+
+        $("#livetable tbody").empty();
+        $.each(smdata, function (index,smdata) {
+            var score = ''
+            var minute = ''
+            
+            if (smdata['time']['minute'] != null){
+                minute = smdata['time']['minute'] + "'";
+                score = smdata['scores']['localteam_score'] + " - " + smdata['scores']['visitorteam_score'];
+            }
+            $("tbody").append(
+               "<tr>" +
+               "<td>" + smdata['id'] + "</td>" +
+               "<td>" + smdata['time']['starting_at']['time'] + "</td>" +
+               "<td>" + smdata['localTeam']['data']['name'] + "</td>" +
+               "<td>" + score + "</td>" +
+               "<td>" + smdata['visitorTeam']['data']['name'] + "</td>" +
+               "<td>" + minute + "</td>" +
+               "<td>" + smdata['time']['status'] + "</td>" +
+               "</tr>"
+            )
+        })
+
+    },
+    failure: function(data) { 
+        alert('Something went wrong');
+    }
+}); 
+});    
+</script>
+
+
+
 {% endblock %}
-
-
-
-
-

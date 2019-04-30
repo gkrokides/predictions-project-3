@@ -49,6 +49,6 @@ urlpatterns = [
     url(r'^betslips/(?P<pk>[0-9]+)/edit/$', views.betslip_edit, name='betslip_edit'),
     url(r'^betslip-tipster/([\w\-]+)/$', views.betslips_by_tipster, name='betslips_by_tipster'),
     url(r'^smleaguedata$', views.smleaguedata, name='smleaguedata'),
-    url(r'^smlivescorerawview$', views.external_sm_api_view),
+    url(r'^smlivescorerawview$', views.livescore_sm_api_view),
     url(r'^livescore/$', views.livescore, name='livescore')
 ]

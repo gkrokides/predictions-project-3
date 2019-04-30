@@ -59,27 +59,35 @@ $(document).ready(function(){
     url: '/smlivescorerawview',
     type: 'get', // This is the default though, you don't actually need to always mention it
     success: function(data) {
-        var smdata = data['data'];
-        var tr;
-
         $("#livetable tbody").empty();
-        $.each(smdata, function (index,smdata) {
+        $.each(data, function (index,data) {
             var score = ''
             var minute = ''
+            var pk = data['pk']
+            var h2h = "<a href="
             
-            if (smdata['time']['minute'] != null){
-                minute = smdata['time']['minute'] + "'";
-                score = smdata['scores']['localteam_score'] + " - " + smdata['scores']['visitorteam_score'];
+            if (data['minute'] != null || data['minute'] != ""){
+                minute = data['minute'] + "'";
+                score = data['score'];
             }
             $("tbody").append(
                "<tr>" +
-               "<td>" + smdata['id'] + "</td>" +
-               "<td>" + smdata['time']['starting_at']['time'] + "</td>" +
-               "<td>" + smdata['localTeam']['data']['name'] + "</td>" +
+               "<td>" + data['cntr'] + "</td>" +
+               "<td>" + data['lg'][+ "</td>" +
+               "<td>" + data['gmwk'] + "</td>" +
+               "<td>" + data['home'] + "</td>" +
+               "<td>" + data['vs'] + "</td>" +
+               "<td>" + data['away'] + "</td>" +
+               "<td>" + data['date'] + "</td>" +
+               "<td>" + data['time'] + "</td>" +
+               "<td>" + data['bp'] + "</td>" +
+               "<td>" + data['mp'] + "</td>" +
+               "<td>" + data['yp'] + "</td>" +
+               "<td><a href=" + "'{% url 'h2h' data['pk'] %}'" + ">H2H</a>" + "</td>" +
+               "<td><a href=" + "'{% url 'add_tip_from_pk' data['pk'] %}'" + ">+Tip</a>" + "</td>" +
                "<td>" + score + "</td>" +
-               "<td>" + smdata['visitorTeam']['data']['name'] + "</td>" +
                "<td>" + minute + "</td>" +
-               "<td>" + smdata['time']['status'] + "</td>" +
+               "<td>" + data['status'] + "</td>" +
                "</tr>"
             )
         })
@@ -97,6 +105,6 @@ $(document).ready(function(){
         alert('Something went wrong');
     }
 }); 
-});    
+});   
 </script>
 {% endblock %}
