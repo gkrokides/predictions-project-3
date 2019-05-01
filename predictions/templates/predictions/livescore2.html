@@ -3,21 +3,15 @@
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
 
-    <script>
-        $(document).ready(function() {
-        $('#livetable').DataTable( {
-        "paging":   false,
-        "ordering": true,
-        "info":     true
-            } );
-        } );
-    </script>
 
-<script>
+
+    <script>
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
     });
     </script>
+
+  
 
 {% endblock %}
 {% block header %}{% endblock %}
@@ -27,79 +21,23 @@
 <h1>Example text to make sure not the whole page is refreshing.</h1>
 
 
-<p style="border: solid; padding: 5px; background: grey;">
-<span style="color: white;"><strong>Overview/Stats:</strong></span>
-
-{% for item in sorted_x %}
-
-<!--<a href="{% url 'league_overview' sid=item.1 %}" data-toggle="tooltip" data-placement="top" title="{{ item.0 }}"><img src="" class="flag flag-{{ item.2 }}" alt=""/></a>-->
-    {% if item.2 == 'England' %}
-        <a href="{% url 'league_overview' sid=item.1 %}" data-toggle="tooltip" data-placement="top" title="{{ item.0 }}"><span class="flag-icon flag-icon-gb-eng" style="width: 40px; height: 20px;"></span></a>
-        <!--<span class="flag-icon flag-icon-gb-eng" style="width: 40px; height: 20px;"></span>-->
-       {% else %}
-        <a href="{% url 'league_overview' sid=item.1 %}" data-toggle="tooltip" data-placement="top" title="{{ item.0 }}"><span class="flag-icon flag-icon-{{ item.2 }}" style="width: 40px; height: 20px;"></span></a>
-        <!--<span class="flag-icon flag-icon-{{ item.2 }}" style="width: 40px; height: 20px;"></span>-->
-    {% endif %}
-{% endfor %}
-</p>
-<br>
-
 {% load app_filters %}
 {% load humanize %}
 <div class="table-responsive">
-<table id="livetable" class="table display compact" cellspacing="0" width="100%" style="font-size: 90%;">
+<table id="livetable" class="table display compact nowrap" cellspacing="0" width="100%" style="font-size: 90%;">
     <thead>
       <tr style="background: grey; color: white;">
-        <th width="1%" class="centred">Cntr</th>
-        <th class="centred">Lg</th>
-        <th class="centred">Gmwk</th>
-        <th class="centred">Home</th>
-        <th class="centred">vs</th>
-        <th class="centred">Away</th>
-        <th class="centred">Date</th>
-        <th class="centred">Time</th>
-        <th class="centred elohist-background">BP</th>
-        <th class="centred elol6-background">MP</th>
-        <th class="centred gsrs-background">YP</th>
-        <th class="centred">H2H</th>
-        {% if user.is_authenticated %}
-        <th class="centred">Add tip</th>
-        {% endif %}
-        <th class="centred">Score</th>
-        <th class="centred">Minute</th>
-        <th class="centred">Status</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th style="text-align: right;">Home Team</th>
+        <th style="text-align: center;"> - </th>
+        <th>Away Team</th>
+        <th>Minute</th>
+        <th>Status</th>
       </tr>
     </thead>
-    <tbody class="centred">
+    <tbody class="">
 
-    {% for itemm in upcoming_predictions %}
-
-      <tr style ="word-break:break-all;">
-        <td><img src="" class="flag flag-{{ itemm.season.league.country_code }}" alt=""/></td>
-        <td width="7%">{{ itemm.season.league.short_name }}</td>
-        <td>{{ itemm.gameweek }}</td>
-        <td style="font-size: 85%; text-align: right;" width="22%">{{ itemm.hometeam }}</td>
-        <td>-</td>
-        <td style="font-size: 85%; text-align: left;" width="22%">{{ itemm.awayteam }}</td>
-
-        {% if itemm.date|naturalday  == 'today' %}
-        <td><span class="label label-danger">{{ itemm.date|naturalday }}</span></td>
-        {% elif itemm.date|naturalday  == 'tomorrow' %}
-        <td><span class="label label-warning">{{ itemm.date|naturalday }}</span></td>
-        {% else %}
-        <td width="18%">{{ itemm.date|naturalday }}</td>
-        {% endif %}
-        <td width="6%">{{ itemm.fixture_sm.match_time|time:"H:i"}}</td>
-        <td width="9%" class="{{ itemm.prediction_elohist|apply_prediction_colors }}"><strong>{{ itemm.prediction_elohist }}</strong></td>
-        <td width="9%" class="{{ itemm.prediction_elol6|apply_prediction_colors }}"><strong>{{ itemm.prediction_elol6 }}</strong></td>
-        <td width="9%" class="{{ itemm.prediction_gsrs|apply_prediction_colors }}"><strong>{{ itemm.prediction_gsrs }}</strong></td>
-        <td width="1%" class="prediction panel-body"><a href="{% url 'h2h' itemm.pk %}">H2H</a></td>
-        {% if user.is_authenticated %}
-        <td width="1%" class="prediction panel-body"><a href="{% url 'add_tip_from_pk' itemm.pk %}">+Tip</a></td>
-        {% endif %}
-      </tr>
-
-    {% endfor %}
     </tbody>
   </table>
 </div>
@@ -108,7 +46,7 @@
 <script>
 $(document).ready(function(){
     $.ajax({
-    url: '/smlivescorerawview',
+    url: '/smlivescorerawview-all',
     type: 'get', // This is the default though, you don't actually need to always mention it
     success: function(data) {
         var smdata = data['data'];
@@ -119,7 +57,6 @@ $(document).ready(function(){
         //     current_row = $("#livetable tbody")
         //     if ()
         // }
-        var newPredictions = {{ upcoming_predictions }}
 
         // for (itemm in newPredictions){
         // }
@@ -128,23 +65,37 @@ $(document).ready(function(){
         $.each(smdata, function (index,smdata) {
             var score = ''
             var minute = ''
+            var statusTd = "<td>" + smdata['time']['status'] + "</td>"
+
             
             if (smdata['time']['minute'] != null){
                 minute = smdata['time']['minute'] + "'";
                 score = smdata['scores']['localteam_score'] + " - " + smdata['scores']['visitorteam_score'];
             }
+
+            if (smdata['time']['status'] == 'LIVE'){
+                statusTd = "<td style='vertical-align: middle;'>" + 
+                "<span class='label label-danger'>" + smdata['time']['status'] + "</span></td>"
+            }
+
             $("tbody").append(
                "<tr>" +
-               "<td>" + smdata['id'] + "</td>" +
+               "<td>" + smdata['time']['starting_at']['date'] + "</td>" +
                "<td>" + smdata['time']['starting_at']['time'] + "</td>" +
-               "<td>" + smdata['localTeam']['data']['name'] + "</td>" +
-               "<td>" + score + "</td>" +
+               "<td style='text-align: right;'>" + smdata['localTeam']['data']['name'] + "</td>" +
+               "<td style='text-align: center;'>" + score + "</td>" +
                "<td>" + smdata['visitorTeam']['data']['name'] + "</td>" +
                "<td>" + minute + "</td>" +
-               "<td>" + smdata['time']['status'] + "</td>" +
+               statusTd +
                "</tr>"
             )
         })
+
+        $('#livetable').DataTable( {
+        "paging":   false,
+        "ordering": true,
+        "info":     true
+            } );
 
     },
     failure: function(data) { 

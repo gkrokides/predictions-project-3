@@ -48,7 +48,7 @@
         <th class="centred">Date</th>
         <th class="centred">Time</th>
         <th class="centred">Home Team</th>
-        <th class="centred">-</th>
+        <th style='text-align: center;'>-</th>
         <th class="centred">Away Team</th>
         <th class="centred">Minute</th>
         <th class="centred">Status</th>
@@ -69,13 +69,7 @@
 
 <script>
 $(document).ready(function(){
-    $('#livetable').DataTable( {
-        "paging":   false,
-        "ordering": true,
-        "info":     true,
-        "searching": false
-            } );
-
+    
     $.ajax({
     url: '/smlivescorerawview',
     type: 'get', // This is the default though, you don't actually need to always mention it
@@ -86,6 +80,7 @@ $(document).ready(function(){
             var minute = ''
             var cntr = "<img src='' class='flag flag-" + data['cntr'] + "' alt=''/>"
             var statusTd = "<td>" + data['status'] + "</td>"
+            
             if (data['minute'] != null || data['minute'] != ""){
                 minute = data['minute'] + "'";
                 score = data['score'] + " - " + data['score'];
@@ -103,20 +98,34 @@ $(document).ready(function(){
                "<td>" + data['date'] + "</td>" +
                "<td>" + data['time'] + "</td>" +
                "<td>" + data['home'] + "</td>" +
-               "<td>" + data['score'] + "</td>" +
+               "<td style='text-align: center;'>" + data['score'] + "</td>" +
                "<td>" + data['away'] + "</td>" +
                "<td>" + data['minute'] + "</td>" +
                statusTd +
                "<td>" + data['bp'] + "</td>" +
                "<td>" + data['mp'] + "</td>" +
                "<td>" + data['yp'] + "</td>" +
+               "<td>" + 'h2h' + "</td>" +
+               "<td>" + 'Add Tip' + "</td>" +
                "</tr>"
             )
         })
+
+        $('#livetable').DataTable( {
+        "paging":   false,
+        "ordering": true,
+        "info":     true,
+        "searching": true
+            } );
+
+
     },
     failure: function(data) { 
         alert('Something went wrong');
     }
+
+
+
 }); 
 });    
 </script>

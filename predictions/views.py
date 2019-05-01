@@ -2401,3 +2401,6 @@ def livescore(request):
     return render(request, 'predictions/livescore3.html', {'x': x, 'sorted_x': sorted_x,
         'upcoming_predictions': upcoming_predictions, 'threshold': threshold, 'live_table': live_table})
 
+
+def livescore_all(request):
+    return render(request, 'predictions/livescore2.html', {})
