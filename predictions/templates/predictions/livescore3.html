@@ -3,7 +3,14 @@
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
 
+<script type="">
+    {% if user.is_authenticated %}
+        var user_is_authenticated = 1
+    {% else %}
+        var user_is_authenticated = 0    
+    {% endif %}
 
+</script>
 
 <script>
     $(document).ready(function(){
@@ -47,9 +54,9 @@
         <th class="centred">Gmwk</th>
         <th class="centred">Date</th>
         <th class="centred">Time</th>
-        <th class="centred">Home Team</th>
+        <th style='text-align: right;'>Home Team</th>
         <th style='text-align: center;'>-</th>
-        <th class="centred">Away Team</th>
+        <th style='text-align: left;'>Away Team</th>
         <th class="centred">Minute</th>
         <th class="centred">Status</th>
         <th class="centred elohist-background">BP</th>
@@ -67,6 +74,19 @@
   </table>
 </div>
 
+
+<script>
+    function predictionClass(prediction){
+        if(prediction == 'HOME'){
+            return 'home-prediction'
+        } else if (prediction == 'AWAY') {
+            return 'away-prediction'
+        } else {
+            return 'draw-prediction'
+        }
+    }    
+</script>
+
 <script>
 $(document).ready(function(){
     
@@ -76,10 +96,19 @@ $(document).ready(function(){
     success: function(data) {
         $("#livetable tbody").empty();
         $.each(data, function (index,data) {
-            var score = ''
+            var score = '-'
             var minute = ''
             var cntr = "<img src='' class='flag flag-" + data['cntr'] + "' alt=''/>"
+            var h2h = "<td width='1%'' class='prediction panel-body'><a href=" + "/headtohead/" + data['pk'] + ">H2H</a></td>"
             var statusTd = "<td>" + data['status'] + "</td>"
+            var addTip = ''
+            var bpClass = "class='" + predictionClass(data['bp']) +"'"
+            var mpClass = "class='" + predictionClass(data['mp']) +"'"
+            var ypClass = "class='" + predictionClass(data['yp']) +"'"
+
+            if (user_is_authenticated == 1){
+                addTip = "<td width='1%'' class='prediction panel-body'><a href=" + "/add-tip/" + data['pk'] + ">+Tip</a></td>"
+            }
             
             if (data['minute'] != null || data['minute'] != ""){
                 minute = data['minute'] + "'";
@@ -97,16 +126,16 @@ $(document).ready(function(){
                "<td>" + data['gmwk'] + "</td>" +
                "<td>" + data['date'] + "</td>" +
                "<td>" + data['time'] + "</td>" +
-               "<td>" + data['home'] + "</td>" +
-               "<td style='text-align: center;'>" + data['score'] + "</td>" +
-               "<td>" + data['away'] + "</td>" +
+               "<td style='text-align: right;'>" + data['home'] + "</td>" +
+               "<td style='text-align: center;'>" + score + "</td>" +
+               "<td style='text-align: left;'>" + data['away'] + "</td>" +
                "<td>" + data['minute'] + "</td>" +
                statusTd +
-               "<td>" + data['bp'] + "</td>" +
-               "<td>" + data['mp'] + "</td>" +
-               "<td>" + data['yp'] + "</td>" +
-               "<td>" + 'h2h' + "</td>" +
-               "<td>" + 'Add Tip' + "</td>" +
+               "<td " + bpClass + ">" + data['bp'] + "</td>" +
+               "<td " + mpClass + ">" + data['mp'] + "</td>" +
+               "<td " + ypClass + ">" + data['yp'] + "</td>" +
+               h2h +
+               addTip +
                "</tr>"
             )
         })
