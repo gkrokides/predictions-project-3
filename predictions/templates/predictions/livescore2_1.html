@@ -18,21 +18,22 @@
 
 {% block content30 %}
 
-<h1>Example text to make sure not the whole page is refreshing.</h1>
+<h1>Live Score</h1>
 
 
 {% load app_filters %}
 {% load humanize %}
 <div class="table-responsive">
-<table id="livetable" class="table display compact nowrap" cellspacing="0" width="100%" style="font-size: 90%;">
+<table id="livetable" class="table table-condensed" cellspacing="0" width="100%" style="font-size: 90%;">
     <thead>
       <tr style="background: grey; color: white;">
         <th>Date</th>
-        <th>Time</th>
+        <th>Kick Off</th>
         <th style="text-align: right;">Home Team</th>
         <th style="text-align: center;"> - </th>
         <th>Away Team</th>
-        <th>Minute</th>
+        <th style='text-align: right;'>HT</th>
+        <th style="text-align: center;">Minute</th>
         <th>Status</th>
       </tr>
     </thead>
@@ -45,10 +46,11 @@
 
 <script>
 $(document).ready(function(){
-    var table = $.ajax({
-    url: '/smlivescorerawview-all',
-    type: 'get', // This is the default though, you don't actually need to always mention it
-    success: function(data) {
+    function livetableUpdate() {
+      $.ajax({
+      url: '/smlivescorerawview-all',
+      type: 'get', // This is the default though, you don't actually need to always mention it
+      success: function(data) {
         var smdata = data['data'];
         var tr;
 
@@ -57,6 +59,8 @@ $(document).ready(function(){
             var score = ''
             var minute = ''
             var statusTd = "<td>" + smdata['time']['status'] + "</td>"
+            var homeLogo = "<img src='" + smdata['localTeam']['data']['logo_path'] + "' height=20 width=20>"
+            var awayLogo = "<img src='" + smdata['visitorTeam']['data']['logo_path'] + "' height=20 width=20>"
 
             
             if (smdata['time']['minute'] != null){
@@ -73,30 +77,30 @@ $(document).ready(function(){
                "<tr>" +
                "<td>" + smdata['time']['starting_at']['date'] + "</td>" +
                "<td>" + smdata['time']['starting_at']['time'] + "</td>" +
-               "<td style='text-align: right;'>" + smdata['localTeam']['data']['name'] + "</td>" +
-               "<td style='text-align: center;'>" + score + "</td>" +
-               "<td>" + smdata['visitorTeam']['data']['name'] + "</td>" +
-               "<td>" + minute + "</td>" +
+               "<td style='text-align: right;'>" + smdata['localTeam']['data']['name'] + "&nbsp;" + "&nbsp;" + homeLogo + "</td>" +
+               "<td style='text-align: center;'><strong>" + score + "</strong></td>" +
+               "<td>" + awayLogo + "&nbsp;" + "&nbsp;" + smdata['visitorTeam']['data']['name'] + "</td>" +
+               "<td style='text-align: right;'>" + smdata['scores']['ht_score'] + "</td>" +
+               "<td style='text-align: center;'>" + minute + "</td>" +
                statusTd +
                "</tr>"
             )
         })
 
-        $('#livetable').DataTable( {
-        "paging":   false,
-        "ordering": true,
-        "info":     true
-            } );
+
 
     },
     failure: function(data) { 
         alert('Something went wrong');
     }
-});
+    });
+    }
+
+livetableUpdate();    
 
 setInterval( function () {
-    table.ajax.reload();
-}, 5000 );
+    livetableUpdate();
+}, 30000 );
 
 });    
 </script>

@@ -2279,7 +2279,7 @@ def external_sm_api_view(request):
     url = "https://soccer.sportmonks.com/api/v2.0/livescores"
     params = (
         ('api_token', api_token),
-        ('include', 'localTeam,visitorTeam,tvstations'),
+        ('include', 'localTeam,visitorTeam,tvstations,goals'),
         ('tz', 'Europe/Athens'),
         )
 
