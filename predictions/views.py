@@ -2376,7 +2376,7 @@ def external_sm_api_view(request):
 
 def livescore_sm_api_view2(request):
     today = datetime.today()
-    threshold = datetime.now() + timedelta(days=3)
+    threshold = datetime.now() + timedelta(days=2)
     upcoming_predictions = Game.objects.select_related('season').filter(date__gte=today, date__lte=threshold, game_status='OK').exclude(homegoals__gte=0).order_by('date', 'fixture_sm__match_time')
     # leagues = [l.fixture_sm.season.league.league_id for l in upcoming_predictions]
     final_data = []
@@ -2467,12 +2467,12 @@ def livescore_sm_api_view2(request):
 
 
 def livescore(request):
-    from SMcalls import SMcall_livescore
-    today = datetime.today()
-    threshold = datetime.now() + timedelta(days=3)
-    upcoming_predictions = Game.objects.select_related('season').filter(date__gte=today, date__lte=threshold, game_status='OK').exclude(homegoals__gte=0).order_by('date', 'fixture_sm__match_time')
+    # from SMcalls import SMcall_livescore
+    # today = datetime.today()
+    # threshold = datetime.now() + timedelta(days=2)
+    # upcoming_predictions = Game.objects.select_related('season').filter(date__gte=today, date__lte=threshold, game_status='OK').exclude(homegoals__gte=0).order_by('date', 'fixture_sm__match_time')
     countries = Leagues.objects.order_by('country').values_list('country', flat=True).distinct()
-    live_table = SMcall_livescore(request)
+    # live_table = SMcall_livescore(request)
     # live_table_json = json.dumps(live_table, indent=4)
     # live_table_dict = json.loads(live_table_json)
     # country_codes = Leagues.objects.order_by('country').values_list('country_code', flat=True).distinct()
@@ -2490,9 +2490,8 @@ def livescore(request):
         x.append([key, szns_drpdown[key][0][1], szns_drpdown[key][0][7]])
     # szns_drpdown = json.dumps(szns_drpdown)
     sorted_x = sorted(x, key=itemgetter(0), reverse=False)
-    return render(request, 'predictions/livescore.html', {'x': x, 'sorted_x': sorted_x,
-        'upcoming_predictions': upcoming_predictions, 'threshold': threshold, 'live_table': live_table})
+    return render(request, 'predictions/livescore3.html', {'x': x, 'sorted_x': sorted_x})
 
 
 def livescore_all(request):
-    return render(request, 'predictions/livescore2.html', {})
+    return render(request, 'predictions/livescore2_1.html', {})

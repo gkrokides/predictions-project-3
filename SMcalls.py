@@ -567,7 +567,7 @@ def SMcall_teamsBySeason(seasonId):
 
 def SMcall_livescore(request):
     today = datetime.today()
-    threshold = datetime.now() + timedelta(days=3)
+    threshold = datetime.now() + timedelta(days=2)
     upcoming_predictions = Game.objects.select_related('season').filter(date__gte=today, date__lte=threshold, game_status='OK').exclude(homegoals__gte=0).order_by('date', 'fixture_sm__match_time')
     leagues = [l.fixture_sm.season.league.league_id for l in upcoming_predictions]
     final_data = []

@@ -89,70 +89,68 @@
 
 <script>
 $(document).ready(function(){
-    function populateTable(){
-        $.ajax({
-            url: '/smlivescorerawview',
-            type: 'get', // This is the default though, you don't actually need to always mention it
-            success: function(data) {
-                $("#livetable tbody").empty();
-                $.each(data, function (index,data) {
-                    var score = ' - '
-                    var minute = ''
-                    var cntr = "<img src='' class='flag flag-" + data['cntr'] + "' alt=''/>"
-                    var h2h = "<td class='prediction panel-body'><a href=" + "/headtohead/" + data['pk'] + ">H2H</a></td>"
-                    var statusTd = "<td>" + data['status'] + "</td>"
-                    var addTip = ''
-                    var bpClass = "class='" + predictionClass(data['bp']) +"'"
-                    var mpClass = "class='" + predictionClass(data['mp']) +"'"
-                    var ypClass = "class='" + predictionClass(data['yp']) +"'"
+    
+  var table = $.ajax({
+      url: '/smlivescorerawview',
+      type: 'get', // This is the default though, you don't actually need to always mention it
+      success: function(data) {
+          $("#livetable tbody").empty();
+          $.each(data, function (index,data) {
+              var score = ' - '
+              var minute = ''
+              var cntr = "<img src='' class='flag flag-" + data['cntr'] + "' alt=''/>"
+              var h2h = "<td width='1%'' class='prediction panel-body'><a href=" + "/headtohead/" + data['pk'] + ">H2H</a></td>"
+              var statusTd = "<td>" + data['status'] + "</td>"
+              var addTip = ''
+              var bpClass = "class='" + predictionClass(data['bp']) +"'"
+              var mpClass = "class='" + predictionClass(data['mp']) +"'"
+              var ypClass = "class='" + predictionClass(data['yp']) +"'"
 
-                    if (user_is_authenticated == 1){
-                        addTip = "<td class='prediction panel-body'><a href=" + "/add-tip/" + data['pk'] + ">+Tip</a></td>"
-                    }
-                    
-                    if (data['minute'] != null || data['minute'] != ""){
-                        minute = data['minute'] + "'";
-                        score = data['score'] + " - " + data['score'];
-                    }
+              if (user_is_authenticated == 1){
+                  addTip = "<td width='1%'' class='prediction panel-body'><a href=" + "/add-tip/" + data['pk'] + ">+Tip</a></td>"
+              }
+              
+              if (data['minute'] != null || data['minute'] != ""){
+                  minute = data['minute'] + "'";
+                  score = data['score'] + " - " + data['score'];
+              }
 
-                    if (data['status'] == 'LIVE'){
-                        statusTd = "<td style='vertical-align: middle;'>" + 
-                        "<span class='label label-danger'>" + data['status'] + "</span></td>"
-                    } 
-                    $("tbody").append(
-                       "<tr>" +
-                       "<td>" + cntr + "</td>" +
-                       "<td>" + data['lg'] + "</td>" +
-                       "<td>" + data['gmwk'] + "</td>" +
-                       "<td>" + data['date'] + "</td>" +
-                       "<td>" + data['time'] + "</td>" +
-                       "<td style='text-align: right;'>" + data['home'] + "</td>" +
-                       "<td style='text-align: center;'>" + score + "</td>" +
-                       "<td style='text-align: left;'>" + data['away'] + "</td>" +
-                       "<td>" + data['minute'] + "</td>" +
-                       statusTd +
-                       "<td " + bpClass + ">" + data['bp'] + "</td>" +
-                       "<td " + mpClass + ">" + data['mp'] + "</td>" +
-                       "<td " + ypClass + ">" + data['yp'] + "</td>" +
-                       h2h +
-                       addTip +
-                       "</tr>"
-                    )
-                })
+              if (data['status'] == 'LIVE'){
+                  statusTd = "<td style='vertical-align: middle;'>" + 
+                  "<span class='label label-danger'>" + data['status'] + "</span></td>"
+              } 
+              $("tbody").append(
+                 "<tr>" +
+                 "<td>" + cntr + "</td>" +
+                 "<td>" + data['lg'] + "</td>" +
+                 "<td>" + data['gmwk'] + "</td>" +
+                 "<td>" + data['date'] + "</td>" +
+                 "<td>" + data['time'] + "</td>" +
+                 "<td style='text-align: right;'>" + data['home'] + "</td>" +
+                 "<td style='text-align: center;'>" + score + "</td>" +
+                 "<td style='text-align: left;'>" + data['away'] + "</td>" +
+                 "<td>" + data['minute'] + "</td>" +
+                 statusTd +
+                 "<td " + bpClass + ">" + data['bp'] + "</td>" +
+                 "<td " + mpClass + ">" + data['mp'] + "</td>" +
+                 "<td " + ypClass + ">" + data['yp'] + "</td>" +
+                 h2h +
+                 addTip +
+                 "</tr>"
+              )
+          })
 
-            },
-            failure: function(data) { 
-                alert('Something went wrong');
-            }
+      },
+      failure: function(data) { 
+          alert('Something went wrong');
+      }
 
-        });
-    }
+  });
+  
+  setInterval (function(){
+    table.ajax.reload();
+  }, 5000);
 
-    populateTable()
-
-    setInterval (function(){
-        populateTable()
-    }, 30000);
 });
 
 </script>

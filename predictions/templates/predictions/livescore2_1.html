@@ -45,7 +45,7 @@
 
 <script>
 $(document).ready(function(){
-    $.ajax({
+    var table = $.ajax({
     url: '/smlivescorerawview-all',
     type: 'get', // This is the default though, you don't actually need to always mention it
     success: function(data) {
@@ -92,7 +92,12 @@ $(document).ready(function(){
     failure: function(data) { 
         alert('Something went wrong');
     }
-}); 
+});
+
+setInterval( function () {
+    table.ajax.reload();
+}, 5000 );
+
 });    
 </script>
 

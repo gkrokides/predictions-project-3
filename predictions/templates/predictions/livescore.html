@@ -23,9 +23,6 @@
 
 {% block content30 %}
 
-<h1>Example text to make sure not the whole page is refreshing.</h1>
-
-
 <p style="border: solid; padding: 5px; background: grey;">
 <span style="color: white;"><strong>Overview/Stats:</strong></span>
 
@@ -91,9 +88,7 @@
 $(document).ready(function(){
     
     setInterval (function(){
-        $('#livetable').DataTable().destroy();
         if ( ! $.fn.DataTable.isDataTable( '#livetable' ) ) {
-            
             $.ajax({
             url: '/smlivescorerawview',
             type: 'get', // This is the default though, you don't actually need to always mention it
@@ -224,7 +219,7 @@ $(document).ready(function(){
             });
 
         }
-    }, 10000);    
+    }, 30000);    
 });
 
 </script>
