@@ -2490,7 +2490,7 @@ def livescore(request):
         x.append([key, szns_drpdown[key][0][1], szns_drpdown[key][0][7]])
     # szns_drpdown = json.dumps(szns_drpdown)
     sorted_x = sorted(x, key=itemgetter(0), reverse=False)
-    return render(request, 'predictions/livescore3.html', {'x': x, 'sorted_x': sorted_x,
+    return render(request, 'predictions/livescore.html', {'x': x, 'sorted_x': sorted_x,
         'upcoming_predictions': upcoming_predictions, 'threshold': threshold, 'live_table': live_table})
 
 

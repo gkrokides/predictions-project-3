@@ -46,7 +46,7 @@
 {% load app_filters %}
 {% load humanize %}
 <div class="table-responsive">
-<table id="livetable" class="table display compact nowrap" cellspacing="0" width="100%" style="font-size: 90%;">
+<table id="livetable" class="table table-condensed" cellspacing="0" width="100%" style="font-size: 90%;">
     <thead>
       <tr style="background: grey; color: white;">
         <th width="1%" class="centred">Cntr</th>
@@ -89,7 +89,7 @@
 
 <script>
 $(document).ready(function(){
-    
+    setInterval (function(){
     $.ajax({
     url: '/smlivescorerawview',
     type: 'get', // This is the default though, you don't actually need to always mention it
@@ -140,23 +140,21 @@ $(document).ready(function(){
             )
         })
 
-        $('#livetable').DataTable( {
-        "paging":   false,
-        "ordering": true,
-        "info":     true,
-        "searching": true
-            } );
-
+        
 
     },
     failure: function(data) { 
         alert('Something went wrong');
     }
 
+    
 
 
-}); 
-});    
+
+});
+}, 5000);
+});
+
 </script>
 
 {% endblock %}

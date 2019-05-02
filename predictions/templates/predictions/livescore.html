@@ -1,110 +1,232 @@
 {% extends 'predictions/base.html' %}
 {% block head %}
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
 
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jqc-1.12.3/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-flash-1.2.2/b-html5-1.2.2/b-print-1.2.2/r-2.1.0/datatables.min.js"></script>
+<script type="">
+    {% if user.is_authenticated %}
+        var user_is_authenticated = 1
+    {% else %}
+        var user_is_authenticated = 0    
+    {% endif %}
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jqc-1.12.3/pdfmake-0.1.18/dt-1.10.12/b-1.2.2/b-flash-1.2.2/b-html5-1.2.2/b-print-1.2.2/r-2.1.0/datatables.min.css"/>
-
-
-
-<script>
-    $(document).ready(function() {
-    $('#livetable').DataTable( {
-        "scrollY": "600px",
-        "paging": false,
-        "scrollCollapse": true,
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
-    } );
-} );
 </script>
 
-
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    </script>
 
 {% endblock %}
 {% block header %}{% endblock %}
 
 {% block content30 %}
 
-    <h1>Example text to make sure not the whole page is refreshing.</h1>
-
-    <div id="list">
-    </div>
-
-    <table id="livetable" class="display compact" cellspacing="0" width="100%">
-        <thead>
-            <tr style="font-size:80%;">
-                <th>Game_ID</th>
-                <th>Match Time</th>
-                <th>Home Team</th>
-                <th>Score</th>
-                <th>Away Team</th>
-                <th>Minute</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
+<h1>Example text to make sure not the whole page is refreshing.</h1>
 
 
-        </tbody>
-    </table>
+<p style="border: solid; padding: 5px; background: grey;">
+<span style="color: white;"><strong>Overview/Stats:</strong></span>
 
+{% for item in sorted_x %}
+
+<!--<a href="{% url 'league_overview' sid=item.1 %}" data-toggle="tooltip" data-placement="top" title="{{ item.0 }}"><img src="" class="flag flag-{{ item.2 }}" alt=""/></a>-->
+    {% if item.2 == 'England' %}
+        <a href="{% url 'league_overview' sid=item.1 %}" data-toggle="tooltip" data-placement="top" title="{{ item.0 }}"><span class="flag-icon flag-icon-gb-eng" style="width: 40px; height: 20px;"></span></a>
+        <!--<span class="flag-icon flag-icon-gb-eng" style="width: 40px; height: 20px;"></span>-->
+       {% else %}
+        <a href="{% url 'league_overview' sid=item.1 %}" data-toggle="tooltip" data-placement="top" title="{{ item.0 }}"><span class="flag-icon flag-icon-{{ item.2 }}" style="width: 40px; height: 20px;"></span></a>
+        <!--<span class="flag-icon flag-icon-{{ item.2 }}" style="width: 40px; height: 20px;"></span>-->
+    {% endif %}
+{% endfor %}
+</p>
+<br>
+
+{% load app_filters %}
+{% load humanize %}
+<div class="table-responsive">
+<table id="livetable" class="table display compact nowrap" cellspacing="0" width="100%" style="font-size: 90%;">
+    <thead>
+      <tr style="background: grey; color: white;">
+        <th width="1%" class="centred">Cntr</th>
+        <th class="centred">Lg</th>
+        <th class="centred">Gmwk</th>
+        <th class="centred">Date</th>
+        <th class="centred">Time</th>
+        <th style='text-align: right;'>Home Team</th>
+        <th style='text-align: center;'>-</th>
+        <th style='text-align: left;'>Away Team</th>
+        <th class="centred">Minute</th>
+        <th class="centred">Status</th>
+        <th class="centred elohist-background">BP</th>
+        <th class="centred elol6-background">MP</th>
+        <th class="centred gsrs-background">YP</th>
+        <th class="centred">H2H</th>
+        {% if user.is_authenticated %}
+        <th class="centred">Add tip</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody class="centred">
+
+    </tbody>
+  </table>
+</div>
 
 
 <script>
-$(document).ready(function(){
-    $.ajax({
-    url: '/smlivescorerawview',
-    type: 'get', // This is the default though, you don't actually need to always mention it
-    success: function(data) {
-        $("#livetable tbody").empty();
-        $.each(data, function (index,data) {
-            var score = ''
-            var minute = ''
-            var pk = data['pk']
-            var h2h = "<a href="
-            
-            if (data['minute'] != null || data['minute'] != ""){
-                minute = data['minute'] + "'";
-                score = data['score'];
-            }
-            $("tbody").append(
-               "<tr>" +
-               "<td>" + data['cntr'] + "</td>" +
-               "<td>" + data['lg'][+ "</td>" +
-               "<td>" + data['gmwk'] + "</td>" +
-               "<td>" + data['home'] + "</td>" +
-               "<td>" + data['vs'] + "</td>" +
-               "<td>" + data['away'] + "</td>" +
-               "<td>" + data['date'] + "</td>" +
-               "<td>" + data['time'] + "</td>" +
-               "<td>" + data['bp'] + "</td>" +
-               "<td>" + data['mp'] + "</td>" +
-               "<td>" + data['yp'] + "</td>" +
-               "<td><a href=" + "'{% url 'h2h' data['pk'] %}'" + ">H2H</a>" + "</td>" +
-               "<td><a href=" + "'{% url 'add_tip_from_pk' data['pk'] %}'" + ">+Tip</a>" + "</td>" +
-               "<td>" + score + "</td>" +
-               "<td>" + minute + "</td>" +
-               "<td>" + data['status'] + "</td>" +
-               "</tr>"
-            )
-        })
-
-        //  $('#livetable tbody').html("");
-        // $.each(smdata, function(index,smdata) {        
-        //     tr = $('<tr>');
-        //     tr.append("<td>" + smdata['id'] + "</td>");
-        //      $('#myTable tbody').append(tr);
-        //     console.log(tr);
-        // });
-
-    },
-    failure: function(data) { 
-        alert('Something went wrong');
-    }
-}); 
-});   
+    function predictionClass(prediction){
+        if(prediction == 'HOME'){
+            return 'home-prediction'
+        } else if (prediction == 'AWAY') {
+            return 'away-prediction'
+        } else {
+            return 'draw-prediction'
+        }
+    }    
 </script>
+
+<script>
+$(document).ready(function(){
+    
+    setInterval (function(){
+        $('#livetable').DataTable().destroy();
+        if ( ! $.fn.DataTable.isDataTable( '#livetable' ) ) {
+            
+            $.ajax({
+            url: '/smlivescorerawview',
+            type: 'get', // This is the default though, you don't actually need to always mention it
+            success: function(data) {
+                $("#livetable tbody").empty();
+                $.each(data, function (index,data) {
+                    var score = '-'
+                    var minute = ''
+                    var cntr = "<img src='' class='flag flag-" + data['cntr'] + "' alt=''/>"
+                    var h2h = "<td width='1%'' class='prediction panel-body'><a href=" + "/headtohead/" + data['pk'] + ">H2H</a></td>"
+                    var statusTd = "<td>" + data['status'] + "</td>"
+                    var addTip = ''
+                    var bpClass = "class='" + predictionClass(data['bp']) +"'"
+                    var mpClass = "class='" + predictionClass(data['mp']) +"'"
+                    var ypClass = "class='" + predictionClass(data['yp']) +"'"
+
+                    if (user_is_authenticated == 1){
+                        addTip = "<td width='1%'' class='prediction panel-body'><a href=" + "/add-tip/" + data['pk'] + ">+Tip</a></td>"
+                    }
+                    
+                    if (data['minute'] != null || data['minute'] != ""){
+                        minute = data['minute'] + "'";
+                        score = data['score'] + " - " + data['score'];
+                    }
+
+                    if (data['status'] == 'LIVE'){
+                        statusTd = "<td style='vertical-align: middle;'>" + 
+                        "<span class='label label-danger'>" + data['status'] + "</span></td>"
+                    } 
+                    $("tbody").append(
+                       "<tr>" +
+                       "<td>" + cntr + "</td>" +
+                       "<td>" + data['lg'] + "</td>" +
+                       "<td>" + data['gmwk'] + "</td>" +
+                       "<td>" + data['date'] + "</td>" +
+                       "<td>" + data['time'] + "</td>" +
+                       "<td style='text-align: right;'>" + data['home'] + "</td>" +
+                       "<td style='text-align: center;'>" + score + "</td>" +
+                       "<td style='text-align: left;'>" + data['away'] + "</td>" +
+                       "<td>" + data['minute'] + "</td>" +
+                       statusTd +
+                       "<td " + bpClass + ">" + data['bp'] + "</td>" +
+                       "<td " + mpClass + ">" + data['mp'] + "</td>" +
+                       "<td " + ypClass + ">" + data['yp'] + "</td>" +
+                       h2h +
+                       addTip +
+                       "</tr>"
+                    )
+                })
+
+                $('#livetable').DataTable( {
+                "paging":   false,
+                "ordering": true,
+                "info":     true,
+                "searching": true
+                    } );
+
+
+            },
+            failure: function(data) { 
+                alert('Something went wrong');
+            }
+
+
+
+            });
+        } else {
+            $.ajax({
+            url: '/smlivescorerawview',
+            type: 'get', // This is the default though, you don't actually need to always mention it
+            success: function(data) {
+                $("#livetable tbody").empty();
+                $.each(data, function (index,data) {
+                    var score = '-'
+                    var minute = ''
+                    var cntr = "<img src='' class='flag flag-" + data['cntr'] + "' alt=''/>"
+                    var h2h = "<td width='1%'' class='prediction panel-body'><a href=" + "/headtohead/" + data['pk'] + ">H2H</a></td>"
+                    var statusTd = "<td>" + data['status'] + "</td>"
+                    var addTip = ''
+                    var bpClass = "class='" + predictionClass(data['bp']) +"'"
+                    var mpClass = "class='" + predictionClass(data['mp']) +"'"
+                    var ypClass = "class='" + predictionClass(data['yp']) +"'"
+
+                    if (user_is_authenticated == 1){
+                        addTip = "<td width='1%'' class='prediction panel-body'><a href=" + "/add-tip/" + data['pk'] + ">+Tip</a></td>"
+                    }
+                    
+                    if (data['minute'] != null || data['minute'] != ""){
+                        minute = data['minute'] + "'";
+                        score = data['score'] + " - " + data['score'];
+                    }
+
+                    if (data['status'] == 'LIVE'){
+                        statusTd = "<td style='vertical-align: middle;'>" + 
+                        "<span class='label label-danger'>" + data['status'] + "</span></td>"
+                    } 
+                    $("tbody").append(
+                       "<tr>" +
+                       "<td>" + cntr + "</td>" +
+                       "<td>" + data['lg'] + "</td>" +
+                       "<td>" + data['gmwk'] + "</td>" +
+                       "<td>" + data['date'] + "</td>" +
+                       "<td>" + data['time'] + "</td>" +
+                       "<td style='text-align: right;'>" + data['home'] + "</td>" +
+                       "<td style='text-align: center;'>" + score + "</td>" +
+                       "<td style='text-align: left;'>" + data['away'] + "</td>" +
+                       "<td>" + data['minute'] + "</td>" +
+                       statusTd +
+                       "<td " + bpClass + ">" + data['bp'] + "</td>" +
+                       "<td " + mpClass + ">" + data['mp'] + "</td>" +
+                       "<td " + ypClass + ">" + data['yp'] + "</td>" +
+                       h2h +
+                       addTip +
+                       "</tr>"
+                    )
+                })
+
+                 $('#livetable').dataTable().clear().draw();
+
+
+            },
+            failure: function(data) { 
+                alert('Something went wrong');
+            }
+
+
+
+            });
+
+        }
+    }, 10000);    
+});
+
+</script>
+
 {% endblock %}
