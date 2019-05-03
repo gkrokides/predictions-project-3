@@ -2494,4 +2494,4 @@ def livescore(request):
 
 
 def livescore_all(request):
-    return render(request, 'predictions/livescore2_1.html', {})
+    return render(request, 'predictions/livescore2_2.html', {})
