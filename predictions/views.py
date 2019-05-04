@@ -2413,12 +2413,38 @@ def livescore_sm_api_view2(request):
                     score = '-'
                     tm = g.fixture_sm.match_time
                     tm_formatted = tm.strftime("%H:%M")
+                    result = ''
+                    bpClass = ''
+                    mpClass = ''
+                    ypClass = ''
 
                     if g.pk in live_fixtures:
                         smObj = next(item for item in smData if item["id"] == currentMatch_id)
                         if smObj['time']['minute'] != None:
                             minute = str(smObj['time']['minute']) + "'"
                             score = str(smObj['scores']['localteam_score']) + " - " + str(smObj['scores']['visitorteam_score'])
+
+                        if smObj['scores']['localteam_score'] - smObj['scores']['visitorteam_score'] > 0:
+                            result = 'HOME'
+                        elif smObj['scores']['localteam_score'] - smObj['scores']['visitorteam_score'] < 0:
+                            result = 'AWAY'
+                        else:
+                            result = 'DRAW'
+
+                        if g.prediction_elohist == result:
+                            bpClass = 'succ'
+                        else:
+                            bpClass = 'fail'
+
+                        if g.prediction_elol6 == result:
+                            mpClass = 'succ'
+                        else:
+                            mpClass = 'fail'
+
+                        if g.prediction_gsrs == result:
+                            ypClass = 'succ'
+                        else:
+                            ypClass = 'fail'
 
                         final_data.append({
                             'cntr': g.season.league.country_code,
@@ -2432,6 +2458,9 @@ def livescore_sm_api_view2(request):
                             'bp': g.prediction_elohist,
                             'mp': g.prediction_elol6,
                             'yp': g.prediction_gsrs,
+                            'bpClass': bpClass,
+                            'mpClass': mpClass,
+                            'ypClass': ypClass,
                             'pk': g.pk,
                             'score': score,
                             'minute': minute,
@@ -2450,6 +2479,9 @@ def livescore_sm_api_view2(request):
                             'bp': g.prediction_elohist,
                             'mp': g.prediction_elol6,
                             'yp': g.prediction_gsrs,
+                            'bpClass': bpClass,
+                            'mpClass': mpClass,
+                            'ypClass': ypClass,
                             'pk': g.pk,
                             'score': '',
                             'minute': '',
@@ -2490,7 +2522,7 @@ def livescore(request):
         x.append([key, szns_drpdown[key][0][1], szns_drpdown[key][0][7]])
     # szns_drpdown = json.dumps(szns_drpdown)
     sorted_x = sorted(x, key=itemgetter(0), reverse=False)
-    return render(request, 'predictions/livescore3.html', {'x': x, 'sorted_x': sorted_x})
+    return render(request, 'predictions/livescore3_1.html', {'x': x, 'sorted_x': sorted_x})
 
 
 def livescore_all(request):
