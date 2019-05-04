@@ -33,8 +33,8 @@
             awayteamId = fixtureData['visitorTeam']['data']['id']
             hometeamName = fixtureData['localTeam']['data']['name']
             awayteamName = fixtureData['visitorTeam']['data']['name']
-            var homeLogo = "<img src='" + fixtureData['localTeam']['data']['logo_path'] + "' height=20 width=20>"
-            var awayLogo = "<img src='" + fixtureData['visitorTeam']['data']['logo_path'] + "' height=20 width=20>"
+            var homeLogo = "<span style='vertical-align: middle;'><img src='" + fixtureData['localTeam']['data']['logo_path'] + "' height=100 width=100></span>"
+            var awayLogo = "<span style='vertical-align: middle;'><img src='" + fixtureData['visitorTeam']['data']['logo_path'] + "' height=100 width=100></span>"
           }
         }
 
@@ -48,8 +48,25 @@
           }
         }
 
+        for(j in goalData){
+          if(goalData[j].team_id == awayteamId){
+            var awayteamGoals_dict = {};
+            awayteamGoals_dict["scorer"] = goalData[j].player_name
+            awayteamGoals_dict["reason"] = goalData[j].reason
+            awayteamGoals_dict["minute"] = goalData[j].minute
+            awayteamGoals.push(awayteamGoals_dict)
+          }
+        }
+
         var outerHomediv = document.getElementById('homeModalData');
+        outerHomediv.style.textAlign = "center";
         outerHomediv.innerHTML = "";
+
+        var outerAwaydiv = document.getElementById('awayModalData');
+        outerAwaydiv.style.textAlign = "center";
+        outerAwaydiv.innerHTML = "";
+        // outerHomediv.style.display = "inline-block";
+        
         // document.getElementById('hometeamHeader').innerHTML = "";
         // document.getElementById('ulHome').innerHTML = "";
         
@@ -57,7 +74,11 @@
         // Home team header in modal
         var hometeamDiv = document.createElement('div');
         outerHomediv.appendChild(hometeamDiv);
-        hometeamDiv.innerHTML = homeLogo + "<h4>" + hometeamName + "</h4><hr>";
+        hometeamDiv.innerHTML = "<h4 style='display: inline-block;'>" + hometeamName + "</h4>" + "<span style='display: inline-block;'>" + homeLogo + "</span>" + "<hr>";
+
+        var awayteamDiv = document.createElement('div');
+        outerAwaydiv.appendChild(awayteamDiv);
+        awayteamDiv.innerHTML = "<span style='display: inline-block;'>" + awayLogo + "</span>" + "<h4 style='display: inline-block;'>" + awayteamName + "</h4>" + "<hr>";
         // var hometeamDiv2 = document.getElementById("hometeamHeader");
         // hometeamDiv2.innerHTML = "<h4>" + hometeamName + "</h4>";
 
@@ -85,6 +106,20 @@
             var reasonText =  "<span class='label label-danger'>" + goal["reason"] + "</span>"
           }
           li.innerHTML += "<span class='label label-default'>" + minute + "</span>" + " " + goal["scorer"] + " " + reasonText;
+        });
+
+        var ulaway = document.createElement('ul');
+        ulaway.style.listStyleType = "none";
+        document.getElementById('awayModalData').appendChild(ulaway);
+        awayteamGoals.forEach(function(goal){
+          var liaway = document.createElement('li');
+          ulaway.appendChild(liaway);
+          var reasonText = ''
+          var minute = goal["minute"] + "'"
+          if (goal["reason"] == "Own Goal"){
+            var reasonText =  "<span class='label label-danger'>" + goal["reason"] + "</span>"
+          }
+          liaway.innerHTML += "<span class='label label-default'>" + minute + "</span>" + " " + goal["scorer"] + " " + reasonText;
         });
 
 
@@ -176,11 +211,11 @@
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header" style="background-color: #5DADE2; color='white'">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Goals</h4>
+          <h4 class="modal-title" style="color:white; font-size:30px;"><strong>Goals</strong></h4>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -191,8 +226,8 @@
                 <li><span class="label label-default">44'</span> Lacazette alexander</li>
               </ul>
             </div>
-            <div class="col-md-6">
-              <div class=""><h4>Valencia</h4></div><hr>
+            <div id="awayModalData" class="col-md-6">
+              <div id="awayteamHeader" class=""><h4>Valencia</h4></div><hr>
               <ul id="ulAway" style="list-style: none;">
                 <li><span class="label label-default">11'</span> Dhiakaby Manole</li>
               </ul>
