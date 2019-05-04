@@ -59,11 +59,11 @@
         }
 
         var outerHomediv = document.getElementById('homeModalData');
-        outerHomediv.style.textAlign = "center";
+        outerHomediv.style.textAlign = "right";
         outerHomediv.innerHTML = "";
 
         var outerAwaydiv = document.getElementById('awayModalData');
-        outerAwaydiv.style.textAlign = "center";
+        outerAwaydiv.style.textAlign = "left";
         outerAwaydiv.innerHTML = "";
         // outerHomediv.style.display = "inline-block";
         
@@ -74,11 +74,11 @@
         // Home team header in modal
         var hometeamDiv = document.createElement('div');
         outerHomediv.appendChild(hometeamDiv);
-        hometeamDiv.innerHTML = "<h4 style='display: inline-block;'>" + hometeamName + "</h4>" + "<span style='display: inline-block;'>" + homeLogo + "</span>" + "<hr>";
+        hometeamDiv.innerHTML = "<h4 style='display: inline-block;'>" + hometeamName + "</h4>" + "<span style='display: inline-block;'>" + "&nbsp;" + "&nbsp;" + homeLogo + "</span>" + "<hr>";
 
         var awayteamDiv = document.createElement('div');
         outerAwaydiv.appendChild(awayteamDiv);
-        awayteamDiv.innerHTML = "<span style='display: inline-block;'>" + awayLogo + "</span>" + "<h4 style='display: inline-block;'>" + awayteamName + "</h4>" + "<hr>";
+        awayteamDiv.innerHTML = "<span style='display: inline-block;'>" + awayLogo + "&nbsp;" + "&nbsp;" + "</span>" + "<h4 style='display: inline-block;'>" + awayteamName + "</h4>" + "<hr>";
         // var hometeamDiv2 = document.getElementById("hometeamHeader");
         // hometeamDiv2.innerHTML = "<h4>" + hometeamName + "</h4>";
 
@@ -99,13 +99,14 @@
         document.getElementById('homeModalData').appendChild(ul);
         hometeamGoals.forEach(function(goal){
           var li = document.createElement('li');
+          li.style.textAlign = "right";
           ul.appendChild(li);
           var reasonText = ''
           var minute = goal["minute"] + "'"
           if (goal["reason"] == "Own Goal"){
             var reasonText =  "<span class='label label-danger'>" + goal["reason"] + "</span>"
           }
-          li.innerHTML += "<span class='label label-default'>" + minute + "</span>" + " " + goal["scorer"] + " " + reasonText;
+          li.innerHTML += "<span> " + goal["scorer"] + " " + reasonText + "</span>" + "<span class='label label-default'>" + minute + "</span>";
         });
 
         var ulaway = document.createElement('ul');
@@ -113,13 +114,14 @@
         document.getElementById('awayModalData').appendChild(ulaway);
         awayteamGoals.forEach(function(goal){
           var liaway = document.createElement('li');
+          liaway.style.textAlign = "left";
           ulaway.appendChild(liaway);
           var reasonText = ''
           var minute = goal["minute"] + "'"
           if (goal["reason"] == "Own Goal"){
             var reasonText =  "<span class='label label-danger'>" + goal["reason"] + "</span>"
           }
-          liaway.innerHTML += "<span class='label label-default'>" + minute + "</span>" + " " + goal["scorer"] + " " + reasonText;
+          liaway.innerHTML += "<span class='label label-default'>" + minute + "</span>" + goal["scorer"] + " " + reasonText;
         });
 
 
