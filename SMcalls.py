@@ -565,76 +565,119 @@ def SMcall_teamsBySeason(seasonId):
     return final_list
 
 
-def SMcall_livescore(request):
-    today = datetime.today()
-    threshold = datetime.now() + timedelta(days=2)
-    upcoming_predictions = Game.objects.select_related('season').filter(date__gte=today, date__lte=threshold, game_status='OK').exclude(homegoals__gte=0).order_by('date', 'fixture_sm__match_time')
-    leagues = [l.fixture_sm.season.league.league_id for l in upcoming_predictions]
-    final_data = []
+def SMcall_allLeagues():
+    import requests
+    import json
     from predictions_project.settings import production
-    MAX_RETRIES = 5
+
+    http1 = 'https://soccer.sportmonks.com/api/v2.0/leagues?api_token='
+    includes = '&include=country'
     if production.sm_API == '':
         from predictions_project.settings import local
         api_token = local.sm_API
     else:
         api_token = production.sm_API
 
-    # timezone = "&tz=Europe/Athens"
-    url = "https://soccer.sportmonks.com/api/v2.0/livescores"
-    params = (
-        ('api_token', api_token),
-        ('include', 'localTeam,visitorTeam,tvstations'),
-        ('tz', 'Europe/Athens'),
-    )
+    requestString = http1 + api_token
 
-    if request.method == "GET":
-        attempt_num = 0  # keep track of how many times we've retried
-        while attempt_num < MAX_RETRIES:
-            r = requests.get(url, params=params, timeout=10)
-            # print r.url
-            if r.status_code == 200:
-                data = r.json()
-                dataJson = json.dumps(data, sort_keys=True, indent=4)
-                dataDict = json.loads(dataJson)
-                for d in dataDict['data']:
-                    if d['league_id'] in leagues:
-                        currentMatch_id = int(d['id'])
-                        minute = ''
-                        score = '-'
-                        gameObj = Game.objects.get(fixture_sm__fixture_id=currentMatch_id)
-                        tm = gameObj.fixture_sm.match_time
-                        tm_formatted = tm.strftime("%H:%M")
-                        if d['time']['minute'] != None:
-                            minute = str(d['time']['minute']) + "'"
-                            score = str(d['scores']['localteam_score']) + " - " + str(d['scores']['visitorteam_score'])
+    response = requests.get(requestString)
 
-                        final_data.append(
-                            {
-                                'cntr': gameObj.season.league.country_code,
-                                'lg': gameObj.season.league.short_name,
-                                'gmwk': gameObj.gameweek,
-                                'home': gameObj.hometeam.name,
-                                'vs': '-',
-                                'away': gameObj.awayteam.name,
-                                'date': gameObj.date,
-                                'time': tm_formatted,
-                                'bp': gameObj.prediction_elohist,
-                                'mp': gameObj.prediction_elol6,
-                                'yp': gameObj.prediction_gsrs,
-                                'pk': gameObj.pk,
-                                'score': score,
-                                'minute': minute,
-                                'status': d['time']['status']
-                            }
-                        )
-                # final_data_json = json.dumps(final_data)
-                return final_data
-            else:
-                attempt_num += 1
-                errormsg = "Request failed"
-                # You can probably use a logger to log the error here
-                time.sleep(5)  # Wait for 5 seconds before re-trying
-        return errormsg
-    else:
-        errormsg = "Method not allowed"
-        return errormsg
+    smResponse = response.json()
+    smJson = json.dumps(smResponse, sort_keys=True, indent=4)
+    smDict = json.loads(smJson)
+    total_pages = smDict['meta']['pagination']['total_pages']
+    final_list = []
+
+    for j in range(1, total_pages + 1):
+        page = "&page=" + str(j)
+        requestString = http1 + api_token + includes + page
+
+        response = requests.get(requestString)
+        smData = response.json()
+        dataJson = json.dumps(smData, sort_keys=True, indent=4)
+        allLeagues = json.loads(dataJson)
+
+        lgs = allLeagues['data']
+
+        for i in range(0, len(lgs)):
+            final_list.append({
+                'league_id': lgs[i]['id'],
+                'name': lgs[i]['name'],
+                'country': lgs[i]['country']['data']['name'],
+                'logo_path': lgs[i]['logo_path']
+            })
+
+    return final_list
+# def SMcall_livescore(request):
+#     today = datetime.today()
+#     threshold = datetime.now() + timedelta(days=2)
+#     upcoming_predictions = Game.objects.select_related('season').filter(date__gte=today, date__lte=threshold, game_status='OK').exclude(homegoals__gte=0).order_by('date', 'fixture_sm__match_time')
+#     leagues = [l.fixture_sm.season.league.league_id for l in upcoming_predictions]
+#     final_data = []
+#     from predictions_project.settings import production
+#     MAX_RETRIES = 5
+#     if production.sm_API == '':
+#         from predictions_project.settings import local
+#         api_token = local.sm_API
+#     else:
+#         api_token = production.sm_API
+
+#     # timezone = "&tz=Europe/Athens"
+#     url = "https://soccer.sportmonks.com/api/v2.0/livescores"
+#     params = (
+#         ('api_token', api_token),
+#         ('include', 'localTeam,visitorTeam,tvstations'),
+#         ('tz', 'Europe/Athens'),
+#     )
+
+#     if request.method == "GET":
+#         attempt_num = 0  # keep track of how many times we've retried
+#         while attempt_num < MAX_RETRIES:
+#             r = requests.get(url, params=params, timeout=10)
+#             # print r.url
+#             if r.status_code == 200:
+#                 data = r.json()
+#                 dataJson = json.dumps(data, sort_keys=True, indent=4)
+#                 dataDict = json.loads(dataJson)
+#                 for d in dataDict['data']:
+#                     if d['league_id'] in leagues:
+#                         currentMatch_id = int(d['id'])
+#                         minute = ''
+#                         score = '-'
+#                         gameObj = Game.objects.get(fixture_sm__fixture_id=currentMatch_id)
+#                         tm = gameObj.fixture_sm.match_time
+#                         tm_formatted = tm.strftime("%H:%M")
+#                         if d['time']['minute'] != None:
+#                             minute = str(d['time']['minute']) + "'"
+#                             score = str(d['scores']['localteam_score']) + " - " + str(d['scores']['visitorteam_score'])
+
+#                         final_data.append(
+#                             {
+#                                 'cntr': gameObj.season.league.country_code,
+#                                 'lg': gameObj.season.league.short_name,
+#                                 'gmwk': gameObj.gameweek,
+#                                 'home': gameObj.hometeam.name,
+#                                 'vs': '-',
+#                                 'away': gameObj.awayteam.name,
+#                                 'date': gameObj.date,
+#                                 'time': tm_formatted,
+#                                 'bp': gameObj.prediction_elohist,
+#                                 'mp': gameObj.prediction_elol6,
+#                                 'yp': gameObj.prediction_gsrs,
+#                                 'pk': gameObj.pk,
+#                                 'score': score,
+#                                 'minute': minute,
+#                                 'status': d['time']['status']
+#                             }
+#                         )
+#                 # final_data_json = json.dumps(final_data)
+#                 return final_data
+#             else:
+#                 attempt_num += 1
+#                 errormsg = "Request failed"
+#                 # You can probably use a logger to log the error here
+#                 time.sleep(5)  # Wait for 5 seconds before re-trying
+#         return errormsg
+#     else:
+#         errormsg = "Method not allowed"
+#         return errormsg

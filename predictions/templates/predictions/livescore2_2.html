@@ -74,11 +74,11 @@
         // Home team header in modal
         var hometeamDiv = document.createElement('div');
         outerHomediv.appendChild(hometeamDiv);
-        hometeamDiv.innerHTML = "<h4 style='display: inline-block;'>" + hometeamName + "</h4>" + "<span style='display: inline-block;'>" + "&nbsp;" + "&nbsp;" + homeLogo + "</span>" + "<hr>";
+        hometeamDiv.innerHTML = "<h2 style='display: inline-block;'>" + hometeamName + "</h2>" + "<span style='display: inline-block;'>" + "&nbsp;" + homeLogo + "</span>" + "<hr>";
 
         var awayteamDiv = document.createElement('div');
         outerAwaydiv.appendChild(awayteamDiv);
-        awayteamDiv.innerHTML = "<span style='display: inline-block;'>" + awayLogo + "&nbsp;" + "&nbsp;" + "</span>" + "<h4 style='display: inline-block;'>" + awayteamName + "</h4>" + "<hr>";
+        awayteamDiv.innerHTML = "<span style='display: inline-block;'>" + awayLogo + "&nbsp;" + "</span>" + "<h2 style='display: inline-block;'>" + awayteamName + "</h2>" + "<hr>";
         // var hometeamDiv2 = document.getElementById("hometeamHeader");
         // hometeamDiv2.innerHTML = "<h4>" + hometeamName + "</h4>";
 
@@ -121,7 +121,7 @@
           if (goal["reason"] == "Own Goal"){
             var reasonText =  "<span class='label label-danger'>" + goal["reason"] + "</span>"
           }
-          liaway.innerHTML += "<span class='label label-default'>" + minute + "</span>" + goal["scorer"] + " " + reasonText;
+          liaway.innerHTML += "<span class='label label-default'>" + minute + "</span>" + "&nbsp;" + goal["scorer"] + " " + reasonText;
         });
 
 

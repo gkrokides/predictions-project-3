@@ -3035,7 +3035,7 @@ class LeagueSM(models.Model):
         verbose_name_plural = "SM Leagues"
 
     def __str__(self):
-        return self.country.name + ' ' + self.name                
+        return self.country.name + ' ' + self.name
 
 
 class SeasonSM(models.Model):
@@ -3112,4 +3112,19 @@ class FixtureSM(models.Model):
         verbose_name_plural = "SM Fixtures"
 
     def __str__(self):
-        return str(self.match_date) + " " + str(self.hometeam) + " vs " + str(self.awayteam)           
+        return str(self.match_date) + " " + str(self.hometeam) + " vs " + str(self.awayteam)
+
+
+class LeagueSMforLive(models.Model):
+    league_id = models.IntegerField(unique=True, primary_key=True)
+    name = models.CharField(max_length=100)
+    country = models.CharField(max_length=200)
+    logo_path = models.TextField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["country"]
+        verbose_name = "SM League for live"
+        verbose_name_plural = "SM Leagues for live"
+
+    def __str__(self):
+        return self.country + ' ' + self.name

@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Post, Leagues, Season, Game, Team, Tip, Betslip, CountrySM, LeagueSM, SeasonSM, TeamSM, FixtureSM
-
+from .models import Post, Leagues, Season, Game, Team, Tip, Betslip, CountrySM, LeagueSM, SeasonSM, TeamSM, FixtureSM, LeagueSMforLive
 
 
 admin.site.register(Post)
@@ -27,8 +26,4 @@ admin.site.register(TeamSM)
 
 admin.site.register(FixtureSM)
 
-
-
-
-
-
+admin.site.register(LeagueSMforLive)
