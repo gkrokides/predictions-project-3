@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import Post, Team, Game, Season, GameFilter, Leagues, GameSeasonFilter, Tip, Betslip
+from .models import Post, Team, Game, Season, GameFilter, Leagues, GameSeasonFilter, Tip, Betslip, LeagueSMforLive
 from .forms import PostForm, GameForm, ContactForm, TipForm, BetslipForm
 from dicts.sorteddict import ValueSortedDict
 from decimal import Decimal
@@ -2266,8 +2266,10 @@ def smleaguedata(request):
         'response': response, 'smleague_data': smleague_data})
 
 
-def external_sm_api_view(request):
+def external_sm_api_view2(request):
     from predictions_project.settings import production
+    leagues = LeagueSMforLive.objects.all()
+    final_data = []
     MAX_RETRIES = 5
     if production.sm_API == '':
         from predictions_project.settings import local
@@ -2280,8 +2282,7 @@ def external_sm_api_view(request):
     params = (
         ('api_token', api_token),
         ('include', 'localTeam,visitorTeam,tvstations,goals'),
-        ('tz', 'Europe/Athens'),
-        )
+        ('tz', 'Europe/Athens'))
 
     if request.method == "GET":
         attempt_num = 0  # keep track of how many times we've retried
@@ -2290,7 +2291,28 @@ def external_sm_api_view(request):
             # print r.url
             if r.status_code == 200:
                 data = r.json()
-                return JsonResponse(data)
+                dataJson = json.dumps(data, sort_keys=True, indent=4)
+                dataDict = json.loads(dataJson)
+                for d in dataDict['data']:
+                    league_name = leagues.get(league_id=d['league_id']).name
+                    country_name = leagues.get(league_id=d['league_id']).country
+                    league_img = leagues.get(league_id=d['league_id']).logo_path
+                    final_data.append({
+                        'fixtureid': d['id'],
+                        'league_name': league_name,
+                        'country_name': country_name,
+                        'league_img': league_img,
+                        'time': d['time'],
+                        'localTeam': d['localTeam'],
+                        'visitorTeam': d['visitorTeam'],
+                        'scores': d['scores'],
+                        'standings': d['standings'],
+                        'colors': d['colors'],
+                        'goals': d['goals'],
+                        'tvstations': d['tvstations']
+                    })
+
+                return JsonResponse(final_data, safe=False)
             else:
                 attempt_num += 1
                 # You can probably use a logger to log the error here
@@ -2298,6 +2320,40 @@ def external_sm_api_view(request):
         return JsonResponse({"error": "Request failed"})
     else:
         return JsonResponse({"error": "Method not allowed"})
+
+
+# def external_sm_api_view(request):
+#     from predictions_project.settings import production
+#     MAX_RETRIES = 5
+#     if production.sm_API == '':
+#         from predictions_project.settings import local
+#         api_token = local.sm_API
+#     else:
+#         api_token = production.sm_API
+
+#     # timezone = "&tz=Europe/Athens"
+#     url = "https://soccer.sportmonks.com/api/v2.0/livescores"
+#     params = (
+#         ('api_token', api_token),
+#         ('include', 'localTeam,visitorTeam,tvstations,goals'),
+#         ('tz', 'Europe/Athens'),
+#         )
+
+#     if request.method == "GET":
+#         attempt_num = 0  # keep track of how many times we've retried
+#         while attempt_num < MAX_RETRIES:
+#             r = requests.get(url, params=params, timeout=10)
+#             # print r.url
+#             if r.status_code == 200:
+#                 data = r.json()
+#                 return JsonResponse(data)
+#             else:
+#                 attempt_num += 1
+#                 # You can probably use a logger to log the error here
+#                 time.sleep(5)  # Wait for 5 seconds before re-trying
+#         return JsonResponse({"error": "Request failed"})
+#     else:
+#         return JsonResponse({"error": "Method not allowed"})
 
 
 # def livescore_sm_api_view(request):
@@ -2526,4 +2582,4 @@ def livescore(request):
 
 
 def livescore_all(request):
-    return render(request, 'predictions/livescore2_2.html', {})
+    return render(request, 'predictions/livescore2_3.html', {})

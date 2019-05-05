@@ -1,4 +1,6 @@
-Note: Steps 1 to 7 are for entering a league, season and teams for the first time. Once the data is in the system you just use steps 8 and 9 through the year.
+Notes: Steps 1 to 7 are for entering a league, season and teams for the first time. Once the data is in the system you just use steps 8 and 9 through the year.
+
+If you have the league and just want to add the new season, use steps 3 onwards.
 
 1. Make sure the country associated with the league is already in the CountrySM table. If not, use the management command "python manage.py sm_create_or_update_all_countries". This command will get all the countries from the sportmonks api and will update the CountrySM table accordingly. Alternatively you can use "sm_create_country <smCountryId>" management command to enter just the country you are interested in instead of re-entering all countries in the database. 
 

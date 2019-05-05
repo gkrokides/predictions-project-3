@@ -565,6 +565,7 @@ def SMcall_teamsBySeason(seasonId):
     return final_list
 
 
+# this is used only for updating the LeagueSMforLive table. DO NOT use for updating the LeagueSM
 def SMcall_allLeagues():
     import requests
     import json
