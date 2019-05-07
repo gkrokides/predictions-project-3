@@ -1,37 +1,123 @@
 {% extends 'predictions/base.html' %}
 {% block head %}
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/rg-1.1.0/datatables.min.css"/>
- 
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/rg-1.1.0/datatables.min.js"></script>
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/rowgroup/1.1.0/js/dataTables.rowGroup.min.js"></script>
+<script src='https://cdn.jsdelivr.net/lodash/4.17.2/lodash.min.js'></script>
+
+<script type="text/javascript">
+
+      function modalOnClick(clicked_id){
+        var allData = window.smdata
+        var fixtureData = {};
+        var goalData = [];
+        var hometeamId = '';
+        var awayteamId = '';
+        var hometeamName = '';
+        var awayteamName = '';
+        var hometeamGoals = [];
+        var awayteamGoals = [];
+
+        
+        for(var i=0; i < allData.length; i++){
+          if(allData[i].fixtureid == clicked_id){
+            fixtureData = allData[i]
+            goalData = fixtureData['goals']['data']
+            hometeamId = fixtureData['localTeam']['data']['id']
+            awayteamId = fixtureData['visitorTeam']['data']['id']
+            hometeamName = fixtureData['localTeam']['data']['name']
+            awayteamName = fixtureData['visitorTeam']['data']['name']
+            var homeLogo = "<span style='vertical-align: middle;'><img src='" + fixtureData['localTeam']['data']['logo_path'] + "' height=100 width=100></span>"
+            var awayLogo = "<span style='vertical-align: middle;'><img src='" + fixtureData['visitorTeam']['data']['logo_path'] + "' height=100 width=100></span>"
+          }
+        }
+
+        for(j in goalData){
+          if(goalData[j].team_id == hometeamId){
+            var hometeamGoals_dict = {};
+            hometeamGoals_dict["scorer"] = goalData[j].player_name
+            hometeamGoals_dict["reason"] = goalData[j].reason
+            hometeamGoals_dict["minute"] = goalData[j].minute
+            hometeamGoals.push(hometeamGoals_dict)
+          }
+        }
+
+        for(j in goalData){
+          if(goalData[j].team_id == awayteamId){
+            var awayteamGoals_dict = {};
+            awayteamGoals_dict["scorer"] = goalData[j].player_name
+            awayteamGoals_dict["reason"] = goalData[j].reason
+            awayteamGoals_dict["minute"] = goalData[j].minute
+            awayteamGoals.push(awayteamGoals_dict)
+          }
+        }
+
+        var outerHomediv = document.getElementById('homeModalData');
+        outerHomediv.style.textAlign = "right";
+        outerHomediv.innerHTML = "";
+
+        var outerAwaydiv = document.getElementById('awayModalData');
+        outerAwaydiv.style.textAlign = "left";
+        outerAwaydiv.innerHTML = "";
+        // Home team header in modal
+        var hometeamDiv = document.createElement('div');
+        outerHomediv.appendChild(hometeamDiv);
+        hometeamDiv.innerHTML = "<h2 style='display: inline-block;'>" + hometeamName + "</h2>" + "<span style='display: inline-block;'>" + "&nbsp;" + homeLogo + "</span>" + "<hr>";
+
+        var awayteamDiv = document.createElement('div');
+        outerAwaydiv.appendChild(awayteamDiv);
+        awayteamDiv.innerHTML = "<span style='display: inline-block;'>" + awayLogo + "&nbsp;" + "</span>" + "<h2 style='display: inline-block;'>" + awayteamName + "</h2>" + "<hr>";
+
+        var ul = document.createElement('ul');
+        ul.style.listStyleType = "none";
+        document.getElementById('homeModalData').appendChild(ul);
+        hometeamGoals.forEach(function(goal){
+          var li = document.createElement('li');
+          li.style.textAlign = "right";
+          ul.appendChild(li);
+          var reasonText = ''
+          var minute = goal["minute"] + "'"
+          if (goal["reason"] == "Own Goal"){
+            var reasonText =  "<span class='label label-danger'>" + goal["reason"] + "</span>"
+          }
+          li.innerHTML += "<span> " + goal["scorer"] + " " + reasonText + "</span>" + "<span class='label label-default'>" + minute + "</span>";
+        });
+
+        var ulaway = document.createElement('ul');
+        ulaway.style.listStyleType = "none";
+        document.getElementById('awayModalData').appendChild(ulaway);
+        awayteamGoals.forEach(function(goal){
+          var liaway = document.createElement('li');
+          liaway.style.textAlign = "left";
+          ulaway.appendChild(liaway);
+          var reasonText = ''
+          var minute = goal["minute"] + "'"
+          if (goal["reason"] == "Own Goal"){
+            var reasonText =  "<span class='label label-danger'>" + goal["reason"] + "</span>"
+          }
+          liaway.innerHTML += "<span class='label label-default'>" + minute + "</span>" + "&nbsp;" + goal["scorer"] + " " + reasonText;
+        });
+      }
+    </script>
+
+   
 
 {% endblock %}
 {% block header %}{% endblock %}
 
 {% block content30 %}
 
-
-
-{% load app_filters %}
-{% load humanize %}
 <div class="table-responsive">
 <table id="livetable" class="table table-condensed" cellspacing="0" width="100%" style="font-size: 90%;">
     <thead>
-      <tr style="background: grey; color: white;">
-        <th>Country</th>
-        <th>League</th>
-        <th>Date</th>
-        <th>Kick Off</th>
-        <th style="text-align: right;">Home Team</th>
+      <tr class ="page-header" style="background: #454545; color: white;">
+        <th>DATE</th>
+        <th>KICK OFF</th>
+        <th style="text-align: right;">HOME</th>
         <th style="text-align: center;"> - </th>
-        <th>Away Team</th>
+        <th>AWAY</th>
         <th style='text-align: right;'>HT</th>
-        <th style="text-align: center;">Minute</th>
-        <th>Status</th>
-        <th>Details</th>
+        <th style="text-align: center;">MIN</th>
+        <th>STATUS</th>
+        <th>DETAILS</th>
       </tr>
     </thead>
     <tbody class="">
@@ -117,14 +203,6 @@
 
 <script>
 $(document).ready(function(){
-    $('#livetable').DataTable( {
-        "paging":   false,
-        "ordering": true,
-        "info":     true,  
-        rowGroup: {
-            dataSrc: 1
-        }
-    });
 
     function livetableUpdate() {
       $.ajax({
@@ -134,6 +212,7 @@ $(document).ready(function(){
         var smdata = data;
         var tr;
         window.smdata = smdata
+        var tableData = []
 
         $("#livetable tbody").empty();
         $.each(smdata, function (index,smdata) {
@@ -144,6 +223,7 @@ $(document).ready(function(){
             var awayLogo = "<img src='" + smdata['visitorTeam']['data']['logo_path'] + "' height=20 width=20>"
             var htScore = ''
             var fixtureId = smdata['fixtureid']
+            
 
             if (smdata['scores']['ht_score'] != null){
               htScore = smdata['scores']['ht_score'];
@@ -159,37 +239,89 @@ $(document).ready(function(){
                 "<span class='label label-danger'>" + smdata['time']['status'] + "</span></td>"
             }
 
-            $("tbody").append(
-               "<tr>" +
-               "<td>" + smdata['country_name'] + "</td>" +
-               "<td>" + smdata['league_name'] + "</td>" +
-               "<td>" + smdata['time']['starting_at']['date'] + "</td>" +
-               "<td>" + smdata['time']['starting_at']['time'] + "</td>" +
-               "<td style='text-align: right;'>" + smdata['localTeam']['data']['name'] + "&nbsp;" + "&nbsp;" + homeLogo + "</td>" +
-               "<td style='text-align: center;'><strong>" + score + "</strong></td>" +
-               "<td>" + awayLogo + "&nbsp;" + "&nbsp;" + smdata['visitorTeam']['data']['name'] + "</td>" +
-               "<td style='text-align: right;'>" + htScore + "</td>" +
-               "<td style='text-align: center;'>" + minute + "</td>" +
-               statusTd +
-               "<td><button " + "id=" + fixtureId + " onClick=" + "'modalOnClick(this.id)' " + "type='button' class='btn btn-info btn-xs' data-toggle='modal' data-target='#myModal'>" + "Details" + "</button></td>" +
-               "</tr>"
-            )
 
 
-            
+            tableData.push({
+              country: smdata['country_name'],
+              league: smdata['league_name'],
+              league_name: smdata['country_name'] + " " + smdata['league_name'],
+              date: smdata['time']['starting_at']['date'],
+              time: smdata['time']['starting_at']['time'],
+              hometeam: smdata['localTeam']['data']['name'],
+              homeLogo: homeLogo,
+              score: score,
+              awayteam: smdata['visitorTeam']['data']['name'],
+              awaylogo: awayLogo,
+              ht: htScore,
+              min: minute,
+              status: statusTd,
+              fid: fixtureId
+            })
+
+            // $("tbody").append(
+            //    "<tr>" +
+            //    "<td>" + smdata['country_name'] + "</td>" +
+            //    "<td>" + smdata['league_name'] + "</td>" +
+            //    "<td>" + smdata['time']['starting_at']['date'] + "</td>" +
+            //    "<td>" + smdata['time']['starting_at']['time'] + "</td>" +
+            //    "<td style='text-align: right;'>" + smdata['localTeam']['data']['name'] + "&nbsp;" + "&nbsp;" + homeLogo + "</td>" +
+            //    "<td style='text-align: center;'><strong>" + score + "</strong></td>" +
+            //    "<td>" + awayLogo + "&nbsp;" + "&nbsp;" + smdata['visitorTeam']['data']['name'] + "</td>" +
+            //    "<td style='text-align: right;'>" + htScore + "</td>" +
+            //    "<td style='text-align: center;'>" + minute + "</td>" +
+            //    statusTd +
+            //    "<td><button " + "id=" + fixtureId + " onClick=" + "'modalOnClick(this.id)' " + "type='button' class='btn btn-info btn-xs' data-toggle='modal' data-target='#myModal'>" + "Details" + "</button></td>" +
+            //    "</tr>"
+            // )
 
         })
 
+        var grouped = _.groupBy(tableData, function(cntr) {
+        return cntr.league_name;
+        });
 
+        console.log(JSON.stringify(grouped, null, 4));
+
+        for(var ob in grouped){
+          console.log(grouped[ob].length);
+          $("#livetable tbody").append(
+                 "<tr style='background: #999999; color: white;'>" +
+                 "<td colspan='9'>" + ob + "</td>" +
+                 "</tr>"
+              )
+          for(var cnt=0; cnt < grouped[ob].length; cnt++)
+            $("#livetable tbody").append(
+                 "<tr>" +
+                 "<td>" + grouped[ob][cnt].date + "</td>" +
+                 "<td>" + grouped[ob][cnt].time + "</td>" +
+                 "<td style='text-align: right;'>" + grouped[ob][cnt].hometeam + "&nbsp;" + "&nbsp;" + grouped[ob][cnt].homeLogo + "</td>" +
+                 "<td style='text-align: center;'><strong>" + grouped[ob][cnt].score + "</strong></td>" +
+                 "<td>" + grouped[ob][cnt].awaylogo + "&nbsp;" + "&nbsp;" + grouped[ob][cnt].awayteam + "</td>" +
+                 "<td style='text-align: right;'>" + grouped[ob][cnt].ht + "</td>" +
+                 "<td style='text-align: center;'>" + grouped[ob][cnt].min + "</td>" +
+                 grouped[ob][cnt].status +
+                 "<td><button " + "id=" + grouped[ob][cnt].fid + " onClick=" + "'modalOnClick(this.id)' " + "type='button' class='btn btn-info btn-xs' data-toggle='modal' data-target='#myModal'>" + "Details" + "</button></td>" +
+                 "</tr>"
+              )
+        }
+        
 
     },
     failure: function(data) { 
         alert('Something went wrong');
     }
     });
+    
     }
 
 livetableUpdate();
+
+// var grouped = _.groupBy(livetableUpdate(), "country");
+// console.log(JSON.stringify(livetableUpdate()));
+
+// var groupedk = _.keyBy(livetableUpdate(), 'country');
+// console.dir(groupedk);
+
 
 
 setInterval( function () {
@@ -199,11 +331,7 @@ setInterval( function () {
 });    
 </script>
 
-<script>
-  
 
-
-</script>
 
 {% endblock %}
 
