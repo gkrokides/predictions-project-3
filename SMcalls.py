@@ -390,7 +390,7 @@ def SMcall_LeagueFixturesByDaterange_paginated(league, season, start_date, end_d
         fixtures_for_date = json.loads(dataJson)
 
         f = fixtures_for_date['data']
-
+        round = None
         for i in range(0, len(f)):
             if f[i]['season_id'] == season:
                 match_date_str = f[i]['time']['starting_at']['date']
@@ -423,6 +423,9 @@ def SMcall_LeagueFixturesByDaterange_paginated(league, season, start_date, end_d
                 else:
                     odds_2 = None
 
+                if f[i]['round_id'] != None:
+                    round = f[i]['round_id']
+
                 final_list.append({
                     'fixture_id': f[i]['id'],
                     'season': selected_season,
@@ -436,7 +439,7 @@ def SMcall_LeagueFixturesByDaterange_paginated(league, season, start_date, end_d
                     'match_date': match_date,
                     'match_time': match_time,
                     'match_time': f[i]['time']['starting_at']['time'],
-                    'gameweek': f[i]['round']['data']['name'],
+                    'gameweek': round,
                     'stage': f[i]['stage']['data']['name'],
                     'odds_1': odds_1,
                     'odds_x': odds_x,

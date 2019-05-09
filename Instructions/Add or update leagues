@@ -1,4 +1,4 @@
-Notes: Steps 1 to 7 are for entering a league, season and teams for the first time. Once the data is in the system you just use steps 8 and 9 through the year.
+Notes: Steps 1 to 7 are for entering a league, season and teams for the first time. Once the data is in the system you just use step 8 through the year.
 
 If you have the league and just want to add the new season, use steps 3 onwards.
 
@@ -28,11 +28,5 @@ to create any missing teams in the Team table (not the TeamSM table).
 python manage.py update_games_boilerplate <smSeasonId> <startDate> <endDate>
 to request the match data from the sportmonks API, update or create the FixtureSM and Game instances. 
 
-OR
 
-8. Download the Fixtures from sportmonks and populate the FixtureSM table using the management command 
-"python manage.py sm_create_or_update_fixtures_for_daterange_paginated <smLeagueId> <smSeasonId> <startDate> <endDate>".
-
-9. Populate the Game table using the management command 
-"python manage.py update_games_from_smfixtures <smSeasonId> <startDate> <endDate>". 
 
