@@ -109,8 +109,8 @@
           }
           liaway.innerHTML += "<span class='label label-default'>" + 
           minute + "</span>" +
-          "&nbsp;" + "&nbsp;" + "<i class='fa fa-futbol-o' aria-hidden='true'></i>" + 
-          "&nbsp;" + goal["scorer"] + 
+          "&nbsp;" + "<i class='fa fa-futbol-o' aria-hidden='true'></i>" + 
+          "&nbsp;" + "&nbsp;" + goal["scorer"] + 
           "&nbsp;" + reasonText;
         });
       }
@@ -121,22 +121,23 @@
       function tvmodalOnClick(clicked_id){
         var allData = window.smdata
         var fixtureData = {};
+        var tvstationsData = [];
         var tvstations = [];
         
         for(var i=0; i < allData.length; i++){
           if(allData[i].fixtureid == clicked_id){
             fixtureData = allData[i]
-            tvstations = fixtureData['tvstations']['data']
+            tvstationsData = fixtureData['tvstations']['data']
 
           }
         }
 
-        for(j in tvstations){
+        for(j in tvstationsData){
           var tvstations_dict = {};
-          tvstations_dict["tvstation"] = tvstations[j].tvstation
+          tvstations_dict["tvstation"] = tvstationsData[j].tvstation
           tvstations.push(tvstations_dict)
         }
-
+        // console.log(JSON.stringify(tvstations, null, 4));
 
         var outerTvdiv = document.getElementById('tvModalData');
         outerTvdiv.style.textAlign = "right";
@@ -146,12 +147,13 @@
         var ul = document.createElement('ul');
         ul.style.listStyleType = "none";
         document.getElementById('tvModalData').appendChild(ul);
-        tvstations.forEach(function(tvstation){
+        tvstations.forEach(function(station){
           var li = document.createElement('li');
-          li.style.textAlign = "right";
+          li.style.textAlign = "left";
           ul.appendChild(li);
-          li.innerHTML += tvstation["tvstation"] + 
-          "&nbsp;" + "&nbsp;" + "<i class='fa fa-tv' aria-hidden='true'></i>"
+          li.innerHTML += station["tvstation"] + 
+          "&nbsp;" + "&nbsp;" + "<i class='fa fa-tv' aria-hidden='true'></i>";
+          console.log(station["tvstation"]);
         });
 
       }
@@ -173,11 +175,11 @@
         <th style="text-align: right;">HOME</th>
         <th style="text-align: center;"> - </th>
         <th>AWAY</th>
-        <th style='text-align: right;'>HT</th>
         <th style="text-align: center;">MIN</th>
-        <th>STATUS</th>
-        <th>GOALS</th>
-        <th>TV</th>
+        <th style='text-align: center;'>STATUS</th>
+        <th style="text-align: center">HT</th>
+        <th style="text-align: center" width="5%">GOALS</th>
+        <th style="text-align: center" width="5%">TV</th>
       </tr>
     </thead>
     <tbody class="">
@@ -269,7 +271,7 @@
       <div class="modal-content">
         <div class="modal-header" style="background-color: #5DADE2; color='white'">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title" style="color:white; font-size:30px;"><strong>TV Stations</strong></h4>
+          <h4 class="modal-title" style="color:white; font-size:30px;"><strong>Live on TV</strong></h4>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -302,10 +304,10 @@ $(document).ready(function(){
         $.each(smdata, function (index,smdata) {
             var score = ''
             var minute = ''
-            var statusTd = "<td>" + smdata['time']['status'] + "</td>"
+            var statusTd = "<td style='text-align: center;'>" + smdata['time']['status'] + "</td>"
             var homeLogo = "<img src='" + smdata['localTeam']['data']['logo_path'] + "' height=20 width=20>"
             var awayLogo = "<img src='" + smdata['visitorTeam']['data']['logo_path'] + "' height=20 width=20>"
-            var htScore = ''
+            var htScore = "<td></td>"
             var fixtureId = smdata['fixtureid']
             var tvstations = "<td></td>"
             
@@ -320,15 +322,15 @@ $(document).ready(function(){
             }
 
             if (smdata['time']['status'] == 'LIVE'){
-                statusTd = "<td style='vertical-align: middle;'>" + 
+                statusTd = "<td style='text-align: center;'>" + 
                 "<span class='label label-danger'>" + smdata['time']['status'] + "</span></td>"
             }
 
             if(smdata['tvstations']['data'].length > 0){
-              tvstations = "<td style='vertical-align:middle'>" + 
-                 "<button class='btn btn-info btn-md data-toggle='modal' data-target='#tvModal'" + 
-                 "id=" + fixtureId +
-                 " onClick=" + "'tvmodalOnClick(this.id)'> " + 
+              tvstations = "<td style='text-align: center;'>" + 
+                 "<button " + "id=" + fixtureId + 
+                 " onClick=" + "'tvmodalOnClick(this.id)' " +
+                 "type='button' class='btn btn-info btn-sm' data-toggle='modal' data-target='#tvModal'>" + 
                  "<i class='fa fa-tv'></i> </button>" + "</td>"
             }
 
@@ -374,10 +376,10 @@ $(document).ready(function(){
         return cntr.league_name;
         });
 
-        console.log(JSON.stringify(grouped, null, 4));
+        // console.log(JSON.stringify(grouped, null, 4));
 
         for(var ob in grouped){
-          console.log(grouped[ob].length);
+          // console.log(grouped[ob].length);
           $("#livetable tbody").append(
                  "<tr style='background: #999999; color: white;'>" +
                  "<td colspan='10'>" + ob + "</td>" +
@@ -386,15 +388,15 @@ $(document).ready(function(){
           for(var cnt=0; cnt < grouped[ob].length; cnt++)
             $("#livetable tbody").append(
                  "<tr>" +
-                 "<td>" + grouped[ob][cnt].date + "</td>" +
-                 "<td>" + grouped[ob][cnt].time + "</td>" +
+                 "<td style='text-align: center;'>" + grouped[ob][cnt].date + "</td>" +
+                 "<td style='text-align: center;'>" + grouped[ob][cnt].time + "</td>" +
                  "<td style='text-align: right;'>" + grouped[ob][cnt].hometeam + "&nbsp;" + "&nbsp;" + grouped[ob][cnt].homeLogo + "</td>" +
                  "<td style='text-align: center;'><strong>" + grouped[ob][cnt].score + "</strong></td>" +
-                 "<td>" + grouped[ob][cnt].awaylogo + "&nbsp;" + "&nbsp;" + grouped[ob][cnt].awayteam + "</td>" +
-                 "<td style='text-align: right;'>" + grouped[ob][cnt].ht + "</td>" +
+                 "<td style='text-align: left;'>" + grouped[ob][cnt].awaylogo + "&nbsp;" + "&nbsp;" + grouped[ob][cnt].awayteam + "</td>" +
                  "<td style='text-align: center;'>" + grouped[ob][cnt].min + "</td>" +
                  grouped[ob][cnt].status +
-                 "<td><button " + "id=" + grouped[ob][cnt].fid + " onClick=" + "'modalOnClick(this.id)' " + "type='button' class='btn btn-info btn-md' data-toggle='modal' data-target='#myModal'>" + "<i class='fa fa-futbol-o'></i>" + "</button></td>" +
+                 "<td style='text-align: center;'>" + grouped[ob][cnt].ht + "</td>" +
+                 "<td style='text-align: center;'><button " + "id=" + grouped[ob][cnt].fid + " onClick=" + "'modalOnClick(this.id)' " + "type='button' class='btn btn-info btn-sm' data-toggle='modal' data-target='#myModal'>" + "<i class='fa fa-futbol-o'></i>" + "</button></td>" +
                  grouped[ob][cnt].tvstations +
                  "</tr>"
                  
