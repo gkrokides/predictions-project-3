@@ -81,7 +81,7 @@ class Command(BaseCommand):
                     current_obj.type = 'PO'
                     lastgw = FixtureSM.objects.filter(season=sm_obj.season).order_by('-gameweek')[0]
                     if sm_obj.game_status == None:
-                        current_obj.game_status = lastgw.gameweek + 1
+                        current_obj.gameweek = lastgw.gameweek + 1
                     else:
                         current_obj.gameweek = lastgw.gameweek + sm_obj.gameweek
 
