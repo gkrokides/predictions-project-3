@@ -104,7 +104,10 @@ class Command(BaseCommand):
                 else:
                     mstage = 'PO'
                     lastgw = FixtureSM.objects.filter(season=sm_obj.season).order_by('-gameweek')[0]
-                    gw = lastgw.gameweek + sm_obj.gameweek
+                    if sm_obj.gameweek == None:
+                        gw = lastgw.gameweek + 1
+                    else:
+                        gw = lastgw.gameweek + sm_obj.gameweek
 
                 # Here I'm making sure the score will be entered only for the first games when
                 # they are first created
