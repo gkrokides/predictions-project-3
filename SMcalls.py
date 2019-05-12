@@ -458,11 +458,18 @@ def SMcall_allCountries():
     from predictions_project.settings import production
 
     http1 = 'https://soccer.sportmonks.com/api/v2.0/countries?api_token='
-    if production.sm_API == '':
+
+    if production.sm_API != '':
+        api_token = production.sm_API
+    else:
         from predictions_project.settings import local
         api_token = local.sm_API
-    else:
-        api_token = production.sm_API
+
+    # if production.sm_API == '':
+    #     from predictions_project.settings import local
+    #     api_token = local.sm_API
+    # else:
+    #     api_token = production.sm_API
 
     requestString = http1 + api_token
 
