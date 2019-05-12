@@ -162,5 +162,5 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS', '')
 EMAIL_PORT = 587
 # EMAIL_USE_SSL = True
 
-#sportmonks
-sm_API = ''
+# sportmonks
+sm_API = os.environ.get('API_KEY', '')
