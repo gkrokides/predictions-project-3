@@ -52,7 +52,7 @@ class Command(BaseCommand):
         cntCreated = 0
 
         for sm_obj in allFixtures_sm:
-            self.stdout.write(self.style.WARNING('"%s"' % sm_obj.pk))
+            # self.stdout.write(self.style.WARNING('"%s"' % sm_obj.pk))
             seasonobj = Season.objects.get(season_sm=smSeasonId)
             hm_obj = Team.objects.get(team_sm=sm_obj.hometeam)
             aw_obj = Team.objects.get(team_sm=sm_obj.awayteam)
@@ -80,7 +80,10 @@ class Command(BaseCommand):
                 else:
                     current_obj.type = 'PO'
                     lastgw = FixtureSM.objects.filter(season=sm_obj.season).order_by('-gameweek')[0]
-                    current_obj.gameweek = lastgw.gameweek + sm_obj.gameweek
+                    if sm_obj.game_status == None:
+                        current_obj.game_status = lastgw.gameweek + 1
+                    else:
+                        current_obj.gameweek = lastgw.gameweek + sm_obj.gameweek
 
                 current_obj.save()
                 cntUpdated += 1
