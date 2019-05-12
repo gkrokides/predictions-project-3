@@ -52,7 +52,7 @@ class Command(BaseCommand):
         cntCreated = 0
 
         for sm_obj in allFixtures_sm:
-            # self.stdout.write(self.style.WARNING('"%s"' % sm_obj.pk))
+            self.stdout.write(self.style.WARNING('"%s"' % sm_obj.pk))
             seasonobj = Season.objects.get(season_sm=smSeasonId)
             hm_obj = Team.objects.get(team_sm=sm_obj.hometeam)
             aw_obj = Team.objects.get(team_sm=sm_obj.awayteam)
