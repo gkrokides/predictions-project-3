@@ -65,17 +65,17 @@
         // Home team header in modal
         var hometeamDiv = document.createElement('div');
         outerHomediv.appendChild(hometeamDiv);
-        hometeamDiv.innerHTML = "<h2 style='display: inline-block;'>" + hometeamName + "</h2>" + "<span style='display: inline-block;'>" + "&nbsp;" + homeLogo + "</span>" + "<hr>";
+        hometeamDiv.innerHTML = "<h3 style='display: inline-block;' white-space: nowrap;>" + hometeamName + "</h3>" + "<span style='display: inline-block; white-space: nowrap;'>" + "&nbsp;" + homeLogo + "</span>" + "<hr>";
 
         // Score header in modal
         var scoreDiv = document.createElement('div');
         outerScorediv.appendChild(scoreDiv);
-        scoreDiv.innerHTML = "<h2 style='display: inline-block;'>" + score + "</h2>";
+        scoreDiv.innerHTML = "<h1 style='display: inline-block; white-space: nowrap;'>" + score + "</h1>";
 
         // Away team header in modal
         var awayteamDiv = document.createElement('div');
         outerAwaydiv.appendChild(awayteamDiv);
-        awayteamDiv.innerHTML = "<span style='display: inline-block;'>" + awayLogo + "&nbsp;" + "</span>" + "<h2 style='display: inline-block;'>" + awayteamName + "</h2>" + "<hr>";
+        awayteamDiv.innerHTML = "<span style='display: inline-block; white-space: nowrap;'>" + awayLogo + "&nbsp;" + "</span>" + "<h3 style='display: inline-block; white-space: nowrap;'>" + awayteamName + "</h3>" + "<hr>";
 
         var ul = document.createElement('ul');
         ul.style.listStyleType = "none";
@@ -238,24 +238,24 @@
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <div class="modal-header" style="background-color: #5DADE2; color='white'">
+        <div class="modal-header" style="background-color: #5DADE2; color='white';">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title" style="color:white; font-size:30px;"><strong>Goals</strong></h4>
         </div>
         <div class="modal-body">
           <div class="row">
             <div id="homeModalData" class="col-md-5">
-              <div id="hometeamHeader" class=""><h4>Arsenal</h4></div><hr>
+              <div id="hometeamHeader" style="white-space: nowrap;"><h4>Arsenal</h4></div><hr>
               <ul id="ulHome" style="list-style: none;">
                 <li><span class="label label-default">19'</span> Lacazette Alexander</li>
                 <li><span class="label label-default">44'</span> Lacazette alexander</li>
               </ul>
             </div>
             <div id="scoreModalData" class="col-md-2">
-              <div id="scoreHeader" class=""><h4>-</h4></div><hr>
+              <div id="scoreHeader" style="white-space: nowrap;"><h4>-</h4></div><hr>
             </div>
             <div id="awayModalData" class="col-md-5">
-              <div id="awayteamHeader" class=""><h4>Valencia</h4></div><hr>
+              <div id="awayteamHeader" style="white-space: nowrap;"><h4>Valencia</h4></div><hr>
               <ul id="ulAway" style="list-style: none;">
                 <li><span class="label label-default">11'</span> Dhiakaby Manole</li>
               </ul>

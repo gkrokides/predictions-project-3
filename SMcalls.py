@@ -424,7 +424,7 @@ def SMcall_LeagueFixturesByDaterange_paginated(league, season, start_date, end_d
                     odds_2 = None
 
                 if f[i]['round_id'] != None:
-                    round = f[i]['round_id']
+                    round = f[i]['round']['data']['name']
 
                 final_list.append({
                     'fixture_id': f[i]['id'],
