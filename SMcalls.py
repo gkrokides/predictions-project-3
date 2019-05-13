@@ -390,8 +390,9 @@ def SMcall_LeagueFixturesByDaterange_paginated(league, season, start_date, end_d
         fixtures_for_date = json.loads(dataJson)
 
         f = fixtures_for_date['data']
-        round = None
+
         for i in range(0, len(f)):
+            round = None
             if f[i]['season_id'] == season:
                 match_date_str = f[i]['time']['starting_at']['date']
                 match_date = datetime.strptime(match_date_str, '%Y-%m-%d')

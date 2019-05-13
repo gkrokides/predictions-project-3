@@ -25,7 +25,6 @@ class Command(BaseCommand):
         cntUpdated = 0
         cntCreated = 0
 
-        # update the fixtureSM table
         for x in allFixtures:
             if FixtureSM.objects.filter(fixture_id=x['fixture_id']).exists():
                 FixtureSM.objects.filter(fixture_id=x['fixture_id']).update(**x)
@@ -38,22 +37,14 @@ class Command(BaseCommand):
                 #     setattr(current_obj, i, d[i])
                 #     current_obj.save()
             else:
-                if x['stage'] != 'Regular Season':
-                    lastgw = FixtureSM.objects.filter(season=x['season']).order_by('-gameweek')[0]
-                    if x['gameweek'] == None:
-                        x['gameweek'] = lastgw.gameweek + 1
-                    else:
-                        x['gameweek'] = lastgw.gameweek + x['gameweek']
-                    FixtureSM.objects.create(**x)
-                else:
-                    FixtureSM.objects.create(**x)
+                FixtureSM.objects.create(**x)
                 cntCreated += 1
                 # self.stdout.write(self.style.SUCCESS('"%s" has been created' % x['fixture_id']))
                 self.stdout.write(self.style.SUCCESS('"\r%%%s" creating FxitureSM instances from API ' % (100 * float(cntCreated) / float(len(allFixtures)))), ending='\r')
                 self.stdout.flush()
         self.stdout.write(self.style.SUCCESS('FixtureSM instances created: "%i". FixtureSM instances Updated: "%i"' % (cntCreated, cntUpdated)))
 
-        # update the Game table
+        # start updaing game instances
         allFixtures_sm = FixtureSM.objects.filter(Q(season=smSeasonId, match_date__gte=startDate) & Q(season=smSeasonId, match_date__lte=endDate)).order_by('match_date')
         gameseason = Season.objects.get(season_sm__season_id=smSeasonId)
 
@@ -112,12 +103,11 @@ class Command(BaseCommand):
                     gw = sm_obj.gameweek
                 else:
                     mstage = 'PO'
-                    gw = sm_obj.gameweek
-                    # lastgw = FixtureSM.objects.filter(season=sm_obj.season).order_by('-gameweek')[0]
-                    # if sm_obj.gameweek == None:
-                    #     gw = lastgw.gameweek + 1
-                    # else:
-                    #     gw = lastgw.gameweek + sm_obj.gameweek
+                    lastgw = FixtureSM.objects.filter(season=sm_obj.season).order_by('-gameweek')[0]
+                    if sm_obj.gameweek == None:
+                        gw = lastgw.gameweek + 1
+                    else:
+                        gw = lastgw.gameweek + sm_obj.gameweek
 
                 # Here I'm making sure the score will be entered only for the first games when
                 # they are first created

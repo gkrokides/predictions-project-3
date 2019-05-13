@@ -2117,24 +2117,6 @@ class Game(models.Model):
         away_sa = 1 - hmscore
         return away_sa
 
-    def r_new_home(self):
-        if self.homegoals >= 0:
-            r_old = self._default_manager.get_previous_elo_by_actual_date_for_initial(tm=self.hometeam, seasn=self.season, dt=self.date)
-            k = self.get_k_factor()
-            sa = self.home_sa()
-            se = self.home_se()
-            rating = r_old + k * (sa - se)
-            return rating
-        else:
-            gmwkk = self._default_manager.last_gameweek_played(self.hometeam, self.season.id)
-            last_gwk_qrset = Game.objects.filter(Q(season=self.season.id, gameweek=gmwkk, hometeam=self.hometeam) | Q(season=self.season.id, gameweek=gmwkk, awayteam=self.hometeam))
-            tms = last_gwk_qrset.get(Q(hometeam=self.hometeam) | Q(awayteam=self.hometeam))
-            if self.hometeam == tms.hometeam:
-                rating = tms.elo_rating_home
-            else:
-                rating = tms.elo_rating_away
-            return rating
-
     # def r_new_home(self):
     #     if self.homegoals >= 0:
     #         r_old = self._default_manager.get_previous_elo_by_actual_date_for_initial(tm=self.hometeam, seasn=self.season, dt=self.date)
@@ -2144,7 +2126,6 @@ class Game(models.Model):
     #         rating = r_old + k * (sa - se)
     #         return rating
     #     else:
-    #         lastMatch = Game.objects.filter(Q(hometeam=self.hometeam, season=self.season.id)|Q(awayteam=self.hometeam, season=self.season.id)).exclude(result__exact='').exclude(result__isnull=True).order_by('-date')[0]
     #         gmwkk = self._default_manager.last_gameweek_played(self.hometeam, self.season.id)
     #         last_gwk_qrset = Game.objects.filter(Q(season=self.season.id, gameweek=gmwkk, hometeam=self.hometeam) | Q(season=self.season.id, gameweek=gmwkk, awayteam=self.hometeam))
     #         tms = last_gwk_qrset.get(Q(hometeam=self.hometeam) | Q(awayteam=self.hometeam))
@@ -2152,6 +2133,40 @@ class Game(models.Model):
     #             rating = tms.elo_rating_home
     #         else:
     #             rating = tms.elo_rating_away
+    #         return rating
+
+    def r_new_home(self):
+        if self.homegoals >= 0:
+            r_old = self._default_manager.get_previous_elo_by_actual_date_for_initial(tm=self.hometeam, seasn=self.season, dt=self.date)
+            k = self.get_k_factor()
+            sa = self.home_sa()
+            se = self.home_se()
+            rating = r_old + k * (sa - se)
+            return rating
+        else:
+            lastmatch = Game.objects.filter(Q(season=self.season.id, date__lt=self.date, hometeam=self.hometeam) | Q(season=self.season.id, date__lt=self.date, awayteam=self.hometeam)).order_by('-date')[0]
+            if self.hometeam == lastmatch.hometeam:
+                rating = lastmatch.elo_rating_home
+            else:
+                rating = lastmatch.elo_rating_away
+            return rating
+
+    # def r_new_away(self):
+    #     if self.awaygoals >= 0:
+    #         r_old = self._default_manager.get_previous_elo_by_actual_date_for_initial(tm=self.awayteam, seasn=self.season, dt=self.date)
+    #         k = self.get_k_factor()
+    #         sa = self.away_sa()
+    #         se = self.away_se()
+    #         rating = r_old + k * (sa - se)
+    #         return rating
+    #     else:
+    #         gmwkk = self._default_manager.last_gameweek_played(self.awayteam, self.season.id)
+    #         last_gwk_qrset = Game.objects.filter(Q(season=self.season.id, gameweek=gmwkk, hometeam=self.awayteam) | Q(season=self.season.id, gameweek=gmwkk, awayteam=self.awayteam))
+    #         tms = last_gwk_qrset.get(Q(hometeam=self.awayteam) | Q(awayteam=self.awayteam))
+    #         if self.awayteam == tms.awayteam:
+    #             rating = tms.elo_rating_away
+    #         else:
+    #             rating = tms.elo_rating_home
     #         return rating
 
     def r_new_away(self):
@@ -2163,13 +2178,11 @@ class Game(models.Model):
             rating = r_old + k * (sa - se)
             return rating
         else:
-            gmwkk = self._default_manager.last_gameweek_played(self.awayteam, self.season.id)
-            last_gwk_qrset = Game.objects.filter(Q(season=self.season.id, gameweek=gmwkk, hometeam=self.awayteam) | Q(season=self.season.id, gameweek=gmwkk, awayteam=self.awayteam))
-            tms = last_gwk_qrset.get(Q(hometeam=self.awayteam) | Q(awayteam=self.awayteam))
-            if self.awayteam == tms.awayteam:
-                rating = tms.elo_rating_away
+            lastmatch = Game.objects.filter(Q(season=self.season.id, date__lt=self.date, hometeam=self.awayteam) | Q(season=self.season.id, date__lt=self.date, awayteam=self.awayteam)).order_by('-date')[0]
+            if self.awayteam == lastmatch.awayteam:
+                rating = lastmatch.elo_rating_away
             else:
-                rating = tms.elo_rating_home
+                rating = lastmatch.elo_rating_home
             return rating
 
     # def elo_hist_prediction_status(self):
