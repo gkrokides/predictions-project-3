@@ -866,7 +866,7 @@ class GameManager(models.Manager):
             pass
         else:
             for gm in tmgames:
-                x.append(str(gm.hometeam) + ' - ' + str(gm.awayteam) + ' (' + str(gm.homegoals) + '-' + str(gm.awaygoals) + ')')
+                x.append(gm.hometeam + ' - ' + gm.awayteam + ' (' + str(gm.homegoals) + '-' + str(gm.awaygoals) + ')')
         return x
 
     # returns a list of pairs of form and tooltip
