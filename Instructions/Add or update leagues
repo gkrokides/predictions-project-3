@@ -28,5 +28,5 @@ to create any missing teams in the Team table (not the TeamSM table).
 python manage.py update_games_boilerplate <smSeasonId> <startDate> <endDate>
 to request the match data from the sportmonks API, update or create the FixtureSM and Game instances. 
 
-
+**periodically run sm_create_or_update_all_leagues_for_live to refresh the LeagueSMforLive. Maybe run 3 times a year.
 

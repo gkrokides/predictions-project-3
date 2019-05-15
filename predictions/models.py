@@ -1255,6 +1255,11 @@ class GameManager(models.Manager):
         qrset = self.filter(season=sznn, type='RS').exclude(homegoals__isnull=True).count()
         return qrset
 
+    # total Season games(including playoffs) played for the given season
+    def total_season_games_played_inc_po(self, sznn):
+        qrset = self.filter(season=sznn).exclude(homegoals__isnull=True).count()
+        return qrset
+
     # total games that will be played for the given season
     def total_season_games(self, seasonn):
         # games_per_gameweek = self.filter(season=seasonn, gameweek=1).count()

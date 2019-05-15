@@ -741,6 +741,7 @@ def predictions(request):
             else:
                 playoffs_started = False
             games_played = Game.objects.total_season_games_played(seasonid)
+            games_played_inc_po = Game.objects.total_season_games_played_inc_po(seasonid)
             games_total = Game.objects.total_season_games(seasonid)
             games_played_perc = float(games_played) / games_total
             home_wins_total = Game.objects.total_season_home_wins(seasonid)
@@ -753,9 +754,9 @@ def predictions(request):
             goals_p_game = float(season_goals) / games_played
             bts = Game.objects.season_both_teams_scored(seasonid)
             bts_perc = format(float(bts) / games_played, "0.00%")
-            over_1p5 = format(float(Game.objects.over_one_half_optimized(seasonid)) / games_played, "0.00%")
-            over_2p5 = format(float(Game.objects.over_two_half_optimized(seasonid)) / games_played, "0.00%")
-            over_3p5 = format(float(Game.objects.over_three_half_optimized(seasonid)) / games_played, "0.00%")
+            over_1p5 = format(float(Game.objects.over_one_half_optimized(seasonid)) / games_played_inc_po, "0.00%")
+            over_2p5 = format(float(Game.objects.over_two_half_optimized(seasonid)) / games_played_inc_po, "0.00%")
+            over_3p5 = format(float(Game.objects.over_three_half_optimized(seasonid)) / games_played_inc_po, "0.00%")
             lst = Season.objects.get(id=seasonid)
             lstout = lst.league.league_name
             ssnout = str(lst.get_start_year()) + "/" + str(lst.get_end_year())
@@ -1895,6 +1896,7 @@ def league_overview(request, sid):
     ssnout = ""
     any_postponed = False
     games_played = Game.objects.total_season_games_played(seasonid)
+    games_played_inc_po = Game.objects.total_season_games_played_inc_po(seasonid)
     games_total = Game.objects.total_season_games(seasonid)
     games_played_perc = float(games_played) / games_total
     home_wins_total = Game.objects.total_season_home_wins(seasonid)
@@ -1907,9 +1909,9 @@ def league_overview(request, sid):
     goals_p_game = float(season_goals) / games_played
     bts = Game.objects.season_both_teams_scored(seasonid)
     bts_perc = format(float(bts) / games_played, "0.00%")
-    over_1p5 = format(float(Game.objects.over_one_half_optimized(seasonid)) / games_played, "0.00%")
-    over_2p5 = format(float(Game.objects.over_two_half_optimized(seasonid)) / games_played, "0.00%")
-    over_3p5 = format(float(Game.objects.over_three_half_optimized(seasonid)) / games_played, "0.00%")
+    over_1p5 = format(float(Game.objects.over_one_half_optimized(seasonid)) / games_played_inc_po, "0.00%")
+    over_2p5 = format(float(Game.objects.over_two_half_optimized(seasonid)) / games_played_inc_po, "0.00%")
+    over_3p5 = format(float(Game.objects.over_three_half_optimized(seasonid)) / games_played_inc_po, "0.00%")
     lst = Season.objects.get(id=seasonid)
     lstout = lst.league.league_name
     ssnout = str(lst.get_start_year()) + "/" + str(lst.get_end_year())
