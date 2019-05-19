@@ -2482,27 +2482,27 @@ def livescore_sm_api_view2(request):
                             minute = str(smObj['time']['minute']) + "'"
                             score = str(smObj['scores']['localteam_score']) + " - " + str(smObj['scores']['visitorteam_score'])
 
-                        if smObj['scores']['localteam_score'] - smObj['scores']['visitorteam_score'] > 0:
-                            result = 'HOME'
-                        elif smObj['scores']['localteam_score'] - smObj['scores']['visitorteam_score'] < 0:
-                            result = 'AWAY'
-                        else:
-                            result = 'DRAW'
+                            if smObj['scores']['localteam_score'] - smObj['scores']['visitorteam_score'] > 0:
+                                result = 'HOME'
+                            elif smObj['scores']['localteam_score'] - smObj['scores']['visitorteam_score'] < 0:
+                                result = 'AWAY'
+                            else:
+                                result = 'DRAW'
 
-                        if g.prediction_elohist == result:
-                            bpClass = 'succ'
-                        else:
-                            bpClass = 'fail'
+                            if g.prediction_elohist == result:
+                                bpClass = 'succ'
+                            else:
+                                bpClass = 'fail'
 
-                        if g.prediction_elol6 == result:
-                            mpClass = 'succ'
-                        else:
-                            mpClass = 'fail'
+                            if g.prediction_elol6 == result:
+                                mpClass = 'succ'
+                            else:
+                                mpClass = 'fail'
 
-                        if g.prediction_gsrs == result:
-                            ypClass = 'succ'
-                        else:
-                            ypClass = 'fail'
+                            if g.prediction_gsrs == result:
+                                ypClass = 'succ'
+                            else:
+                                ypClass = 'fail'
 
                         final_data.append({
                             'cntr': g.season.league.country_code,
