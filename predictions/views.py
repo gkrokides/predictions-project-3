@@ -2246,7 +2246,6 @@ def smleaguedata(request):
 
     requestString = http1 + leagueID + http2 + api_token + http3
 
-    # response = requests.get("https://soccer.sportmonks.com/api/v2.0/leagues/181?api_token=UtfTQXmWeltdNWnWsL53IbP3t7YDyezdR0fMuVbAl9gk9ErXbJOyxQJAEVGB&include=country,season")
     response = requests.get(requestString)
 
     smleague = response.json()
