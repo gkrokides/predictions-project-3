@@ -11,6 +11,8 @@ from operator import itemgetter
 from django.utils.text import slugify
 import itertools
 from django.utils.encoding import python_2_unicode_compatible
+import six
+from six import python_2_unicode_compatible
 
 
 class Leagues(models.Model):
@@ -88,6 +90,7 @@ class Season(models.Model):
         return str(self.league) + " " + str(self.get_start_year()) + "/" + str(self.get_end_year())
 
 
+@python_2_unicode_compatible
 class Team(models.Model):
     team_sm = models.ForeignKey('TeamSM', blank=True, null=True)
     name = models.CharField(max_length=250, unique=True, primary_key=True)
@@ -96,8 +99,11 @@ class Team(models.Model):
     class Meta:
         ordering = ["name"]
 
+    # def __str__(self):
+    #     return self.name
+
     def __str__(self):
-        return self.name
+        return "{0}".format(self.name)
 
 
 class GameManager(models.Manager):
