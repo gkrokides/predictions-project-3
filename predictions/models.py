@@ -105,7 +105,7 @@ class Team(models.Model):
     def __str__(self):
         return "{0}".format(self.name)
 
-
+@python_2_unicode_compatible
 class GameManager(models.Manager):
     def team_points(self, team):
         xhome = self.filter(hometeam=team, result='HOME').count()
@@ -870,10 +870,15 @@ class GameManager(models.Manager):
                    .order_by('-date'))[0:6]
         if tmgames.count() < 1:
             pass
+        # else:
+        #     for gm in tmgames:
+        #         x.append(str(gm.hometeam) + ' - ' + str(gm.awayteam) + ' (' + str(gm.homegoals) + '-' + str(gm.awaygoals) + ')')
+        # return x
         else:
             for gm in tmgames:
-                x.append(str(gm.hometeam) + ' - ' + str(gm.awayteam) + ' (' + str(gm.homegoals) + '-' + str(gm.awaygoals) + ')')
+                x.append("{0}".format(gm.hometeam) + ' - ' + "{0}".format(gm.awayteam) + ' (' + "{0}".format(gm.homegoals) + '-' + "{0}".format(gm.awaygoals) + ')')
         return x
+        
 
     # returns a list of pairs of form and tooltip
     def team_form_tooltip_joined_by_date(self, team, sid, dt):
