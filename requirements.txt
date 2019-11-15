@@ -8,7 +8,7 @@ django-filter==0.12.0
 graphviz==0.10.1
 gunicorn==19.6.0
 mysql-connector-python==8.0.12
-numpy==1.8.0rc1
+numpy==1.8.1
 pbr==1.8.1
 Pillow==3.0.0
 pyOpenSSL==0.13.1
@@ -16,13 +16,10 @@ pyparsing==2.0.1
 python-dateutil==1.5
 pytz==2013.7
 requests==2.20.1
-scipy==0.13.0b1
+scipy==0.13.1
 six==1.10.0
 sqlparse==0.2.2
 stevedore==1.9.0
 urllib3==1.24.1
-virtualenv==13.1.2
-virtualenv-clone==0.2.6
-virtualenvwrapper==4.7.1
-virtualenvwrapper-win==1.2.1
+
 
